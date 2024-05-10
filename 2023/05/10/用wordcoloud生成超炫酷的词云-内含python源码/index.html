@@ -16,22 +16,27 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="使用jieba分词，wordcoloud词云可视化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/2024/04/14/hello-world/index.html">
+<meta property="og:title" content="用wordcoloud生成超炫酷的词云_内含python源码">
+<meta property="og:url" content="https://linxkon.github.io/2023/05/10/%E7%94%A8wordcoloud%E7%94%9F%E6%88%90%E8%B6%85%E7%82%AB%E9%85%B7%E7%9A%84%E8%AF%8D%E4%BA%91-%E5%86%85%E5%90%ABpython%E6%BA%90%E7%A0%81/index.html">
 <meta property="og:site_name" content="见·你所爱">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="使用jieba分词，wordcoloud词云可视化">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-04-14T13:38:22.636Z">
-<meta property="article:modified_time" content="2024-04-14T13:38:22.636Z">
+<meta property="og:image" content="https://linxkon.github.io/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5ai.jpg">
+<meta property="og:image" content="https://linxkon.github.io/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5color112.png">
+<meta property="og:image" content="https://linxkon.github.io/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5parrot_new.png">
+<meta property="article:published_time" content="2023-05-10T13:24:43.000Z">
+<meta property="article:modified_time" content="2024-05-10T14:08:47.792Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="技术分享，项目实战，生活记录">
+<meta property="article:tag" content="可视化">
+<meta property="article:tag" content="数据分析">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5ai.jpg">
   
   
   
-  <title>Hello World - 见·你所爱</title>
+  <title>用wordcoloud生成超炫酷的词云_内含python源码 - 见·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -69,7 +74,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -197,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hello World"></span>
+            <span id="subtitle" data-typed-text="用wordcoloud生成超炫酷的词云_内含python源码"></span>
           
         </div>
 
@@ -208,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-04-14 21:38" pubdate>
-          2024年4月14日 晚上
+        <time datetime="2023-05-10 21:24" pubdate>
+          2023年5月10日 晚上
         </time>
       </span>
     
@@ -220,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          18 字
+          358 字
         
       </span>
     
@@ -231,7 +236,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -268,24 +273,26 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Hello World</h1>
+            <h1 id="seo-header">用wordcoloud生成超炫酷的词云_内含python源码</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+                <p>使用jieba分词，wordcoloud词云可视化<br><img src="/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5ai.jpg" srcset="/img/loading.gif" lazyload></p>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<span id="more"></span>
+<p><strong>环境准备</strong><br>pip 安装jieba库,wordcloud库与scipy库<br><strong>资料准备</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 用于分词的文本:词频统计_AIjob.csv</li>
+<li><input disabled="" type="checkbox"> 禁止统计词库:stopwords.txt</li>
+<li><input disabled="" type="checkbox"> 自定义分词库:人工智能词汇.txt</li>
+<li><input disabled="" type="checkbox"> 掩膜用的形状图片:mask.jpg</li>
+</ul>
+<p>不废话,直接上码</p>
+<h3 id="1-用结巴分词-生成字典对象"><a href="#1-用结巴分词-生成字典对象" class="headerlink" title="1.用结巴分词,生成字典对象"></a>1.用结巴分词,生成字典对象</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> jieba<br><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> Counter<br><span class="hljs-keyword">import</span> wordcloud<br><span class="hljs-comment"># 读取文件</span><br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;词频统计_AIjob.csv&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>, encoding=<span class="hljs-string">&quot;utf-8&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    desc = f.read()<br><br><span class="hljs-comment"># 加载停用词列表</span><br>stop_words = []<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;stopwords.txt&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>,encoding=<span class="hljs-string">&#x27;utf-8&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> f:<br>        stop_words.append(line.strip())<br><br>jieba.load_userdict(<span class="hljs-string">&quot;人工智能词汇.txt&quot;</span>)<br><span class="hljs-comment"># 分词</span><br>words = jieba.cut(desc, cut_all=<span class="hljs-literal">False</span>)<br><span class="hljs-comment"># 过滤停用词</span><br>filtered_words = []<br><span class="hljs-keyword">for</span> word <span class="hljs-keyword">in</span> words:<br>    <span class="hljs-keyword">if</span> word <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> stop_words <span class="hljs-keyword">and</span> <span class="hljs-built_in">len</span>(word) &gt; <span class="hljs-number">1</span>:<br>        filtered_words.append(word)<br><br><span class="hljs-comment"># 统计词频</span><br>word_counts = Counter(filtered_words)<br><br>w100=word_counts.most_common(<span class="hljs-number">500</span>)<br><span class="hljs-comment"># 使用字典推导将列表转换为字典  </span><br>dict_result = &#123;key: value <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> w100&#125; <br></code></pre></td></tr></table></figure>
+<h3 id="2-用wordcloud-生成词云"><a href="#2-用wordcloud-生成词云" class="headerlink" title="2.用wordcloud 生成词云"></a>2.用wordcloud 生成词云</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">from</span> scipy.ndimage <span class="hljs-keyword">import</span> gaussian_gradient_magnitude<br><span class="hljs-keyword">from</span> wordcloud <span class="hljs-keyword">import</span> WordCloud, ImageColorGenerator<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">pic_wordcloud</span>(<span class="hljs-params">dict_result,img_path,out_path</span>):<br><br>    <br>    <span class="hljs-comment"># img_path=r&quot;E:\jupyter\spyder\bosszhipin\词频统计\pic\T1.jpg&quot;</span><br>    <br>    parrot_color = np.array(Image.<span class="hljs-built_in">open</span>(img_path))<br>    <br>    parrot_color = parrot_color[::<span class="hljs-number">3</span>, ::<span class="hljs-number">3</span>]<br>    <br>    <span class="hljs-comment"># create mask  white is &quot;masked out&quot;</span><br>    parrot_mask = parrot_color.copy()<br>    parrot_mask[parrot_mask.<span class="hljs-built_in">sum</span>(axis=<span class="hljs-number">2</span>) == <span class="hljs-number">0</span>] = <span class="hljs-number">255</span><br>    <br>    <br>    edges = np.mean([gaussian_gradient_magnitude(parrot_color[:, :, i] / <span class="hljs-number">255.</span>, <span class="hljs-number">2</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>)], axis=<span class="hljs-number">0</span>)<br>    parrot_mask[edges &gt; <span class="hljs-number">.08</span>] = <span class="hljs-number">255</span><br>    <br>    <br>    <span class="hljs-comment"># acurately but it makes a better picture</span><br>    wc = WordCloud(max_words=<span class="hljs-number">1000</span>, mask=parrot_mask, max_font_size=<span class="hljs-number">40</span>, random_state=<span class="hljs-number">42</span>, font_path=<span class="hljs-string">r&quot;C:\Users\10921\AppData\Local\Microsoft\Windows\Fonts\方正正准黑简体.ttf&quot;</span>,relative_scaling=<span class="hljs-number">0</span>,<br>                   <span class="hljs-comment">#width=1920, height=1080</span><br>                   )<br>    <br>    <span class="hljs-comment"># generate word cloud</span><br>    wc.generate_from_frequencies(dict_result)<br>    <span class="hljs-comment"># plt.imshow(wc)</span><br>    <br>    <span class="hljs-comment"># create coloring from image</span><br>    image_colors = ImageColorGenerator(parrot_color)<br>    wc.recolor(color_func=image_colors)<br>    <span class="hljs-comment"># plt.figure(figsize=(10, 10))</span><br>    <span class="hljs-comment"># plt.imshow(wc, interpolation=&quot;bilinear&quot;)</span><br>    <span class="hljs-comment"># wc.to_file(&quot;parrot_new.png&quot;)</span><br>    wc.to_file(out_path)<br>img_path=<span class="hljs-string">&quot;mask.jpg&quot;</span><br>out_path=<span class="hljs-string">&#x27;output.png&#x27;</span><br>pic_wordcloud(dict_result,img_path,out_path)<br></code></pre></td></tr></table></figure>
+<p><img src="/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5color112.png" srcset="/img/loading.gif" lazyload><br><img src="/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5parrot_new.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -295,6 +302,15 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="print-no-link">#可视化</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="print-no-link">#数据分析</a>
+      
+    </div>
+  
 </div>
 
 
@@ -303,8 +319,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hello World</div>
-      <div>http://example.com/2024/04/14/hello-world/</div>
+      <div>用wordcoloud生成超炫酷的词云_内含python源码</div>
+      <div>https://linxkon.github.io/2023/05/10/用wordcoloud生成超炫酷的词云-内含python源码/</div>
     </div>
     <div class="license-meta">
       
@@ -316,7 +332,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年4月14日</div>
+          <div>2023年5月10日</div>
         </div>
       
       
@@ -348,9 +364,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/04/15/hello-linux/" title="Hello Linux">
+                      <a href="/2024/05/03/%E5%8C%97%E4%BA%AC%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%A1%8C%E4%B8%9A%E8%96%AA%E8%B5%84%E5%A4%A7%E6%8F%AD%E7%A7%98/" title="北京人工智能行业薪资大揭秘">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Hello Linux</span>
+                        <span class="hidden-mobile">北京人工智能行业薪资大揭秘</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

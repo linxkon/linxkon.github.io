@@ -16,22 +16,25 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="Linux在开发中非常常用，一起来学习一下Linux常用的命令吧 基本格式12# 格式命令名 [-选项] [参数]		# 有些命令要选项和参数, 有些不需要. 这里的[]表示可选项.  文件目录操作2.ls命令 123456789101112131415161718# ls命令, 来源于: list(列表)  即: 查看指定目录下所有的子级(不包括子级的子级)# 格式ls [-a -l -h] [">
+    <meta name="description" content="整理了一下linux常用的一些命令">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello Linux">
-<meta property="og:url" content="http://example.com/2024/04/15/hello-linux/index.html">
+<meta property="og:title" content="Linux常用命令整理">
+<meta property="og:url" content="https://linxkon.github.io/2022/03/03/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%95%B4%E7%90%86/index.html">
 <meta property="og:site_name" content="见·你所爱">
-<meta property="og:description" content="Linux在开发中非常常用，一起来学习一下Linux常用的命令吧 基本格式12# 格式命令名 [-选项] [参数]		# 有些命令要选项和参数, 有些不需要. 这里的[]表示可选项.  文件目录操作2.ls命令 123456789101112131415161718# ls命令, 来源于: list(列表)  即: 查看指定目录下所有的子级(不包括子级的子级)# 格式ls [-a -l -h] [">
+<meta property="og:description" content="整理了一下linux常用的一些命令">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-04-15T01:22:55.723Z">
-<meta property="article:modified_time" content="2024-04-18T08:37:31.033Z">
+<meta property="og:image" content="https://linxkon.github.io/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5genk.jpg">
+<meta property="article:published_time" content="2022-03-03T12:24:43.000Z">
+<meta property="article:modified_time" content="2024-05-10T13:59:44.382Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="技术分享，项目实战，生活记录">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="基础命令">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/2024%E5%B9%B45%E6%9C%8810%E6%97%A5genk.jpg">
   
   
   
-  <title>Hello Linux - 见·你所爱</title>
+  <title>Linux常用命令整理 - 见·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -69,7 +72,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -197,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hello Linux"></span>
+            <span id="subtitle" data-typed-text="Linux常用命令整理"></span>
           
         </div>
 
@@ -208,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-04-15 09:22" pubdate>
-          2024年4月15日 上午
+        <time datetime="2022-03-03 20:24" pubdate>
+          2022年3月3日 晚上
         </time>
       </span>
     
@@ -268,12 +271,13 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Hello Linux</h1>
+            <h1 id="seo-header">Linux常用命令整理</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Linux在开发中非常常用，一起来学习一下Linux常用的命令吧</p>
+                <p>整理了一下linux常用的一些命令</p>
+<span id="more"></span>
 <h2 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">格式</span><br>命令名 [-选项] [参数]		# 有些命令要选项和参数, 有些不需要. 这里的[]表示可选项. <br></code></pre></td></tr></table></figure>
 <h2 id="文件目录操作"><a href="#文件目录操作" class="headerlink" title="文件目录操作"></a>文件目录操作</h2><h4 id="2-ls命令"><a href="#2-ls命令" class="headerlink" title="2.ls命令"></a>2.ls命令</h4> <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">ls</span>命令, 来源于: list(列表)  即: 查看指定目录下所有的子级(不包括子级的子级)</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">格式</span><br>ls [-a -l -h] [Linux的路径]<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">参数解释</span><br>-a		显示所有(包括隐藏的)	 all<br>-l		以行的形式展示详细信息 line<br>-h		以人性化的方式展示.   human<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">例如:</span> <br>ls			# 查看当前目录的子级, 不包括隐藏.<br>ls /		# 查看根目录(/)下的内容.<br>ls -a 		# 查看当前目录的子级, 包括隐藏.<br>ls -l		# 以行的方式, 查看当前目录的子级. 简写形式: ll<br>ls -h		# 以人性化的方式展示当前目录的内容, 但是: 无效果.<br>ls -lh		# 行的方式, 人性化展示当前目录下的内容. 简写形式:  ll -h<br>ls -al		# 以行的形式, 展示当前目录下所有子级(包括 隐藏)<br>ls -alh 	# 以行, 人性化的方式展示当前目录下所有子级(包括 隐藏)<br></code></pre></td></tr></table></figure>
 
@@ -304,7 +308,7 @@
 
 
 
-<p>—————————————————华丽的分割线—————————————————</p>
+<p>—————————————————华丽的分割线—————————————————<br><img src="/images/2024年5月10日genk.jpg" srcset="/img/loading.gif" lazyload title="毕加索" alt="dolor"></p>
 
                 
               </div>
@@ -314,6 +318,15 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/linux/" class="print-no-link">#linux</a>
+      
+        <a href="/tags/%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/" class="print-no-link">#基础命令</a>
+      
+    </div>
+  
 </div>
 
 
@@ -322,8 +335,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hello Linux</div>
-      <div>http://example.com/2024/04/15/hello-linux/</div>
+      <div>Linux常用命令整理</div>
+      <div>https://linxkon.github.io/2022/03/03/linux常用命令整理/</div>
     </div>
     <div class="license-meta">
       
@@ -335,7 +348,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年4月15日</div>
+          <div>2022年3月3日</div>
         </div>
       
       
@@ -367,21 +380,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/04/18/My-Gallery/" title="My Gallery">
+                      <a href="/2022/03/18/SQL%E4%B9%8BDQL%E8%AF%A6%E8%A7%A3/" title="SQL之DQL详解">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">My Gallery</span>
+                        <span class="hidden-mobile">SQL之DQL详解</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
-                    
-                      <a href="/2024/04/14/hello-world/" title="Hello World">
-                        <span class="hidden-mobile">Hello World</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
                     
                   </article>
                 </div>
