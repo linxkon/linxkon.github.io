@@ -24,7 +24,7 @@
 <meta property="og:description" content="在此补充一下之前公式不显示的问题。虽然Fluid主题支持LaTeX 数学公式，但是需要手动操作，而且我按照教程开启本功能mathjax没有成功，即公式在网页里并没有被渲染和转换。通过网上查找，发现解决这类问题的思路主要是换渲染引擎，例如pandoc、mathjax、katex。我目前使用mathjax，操作如下：  卸载默认引擎，并安装这个新的渲染引擎 12$ npm uninstall">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-15T14:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-13T12:20:54.520Z">
+<meta property="article:modified_time" content="2024-05-13T12:54:42.216Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="博客维护">
 <meta property="article:tag" content="数学">
@@ -221,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          641 字
+          678 字
         
       </span>
     
@@ -326,6 +326,8 @@ target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/guide/#快�
 \sum_{k=1}^{r}\left\|{\zeta}_{k}\right\|^{2 p_{k}} &lt;
 1\right\}\]</span></p></li>
 </ul>
+<p>最后如果公式还是乱码可以尝试重启电脑，然后先尝试部署一下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hexo clean&amp;&amp;hexo g&amp;&amp;hexo d&amp;&amp;hexo s<br></code></pre></td></tr></table></figure>
 
                 
               </div>
