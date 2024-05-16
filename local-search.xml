@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>AI技能含金量可视化</title>
+    <link href="/2024/05/17/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%A1%8C%E4%B8%9A%E7%9A%84%E4%B8%8D%E5%90%8C%E6%8A%80%E8%83%BD%E6%A0%91%E5%90%AB%E9%87%91%E9%87%8F%E5%88%86%E6%9E%90/"/>
+    <url>/2024/05/17/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%A1%8C%E4%B8%9A%E7%9A%84%E4%B8%8D%E5%90%8C%E6%8A%80%E8%83%BD%E6%A0%91%E5%90%AB%E9%87%91%E9%87%8F%E5%88%86%E6%9E%90/</url>
+    
+    <content type="html"><![CDATA[<p>在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++……<br />话题有争议，但是数据不会说谎，让我们拭目以待吧~ <span id="more"></span></p><h1 id="数据可视化示例">数据可视化示例</h1><p>这是一个使用ECharts生成的图表示例，展示了不同职业技能的平均年薪和岗位数量。</p><div id="container" style="height: 500px;"></div><script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.0/files/dist/echarts.min.js"></script><script type="text/javascript">  var dom = document.getElementById('container');  var myChart = echarts.init(dom, null, {    renderer: 'canvas',    useDirtyRect: false  });  var app = {};    var option;  option = {    dataset: {      source: [        ['平均年薪(k)', '岗位数量', '职业技能'],        [378.43, 708, "视觉|cv|视频|图像"],        [414.87, 350, "NLP|自然语言|LLM"],        [439.42, 545, "多模态|大模型"],        [396.63, 691, "机器学习"],        [395.89, 785, "深度学习"],        [359.3, 154, "软件开发"],        [379.71, 98, "控制算法"],        [435.72, 171, "推荐算法"],        [358.5, 100, "数据挖掘|数据分析"],        [415.83, 36, "地图|路径算法"],        [384.27, 1032, "python"],        [396.68, 1225, "C++"],        [384.61, 206, "TensorFlow"],        [390.4, 193, "PyTorch"],      ]    },    grid: { containLabel: true },    xAxis: { name: '岗位数量' },    yAxis: { type: 'category' },    visualMap: {      orient: 'horizontal',      left: 'center',      min: 350,      max: 450,      text: ['High 平均年薪(k)', 'Low 平均年薪(k)'],      // Map the 平均年薪(k) column to color      dimension: 0,      inRange: {        color: ['#65B581', '#FFCE34', '#FD665F']      }    },    series: [      {        type: 'bar',        encode: {          // Map the "岗位数量" column to X axis.          x: '岗位数量',          // Map the "职业技能" column to Y axis          y: '职业技能'        }      }    ]  };  if (option && typeof option === 'object') {    myChart.setOption(option);  }  window.addEventListener('resize', myChart.resize);</script><p><strong>视觉 (CV) 与 自然语言处理 (NLP)</strong>首先，我们来看看视觉和自然语言处理这两个热门领域。视觉相关的岗位，如视频处理和图像识别，平均年薪为378.43k，岗位数量达到708个。相比之下，自然语言处理（NLP）的平均年薪更高，达到了414.87k，但岗位数量只有350个。显然，虽然NLP领域的薪酬更具吸引力，但岗位数量却不及CV。如果你更看重收入，NLP是一个不错的选择；如果你更注重就业机会，CV可能会更适合你。</p><p><strong>多模态与大模型</strong>多模态与大模型相关的岗位提供了相对较高的平均年薪，达到了439.42k，岗位数量为545个。这一领域在薪资和岗位数量上都表现得非常出色。对于那些希望在新兴领域中站稳脚跟的人来说，多模态和大模型无疑是值得关注的方向。</p><p><strong>机器学习与深度学习</strong>机器学习和深度学习一直是AI领域的核心。机器学习相关岗位的平均年薪为396.63k，岗位数量为691个，而深度学习的平均年薪稍低，为395.89k，但岗位数量更多，达到了785个。这表明，深度学习的需求量略高于机器学习，但两者的薪资水平相差无几。</p><p><strong>软件开发与控制算法</strong>在较为传统的AI应用领域中，软件开发的平均年薪为359.3k，岗位数量仅有154个。控制算法的情况稍好一些，平均年薪为379.71k，岗位数量为98个。尽管这两个领域的薪资相对较低，但仍有其不可忽视的重要性，尤其在具体应用和实现上。</p><p><strong>推荐算法与数据挖掘</strong>推荐算法在薪资方面表现突出，平均年薪达到了435.72k，但岗位数量仅有171个。相比之下，数据挖掘与数据分析的平均年薪为358.5k，岗位数量为100个。这两个领域都强调数据处理和分析，但推荐算法在薪资上的吸引力无疑更大。</p><p><strong>地图与路径算法</strong>地图与路径算法是一个相对小众但薪资颇高的领域，平均年薪为415.83k，然而岗位数量仅为36个。这说明，这一领域的高薪水伴随着高竞争，适合那些具备专长并勇于挑战的人。</p><p><strong>编程语言：Python与C++</strong>在编程语言的选择上，Python和C++都是AI开发者的常用工具。Python相关岗位的平均年薪为384.27k，岗位数量高达1032个；而C++的平均年薪略高，为396.68k，岗位数量更多，达到了1225个。两者在薪资和岗位数量上都不相上下，但C++略胜一筹。</p><p><strong>框架选择：TensorFlow与PyTorch</strong>最后，在框架选择上，TensorFlow相关岗位的平均年薪为384.61k，岗位数量为206个；而PyTorch的平均年薪为390.4k，岗位数量为193个。这表明，两者在薪资和岗位数量上差距不大，选择哪个框架可能更多地取决于个人偏好和项目需求。</p><div id="main" style="width: 600px;height:400px;"></div><script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script><script type="text/javascript">var chartDom = document.getElementById('main');var myChart = echarts.init(chartDom);var option;option = {    title: {        text: 'ECharts example'    },    tooltip: {},    xAxis: {        data: ['A', 'B', 'C', 'D', 'E', 'F']    },    yAxis: {},    series: [{        type: 'bar',        data: [5, 20, 36, 10, 10, 20]    }]};option && myChart.setOption(option);</script>]]></content>
+    
+    
+    <categories>
+      
+      <category>Data Visualization</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ECharts</tag>
+      
+      <tag>AI</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>一首歌的时间部署本地Llama3大模型</title>
     <link href="/2024/05/11/%E4%B8%80%E9%A6%96%E6%AD%8C%E7%9A%84%E6%97%B6%E9%97%B4-%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%B8%93%E5%B1%9Ellama3%E5%A4%A7%E6%A8%A1%E5%9E%8B/"/>
     <url>/2024/05/11/%E4%B8%80%E9%A6%96%E6%AD%8C%E7%9A%84%E6%97%B6%E9%97%B4-%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%B8%93%E5%B1%9Ellama3%E5%A4%A7%E6%A8%A1%E5%9E%8B/</url>
@@ -127,9 +154,9 @@
     
     <tags>
       
-      <tag>人工智能</tag>
-      
       <tag>AI</tag>
+      
+      <tag>人工智能</tag>
       
       <tag>专业名词</tag>
       

@@ -16,27 +16,23 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="集成学习的基础思想是通过组合多个基学习器形成整体强学习器,使基学习器在预测准确性、降低过拟合风险、增强模型的鲁棒性等方面获得明显提升,集成学习主要包含Bagging和Boosting两大分类。本文对比总结了四种集成学习常见模型。">
+    <meta name="description" content="在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++…… 话题有争议，但是数据不会说谎，让我们拭目以待吧~">
 <meta property="og:type" content="article">
-<meta property="og:title" content="集成学习常见模型比对">
-<meta property="og:url" content="https://linxkon.github.io/2021/10/11/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A6%81%E7%82%B9%E5%AF%B9%E6%AF%94/index.html">
+<meta property="og:title" content="AI技能含金量可视化">
+<meta property="og:url" content="https://linxkon.github.io/2024/05/17/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%A1%8C%E4%B8%9A%E7%9A%84%E4%B8%8D%E5%90%8C%E6%8A%80%E8%83%BD%E6%A0%91%E5%90%AB%E9%87%91%E9%87%8F%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="见·你所爱">
-<meta property="og:description" content="集成学习的基础思想是通过组合多个基学习器形成整体强学习器,使基学习器在预测准确性、降低过拟合风险、增强模型的鲁棒性等方面获得明显提升,集成学习主要包含Bagging和Boosting两大分类。本文对比总结了四种集成学习常见模型。">
+<meta property="og:description" content="在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++…… 话题有争议，但是数据不会说谎，让我们拭目以待吧~">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%AE%97%E6%B3%95.png">
-<meta property="article:published_time" content="2021-10-11T02:11:13.000Z">
-<meta property="article:modified_time" content="2024-05-16T14:20:33.869Z">
+<meta property="article:published_time" content="2024-05-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-05-16T17:22:34.101Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="机器学习">
-<meta property="article:tag" content="集成学习">
-<meta property="article:tag" content="笔记整理">
-<meta property="article:tag" content="总结归纳">
+<meta property="article:tag" content="ECharts">
+<meta property="article:tag" content="AI">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E7%AE%97%E6%B3%95.png">
   
   
   
-  <title>集成学习常见模型比对 - 见·你所爱</title>
+  <title>AI技能含金量可视化 - 见·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +198,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="集成学习常见模型比对"></span>
+            <span id="subtitle" data-typed-text="AI技能含金量可视化"></span>
           
         </div>
 
@@ -213,8 +209,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-10-11 10:11" pubdate>
-          2021年10月11日 上午
+        <time datetime="2024-05-17 00:00" pubdate>
+          2024年5月17日 凌晨
         </time>
       </span>
     
@@ -225,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          669 字
+          1.2k 字
         
       </span>
     
@@ -236,7 +232,7 @@
         
         
         
-          6 分钟
+          10 分钟
         
       </span>
     
@@ -273,64 +269,125 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">集成学习常见模型比对</h1>
+            <h1 id="seo-header">AI技能含金量可视化</h1>
             
             
               <div class="markdown-body">
                 
-                <p>集成学习的基础思想是通过组合多个基学习器形成整体强学习器,使基学习器在预测准确性、降低过拟合风险、增强模型的鲁棒性等方面获得明显提升,集成学习主要包含Bagging和Boosting两大分类。本文对比总结了四种集成学习常见模型。</p>
-<span id="more"></span>
-<p>Bagging是一种并行式的集成学习方法，其特点包括通过有放回的抽样产生不同的训练集，从而训练多个不同的学习器，并通过平均投票或多数表决的方式决定预测结果。此外，Bagging允许弱学习器并行训练，代表算法包括随机森林算法。</p>
-<p>Boosting是一种串行式的集成学习方法，其特点是随着学习的积累从弱到强，每加入一个弱学习器，整体能力会得到提升。Boosting对学习器进行加权投票，采用串行方式进行学习，具有明确的先后顺序。代表算法包括Adaboost、GBDT、XGBoost以及LightGBM。</p>
-<p><img src="/images/集成学习常见模型对比/集成学习对比示意.png" srcset="/img/loading.gif" lazyload /></p>
-<table>
+                <p>在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++……<br />
+话题有争议，但是数据不会说谎，让我们拭目以待吧~ <span id="more"></span></p>
+<h1 id="数据可视化示例">数据可视化示例</h1>
+<p>这是一个使用ECharts生成的图表示例，展示了不同职业技能的平均年薪和岗位数量。</p>
+<div id="container" style="height: 500px;">
 
-<thead>
-<tr class="header">
-<th>模型</th>
-<th>核心要点</th>
-<th>模型优缺点</th>
-<th>模型应用</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Bagging随机森林</td>
-<td>1. 随机有放回的抽样产生不同的训练集(boostrap)<br>2.
-基于不同抽样训练多个基学习器（如决策树）<br>3.
-通过投票或平均组合预测结果</td>
-<td>优点:<br>- 泛化错误率低<br>-
-易于并行训练<br>缺点:<br>-性能上限低</td>
-<td>1. 分类问题<br>2. 回归问题</td>
-</tr>
-<tr class="even">
-<td>Adaptive Boosting</td>
-<td>1. 迭代构建弱学习器<br>2.
-聚焦错误样本,每轮根据分类结果调整样本及模型权重<br>3.
-组合加权弱学习器成强学习器</td>
-<td>优点:<br>- 泛化能力强<br>- 易于处理多种数据<br>缺点:<br>-
-对离群点敏感<br>- 需要预处理高维或不平衡数据</td>
-<td>1. 分类问题<br>2. 图像识别</td>
-</tr>
-<tr class="odd">
-<td>GBDT (梯度提升树)</td>
-<td>1. 迭代构建决策树<br>2. 拟合损失函数的负梯度训练新树<br>3.
-累加方式构建最终模型</td>
-<td>优点:<br>- 准确性高<br>- 可以适应多种损失函数<br>缺点:<br>-
-容易过拟合<br>- 计算量大</td>
-<td>1. 回归问题<br>2. 排名问题<br>3. 分类问题</td>
-</tr>
-<tr class="even">
-<td>XGBoost</td>
-<td>1. 基于GBDT的高效实现<br>2. 加入正则化项解决GBDT过拟合问题<br>3.
-损失函数泰勒二阶近似优化拟合函数<br/>4.支持并行化和缺失值处理</td>
-<td>优点:<br>- 速度快<br>- 准确性高,防止过拟合<br>-
-支持多种目标函数和评估指标<br>缺点:<br>- 参数调整复杂<br>-
-可能需要更多的内存</td>
-<td>1. 赢取竞赛的首选算法<br>2. 排名问题<br>3. 分类和回归问题</td>
-</tr>
-</tbody>
-</table>
+</div>
+<script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.0/files/dist/echarts.min.js"></script>
+<script type="text/javascript">
+  var dom = document.getElementById('container');
+  var myChart = echarts.init(dom, null, {
+    renderer: 'canvas',
+    useDirtyRect: false
+  });
+  var app = {};
+  
+  var option;
+
+  option = {
+    dataset: {
+      source: [
+        ['平均年薪(k)', '岗位数量', '职业技能'],
+        [378.43, 708, "视觉|cv|视频|图像"],
+        [414.87, 350, "NLP|自然语言|LLM"],
+        [439.42, 545, "多模态|大模型"],
+        [396.63, 691, "机器学习"],
+        [395.89, 785, "深度学习"],
+        [359.3, 154, "软件开发"],
+        [379.71, 98, "控制算法"],
+        [435.72, 171, "推荐算法"],
+        [358.5, 100, "数据挖掘|数据分析"],
+        [415.83, 36, "地图|路径算法"],
+        [384.27, 1032, "python"],
+        [396.68, 1225, "C++"],
+        [384.61, 206, "TensorFlow"],
+        [390.4, 193, "PyTorch"],
+      ]
+    },
+    grid: { containLabel: true },
+    xAxis: { name: '岗位数量' },
+    yAxis: { type: 'category' },
+    visualMap: {
+      orient: 'horizontal',
+      left: 'center',
+      min: 350,
+      max: 450,
+      text: ['High 平均年薪(k)', 'Low 平均年薪(k)'],
+      // Map the 平均年薪(k) column to color
+      dimension: 0,
+      inRange: {
+        color: ['#65B581', '#FFCE34', '#FD665F']
+      }
+    },
+    series: [
+      {
+        type: 'bar',
+        encode: {
+          // Map the "岗位数量" column to X axis.
+          x: '岗位数量',
+          // Map the "职业技能" column to Y axis
+          y: '职业技能'
+        }
+      }
+    ]
+  };
+
+  if (option && typeof option === 'object') {
+    myChart.setOption(option);
+  }
+
+  window.addEventListener('resize', myChart.resize);
+</script>
+<p><strong>视觉 (CV) 与 自然语言处理 (NLP)</strong>
+首先，我们来看看视觉和自然语言处理这两个热门领域。视觉相关的岗位，如视频处理和图像识别，平均年薪为378.43k，岗位数量达到708个。相比之下，自然语言处理（NLP）的平均年薪更高，达到了414.87k，但岗位数量只有350个。显然，虽然NLP领域的薪酬更具吸引力，但岗位数量却不及CV。如果你更看重收入，NLP是一个不错的选择；如果你更注重就业机会，CV可能会更适合你。</p>
+<p><strong>多模态与大模型</strong>
+多模态与大模型相关的岗位提供了相对较高的平均年薪，达到了439.42k，岗位数量为545个。这一领域在薪资和岗位数量上都表现得非常出色。对于那些希望在新兴领域中站稳脚跟的人来说，多模态和大模型无疑是值得关注的方向。</p>
+<p><strong>机器学习与深度学习</strong>
+机器学习和深度学习一直是AI领域的核心。机器学习相关岗位的平均年薪为396.63k，岗位数量为691个，而深度学习的平均年薪稍低，为395.89k，但岗位数量更多，达到了785个。这表明，深度学习的需求量略高于机器学习，但两者的薪资水平相差无几。</p>
+<p><strong>软件开发与控制算法</strong>
+在较为传统的AI应用领域中，软件开发的平均年薪为359.3k，岗位数量仅有154个。控制算法的情况稍好一些，平均年薪为379.71k，岗位数量为98个。尽管这两个领域的薪资相对较低，但仍有其不可忽视的重要性，尤其在具体应用和实现上。</p>
+<p><strong>推荐算法与数据挖掘</strong>
+推荐算法在薪资方面表现突出，平均年薪达到了435.72k，但岗位数量仅有171个。相比之下，数据挖掘与数据分析的平均年薪为358.5k，岗位数量为100个。这两个领域都强调数据处理和分析，但推荐算法在薪资上的吸引力无疑更大。</p>
+<p><strong>地图与路径算法</strong>
+地图与路径算法是一个相对小众但薪资颇高的领域，平均年薪为415.83k，然而岗位数量仅为36个。这说明，这一领域的高薪水伴随着高竞争，适合那些具备专长并勇于挑战的人。</p>
+<p><strong>编程语言：Python与C++</strong>
+在编程语言的选择上，Python和C++都是AI开发者的常用工具。Python相关岗位的平均年薪为384.27k，岗位数量高达1032个；而C++的平均年薪略高，为396.68k，岗位数量更多，达到了1225个。两者在薪资和岗位数量上都不相上下，但C++略胜一筹。</p>
+<p><strong>框架选择：TensorFlow与PyTorch</strong>
+最后，在框架选择上，TensorFlow相关岗位的平均年薪为384.61k，岗位数量为206个；而PyTorch的平均年薪为390.4k，岗位数量为193个。这表明，两者在薪资和岗位数量上差距不大，选择哪个框架可能更多地取决于个人偏好和项目需求。</p>
+<div id="main" style="width: 600px;height:400px;">
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script type="text/javascript">
+var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
+
+option = {
+    title: {
+        text: 'ECharts example'
+    },
+    tooltip: {},
+    xAxis: {
+        data: ['A', 'B', 'C', 'D', 'E', 'F']
+    },
+    yAxis: {},
+    series: [{
+        type: 'bar',
+        data: [5, 20, 36, 10, 10, 20]
+    }]
+};
+
+option && myChart.setOption(option);
+</script>
 
                 
               </div>
@@ -349,7 +406,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/categories/" class="category-chain-item">categories</a>
+  <a href="/categories/Data-Visualization/" class="category-chain-item">Data Visualization</a>
   
   
 
@@ -364,13 +421,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
+        <a href="/tags/ECharts/" class="print-no-link">#ECharts</a>
       
-        <a href="/tags/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" class="print-no-link">#集成学习</a>
-      
-        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
-      
-        <a href="/tags/%E6%80%BB%E7%BB%93%E5%BD%92%E7%BA%B3/" class="print-no-link">#总结归纳</a>
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
       
     </div>
   
@@ -382,8 +435,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>集成学习常见模型比对</div>
-      <div>https://linxkon.github.io/2021/10/11/机器学习要点对比/</div>
+      <div>AI技能含金量可视化</div>
+      <div>https://linxkon.github.io/2024/05/17/人工智能行业的不同技能树含金量分析/</div>
     </div>
     <div class="license-meta">
       
@@ -395,7 +448,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年10月11日</div>
+          <div>2024年5月17日</div>
         </div>
       
       
@@ -427,18 +480,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/21/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B/" title="hexo博客搭建教程">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">hexo博客搭建教程</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/03/11/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86/" title="线性回归知识点梳理">
-                        <span class="hidden-mobile">线性回归知识点梳理</span>
+                      <a href="/2024/05/11/%E4%B8%80%E9%A6%96%E6%AD%8C%E7%9A%84%E6%97%B6%E9%97%B4-%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%B8%93%E5%B1%9Ellama3%E5%A4%A7%E6%A8%A1%E5%9E%8B/" title="一首歌的时间部署本地Llama3大模型">
+                        <span class="hidden-mobile">一首歌的时间部署本地Llama3大模型</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
