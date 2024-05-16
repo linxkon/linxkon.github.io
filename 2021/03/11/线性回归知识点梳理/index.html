@@ -23,13 +23,15 @@
 <meta property="og:site_name" content="见·你所爱">
 <meta property="og:description" content="🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.png">
 <meta property="article:published_time" content="2021-03-11T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-16T02:35:54.557Z">
+<meta property="article:modified_time" content="2024-05-16T14:27:38.635Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="回归模型">
 <meta property="article:tag" content="笔记整理">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.png">
   
   
   
@@ -390,8 +392,10 @@ J&#39;_{(\theta)}=\frac{\partial\mathrm{J}(\theta)}{\partial\theta}=\frac{2*1}{2
 <p><span class="math display">\[
 \theta_j=\theta_j-\alpha\frac1m\sum_{i=1}^m(h_\theta(x^i)-y^i)*x_j^i
 \]</span> - 参数说明</p>
-<pre><code class="hljs">- θ_j:当前损失函数的梯度位置/原函数的特征权重</code></pre>
-<p>m,n:行数,列数 i,j:列索引,行索引 x,y:特征向量与目标向量</p>
+<p>θ_j:当前损失函数的梯度位置/原函数的特征权重<br />
+m,n:行数,列数<br />
+i,j:列索引,行索引<br />
+x,y:特征向量与目标向量</p>
 <h3 id="常见梯度下降算法">6.常见梯度下降算法</h3>
 <h5 id="全梯度下降算法-fgd">全梯度下降算法 FGD</h5>
 <ul>
