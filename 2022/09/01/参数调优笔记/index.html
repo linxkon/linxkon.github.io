@@ -16,23 +16,24 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="我们本是完整的一个，但是分开了 于是开始有了期待，有了思念  笑声很轻，眼泪也无声  对天空诉说着爱是永恒  跌跌撞撞寻找属于我们的完整  未来的那一天在心里很重  两只手里藏着全世界的星星  在彼此的眼睛里看到了  海洋陆地，银河苍穹  北极光在脚下划过  猎户座的虹手中缤纷  你说那斑驳的星尘好像我们  后来所有的时间空间都消失了  拥抱里我们变成宇宙的最初">
+    <meta name="description" content="在机器学习中，参数调优是一门玄学，因为模型的最优参数可能依赖于许多场景。因此，不可能为参数调优创建一个全面的指南。本文尝试为XGBoost中的参数提供一些指导。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【原创小诗】完整">
-<meta property="og:url" content="https://linxkon.github.io/2022/07/22/%E3%80%90%E7%94%9F%E6%B4%BB%E6%84%9F%E6%82%9F%E3%80%91-%20%E5%AE%8C%E6%95%B4/index.html">
+<meta property="og:title" content="XGBoost参数调优笔记">
+<meta property="og:url" content="https://linxkon.github.io/2022/09/01/%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="见·你所爱">
-<meta property="og:description" content="我们本是完整的一个，但是分开了 于是开始有了期待，有了思念  笑声很轻，眼泪也无声  对天空诉说着爱是永恒  跌跌撞撞寻找属于我们的完整  未来的那一天在心里很重  两只手里藏着全世界的星星  在彼此的眼睛里看到了  海洋陆地，银河苍穹  北极光在脚下划过  猎户座的虹手中缤纷  你说那斑驳的星尘好像我们  后来所有的时间空间都消失了  拥抱里我们变成宇宙的最初">
+<meta property="og:description" content="在机器学习中，参数调优是一门玄学，因为模型的最优参数可能依赖于许多场景。因此，不可能为参数调优创建一个全面的指南。本文尝试为XGBoost中的参数提供一些指导。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-22T15:54:22.000Z">
-<meta property="article:modified_time" content="2024-05-13T13:51:11.046Z">
+<meta property="article:published_time" content="2022-09-01T12:21:13.000Z">
+<meta property="article:modified_time" content="2024-05-16T02:40:07.891Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="生活感悟">
-<meta property="article:tag" content="原创诗歌">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="回归模型">
+<meta property="article:tag" content="参数调优">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>【原创小诗】完整 - 见·你所爱</title>
+  <title>XGBoost参数调优笔记 - 见·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -198,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="【原创小诗】完整"></span>
+            <span id="subtitle" data-typed-text="XGBoost参数调优笔记"></span>
           
         </div>
 
@@ -209,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-07-22 23:54" pubdate>
-          2022年7月22日 晚上
+        <time datetime="2022-09-01 20:21" pubdate>
+          2022年9月1日 晚上
         </time>
       </span>
     
@@ -221,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          155 字
+          804 字
         
       </span>
     
@@ -232,7 +233,7 @@
         
         
         
-          2 分钟
+          7 分钟
         
       </span>
     
@@ -269,28 +270,49 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">【原创小诗】完整</h1>
+            <h1 id="seo-header">XGBoost参数调优笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <center>
-<p>我们本是完整的一个，但是分开了<br></p>
-<p>于是开始有了期待，有了思念 <br></p>
-<p>笑声很轻，眼泪也无声 <br></p>
-<p>对天空诉说着爱是永恒 <br></p>
-<p>跌跌撞撞寻找属于我们的完整 <br></p>
-<p>未来的那一天在心里很重 <br></p>
-<p>两只手里藏着全世界的星星 <br></p>
-<p>在彼此的眼睛里看到了 <br></p>
-<p>海洋陆地，银河苍穹 <br></p>
-<p>北极光在脚下划过 <br></p>
-<p>猎户座的虹手中缤纷 <br></p>
-<p>你说那斑驳的星尘好像我们 <br></p>
-<p>后来所有的时间空间都消失了 <br></p>
-<p>拥抱里我们变成宇宙的最初 <br></p>
-<p>完整 <br></p>
-</center>
+                <p>在机器学习中，参数调优是一门玄学，因为模型的最优参数可能依赖于许多场景。因此，不可能为参数调优创建一个全面的指南。本文尝试为XGBoost中的参数提供一些指导。</p>
+<span id="more"></span>
+<h3
+id="理解偏差-方差权衡bias-variance-tradeoff">1.理解偏差-方差权衡(Bias-Variance
+Tradeoff)</h3>
+<p>如果你参加过机器学习或统计学课程，这可能是最重要的概念之一。当我们允许模型变得更加复杂（例如，增加深度）时，模型具有更好的拟合训练数据的能力，从而获得偏差较小的模型。然而，这种复杂的模型需要更多的数据来进行拟合。</p>
+<p>XGBoost中的大多数参数都涉及偏差和方差的权衡。最好的模型应该在模型复杂度和预测能力之间进行仔细权衡。参数文档会告诉你每个参数是否会使模型更保守。这可以帮助你在复杂模型和简单模型之间进行调整。</p>
+<h3 id="控制过拟合">2.控制过拟合</h3>
+<p>当你观察到训练准确率高但测试准确率低时，很可能遇到了过拟合问题。</p>
+<p>在XGBoost中，一般有两种方法可以控制过拟合：</p>
+<blockquote>
+<ul>
+<li><p>第一种方法是直接控制模型复杂度。</p>
+<p><code>这包括max_depth、min_child_weight和gamma。</code></p></li>
+<li><p>第二种方法是增加随机性，使训练对噪声具有鲁棒性。</p></li>
+</ul>
+<p>​ <code>这包括subsample和colsample_bytree。</code></p>
+</blockquote>
+<p>你还可以减少步长eta。记住在这样做时增加num_round。</p>
+<h3 id="处理数据集不平衡">3.处理数据集不平衡</h3>
+<p>对于诸如广告点击日志等常见情况，数据集极度不平衡。这会影响XGBoost模型的训练，有两种方法可以改进。</p>
+<blockquote>
+<p>如果你只关心预测的整体性能指标（AUC）</p>
+<ul>
+<li><p>通过scale_pos_weight平衡正负样本的权重</p></li>
+<li><p>使用AUC作为评估标准</p></li>
+</ul>
+<p>如果你关心预测的正确概率</p>
+<ul>
+<li><p>在这种情况下，你不能重新平衡数据集</p></li>
+<li><p>将参数max_delta_step设置为一个有限的数值（例如1）以帮助收敛</p></li>
+</ul>
+</blockquote>
+<h3 id="减少内存使用">4.减少内存使用</h3>
+<p>如果你使用类似sklearn.model_selection.GridSearchCV的HPO库，请控制它可以使用的线程数。最好让XGBoost并行运行，而不是让GridSearchCV同时运行多个实验。例如，为交叉验证创建一个数据折叠可以消耗大量内存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 这会创建数据集的副本。X和X_train同时存在于内存中。</span><br><span class="hljs-comment"># 如果你在n_jobs大于1的情况下运行`GridSearchCV`，每个线程都会同时发生这种情况。</span><br>X_train, X_test, y_train, y_test = train_test_split(X, y)<br><br>df = pd.DataFrame()<br><span class="hljs-comment"># 这会创建数据框的新副本，即使你指定了inplace参数</span><br>new_df = df.drop(...)<br><br>array = np.array(...)<br><span class="hljs-comment"># 这可能会也可能不会复制数据，具体取决于数据类型</span><br>array.astype(np.float32)<br><br><span class="hljs-comment"># np默认使用双精度，你真的需要吗？</span><br>array = np.array(...)<br></code></pre></td></tr></table></figure>
+<p>你可以在文档中找到一些更具体的减少内存使用的实践。例如：与Dask的分布式XGBoost、XGBoost
+GPU支持。然而，在深入研究这些之前，要意识到数据副本的创建是一个好的起点。它通常消耗的内存比人们预期的要多得多</p>
 
                 
               </div>
@@ -309,7 +331,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%94%9F%E6%B4%BB%E6%84%9F%E6%82%9F/" class="category-chain-item">生活感悟</a>
+  <a href="/categories/%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98/" class="category-chain-item">参数调优</a>
   
   
 
@@ -324,9 +346,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%94%9F%E6%B4%BB%E6%84%9F%E6%82%9F/" class="print-no-link">#生活感悟</a>
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
       
-        <a href="/tags/%E5%8E%9F%E5%88%9B%E8%AF%97%E6%AD%8C/" class="print-no-link">#原创诗歌</a>
+        <a href="/tags/%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B/" class="print-no-link">#回归模型</a>
+      
+        <a href="/tags/%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98/" class="print-no-link">#参数调优</a>
       
     </div>
   
@@ -338,8 +362,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>【原创小诗】完整</div>
-      <div>https://linxkon.github.io/2022/07/22/【生活感悟】- 完整/</div>
+      <div>XGBoost参数调优笔记</div>
+      <div>https://linxkon.github.io/2022/09/01/参数调优笔记/</div>
     </div>
     <div class="license-meta">
       
@@ -351,7 +375,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年7月22日</div>
+          <div>2022年9月1日</div>
         </div>
       
       
@@ -383,9 +407,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/01/%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98%E7%AC%94%E8%AE%B0/" title="XGBoost参数调优笔记">
+                      <a href="/2022/09/11/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD%E6%B1%87%E7%BC%96/" title="人工智能专业术语汇编">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">XGBoost参数调优笔记</span>
+                        <span class="hidden-mobile">人工智能专业术语汇编</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -393,8 +417,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/04/15/SQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="SQL数据库基础知识">
-                        <span class="hidden-mobile">SQL数据库基础知识</span>
+                      <a href="/2022/07/22/%E3%80%90%E7%94%9F%E6%B4%BB%E6%84%9F%E6%82%9F%E3%80%91-%20%E5%AE%8C%E6%95%B4/" title="【原创小诗】完整">
+                        <span class="hidden-mobile">【原创小诗】完整</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
