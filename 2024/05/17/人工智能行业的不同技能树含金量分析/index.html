@@ -16,16 +16,16 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++…… 话题有争议，但是数据非常客观，让我们拭目以待吧~">
+    <meta name="description" content="在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++……话题有争议，但是数据非常客观，让我们拭目以待吧~">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AI行业技能点含金量统计分析">
 <meta property="og:url" content="https://linxkon.github.io/2024/05/17/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%A1%8C%E4%B8%9A%E7%9A%84%E4%B8%8D%E5%90%8C%E6%8A%80%E8%83%BD%E6%A0%91%E5%90%AB%E9%87%91%E9%87%8F%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="见·你所爱">
-<meta property="og:description" content="在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++…… 话题有争议，但是数据非常客观，让我们拭目以待吧~">
+<meta property="og:description" content="在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++……话题有争议，但是数据非常客观，让我们拭目以待吧~">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/ai%E6%8A%80%E8%83%BD%E7%82%B9.png">
 <meta property="article:published_time" content="2024-05-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-05-17T02:40:54.887Z">
+<meta property="article:modified_time" content="2024-05-18T10:30:04.380Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="ECharts">
 <meta property="article:tag" content="AI">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1.7k 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          11 分钟
+          14 分钟
         
       </span>
     
@@ -276,17 +276,72 @@
             
               <div class="markdown-body">
                 
-                <p>在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++……<br />
-话题有争议，但是数据非常客观，让我们拭目以待吧~ <span id="more"></span></p>
-<h3 id="数据说明">数据说明</h3>
-<p><img src="/images/AI哪个技能点最值钱/原始数据.png" srcset="/img/loading.gif" lazyload /></p>
-<p><strong>数据来源：</strong>为BOSS直聘算法工程师相关岗位,数据时间是2024年五月,有效样本总量为2200个.<br />
-<strong>数据内容：</strong>
-招聘标题,薪资,福利待遇,关键词,岗位描述,公司,地址,招聘网址<br />
-<strong>统计方法：</strong>对样本数据通过相关的岗位关键词进行筛选,并统计筛选结果的薪资均值,岗位数量等信息,汇总为下表。</p>
-<div id="container" style="height: 500px;">
+                <p>在人工智能领域，有很多热议的技能选择，如CV还是NLP，TensorFlow还是PyTorch，python还是C++……<br>话题有争议，但是数据非常客观，让我们拭目以待吧~<br><span id="more"></span></p>
+<h3 id="1-数据说明"><a href="#1-数据说明" class="headerlink" title="1.数据说明"></a>1.数据说明</h3><p><img src="/images/AI哪个技能点最值钱/原始数据.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>数据来源：</strong>为BOSS直聘北京地区算法工程师相关岗位,数据时间是2024年五月,有效样本总量为2200个.<br><strong>数据内容：</strong> 招聘标题,薪资,福利待遇,关键词,岗位描述,公司,地址,招聘网址<br><strong>统计方法：</strong>对样本数据通过相关的岗位关键词进行筛选,并统计筛选结果的薪资均值,岗位数量等信息,汇总为下表。 </p>
+<h3 id="2-AI技能点含金量排名"><a href="#2-AI技能点含金量排名" class="headerlink" title="2.AI技能点含金量排名"></a>2.AI技能点含金量排名</h3><div id="container0" style="height: 500px;"></div>
 
-</div>
+<script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.0/files/dist/echarts.min.js"></script>
+<script type="text/javascript">
+var dom = document.getElementById('container0');
+var myChart = echarts.init(dom, null, {
+  renderer: 'canvas',
+  useDirtyRect: false
+});
+var app = {};
+
+var option;
+
+option = {  
+xAxis: {  
+type: 'category',  
+data: [  
+  "视觉|cv|视频|图像",  
+  "NLP|自然语言|LLM",  
+  "多模态|大模型",  
+  "机器学习",  
+  "深度学习",  
+  "软件开发",  
+  "控制算法",  
+  "推荐算法",  
+  "数据挖掘|数据分析",  
+  "地图|路径算法"  
+],  
+axisLabel: {  
+  rotate: 45, // 旋转标签以适应显示  
+  interval: 0 // 设置为0表示显示全部标签  
+}  
+},  
+yAxis: {  
+type: 'value'  
+},  
+series: [  
+{  
+  data: [378.43, 414.87, 439.42, 396.63, 395.89, 359.30, 379.71, 435.72, 358.50, 415.83],  
+  type: 'bar',  
+  showBackground: true,  
+  backgroundStyle: {  
+    color: 'rgba(180, 180, 180, 0.2)'  
+  },
+  label: {  
+    show: true, // 开启数据标签显示  
+    position: 'top', // 数据标签的位置，这里是顶部  
+    formatter: '{c}' // 格式化函数，这里使用默认的'{c}'表示显示数值  
+  }
+}  
+]  
+};
+
+if (option && typeof option === 'object') {
+  myChart.setOption(option);
+}
+
+window.addEventListener('resize', myChart.resize);
+</script>
+
+<p><strong>多模态大模型</strong>以均值439k的平均年薪拔得头筹，<strong>推荐算法</strong>以436k紧随其后，<strong>NLP自然语言处理与地图路径算法工程师</strong>以415K的薪资并列第三。说起薪资较低的，分别是<strong>AI软件开发岗、数据挖掘分析岗</strong>，将近360K，也是难能可贵了。</p>
+<h3 id="3-AI技能点的需求量与含金量分布"><a href="#3-AI技能点的需求量与含金量分布" class="headerlink" title="3.AI技能点的需求量与含金量分布"></a>3.AI技能点的需求量与含金量分布</h3><div id="container" style="height: 500px;"></div>
+
 <script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.0/files/dist/echarts.min.js"></script>
 <script type="text/javascript">
   var dom = document.getElementById('container');
@@ -352,22 +407,622 @@
 
   window.addEventListener('resize', myChart.resize);
 </script>
-<p><strong>视觉 (CV) 与 自然语言处理 (NLP)</strong>
-首先，我们来看看视觉和自然语言处理这两个热门领域。视觉相关的岗位，如视频处理和图像识别，平均年薪为378.43k，岗位数量达到708个。相比之下，自然语言处理（NLP）的平均年薪更高，达到了414.87k，但岗位数量只有350个。显然，虽然NLP领域的薪酬更具吸引力，但岗位数量却不及CV。如果你更看重收入，NLP是一个不错的选择；如果你更注重就业机会，CV可能会更适合你。</p>
-<p><strong>多模态与大模型</strong>
-多模态与大模型相关的岗位提供了相对较高的平均年薪，达到了439.42k，岗位数量为545个。这一领域在薪资和岗位数量上都表现得非常出色。对于那些希望在新兴领域中站稳脚跟的人来说，多模态和大模型无疑是值得关注的方向。</p>
-<p><strong>机器学习与深度学习</strong>
-机器学习和深度学习一直是AI领域的核心。机器学习相关岗位的平均年薪为396.63k，岗位数量为691个，而深度学习的平均年薪稍低，为395.89k，但岗位数量更多，达到了785个。这表明，深度学习的需求量略高于机器学习，但两者的薪资水平相差无几。</p>
-<p><strong>软件开发与控制算法</strong>
-在较为传统的AI应用领域中，软件开发的平均年薪为359.3k，岗位数量仅有154个。控制算法的情况稍好一些，平均年薪为379.71k，岗位数量为98个。尽管这两个领域的薪资相对较低，但仍有其不可忽视的重要性，尤其在具体应用和实现上。</p>
-<p><strong>推荐算法与数据挖掘</strong>
-推荐算法在薪资方面表现突出，平均年薪达到了435.72k，但岗位数量仅有171个。相比之下，数据挖掘与数据分析的平均年薪为358.5k，岗位数量为100个。这两个领域都强调数据处理和分析，但推荐算法在薪资上的吸引力无疑更大。</p>
-<p><strong>地图与路径算法</strong>
-地图与路径算法是一个相对小众但薪资颇高的领域，平均年薪为415.83k，然而岗位数量仅为36个。这说明，这一领域的高薪水伴随着高竞争，适合那些具备专长并勇于挑战的人。</p>
-<p><strong>编程语言：Python与C++</strong>
-在编程语言的选择上，Python和C++都是AI开发者的常用工具。Python相关岗位的平均年薪为384.27k，岗位数量高达1032个；而C++的平均年薪略高，为396.68k，岗位数量更多，达到了1225个。两者在薪资和岗位数量上都不相上下，但C++略胜一筹。</p>
-<p><strong>框架选择：TensorFlow与PyTorch</strong>
-最后，在框架选择上，TensorFlow相关岗位的平均年薪为384.61k，岗位数量为206个；而PyTorch的平均年薪为390.4k，岗位数量为193个。这表明，两者在薪资和岗位数量上差距不大，选择哪个框架可能更多地取决于个人偏好和项目需求。</p>
+
+<p><strong>计算机视觉CV与自然语言NLP</strong>：<br>视觉（CV）与图像、视频打交道，年薪约378k，岗位多；而自然语言处理（NLP）年薪诱人达415k，但岗位少。想多赚钱选NLP，想稳就业选CV。</p>
+<p><strong>多模态与大模型</strong>：<br>新兴的多模态与大模型领域，年薪高达439k，岗位也不少。想站风口就选它！</p>
+<p><strong>机器学习与深度学习</strong>：<br>机器学习年薪约397k，岗位稳定；深度学习略低但需求多。两者薪资相近，看需求选。</p>
+<p><strong>软件开发与控制算法</strong>：<br>软件开发年薪359k但岗位少；控制算法稍好，年薪380k。两者传统但重要。</p>
+<p><strong>推荐算法与数据挖掘</strong>：<br>推荐算法年薪高达436k但岗位少；数据挖掘年薪359k。喜欢数据处理就选它们。</p>
+<p><strong>地图与路径算法</strong>：<br>小众但高薪的地图与路径算法，年薪416k但竞争大。适合专长者挑战。</p>
+<p><strong>编程语言：Python与C++</strong><br>Python年薪384k岗位多，C++年薪略高且岗位更多。两者都是AI开发利器。</p>
+<p><strong>框架选择：TensorFlow与PyTorch</strong><br>TensorFlow年薪385k，PyTorch年薪390k。两者差距小，选谁看心情和项目需求。</p>
+<h3 id="4-技能点与教育程度，工作经验及薪资的关系"><a href="#4-技能点与教育程度，工作经验及薪资的关系" class="headerlink" title="4.技能点与教育程度，工作经验及薪资的关系"></a>4.技能点与教育程度，工作经验及薪资的关系</h3><h4 id="4-1技能点和教育程度对薪资的影响（单位：K）"><a href="#4-1技能点和教育程度对薪资的影响（单位：K）" class="headerlink" title="4.1技能点和教育程度对薪资的影响（单位：K）"></a>4.1技能点和教育程度对薪资的影响（单位：K）</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>专科</th>
+<th>本科</th>
+<th>985/211</th>
+<th>硕士</th>
+<th>博士</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>地图/路径</td>
+<td>-</td>
+<td>481</td>
+<td>330</td>
+<td>470</td>
+<td>1260</td>
+</tr>
+<tr>
+<td>数据挖掘/数据分析</td>
+<td>-</td>
+<td>394</td>
+<td>383</td>
+<td>358</td>
+<td>277</td>
+</tr>
+<tr>
+<td>推荐算法</td>
+<td>-</td>
+<td>378</td>
+<td>456</td>
+<td>397</td>
+<td>397</td>
+</tr>
+<tr>
+<td>PyTorch</td>
+<td>360</td>
+<td>370</td>
+<td>427</td>
+<td>383</td>
+<td>365</td>
+</tr>
+<tr>
+<td>控制算法</td>
+<td>-</td>
+<td>364</td>
+<td>390</td>
+<td>400</td>
+<td>-</td>
+</tr>
+<tr>
+<td>c++/C++</td>
+<td>315</td>
+<td>359</td>
+<td>395</td>
+<td>418</td>
+<td>420</td>
+</tr>
+<tr>
+<td>多模态/大模型</td>
+<td>-</td>
+<td>352</td>
+<td>367</td>
+<td>465</td>
+<td>459</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td>360</td>
+<td>343</td>
+<td>367</td>
+<td>383</td>
+<td>365</td>
+</tr>
+<tr>
+<td>机器学习</td>
+<td>360</td>
+<td>343</td>
+<td>395</td>
+<td>434</td>
+<td>433</td>
+</tr>
+<tr>
+<td>深度学习</td>
+<td>315</td>
+<td>339</td>
+<td>408</td>
+<td>423</td>
+<td>429</td>
+</tr>
+<tr>
+<td>python</td>
+<td>315</td>
+<td>330</td>
+<td>361</td>
+<td>411</td>
+<td>394</td>
+</tr>
+<tr>
+<td>NLP/自然语言/LLM</td>
+<td>-</td>
+<td>328</td>
+<td>373</td>
+<td>480</td>
+<td>556</td>
+</tr>
+<tr>
+<td>软件/开发</td>
+<td>360</td>
+<td>327</td>
+<td>252</td>
+<td>394</td>
+<td>393</td>
+</tr>
+<tr>
+<td>视觉/cv/视频/图像</td>
+<td>360</td>
+<td>320</td>
+<td>434</td>
+<td>411</td>
+<td>514</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="4-2技能点和教育程度对工作岗位数量的影响（单位：个）"><a href="#4-2技能点和教育程度对工作岗位数量的影响（单位：个）" class="headerlink" title="4.2技能点和教育程度对工作岗位数量的影响（单位：个）"></a>4.2技能点和教育程度对工作岗位数量的影响（单位：个）</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>专科</th>
+<th>本科</th>
+<th>985/211</th>
+<th>硕士</th>
+<th>博士</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c++/C++</td>
+<td>2</td>
+<td>248</td>
+<td>23</td>
+<td>255</td>
+<td>42</td>
+</tr>
+<tr>
+<td>python</td>
+<td>2</td>
+<td>223</td>
+<td>22</td>
+<td>212</td>
+<td>39</td>
+</tr>
+<tr>
+<td>深度学习</td>
+<td>2</td>
+<td>157</td>
+<td>25</td>
+<td>166</td>
+<td>25</td>
+</tr>
+<tr>
+<td>机器学习</td>
+<td>1</td>
+<td>144</td>
+<td>23</td>
+<td>117</td>
+<td>29</td>
+</tr>
+<tr>
+<td>视觉/cv/视频/图像</td>
+<td>1</td>
+<td>126</td>
+<td>16</td>
+<td>159</td>
+<td>29</td>
+</tr>
+<tr>
+<td>多模态/大模型</td>
+<td>-</td>
+<td>115</td>
+<td>21</td>
+<td>111</td>
+<td>26</td>
+</tr>
+<tr>
+<td>NLP/自然语言/LLM</td>
+<td>-</td>
+<td>91</td>
+<td>21</td>
+<td>82</td>
+<td>11</td>
+</tr>
+<tr>
+<td>推荐算法</td>
+<td>-</td>
+<td>50</td>
+<td>11</td>
+<td>31</td>
+<td>5</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td>1</td>
+<td>41</td>
+<td>7</td>
+<td>40</td>
+<td>9</td>
+</tr>
+<tr>
+<td>PyTorch</td>
+<td>1</td>
+<td>39</td>
+<td>7</td>
+<td>38</td>
+<td>9</td>
+</tr>
+<tr>
+<td>软件/开发</td>
+<td>1</td>
+<td>38</td>
+<td>3</td>
+<td>20</td>
+<td>3</td>
+</tr>
+<tr>
+<td>数据挖掘/数据分析</td>
+<td>-</td>
+<td>21</td>
+<td>5</td>
+<td>17</td>
+<td>4</td>
+</tr>
+<tr>
+<td>地图/路径</td>
+<td>-</td>
+<td>17</td>
+<td>1</td>
+<td>11</td>
+<td>1</td>
+</tr>
+<tr>
+<td>控制算法</td>
+<td>-</td>
+<td>13</td>
+<td>3</td>
+<td>19</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="4-3技能点和工作经验对平均年薪的影响（单位：K）"><a href="#4-3技能点和工作经验对平均年薪的影响（单位：K）" class="headerlink" title="4.3技能点和工作经验对平均年薪的影响（单位：K）"></a>4.3技能点和工作经验对平均年薪的影响（单位：K）</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>应届</th>
+<th>一年</th>
+<th>两年</th>
+<th>三年</th>
+<th>四年</th>
+<th>五年及以上</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>推荐算法</td>
+<td>351</td>
+<td>261</td>
+<td>433</td>
+<td>433</td>
+<td>-</td>
+<td>462</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td>272</td>
+<td>343</td>
+<td>324</td>
+<td>415</td>
+<td>360</td>
+<td>427</td>
+</tr>
+<tr>
+<td>PyTorch</td>
+<td>285</td>
+<td>350</td>
+<td>318</td>
+<td>409</td>
+<td>360</td>
+<td>517</td>
+</tr>
+<tr>
+<td>c++/C++</td>
+<td>373</td>
+<td>356</td>
+<td>389</td>
+<td>407</td>
+<td>383</td>
+<td>438</td>
+</tr>
+<tr>
+<td>多模态/大模型</td>
+<td>409</td>
+<td>355</td>
+<td>427</td>
+<td>397</td>
+<td>423</td>
+<td>428</td>
+</tr>
+<tr>
+<td>控制算法</td>
+<td>360</td>
+<td>-</td>
+<td>402</td>
+<td>397</td>
+<td>-</td>
+<td>338</td>
+</tr>
+<tr>
+<td>NLP/自然语言/LLM</td>
+<td>544</td>
+<td>359</td>
+<td>392</td>
+<td>392</td>
+<td>442</td>
+<td>416</td>
+</tr>
+<tr>
+<td>软件/开发</td>
+<td>-</td>
+<td>339</td>
+<td>325</td>
+<td>386</td>
+<td>216</td>
+<td>344</td>
+</tr>
+<tr>
+<td>机器学习</td>
+<td>330</td>
+<td>392</td>
+<td>383</td>
+<td>383</td>
+<td>454</td>
+<td>472</td>
+</tr>
+<tr>
+<td>python</td>
+<td>304</td>
+<td>356</td>
+<td>396</td>
+<td>382</td>
+<td>425</td>
+<td>366</td>
+</tr>
+<tr>
+<td>深度学习</td>
+<td>357</td>
+<td>368</td>
+<td>399</td>
+<td>381</td>
+<td>442</td>
+<td>420</td>
+</tr>
+<tr>
+<td>视觉/cv/视频/图像</td>
+<td>406</td>
+<td>360</td>
+<td>454</td>
+<td>379</td>
+<td>397</td>
+<td>505</td>
+</tr>
+<tr>
+<td>地图/路径</td>
+<td>-</td>
+<td>406</td>
+<td>375</td>
+<td>350</td>
+<td>927</td>
+<td>-</td>
+</tr>
+<tr>
+<td>数据挖掘/数据分析</td>
+<td>242</td>
+<td>415</td>
+<td>294</td>
+<td>308</td>
+<td>-</td>
+<td>530</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="4-4技能点和工作经验对工作岗位数量的影响（单位：个）"><a href="#4-4技能点和工作经验对工作岗位数量的影响（单位：个）" class="headerlink" title="4.4技能点和工作经验对工作岗位数量的影响（单位：个）"></a>4.4技能点和工作经验对工作岗位数量的影响（单位：个）</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>应届</th>
+<th>一年</th>
+<th>两年</th>
+<th>三年</th>
+<th>四年</th>
+<th>五年及以上</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c++/C++</td>
+<td>38</td>
+<td>70</td>
+<td>142</td>
+<td>211</td>
+<td>17</td>
+<td>92</td>
+</tr>
+<tr>
+<td>python</td>
+<td>35</td>
+<td>49</td>
+<td>143</td>
+<td>187</td>
+<td>14</td>
+<td>70</td>
+</tr>
+<tr>
+<td>深度学习</td>
+<td>19</td>
+<td>44</td>
+<td>99</td>
+<td>146</td>
+<td>9</td>
+<td>58</td>
+</tr>
+<tr>
+<td>视觉/cv/视频/图像</td>
+<td>18</td>
+<td>32</td>
+<td>89</td>
+<td>125</td>
+<td>8</td>
+<td>59</td>
+</tr>
+<tr>
+<td>机器学习</td>
+<td>26</td>
+<td>32</td>
+<td>85</td>
+<td>120</td>
+<td>10</td>
+<td>41</td>
+</tr>
+<tr>
+<td>多模态/大模型</td>
+<td>13</td>
+<td>25</td>
+<td>71</td>
+<td>116</td>
+<td>9</td>
+<td>39</td>
+</tr>
+<tr>
+<td>NLP/自然语言/LLM</td>
+<td>7</td>
+<td>16</td>
+<td>58</td>
+<td>78</td>
+<td>4</td>
+<td>42</td>
+</tr>
+<tr>
+<td>推荐算法</td>
+<td>6</td>
+<td>4</td>
+<td>40</td>
+<td>33</td>
+<td>-</td>
+<td>14</td>
+</tr>
+<tr>
+<td>PyTorch</td>
+<td>5</td>
+<td>16</td>
+<td>19</td>
+<td>32</td>
+<td>1</td>
+<td>21</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td>7</td>
+<td>18</td>
+<td>21</td>
+<td>32</td>
+<td>1</td>
+<td>19</td>
+</tr>
+<tr>
+<td>软件/开发</td>
+<td>-</td>
+<td>6</td>
+<td>22</td>
+<td>25</td>
+<td>1</td>
+<td>11</td>
+</tr>
+<tr>
+<td>数据挖掘/数据分析</td>
+<td>3</td>
+<td>4</td>
+<td>18</td>
+<td>16</td>
+<td>-</td>
+<td>6</td>
+</tr>
+<tr>
+<td>控制算法</td>
+<td>1</td>
+<td>-</td>
+<td>13</td>
+<td>13</td>
+<td>-</td>
+<td>8</td>
+</tr>
+<tr>
+<td>地图/路径</td>
+<td>-</td>
+<td>9</td>
+<td>5</td>
+<td>9</td>
+<td>7</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="5高性价比工作岗位排名"><a href="#5高性价比工作岗位排名" class="headerlink" title="5高性价比工作岗位排名"></a>5高性价比工作岗位排名</h3><h4 id="加权工作经验-工作岗位数量与薪资-计算技能点的得分及排名情况"><a href="#加权工作经验-工作岗位数量与薪资-计算技能点的得分及排名情况" class="headerlink" title="加权工作经验,工作岗位数量与薪资,计算技能点的得分及排名情况"></a>加权工作经验,工作岗位数量与薪资,计算技能点的得分及排名情况</h4><ul>
+<li>基本原则：学历要求越低，工作经验要求越低，平均年薪越高的技能点越好，其评分会越高</li>
+<li>学历，工作经验数据划分五个等级，然后将三个特征数据归一化处理，彼此相乘，再乘上百分系数，得到最终评分</li>
+</ul>
+<div id="container2" style="height: 400px;"></div>
+
+<script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.0/files/dist/echarts.min.js"></script>
+
+<script type="text/javascript">
+  var dom = document.getElementById('container2');
+  var myChart = echarts.init(dom, null, {
+    renderer: 'canvas',
+    useDirtyRect: false
+  });
+  var app = {};
+
+  var option;
+
+  option = {
+    dataset: [
+      {
+        dimensions: ['name','score'],
+        source: [
+          ["NLP/自然语言/LLM",30.16],
+          ["PyTorch",14.78],
+          ["TensorFlow",15.56],
+          ["c++/C++",83.54],
+          ["python",74.84],
+          ["地图/路径",15.25],
+          ["多模态/大模型",45.56],
+          ["控制算法",10.59],
+          ["推荐算法",29.53],
+          ["数据挖掘/数据分析",5.26],
+          ["机器学习",46.19],
+          ["深度学习",52.13],
+          ["视觉/cv/视频/图像",42.48],
+          ["软件/开发",13.56]
+        ]
+      },
+      {
+        transform: {
+          type: 'sort',
+          config: { dimension: 'score', order: 'desc' }
+        }
+      }
+    ],
+    xAxis: {
+      type: 'category',
+      axisLabel: { interval: 0, rotate: 30 }
+    },
+    yAxis: {},
+    series: {
+      type: 'bar',
+      encode: { x: 'name', y: 'score' },
+            datasetIndex: 1
+    }
+  };
+
+  if (option && typeof option === 'object') {
+    myChart.setOption(option);
+  }
+
+  window.addEventListener('resize', myChart.resize);
+</script>
+
 
                 
               </div>

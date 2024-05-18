@@ -276,85 +276,72 @@
             
               <div class="markdown-body">
                 
-                <p>正则表达式在文本范式处理时有者非常重要的应用，快来一起巩固一下正则的相关知识吧！
-<span id="more"></span> ### 正则表达式应用场景(Regular Expression)</p>
-<ul>
+                <p>正则表达式在文本范式处理时有者非常重要的应用，快来一起巩固一下正则的相关知识吧！<br><span id="more"></span></p>
+<h3 id="正则表达式应用场景-Regular-Expression"><a href="#正则表达式应用场景-Regular-Expression" class="headerlink" title="正则表达式应用场景(Regular Expression)"></a>正则表达式应用场景(Regular Expression)</h3><ul>
 <li>数据验证（表单验证、如手机、邮箱、IP地址）</li>
 <li>爬虫功能</li>
 <li>数据检索（数据检索、数据抓取）</li>
 <li>数据隐藏（135****6235王先生）</li>
 <li>数据过滤（论坛敏感关键词过滤）</li>
 </ul>
-<h3 id="正则--match">正则--match</h3>
-<p><strong>re.match(pattern, string, flags=0)</strong></p>
+<h3 id="正则—match"><a href="#正则—match" class="headerlink" title="正则—match"></a>正则—match</h3><p><strong>re.match(pattern, string, flags=0)</strong></p>
+<div class="table-container">
 <table>
-
 <thead>
-<tr class="header">
+<tr>
 <th><strong>参数</strong></th>
 <th><strong>描述</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>pattern</td>
 <td>匹配的正则表达式</td>
 </tr>
-<tr class="even">
+<tr>
 <td>string</td>
 <td>要匹配的字符串。</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>flags</td>
-<td>标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。参见：<a
-target="_blank" rel="noopener" href="https://www.runoob.com/python/python-reg-expressions.html#flags">正则表达式修饰符
-- 可选标志</a></td>
+<td>标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。参见：<a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-reg-expressions.html#flags">正则表达式修饰符 - 可选标志</a></td>
 </tr>
 </tbody>
 </table>
-<p>re.match 尝试从字符串的<strong>起始位置匹配</strong>一个模式，
-匹配成功 re.match 方法返回一个匹配的对象，否则返回 None。</p>
-<h3 id="正则--search">正则--search</h3>
-<p><strong>re.search(pattern, string, flags=0)</strong></p>
+</div>
+<p>re.match 尝试从字符串的<strong>起始位置匹配</strong>一个模式，<br>匹配成功 re.match 方法返回一个匹配的对象，否则返回 None。</p>
+<h3 id="正则—search"><a href="#正则—search" class="headerlink" title="正则—search"></a>正则—search</h3><p><strong>re.search(pattern, string, flags=0)</strong></p>
+<div class="table-container">
 <table>
-
 <thead>
-<tr class="header">
+<tr>
 <th><strong>参数</strong></th>
 <th><strong>描述</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>pattern</td>
 <td>匹配的正则表达式</td>
 </tr>
-<tr class="even">
+<tr>
 <td>string</td>
 <td>要匹配的字符串。</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>flags</td>
-<td>标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。参见：<a
-target="_blank" rel="noopener" href="https://www.runoob.com/python/python-reg-expressions.html#flags">正则表达式修饰符
-- 可选标志</a></td>
+<td>标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。参见：<a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-reg-expressions.html#flags">正则表达式修饰符 - 可选标志</a></td>
 </tr>
 </tbody>
 </table>
-<p>re.match
-尝试从字符串的<strong>任意位置匹配</strong>一个模式，(常用于全词匹配)
-匹配成功 re.search 方法返回一个匹配的对象，否则返回 None。</p>
+</div>
+<p>re.match 尝试从字符串的<strong>任意位置匹配</strong>一个模式，(常用于全词匹配)<br>匹配成功 re.search 方法返回一个匹配的对象，否则返回 None。</p>
 <p>re.match只匹配字符串的开始，如果字符串开始不符合正则表达式，则匹配失败，函数返回None；而re.search匹配整个字符串，直到找到一个匹配。</p>
-<h3
-id="re.compile正则表达式.sub用来替换的内容要被替换的内容">re.compile（正则表达式）.sub（用来替换的内容，要被替换的内容）</h3>
-<p>compile 函数用于编译正则表达式，生成一个正则表达式（ Pattern
-）对象，供 match() 和 search() 这两个函数使用。 ### ###
-re.sub(正则,替换字符,被替换的内容)</p>
-<h3 id="正则常用符号释义">正则常用符号释义</h3>
+<h3 id="re-compile（正则表达式）-sub（用来替换的内容，要被替换的内容）"><a href="#re-compile（正则表达式）-sub（用来替换的内容，要被替换的内容）" class="headerlink" title="re.compile（正则表达式）.sub（用来替换的内容，要被替换的内容）"></a>re.compile（正则表达式）.sub（用来替换的内容，要被替换的内容）</h3><p>compile 函数用于编译正则表达式，生成一个正则表达式（ Pattern ）对象，供 match() 和 search() 这两个函数使用。</p>
+<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h3 id="re-sub-正则-替换字符-被替换的内容"><a href="#re-sub-正则-替换字符-被替换的内容" class="headerlink" title="re.sub(正则,替换字符,被替换的内容)"></a>re.sub(正则,替换字符,被替换的内容)</h3><h3 id="正则常用符号释义"><a href="#正则常用符号释义" class="headerlink" title="正则常用符号释义"></a>正则常用符号释义</h3><div class="table-container">
 <table>
-
 <thead>
-<tr class="header">
+<tr>
 <th><strong>符号</strong></th>
 <th><strong>解释</strong></th>
 <th><strong>示例</strong></th>
@@ -362,207 +349,207 @@ re.sub(正则,替换字符,被替换的内容)</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>.</td>
 <td><strong>匹配任意字符</strong></td>
 <td>b.t</td>
 <td>可以匹配bat / but / b#t / b1t等</td>
 </tr>
-<tr class="even">
-<td><a href="file://w"></a></td>
+<tr>
+<td><a href="file://w">\w</a></td>
 <td><strong>匹配字母/数字/下划线/汉字</strong></td>
-<td>b</td>
-<td>可以匹配bat / b1t / b_t等&lt;br&gt;但不能匹配b#t</td>
+<td>b\wt</td>
+<td>可以匹配bat / b1t / b_t等\<br\>但不能匹配b#t</td>
 </tr>
-<tr class="odd">
-<td><a href="file://s"></a></td>
-<td>**匹配空白字符（包括、*）</td>
-<td>love</td>
+<tr>
+<td><a href="file://s">\s</a></td>
+<td><strong>匹配空白字符（包括\r、\n、\t等</strong>）</td>
+<td>love\syou</td>
 <td>可以匹配love you</td>
 </tr>
-<tr class="even">
-<td>[(file://d)</td>
+<tr>
+<td><a href="file://d">\d</a></td>
 <td><strong>匹配数字</strong></td>
-<td>[(file://d/d)</td>
+<td><a href="file://d/d">\d\d</a></td>
 <td>可以匹配01 / 23 / 99等</td>
 </tr>
-<tr class="odd">
-<td>[(file://b)</td>
+<tr>
+<td><a href="file://b">\b</a></td>
 <td>匹配单词的边界</td>
-<td>[(file://bThe/b)</td>
+<td><a href="file://bThe/b">\bThe\b</a></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td>^</td>
 <td><strong>匹配字符串的开始</strong></td>
 <td>^The</td>
 <td>可以匹配The开头的字符串</td>
 </tr>
-<tr class="odd">
-<td>$</td>
+<tr>
+<td>\$</td>
 <td><strong>匹配字符串的结束</strong></td>
-<td>.exe$</td>
+<td>.exe\$</td>
 <td>可以匹配.exe结尾的字符串</td>
 </tr>
-<tr class="even">
-<td><a href="file://W"></a></td>
+<tr>
+<td><a href="file://W">\W</a></td>
 <td>匹配非字母/数字/下划线</td>
-<td>b</td>
-<td>可以匹配b#t / b@t等&lt;br&gt;但不能匹配but / b1t / b_t等</td>
+<td>b\Wt</td>
+<td>可以匹配b#t / b@t等\<br\>但不能匹配but / b1t / b_t等</td>
 </tr>
-<tr class="odd">
-<td><a href="file://S"></a></td>
+<tr>
+<td><a href="file://S">\S</a></td>
 <td>匹配非空白字符</td>
-<td>love</td>
-<td>可以匹配love#you等&lt;br&gt;但不能匹配love you</td>
+<td>love\Syou</td>
+<td>可以匹配love#you等\<br\>但不能匹配love you</td>
 </tr>
-<tr class="even">
-<td><a href="file://D"></a></td>
+<tr>
+<td><a href="file://D">\D</a></td>
 <td>匹配非数字</td>
-<td><a href="file://d/D"></a></td>
+<td><a href="file://d/D">\d\D</a></td>
 <td>可以匹配9a / 3# / 0F等</td>
 </tr>
-<tr class="odd">
-<td><a href="file://B"></a></td>
+<tr>
+<td><a href="file://B">\B</a></td>
 <td>匹配非单词边界</td>
-<td><a href="file://Bio/B"></a></td>
+<td><a href="file://Bio/B">\Bio\B</a></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td>[]</td>
 <td>匹配来自字符集的任意单一字符</td>
 <td>[aeiou]</td>
 <td>可以匹配任一元音字母字符</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>[^]</strong></td>
 <td>匹配不在字符集中的任意单一字符</td>
 <td>[^aeiou]</td>
 <td>可以匹配任一非元音字母字符</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>*</strong></td>
 <td><strong>匹配0次或多次</strong></td>
-<td><a href="file://w*">*</a></td>
+<td><a href="file://w*">\w*</a></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>+</strong></td>
 <td><strong>匹配1次或多次</strong></td>
-<td><a href="file://w+">+</a></td>
+<td><a href="file://w+">\w+</a></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>?</strong></td>
 <td><strong>匹配0次或1次</strong></td>
-<td><a href="file://w">?</a></td>
+<td><a href="file://w">\w?</a></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>{N}</strong></td>
 <td><strong>匹配N次</strong></td>
-<td></td>
+<td>\w{3}</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>{M,}</strong></td>
 <td><strong>匹配至少M次</strong></td>
-<td></td>
+<td>\w{3,}</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>{M,N}</strong></td>
 <td><strong>匹配至少M次至多N次</strong></td>
-<td></td>
+<td>\w{3,6}</td>
 <td></td>
 </tr>
-<tr class="even">
-<td><strong>\</strong></td>
+<tr>
+<td><strong>\\</strong></td>
 <td>分支</td>
-<td>foo\bar</td>
+<td>foo\\bar</td>
 <td>可以匹配foo或者bar</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>(?#)</strong></td>
 <td>注释</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>(exp)</strong></td>
 <td>匹配exp并捕获到自动命名的组中</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>(?&lt;name&gt;exp)</strong></td>
 <td>匹配exp并捕获到名为name的组中</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>(?:exp)</strong></td>
 <td>匹配exp但是不捕获匹配的文本</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>(?=exp)</strong></td>
 <td>匹配exp前面的位置</td>
-<td><a href="file://b/w+(%3f=ing)">+(?=ing)</a></td>
-<td>可以匹配I'm dancing中的danc</td>
+<td><a href="file://b/w+(%3f=ing">\b\w+(?=ing)</a>)</td>
+<td>可以匹配I’m dancing中的danc</td>
 </tr>
-<tr class="even">
-<td><strong>(?&lt;=exp)</strong></td>
+<tr>
+<td><strong>(?\&lt;=exp)</strong></td>
 <td>匹配exp后面的位置</td>
-<td>[(?&lt;=)+(file://bdanc)/w+/b)</td>
+<td><a href="file://bdanc">(?\&lt;=\bdanc)\w+\b</a>/w+/b)</td>
 <td>可以匹配I love dancing and reading中的第一个ing</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>(?!exp)</strong></td>
 <td>匹配后面不是exp的位置</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
-<td><strong>(?&lt;!exp)</strong></td>
+<tr>
+<td><strong>(?\&lt;!exp)</strong></td>
 <td>匹配前面不是exp的位置</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>*?</strong></td>
 <td>重复任意次，但尽可能少重复</td>
-<td>a.\b&lt;br&gt;a.\?b</td>
+<td>a.\\b\<br\>a.\\?b</td>
 <td>将正则表达式应用于aabab，前者会匹配整个字符串aabab，后者会匹配aab和ab两个字符串</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>+?</strong></td>
 <td>重复1次或多次，但尽可能少重复</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>??</strong></td>
 <td>重复0次或1次，但尽可能少重复</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>{M,N}?</strong></td>
 <td>重复M到N次，但尽可能少重复</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>{M,}?</strong></td>
 <td>重复M次以上，但尽可能少重复</td>
-<td></td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<p>说明：如果需要匹配的字符是正则表达式中的特殊字符，那么可以使用\进行转义处理，例如想匹配小数点可以写成\.就可以了，因为直接写.会匹配任意字符；同理，想匹配圆括号必须写成\(和\)，否则圆括号被视为正则表达式中的分组。</p>
+</div>
+<p>说明：如果需要匹配的字符是正则表达式中的特殊字符，那么可以使用\\进行转义处理，例如想匹配小数点可以写成\.就可以了，因为直接写.会匹配任意字符；同理，想匹配圆括号必须写成\(和\)，否则圆括号被视为正则表达式中的分组。</p>
 
                 
               </div>

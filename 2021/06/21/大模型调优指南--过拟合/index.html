@@ -16,26 +16,26 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖">
+    <meta name="description" content="过拟合是机器学习模型在训练数据上表现很好，但在新数据上表现不佳的一种现象。它的发生通常是由于模型过于复杂，以至于能够记住训练数据的噪声和细节，而不是学习到数据的普遍模式和特征。以下是导致过拟合的常见原因以及相应的解决方法：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线性回归知识点梳理">
-<meta property="og:url" content="https://linxkon.github.io/2021/03/11/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86/index.html">
+<meta property="og:title" content="大模型调优指南--过拟合">
+<meta property="og:url" content="https://linxkon.github.io/2021/06/21/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%B0%83%E4%BC%98%E6%8C%87%E5%8D%97--%E8%BF%87%E6%8B%9F%E5%90%88/index.html">
 <meta property="og:site_name" content="见·你所爱">
-<meta property="og:description" content="🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖">
+<meta property="og:description" content="过拟合是机器学习模型在训练数据上表现很好，但在新数据上表现不佳的一种现象。它的发生通常是由于模型过于复杂，以至于能够记住训练数据的噪声和细节，而不是学习到数据的普遍模式和特征。以下是导致过拟合的常见原因以及相应的解决方法：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.png">
-<meta property="article:published_time" content="2021-03-11T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-16T14:27:38.635Z">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B.png">
+<meta property="article:published_time" content="2021-06-21T12:21:13.000Z">
+<meta property="article:modified_time" content="2024-05-18T09:39:35.218Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="机器学习">
-<meta property="article:tag" content="回归模型">
 <meta property="article:tag" content="笔记整理">
+<meta property="article:tag" content="模型训练">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B.png">
   
   
   
-  <title>线性回归知识点梳理 - 见·你所爱</title>
+  <title>大模型调优指南--过拟合 - 见·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="线性回归知识点梳理"></span>
+            <span id="subtitle" data-typed-text="大模型调优指南--过拟合"></span>
           
         </div>
 
@@ -212,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-03-11 20:21" pubdate>
-          2021年3月11日 晚上
+        <time datetime="2021-06-21 20:21" pubdate>
+          2021年6月21日 晚上
         </time>
       </span>
     
@@ -224,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          781 字
         
       </span>
     
@@ -235,7 +235,7 @@
         
         
         
-          13 分钟
+          7 分钟
         
       </span>
     
@@ -272,146 +272,43 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">线性回归知识点梳理</h1>
+            <h1 id="seo-header">大模型调优指南--过拟合</h1>
             
             
               <div class="markdown-body">
                 
-                <p>🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼<br> 接下来让我们走进线性回归💖</p>
-<span id="more"></span>
-<h3 id="1-线性回归的概念"><a href="#1-线性回归的概念" class="headerlink" title="1.线性回归的概念"></a>1.线性回归的概念</h3><h5 id="利用-回归方程-函数-对-一个或多个自变量-特征值-和因变量-目标值-之间-关系进行建模的一种分析方式"><a href="#利用-回归方程-函数-对-一个或多个自变量-特征值-和因变量-目标值-之间-关系进行建模的一种分析方式" class="headerlink" title="利用 回归方程(函数) 对 一个或多个自变量(特征值)和因变量(目标值)之间 关系进行建模的一种分析方式."></a>利用 回归方程(函数) 对 一个或多个自变量(特征值)和因变量(目标值)之间 关系进行建模的一种分析方式.</h5><h5 id="y-w1x1-w2x2-…-w-n-b-wT-b"><a href="#y-w1x1-w2x2-…-w-n-b-wT-b" class="headerlink" title="y=w1x1+w2x2+….+w(n)+b= wT+b"></a>y=w1x1+w2x2+….+w(n)+b= wT+b</h5><ul>
-<li>w=weight</li>
-<li>b=bias<br>wT x为将权重系数转置并与x相乘,矩阵的乘法</li>
-</ul>
-<h5 id="常用于分类与回归问题"><a href="#常用于分类与回归问题" class="headerlink" title="常用于分类与回归问题"></a>常用于分类与回归问题</h5><h3 id="2-损失函数"><a href="#2-损失函数" class="headerlink" title="2.损失函数"></a>2.损失函数</h3><h5 id="loss-function-cost-function-目标函数-成本函数"><a href="#loss-function-cost-function-目标函数-成本函数" class="headerlink" title="loss function/cost function/目标函数/成本函数"></a>loss function/cost function/目标函数/成本函数</h5><h5 id="最小二乘损失计算"><a href="#最小二乘损失计算" class="headerlink" title="最小二乘损失计算:"></a>最小二乘损失计算:</h5><script type="math/tex; mode=display">
-J(w,b)=\sum_{i=0}^m\bigl(h\bigl(x^i\bigr)-y^i\bigr)^2</script><h5 id="均方误差MSE"><a href="#均方误差MSE" class="headerlink" title="均方误差MSE"></a>均方误差MSE</h5><script type="math/tex; mode=display">
-J(w,b)=\frac1m\sum_{i=0}^m\left(h\left(x^i\right)-y^i\right)^2</script><h5 id="平均绝对误差MAE"><a href="#平均绝对误差MAE" class="headerlink" title="平均绝对误差MAE"></a>平均绝对误差MAE</h5><h5 id="注-MSE与MAE既能在模型训练阶段作为损失函数求解拟合函数最优解-又可作为模型评估阶段-衡量已有模型误差大小"><a href="#注-MSE与MAE既能在模型训练阶段作为损失函数求解拟合函数最优解-又可作为模型评估阶段-衡量已有模型误差大小" class="headerlink" title="注: MSE与MAE既能在模型训练阶段作为损失函数求解拟合函数最优解,又可作为模型评估阶段,衡量已有模型误差大小"></a>注: MSE与MAE既能在模型训练阶段作为损失函数求解拟合函数最优解,又可作为模型评估阶段,衡量已有模型误差大小</h5><h3 id="3-损失函数推导-正规方程法"><a href="#3-损失函数推导-正规方程法" class="headerlink" title="3.损失函数推导_正规方程法"></a>3.损失函数推导_正规方程法</h3><script type="math/tex; mode=display">
-J(w) =∥Xw−y∥_2^2</script><script type="math/tex; mode=display">
-w=(X^TX)^{-1}*X^Ty</script><h5 id="优点-可以精确求解"><a href="#优点-可以精确求解" class="headerlink" title="优点:可以精确求解"></a>优点:可以精确求解</h5><h5 id="缺点-计算量极大-X-T-X的逆不存在时无解"><a href="#缺点-计算量极大-X-T-X的逆不存在时无解" class="headerlink" title="缺点:计算量极大,X^T X的逆不存在时无解"></a>缺点:计算量极大,X^T X的逆不存在时无解</h5><h3 id="4-梯度与导数"><a href="#4-梯度与导数" class="headerlink" title="4.梯度与导数"></a>4.梯度与导数</h3><h5 id="导数表征了函数在某点处的变化速率"><a href="#导数表征了函数在某点处的变化速率" class="headerlink" title="导数表征了函数在某点处的变化速率."></a>导数表征了函数在某点处的变化速率.</h5><h5 id="梯度（gradient）"><a href="#梯度（gradient）" class="headerlink" title="梯度（gradient）"></a>梯度（gradient）</h5><ul>
-<li>多元函数中，导数不再是一个单一的数值，而是一个向量，因为它涉及到函数对多个自变量的变化率。这个向量被称为梯度（gradient），它表示了函数在某一点上沿着各个自变量方向的变化率。</li>
-</ul>
-<h5 id="梯度的性质"><a href="#梯度的性质" class="headerlink" title="梯度的性质"></a>梯度的性质</h5><ul>
-<li>梯度的方向是函数在给定点增长最快的方向。</li>
-<li>梯度的模（长度）是函数在给定点处沿最大增长方向的增长率</li>
-<li>梯度是垂直于等值面的</li>
-<li>对函数求导</li>
-</ul>
-<script type="math/tex; mode=display">
-f(\theta)=\theta_0x_0+\theta_1x_1+\theta_2x_2+\theta_3x_3+\cdots+\theta_nx_n</script><script type="math/tex; mode=display">
-\nabla f=\begin{bmatrix}\frac{\partial f}{\partial\theta_0}\\\frac{\partial f}{\partial\theta_1}\\\vdots\\\frac{\partial f}{\partial\theta_n}\end{bmatrix}=\begin{bmatrix}x_0\\x_1\\\vdots\\x_n\end{bmatrix}</script><h3 id="5-梯度下降"><a href="#5-梯度下降" class="headerlink" title="5.梯度下降"></a>5.梯度下降</h3><h5 id="梯度下降公式"><a href="#梯度下降公式" class="headerlink" title="梯度下降公式"></a><strong>梯度下降公式</strong></h5><ul>
-<li>循环迭代求当前点的梯度，更新当前的权重参数</li>
-<li></li>
-</ul>
-<script type="math/tex; mode=display">
-\theta_{i+1}=\theta_i-\alpha\frac\partial{\partial\theta_i}J(\theta)</script><ul>
-<li>θ_i:初始位置<br>α:学习率(步长),一般取值范围0.001 ~ 0.01<br>∂/(∂θ_i ) J(θ)  :损失函数在i处的导数</li>
-</ul>
-<h5 id="梯度下降优化过程"><a href="#梯度下降优化过程" class="headerlink" title="梯度下降优化过程 "></a><strong>梯度下降优化过程 </strong></h5><ul>
-<li>给定学习率,步长,初始位置</li>
-<li>计算该点梯度方向并取反</li>
-<li>向梯度反方向移动</li>
-<li>重复以上步骤</li>
-<li><p>达到收敛条件</p>
-<ul>
-<li>两次差距小于指定的阈值 •</li>
-<li>达到指定的迭代次数</li>
+                <p>过拟合是机器学习模型在训练数据上表现很好，但在新数据上表现不佳的一种现象。它的发生通常是由于模型过于复杂，以至于能够记住训练数据的噪声和细节，而不是学习到数据的普遍模式和特征。以下是导致过拟合的常见原因以及相应的解决方法：<br><span id="more"></span></p>
+<h3 id="过拟合的原因"><a href="#过拟合的原因" class="headerlink" title="过拟合的原因"></a>过拟合的原因</h3><ol>
+<li><strong>模型复杂度过高</strong>：模型参数过多（如深层神经网络的层数和节点数过多），导致模型具有很强的表达能力，能够拟合训练数据中的噪声。</li>
+<li><strong>训练数据不足</strong>：训练数据量太少，使得模型只能依赖于有限的数据，容易记住而不是泛化。</li>
+<li><strong>数据噪声</strong>：训练数据中包含大量噪声或异常值，模型在训练时会把这些噪声也当作有效模式来学习。</li>
+<li><strong>训练次数过多</strong>：模型在训练数据上迭代次数过多，导致模型对训练数据的拟合过于精细。</li>
+</ol>
+<h3 id="解决过拟合的方法"><a href="#解决过拟合的方法" class="headerlink" title="解决过拟合的方法"></a>解决过拟合的方法</h3><ol>
+<li><strong>增加训练数据量</strong>：通过收集更多的数据或使用数据增强技术来扩展训练集，可以帮助模型学习到更加普遍的特征。<ul>
+<li><strong>数据增强</strong>：对于图像数据，可以使用翻转、旋转、缩放等技术来生成更多的训练样本。</li>
 </ul>
 </li>
-</ul>
-<h5 id="学习率"><a href="#学习率" class="headerlink" title="学习率"></a><strong>学习率</strong></h5><ul>
-<li>步长决定了在梯度下降迭代过程中</li>
-<li>学习率太小，下降的速度会慢 </li>
-<li>学习率太大：容易造成错过最低点、产生下降过程中 的震荡、甚至梯度爆炸</li>
-</ul>
-<h5 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h5><ul>
-<li>已知</li>
-</ul>
-<script type="math/tex; mode=display">
-h_{(\theta)}=\theta_{1}x_{1}+\theta_{2}x_{2}+\cdots+\theta_{\mathrm{m}}x_{\mathrm{m}}+b\\=\theta_{0}x_{0}+\theta_{1}x_{1}+\theta_{2}x_{2}+\cdots+\theta_{\mathrm{m}}x_{\mathrm{m}}</script><ul>
-<li>损失函数</li>
-</ul>
-<script type="math/tex; mode=display">
-J_{(\theta)}=\frac1{2m}\sum_{i=1}^m(h_\theta(x^i)-y^i)^2</script><ul>
-<li>梯度下降公式</li>
-</ul>
-<script type="math/tex; mode=display">
-\theta_{i+1}=\theta_i-\alpha\frac\partial{\partial\theta_i}J(\theta)</script><ul>
-<li>对损失函数求导</li>
-</ul>
-<script type="math/tex; mode=display">
-J'_{(\theta)}=\frac{\partial\mathrm{J}(\theta)}{\partial\theta}=\frac{2*1}{2m}\sum_{i=1}^{m}(h_{\theta}\big(x^{i}\big)-y^{i})^{2-1}*h_{\theta}\big(x^{i}\big)^{\prime}</script><ul>
-<li><strong>带入梯度下降公式</strong></li>
-</ul>
-<script type="math/tex; mode=display">
-\theta_j=\theta_j-\alpha\frac1m\sum_{i=1}^m(h_\theta(x^i)-y^i)*x_j^i</script><ul>
-<li>参数说明</li>
-</ul>
-<p>θ_j:当前损失函数的梯度位置/原函数的特征权重<br>m,n:行数,列数<br>i,j:列索引,行索引<br>x,y:特征向量与目标向量  </p>
-<h3 id="6-常见梯度下降算法"><a href="#6-常见梯度下降算法" class="headerlink" title="6.常见梯度下降算法"></a>6.常见梯度下降算法</h3><h5 id="全梯度下降算法-FGD"><a href="#全梯度下降算法-FGD" class="headerlink" title="全梯度下降算法 FGD"></a>全梯度下降算法 FGD</h5><ul>
-<li>每次迭代使用全样本梯度     </li>
-<li>(硬件要求极高,数据量大时无法实现)</li>
-</ul>
-<h5 id="随机梯度下降-SGD"><a href="#随机梯度下降-SGD" class="headerlink" title="随机梯度下降 SGD"></a>随机梯度下降 SGD</h5><ul>
-<li>每次迭代随机选择并使用一个样本梯度     </li>
-<li>(容易受异常值影响)</li>
-</ul>
-<h5 id="小批量梯度下降算法-mini-bantch-最常用√"><a href="#小批量梯度下降算法-mini-bantch-最常用√" class="headerlink" title="小批量梯度下降算法 mini-bantch    最常用√"></a><strong>小批量梯度下降算法 mini-bantch    最常用√</strong></h5><ul>
-<li>每次迭代随机选择并使用小批量的样本梯度    </li>
-<li>(在硬件性能满足的情况下,每批的量应该尽可能大)</li>
-</ul>
-<h5 id="随机平均梯度下降-SAG"><a href="#随机平均梯度下降-SAG" class="headerlink" title="随机平均梯度下降 SAG"></a>随机平均梯度下降 SAG</h5><ul>
-<li>每次迭代随机选择并使用一个样本梯度并和以往样本梯度值做平均    </li>
-<li>(解决异常值影响问题,但训练初期受异常值影响较大)</li>
-</ul>
-<h3 id="7-回归问题的评估方法"><a href="#7-回归问题的评估方法" class="headerlink" title="7.回归问题的评估方法"></a>7.回归问题的评估方法</h3><h5 id="平方误差MSE"><a href="#平方误差MSE" class="headerlink" title="平方误差MSE"></a>平方误差MSE</h5><script type="math/tex; mode=display">
-=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})^{2}</script><h5 id="平均绝对误差MAE-1"><a href="#平均绝对误差MAE-1" class="headerlink" title="平均绝对误差MAE"></a>平均绝对误差MAE</h5><script type="math/tex; mode=display">
-=\frac{1}{n}\sum_{i=1}^{n}|y_{i}-\hat{y}_{i}|</script><h5 id="均方根误差"><a href="#均方根误差" class="headerlink" title="均方根误差"></a>均方根误差</h5><script type="math/tex; mode=display">
-RMSE=\sqrt{\frac1n\sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2}</script><h3 id="8-模型拟合"><a href="#8-模型拟合" class="headerlink" title="8.模型拟合"></a>8.模型拟合</h3><h5 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a><strong>过拟合</strong></h5><ul>
-<li><p>原因</p>
-<ul>
-<li>模型过于复杂,学习到了过多异常特征</li>
-<li>数据噪声大</li>
+<li><strong>简化模型</strong>：减少模型的参数数量，选择一个较为简单的模型结构。<ul>
+<li><strong>正则化</strong>：在损失函数中加入正则化项，如L1正则化（Lasso）和L2正则化（Ridge），可以防止模型参数过大，减小模型的复杂度。</li>
 </ul>
 </li>
-<li><p>解决方案</p>
-<ul>
-<li>数据清洗</li>
-<li>正则化</li>
-<li>精简特征维度</li>
-<li>增加数据量</li>
+<li><strong>使用交叉验证</strong>：将数据集划分为多个子集，进行交叉验证，以确保模型在不同数据子集上的表现一致，帮助发现和防止过拟合。<ul>
+<li><strong>K折交叉验证</strong>：将数据集分成K个子集，每次用K-1个子集训练模型，剩下的一个子集测试，循环K次，综合评估模型表现。</li>
 </ul>
 </li>
-</ul>
-<h5 id="欠拟合"><a href="#欠拟合" class="headerlink" title="欠拟合"></a><strong>欠拟合</strong></h5><ul>
-<li><p>原因</p>
-<ul>
-<li>模型复杂度低</li>
-<li>特征选择不当</li>
-<li>数据量不足</li>
-<li>正则化过度</li>
+<li><strong>提前停止（Early Stopping）</strong>：在训练过程中监控验证集的误差，当验证误差不再降低时，停止训练，避免模型在训练集上过度拟合。</li>
+<li><strong>集成方法</strong>：使用多种模型的组合来降低单一模型过拟合的风险。<ul>
+<li><strong>袋装（Bagging）</strong>：如随机森林，通过对数据进行多次采样并训练多个模型，最后进行投票或平均来得到最终结果。</li>
+<li><strong>提升（Boosting）</strong>：如梯度提升决策树（Gradient Boosting Decision Trees, GBDT），通过逐步训练多个弱模型，每次针对前一轮模型的错误进行改进。</li>
 </ul>
 </li>
-<li><p>解决方案</p>
-<ul>
-<li>添加多项式特征项</li>
-<li>添加其它特征</li>
-<li>增加训练量</li>
+<li><strong>正则化技术</strong>：<ul>
+<li><strong>Dropout</strong>：在神经网络训练中随机将一部分神经元输出设置为0，以防止模型过于依赖某些特定的路径。</li>
+<li><strong>数据标准化</strong>：对输入数据进行归一化处理，使其均值为0，标准差为1，帮助模型更快收敛，并减少过拟合的可能。</li>
 </ul>
 </li>
-</ul>
-<h3 id="9-正则化"><a href="#9-正则化" class="headerlink" title="9.正则化"></a>9.正则化</h3><h5 id="概念-在模型训练时，数据中有些特征影响模型复杂度、或者某个特征的异常值较多，-所以要尽量减少这个特征的影响（甚至删除某个特征的影响），这就是正则化。正则化是添加在损失函数中的特殊项"><a href="#概念-在模型训练时，数据中有些特征影响模型复杂度、或者某个特征的异常值较多，-所以要尽量减少这个特征的影响（甚至删除某个特征的影响），这就是正则化。正则化是添加在损失函数中的特殊项" class="headerlink" title="概念:在模型训练时，数据中有些特征影响模型复杂度、或者某个特征的异常值较多， 所以要尽量减少这个特征的影响（甚至删除某个特征的影响），这就是正则化。正则化是添加在损失函数中的特殊项."></a>概念:在模型训练时，数据中有些特征影响模型复杂度、或者某个特征的异常值较多， 所以要尽量减少这个特征的影响（甚至删除某个特征的影响），这就是正则化。正则化是添加在损失函数中的特殊项.</h5><h5 id="L1正则化"><a href="#L1正则化" class="headerlink" title="L1正则化:"></a><strong>L1正则化:</strong></h5><script type="math/tex; mode=display">
-J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^{n}\mid w_{i}\mid</script><ul>
-<li>• α 叫做惩罚系数，该值越大则权重调整的幅度就越大，即：表示对特征权重惩罚力度就越大</li>
-<li>L1 正则化会使得权重趋向于 0，甚至等于 0，使得某些特征失效，达到特征筛选的目的</li>
-<li>from sklearn.linear_model import Lasso</li>
-</ul>
-<h5 id="L2正则化"><a href="#L2正则化" class="headerlink" title="L2正则化"></a><strong>L2正则化</strong></h5><ul>
-<li><script type="math/tex; mode=display">
-J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^nw_i^2</script></li>
-<li>L2 正则化会使得权重趋向于 0，一般不等于 0 </li>
-<li>from sklearn.linear_model import Ridge</li>
-<li>L2的线性回归又称为岭回归</li>
-</ul>
+</ol>
 
                 
               </div>
@@ -430,7 +327,7 @@ J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^nw_i^2</script></li>
     
       <span class="category-chain">
         
-  <a href="/categories/categories/" class="category-chain-item">categories</a>
+  <a href="/categories/AI%E5%9F%BA%E7%A1%80/" class="category-chain-item">AI基础</a>
   
   
 
@@ -447,9 +344,9 @@ J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^nw_i^2</script></li>
       
         <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
       
-        <a href="/tags/%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B/" class="print-no-link">#回归模型</a>
-      
         <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
+      
+        <a href="/tags/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/" class="print-no-link">#模型训练</a>
       
     </div>
   
@@ -461,8 +358,8 @@ J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^nw_i^2</script></li>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>线性回归知识点梳理</div>
-      <div>https://linxkon.github.io/2021/03/11/线性回归知识点梳理/</div>
+      <div>大模型调优指南--过拟合</div>
+      <div>https://linxkon.github.io/2021/06/21/大模型调优指南--过拟合/</div>
     </div>
     <div class="license-meta">
       
@@ -474,7 +371,7 @@ J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^nw_i^2</script></li>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年3月11日</div>
+          <div>2021年6月21日</div>
         </div>
       
       
@@ -506,15 +403,21 @@ J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^nw_i^2</script></li>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/06/21/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%B0%83%E4%BC%98%E6%8C%87%E5%8D%97--%E8%BF%87%E6%8B%9F%E5%90%88/" title="大模型调优指南--过拟合">
+                      <a href="/2021/10/11/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A6%81%E7%82%B9%E5%AF%B9%E6%AF%94/" title="集成学习常见模型比对">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">大模型调优指南--过拟合</span>
+                        <span class="hidden-mobile">集成学习常见模型比对</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2021/03/11/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86/" title="线性回归知识点梳理">
+                        <span class="hidden-mobile">线性回归知识点梳理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
