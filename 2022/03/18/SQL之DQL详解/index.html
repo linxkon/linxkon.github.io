@@ -276,143 +276,310 @@
             
               <div class="markdown-body">
                 
-                <p>SQL数据库中的查询语句整理<br><span id="more"></span></p>
-<p><img src="/images/00194-3462269573.jpeg" srcset="/img/loading.gif" lazyload alt=""></p>
+                <p>SQL数据库中的查询语句整理 <span id="more"></span></p>
+<img src="/images/00194-3462269573.jpeg" srcset="/img/loading.gif" lazyload />
 <table>
 
 <thead>
 <tr class="header">
-<th><h3 id="基础查询">基础查询</h3></th>
-<th></th>
+<th>
+<h3 id="基础查询">
+基础查询
+</h3>
+</th>
+<th>
+</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Select * from 数据表;</td>
-<td>查看所有数据</td>
+<td>
+Select * from 数据表;
+</td>
+<td>
+查看所有数据
+</td>
 </tr>
 <tr class="even">
-<td>Select 字段1,字段2 from 数据表;</td>
-<td>查看字段</td>
+<td>
+Select 字段1,字段2 from 数据表;
+</td>
+<td>
+查看字段
+</td>
 </tr>
 <tr class="odd">
-<td>select 地段名 as 字段别名 from 数据表;</td>
-<td>别名查询</td>
+<td>
+select 地段名 as 字段别名 from 数据表;
+</td>
+<td>
+别名查询
+</td>
 </tr>
 <tr class="even">
-<td>select distinct 地段名 from 数据表;</td>
-<td>去重查询</td>
+<td>
+select distinct 地段名 from 数据表;
+</td>
+<td>
+去重查询
+</td>
 </tr>
 <tr class="odd">
-<td><h3 id="运算符筛选">运算符筛选</h3></td>
-<td></td>
+<td>
+<h3 id="运算符筛选">
+运算符筛选
+</h3>
+</td>
+<td>
+</td>
 </tr>
 <tr class="even">
-<td>select * from 表名 where 字段名 = '字段值';</td>
-<td>筛选某字段值的行信息</td>
+<td>
+select * from 表名 where 字段名 = '字段值';
+</td>
+<td>
+筛选某字段值的行信息
+</td>
 </tr>
 <tr class="odd">
-<td>select * from 表名 where 字段名 != '字段值';</td>
-<td>筛选不含某字段值的行信息</td>
+<td>
+select * from 表名 where 字段名 != '字段值';
+</td>
+<td>
+筛选不含某字段值的行信息
+</td>
 </tr>
 <tr class="even">
-<td>select * from 表名 where 字段名 &gt; 字段值;</td>
-<td>筛选显示大于字段值的行</td>
+<td>
+select * from 表名 where 字段名 &gt; 字段值;
+</td>
+<td>
+筛选显示大于字段值的行
+</td>
 </tr>
 <tr class="odd">
-<td>select * from 表名 where 字段名 in (a,b);</td>
-<td>筛选显示包含a,b值的行</td>
+<td>
+select * from 表名 where 字段名 in (a,b);
+</td>
+<td>
+筛选显示包含a,b值的行
+</td>
 </tr>
 <tr class="even">
-<td>select * from 表名 where 字段名 <strong>between</strong> 20 <strong>and</strong> 80;</td>
-<td>筛选显示介于20 - 80之间的行</td>
+<td>
+select * from 表名 where 字段名 <strong>between</strong> 20
+<strong>and</strong> 80;
+</td>
+<td>
+筛选显示介于20 - 80之间的行
+</td>
 </tr>
 <tr class="odd">
-<td>select * from 表名 where 字段名=a <strong>and</strong> 字段名&gt;b;</td>
-<td>交集条件</td>
+<td>
+select * from 表名 where 字段名=a <strong>and</strong> 字段名&gt;b;
+</td>
+<td>
+交集条件
+</td>
 </tr>
 <tr class="even">
-<td>select * from 表名 where 字段名=a <strong>or</strong> 字段名&gt;b;</td>
-<td>并集条件</td>
+<td>
+select * from 表名 where 字段名=a <strong>or</strong> 字段名&gt;b;
+</td>
+<td>
+并集条件
+</td>
 </tr>
 <tr class="odd">
-<td>select * from 表名 where 字段名 like '_值%';</td>
-<td>近似查询,_占位符,%任意字符</td>
+<td>
+select * from 表名 where 字段名 like '_值%';
+</td>
+<td>
+近似查询,_占位符,%任意字符
+</td>
 </tr>
 <tr class="even">
-<td>select * from 表名 where 字段名 is null;</td>
-<td>空字段查询</td>
+<td>
+select * from 表名 where 字段名 is null;
+</td>
+<td>
+空字段查询
+</td>
 </tr>
 <tr class="odd">
-<td>select * from 表名 where 字段名 is not null;</td>
-<td>非空字段查询</td>
+<td>
+select * from 表名 where 字段名 is not null;
+</td>
+<td>
+非空字段查询
+</td>
 </tr>
 <tr class="even">
-<td><h3 id="排序">排序</h3></td>
-<td></td>
+<td>
+<h3 id="排序">
+排序
+</h3>
+</td>
+<td>
+</td>
 </tr>
 <tr class="odd">
-<td>select * from 表名 order by 字段名 asc | desc;</td>
-<td>排序</td>
+<td>
+select * from 表名 order by 字段名 asc | desc;
+</td>
+<td>
+排序
+</td>
 </tr>
 <tr class="even">
-<td>select * from 表名 order by 字段名1 asc,字段名2 desc</td>
-<td>多重排序</td>
+<td>
+select * from 表名 order by 字段名1 asc,字段名2 desc
+</td>
+<td>
+多重排序
+</td>
 </tr>
 <tr class="odd">
-<td><h3 id="聚合与分组">聚合与分组</h3></td>
-<td></td>
+<td>
+<h3 id="聚合与分组">
+聚合与分组
+</h3>
+</td>
+<td>
+</td>
 </tr>
 <tr class="even">
-<td><p>select 聚合函数 from 表名 where 字段名xxx;</p>
-<p>聚合函数为:count(),max(),min(),sum(),avg()</p>
-<p>xxx为筛选条件</p></td>
-<td>相关条件值下的统计值</td>
+<td>
+<p>
+select 聚合函数 from 表名 where 字段名xxx;
+</p>
+<p>
+聚合函数为:count(),max(),min(),sum(),avg()
+</p>
+<p>
+xxx为筛选条件
+</p>
+</td>
+<td>
+相关条件值下的统计值
+</td>
 </tr>
 <tr class="odd">
-<td><p></p>
-<p>select</p>
-<p>  <strong>分组字段</strong>, 聚合函数(<strong>count(*)</strong>)...</p>
-<p>from</p>
-<p>  数据表名</p>
-<p>where</p>
-<p>  组前筛选</p>
-<p><strong>group by</strong></p>
-<p>  <strong>分组字段</strong></p>
-<p>having</p>
-<p>  组后筛选;</p></td>
-<td><p>分组查询</p>
-<p>一般结合聚合函数一起用, 否则: 无意义</p>
-<p></p>
-<p>where: 组前筛选, 后边不能跟: 聚合函数.</p>
-<p>having: 组后筛选, 后边可以跟: 聚合函数.</p></td>
+<td>
+<p>
+</p>
+<p>
+select
+</p>
+<p>
+<strong>分组字段</strong>, 聚合函数(<strong>count(*)</strong>)...
+</p>
+<p>
+from
+</p>
+<p>
+数据表名
+</p>
+<p>
+where
+</p>
+<p>
+组前筛选
+</p>
+<p>
+<strong>group by</strong>
+</p>
+<p>
+<strong>分组字段</strong>
+</p>
+<p>
+having
+</p>
+<p>
+组后筛选;
+</p>
+</td>
+<td>
+<p>
+分组查询
+</p>
+<p>
+一般结合聚合函数一起用, 否则: 无意义
+</p>
+<p>
+</p>
+<p>
+where: 组前筛选, 后边不能跟: 聚合函数.
+</p>
+<p>
+having: 组后筛选, 后边可以跟: 聚合函数.
+</p>
+</td>
 </tr>
 <tr class="even">
-<td><h3 id="分页查询">分页查询</h3></td>
-<td></td>
+<td>
+<h3 id="分页查询">
+分页查询
+</h3>
+</td>
+<td>
+</td>
 </tr>
 <tr class="odd">
-<td><p>select * from 表名 limit 起始索引, 数据条数;</p>
-<p>注:索引从0开始,从0开始则0可以省略不写</p>
-<p>经验:总页数:=(总条数 + 每页的数据条数 - 1) // 每页的数据条数</p></td>
-<td>分页查询较为常用,有效减少服务器/用户压力</td>
+<td>
+<p>
+select * from 表名 limit 起始索引, 数据条数;
+</p>
+<p>
+注:索引从0开始,从0开始则0可以省略不写
+</p>
+<p>
+经验:总页数:=(总条数 + 每页的数据条数 - 1) // 每页的数据条数
+</p>
+</td>
+<td>
+分页查询较为常用,有效减少服务器/用户压力
+</td>
 </tr>
 <tr class="even">
-<td><h3 id="重分类查询">重分类查询</h3></td>
-<td></td>
+<td>
+<h3 id="重分类查询">
+重分类查询
+</h3>
+</td>
+<td>
+</td>
 </tr>
 <tr class="odd">
-<td><p>select case</p>
-<p>when 条件1 then 重命名值</p>
-<p>when 条件2 then 重命名值2</p>
-<p>.....</p>
-<p>else 重命名值3</p>
-<p>end as 字段名,</p>
-<p>from 数据表</p></td>
-<td></td>
+<td>
+<p>
+select case
+</p>
+<p>
+when 条件1 then 重命名值
+</p>
+<p>
+when 条件2 then 重命名值2
+</p>
+<p>
+.....
+</p>
+<p>
+else 重命名值3
+</p>
+<p>
+end as 字段名,
+</p>
+<p>
+from 数据表
+</p>
+</td>
+<td>
+</td>
 </tr>
 </tbody>
 </table>
+
                 
               </div>
             
