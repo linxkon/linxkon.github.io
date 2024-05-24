@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/llama3.png">
 <meta property="article:published_time" content="2024-05-20T11:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-24T13:09:17.257Z">
+<meta property="article:modified_time" content="2024-05-24T13:21:37.233Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="笔记整理">
 <meta property="article:tag" content="nlp">
@@ -293,7 +293,7 @@ llama3，一次一个张量和矩阵乘法。另外，我将直接从Meta为 lla
 target="_blank" rel="noopener" href="https://llama.meta.com/llama-downloads/">https://llama.meta.com/llama-downloads/</a></p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-513855262cb2170c7aa8d1db7e5260ed_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-513855262cb2170c7aa8d1db7e5260ed_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -301,8 +301,7 @@ alt="img" />
 <p>我不会实现 bpe tokenizer（但 andrej karpathy 有一个非常干净的实现）
 他的实现链接：[https://github.com/karpathy/minbpe)</p>
 <figure>
-<img src="C:\Users\10921\Desktop\llama3实现\karpathyminbpe.png" srcset="/img/loading.gif" lazyload
-alt="img" />
+<img src="/images/llama3实现/karpathyminbpe.png" srcset="/img/loading.gif" lazyload alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs text">from pathlib import Path<br>import tiktoken<br>from tiktoken.load import load_tiktoken_bpe<br>import torch<br>import json<br>import matplotlib.pyplot as plt<br><br>tokenizer_path = &quot;Meta-Llama-3-8B/tokenizer.model&quot;<br>special_tokens = [<br>            &quot;&lt;|begin_of_text|&gt;&quot;,<br>            &quot;&lt;|end_of_text|&gt;&quot;,<br>            &quot;&lt;|reserved_special_token_0|&gt;&quot;,<br>            &quot;&lt;|reserved_special_token_1|&gt;&quot;,<br>            &quot;&lt;|reserved_special_token_2|&gt;&quot;,<br>            &quot;&lt;|reserved_special_token_3|&gt;&quot;,<br>            &quot;&lt;|start_header_id|&gt;&quot;,<br>            &quot;&lt;|end_header_id|&gt;&quot;,<br>            &quot;&lt;|reserved_special_token_4|&gt;&quot;,<br>            &quot;&lt;|eot_id|&gt;&quot;,  # end of turn<br>        ] + [f&quot;&lt;|reserved_special_token_&#123;i&#125;|&gt;&quot; for i in range(5, 256 - 5)]<br>mergeable_ranks = load_tiktoken_bpe(tokenizer_path)<br>tokenizer = tiktoken.Encoding(<br>    name=Path(tokenizer_path).name,<br>    pat_str=r&quot;(?i:&#x27;s|&#x27;t|&#x27;re|&#x27;ve|&#x27;m|&#x27;ll|&#x27;d)|[^\r\n\p&#123;L&#125;\p&#123;N&#125;]?\p&#123;L&#125;+|\p&#123;N&#125;&#123;1,3&#125;| ?[^\s\p&#123;L&#125;\p&#123;N&#125;]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+&quot;,<br>    mergeable_ranks=mergeable_ranks,<br>    special_tokens=&#123;token: len(mergeable_ranks) + i for i, token in enumerate(special_tokens)&#125;,<br>)<br><br>tokenizer.decode(tokenizer.encode(&quot;hello world!&quot;))<br>&#x27;hello world!&#x27;<br></code></pre></td></tr></table></figure>
@@ -311,7 +310,7 @@ alt="img" />
 但由于我们是从头开始实现 llama3，因此我们将一次读取一个张量文件。</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-c237a044abe6bbdc2556cbe7acf044b3_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-c237a044abe6bbdc2556cbe7acf044b3_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -328,7 +327,7 @@ id="我们使用此配置来推断有关模型的详细信息例如">我们使�
 <p>这里我们使用 tiktoken （我认为是一个 openai 库）作为 tokenizer</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-1acdee68e45fc5503592b79e34c18258_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-1acdee68e45fc5503592b79e34c18258_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -339,7 +338,7 @@ alt="img" />
 注意：跟踪形状，它让你更容易理解一切</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-a4436330430517444590607a5af4bfcf_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-a4436330430517444590607a5af4bfcf_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -349,7 +348,7 @@ alt="img" />
 <p>请注意，在这一步之后，形状不会改变，这些值只是需要记住的标准化内容，我们需要一个norm_eps（来自配置），因为我们不想意外地将rms设置为0并除以0，这里是公式：</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-645012127903f431f8f9f5f9dd506e66_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-645012127903f431f8f9f5f9dd506e66_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -359,7 +358,7 @@ alt="img" />
 <p>无论如何，你会看到我从模型字典访问layer.0（这是第一层），所以在标准化之后我们的形状仍然[17x4096]与嵌入相同但标准化</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-979811529314dc783cb499cf2ca93ece_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-979811529314dc783cb499cf2ca93ece_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -368,7 +367,7 @@ alt="img" />
 <p>让我们加载transformer第一层的注意力头</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-3a86ff1392e4ff420bdd9e65b3ce4d6d_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-3a86ff1392e4ff420bdd9e65b3ce4d6d_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -393,7 +392,7 @@ id="我们现在将查询权重与令牌嵌入相乘以接收令牌的查询">�
 个标记，每个标记都有一个 128 长度的查询。</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-b946f4191582804b9e03e0b3c2f0003d_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-b946f4191582804b9e03e0b3c2f0003d_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -410,7 +409,7 @@ RoPE（旋转位置嵌入）执行这些旋转。</p>
 target="_blank" rel="noopener" href="https://www.youtube.com/watch%3Fv%3Do29P0Kpobz0%26t%3D530s">https://www.youtube.com/watch?v=o29P0Kpobz0&amp;t=530s</a></p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-f49af1e8f64b0ce2eb5961232523607b_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-f49af1e8f64b0ce2eb5961232523607b_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -421,21 +420,21 @@ alt="img" />
 是我们旋转查询的标记的位置！</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-79322d3dcc6c412772c7389e8c4ed8b9_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-79322d3dcc6c412772c7389e8c4ed8b9_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <h2 id="使用复数的点积来旋转向量">使用复数的点积来旋转向量</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-58f0207e09f6c337fd2177a8e109a02c_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-58f0207e09f6c337fd2177a8e109a02c_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs text">zero_to_one_split_into_64_parts = torch.tensor(range(64))/64<br>zero_to_one_split_into_64_parts<br>tensor([0.0000, 0.0156, 0.0312, 0.0469, 0.0625, 0.0781, 0.0938, 0.1094, 0.1250,<br>        0.1406, 0.1562, 0.1719, 0.1875, 0.2031, 0.2188, 0.2344, 0.2500, 0.2656,<br>        0.2812, 0.2969, 0.3125, 0.3281, 0.3438, 0.3594, 0.3750, 0.3906, 0.4062,<br>        0.4219, 0.4375, 0.4531, 0.4688, 0.4844, 0.5000, 0.5156, 0.5312, 0.5469,<br>        0.5625, 0.5781, 0.5938, 0.6094, 0.6250, 0.6406, 0.6562, 0.6719, 0.6875,<br>        0.7031, 0.7188, 0.7344, 0.7500, 0.7656, 0.7812, 0.7969, 0.8125, 0.8281,<br>        0.8438, 0.8594, 0.8750, 0.8906, 0.9062, 0.9219, 0.9375, 0.9531, 0.9688,<br>        0.9844])<br>freqs = 1.0 / (rope_theta ** zero_to_one_split_into_64_parts)<br>freqs<br>tensor([1.0000e+00, 8.1462e-01, 6.6360e-01, 5.4058e-01, 4.4037e-01, 3.5873e-01,<br>        2.9223e-01, 2.3805e-01, 1.9392e-01, 1.5797e-01, 1.2869e-01, 1.0483e-01,<br>        8.5397e-02, 6.9566e-02, 5.6670e-02, 4.6164e-02, 3.7606e-02, 3.0635e-02,<br>        2.4955e-02, 2.0329e-02, 1.6560e-02, 1.3490e-02, 1.0990e-02, 8.9523e-03,<br>        7.2927e-03, 5.9407e-03, 4.8394e-03, 3.9423e-03, 3.2114e-03, 2.6161e-03,<br>        2.1311e-03, 1.7360e-03, 1.4142e-03, 1.1520e-03, 9.3847e-04, 7.6450e-04,<br>        6.2277e-04, 5.0732e-04, 4.1327e-04, 3.3666e-04, 2.7425e-04, 2.2341e-04,<br>        1.8199e-04, 1.4825e-04, 1.2077e-04, 9.8381e-05, 8.0143e-05, 6.5286e-05,<br>        5.3183e-05, 4.3324e-05, 3.5292e-05, 2.8750e-05, 2.3420e-05, 1.9078e-05,<br>        1.5542e-05, 1.2660e-05, 1.0313e-05, 8.4015e-06, 6.8440e-06, 5.5752e-06,<br>        4.5417e-06, 3.6997e-06, 3.0139e-06, 2.4551e-06])<br>freqs_for_each_token = torch.outer(torch.arange(17), freqs)<br>freqs_cis = torch.polar(torch.ones_like(freqs_for_each_token), freqs_for_each_token)<br>freqs_cis.shape<br><br># viewing tjhe third row of freqs_cis<br>value = freqs_cis[3]<br>plt.figure()<br>for i, element in enumerate(value[:17]):<br>    plt.plot([0, element.real], [0, element.imag], color=&#x27;blue&#x27;, linewidth=1, label=f&quot;Index: &#123;i&#125;&quot;)<br>    plt.annotate(f&quot;&#123;i&#125;&quot;, xy=(element.real, element.imag), color=&#x27;red&#x27;)<br>plt.xlabel(&#x27;Real&#x27;)<br>plt.ylabel(&#x27;Imaginary&#x27;)<br>plt.title(&#x27;Plot of one row of freqs_cis&#x27;)<br>plt.show()<br></code></pre></td></tr></table></figure>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-3b27398a4bea72f1f64f3115faf516ae_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-3b27398a4bea72f1f64f3115faf516ae_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -452,7 +451,7 @@ id="现在我们对每个标记token的查询元素都有一个复数角度变�
 <h2 id="键几乎与查询相同">键（几乎与查询相同）</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-c997910e27f5cebae65b38a6b46d5b85_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-c997910e27f5cebae65b38a6b46d5b85_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -465,7 +464,7 @@ alt="img" />
 id="在此阶段现在每个标记都有查询和键的旋转值">在此阶段，现在每个标记都有查询和键的旋转值。</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-b3bacaeb87eba8b665968d1c4e06ad28_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-b3bacaeb87eba8b665968d1c4e06ad28_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -477,7 +476,7 @@ id="在下一步中我们将乘以查询和关键矩阵">4.在下一步中，我
 是提示中的标记数量</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-e4b38700f8f38d052ddc34bb770077d3_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-e4b38700f8f38d052ddc34bb770077d3_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -488,41 +487,41 @@ alt="img" />
 因此，在推理过程中，我们将未来的标记设置为零。</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-32b947acb627e83f1be3cfaf7bcea213_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-32b947acb627e83f1be3cfaf7bcea213_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs text">def display_qk_heatmap(qk_per_token):<br>    _, ax = plt.subplots()<br>    im = ax.imshow(qk_per_token.to(float).detach(), cmap=&#x27;viridis&#x27;)<br>    ax.set_xticks(range(len(prompt_split_as_tokens)))<br>    ax.set_yticks(range(len(prompt_split_as_tokens)))<br>    ax.set_xticklabels(prompt_split_as_tokens)<br>    ax.set_yticklabels(prompt_split_as_tokens)<br>    ax.figure.colorbar(im, ax=ax)<br>    <br>display_qk_heatmap(qk_per_token)<br></code></pre></td></tr></table></figure>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-7200e3d7069abc5a550654c2e2c0635a_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-7200e3d7069abc5a550654c2e2c0635a_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs text">mask = torch.full((len(tokens), len(tokens)), float(&quot;-inf&quot;), device=tokens.device)<br>mask = torch.triu(mask, diagonal=1)<br>mask<br>tensor([[0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., -inf, -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., -inf],<br>        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])<br>qk_per_token_after_masking = qk_per_token + mask<br>display_qk_heatmap(qk_per_token_after_masking)<br></code></pre></td></tr></table></figure>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-9d128697d492aac646b8458d83c59a86_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-9d128697d492aac646b8458d83c59a86_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-f023e1085ebbe8e6b882d54ca7a4e147_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-f023e1085ebbe8e6b882d54ca7a4e147_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">qk_per_token_after_masking_after_softmax = torch.nn.functional.softmax(qk_per_token_after_masking, dim=1).to(torch.bfloat16)<br>display_qk_heatmap(qk_per_token_after_masking_after_softmax)<br></code></pre></td></tr></table></figure>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-af163b0bde4ab6ddc644d5d30a3dea53_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-af163b0bde4ab6ddc644d5d30a3dea53_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
 <h2 id="值values注意力几乎结束">值（values）（注意力几乎结束）</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-f636fe202c7a600487771fb278566cc9_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-f636fe202c7a600487771fb278566cc9_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -535,7 +534,7 @@ alt="img" />
 <h2 id="值向量value-vectors">值向量（value vectors）</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-4f9bf9fa8cb5ec2f7f338049e98df276_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-4f9bf9fa8cb5ec2f7f338049e98df276_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -545,7 +544,7 @@ alt="img" />
 <h1 id="注意力">5.注意力</h1>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-c022102b0ca593356099825ddc0cb312_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-c022102b0ca593356099825ddc0cb312_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -557,7 +556,7 @@ alt="img" />
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs text">qkv_attention_store = []<br><br>for head in range(n_heads):<br>    q_layer0_head = q_layer0[head]<br>    k_layer0_head = k_layer0[head//4] # key weights are shared across 4 heads<br>    v_layer0_head = v_layer0[head//4] # value weights are shared across 4 heads<br>    q_per_token = torch.matmul(token_embeddings, q_layer0_head.T)<br>    k_per_token = torch.matmul(token_embeddings, k_layer0_head.T)<br>    v_per_token = torch.matmul(token_embeddings, v_layer0_head.T)<br><br>    q_per_token_split_into_pairs = q_per_token.float().view(q_per_token.shape[0], -1, 2)<br>    q_per_token_as_complex_numbers = torch.view_as_complex(q_per_token_split_into_pairs)<br>    q_per_token_split_into_pairs_rotated = torch.view_as_real(q_per_token_as_complex_numbers * freqs_cis[:len(tokens)])<br>    q_per_token_rotated = q_per_token_split_into_pairs_rotated.view(q_per_token.shape)<br><br>    k_per_token_split_into_pairs = k_per_token.float().view(k_per_token.shape[0], -1, 2)<br>    k_per_token_as_complex_numbers = torch.view_as_complex(k_per_token_split_into_pairs)<br>    k_per_token_split_into_pairs_rotated = torch.view_as_real(k_per_token_as_complex_numbers * freqs_cis[:len(tokens)])<br>    k_per_token_rotated = k_per_token_split_into_pairs_rotated.view(k_per_token.shape)<br><br>    qk_per_token = torch.matmul(q_per_token_rotated, k_per_token_rotated.T)/(128)**0.5<br>    mask = torch.full((len(tokens), len(tokens)), float(&quot;-inf&quot;), device=tokens.device)<br>    mask = torch.triu(mask, diagonal=1)<br>    qk_per_token_after_masking = qk_per_token + mask<br>    qk_per_token_after_masking_after_softmax = torch.nn.functional.softmax(qk_per_token_after_masking, dim=1).to(torch.bfloat16)<br>    qkv_attention = torch.matmul(qk_per_token_after_masking_after_softmax, v_per_token)<br>    qkv_attention = torch.matmul(qk_per_token_after_masking_after_softmax, v_per_token)<br>    qkv_attention_store.append(qkv_attention)<br><br>len(qkv_attention_store)<br>32<br></code></pre></td></tr></table></figure>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-8031063609f976093e7b47ba068f359d_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-8031063609f976093e7b47ba068f359d_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -568,7 +567,7 @@ alt="img" />
 <h1 id="权重矩阵最后步骤之一">6.权重矩阵，最后步骤之一</h1>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-076def42e5c789cd9e63170716ed7fea_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-076def42e5c789cd9e63170716ed7fea_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -580,7 +579,7 @@ matmul</h2>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">embedding_delta = torch.matmul(stacked_qkv_attention, w_layer0.T)<br>embedding_delta.shape<br>torch.Size([17, 4096])<br></code></pre></td></tr></table></figure>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-e3f7584e47bc523b3f1711d74d64534e_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-e3f7584e47bc523b3f1711d74d64534e_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -590,7 +589,7 @@ alt="img" />
 id="我们进行标准化然后通过嵌入增量运行前馈神经网络">7.我们进行标准化，然后通过嵌入增量运行前馈神经网络</h1>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-bab8f207f6096fe5f7f0b4908e20a202_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-bab8f207f6096fe5f7f0b4908e20a202_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -598,7 +597,7 @@ alt="img" />
 <h2 id="加载-ff-权重并实现前馈网络">加载 ff 权重并实现前馈网络</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-c632ca45a493952c3ba94901629df5e5_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-c632ca45a493952c3ba94901629df5e5_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -615,7 +614,7 @@ id="我们终于在第一层之后为每个令牌有了新编辑的嵌入">我�
 <h2 id="天哪一切都同时发生">天哪，一切都同时发生</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-9abf6da09122332cf71f63526ec24dd9_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-9abf6da09122332cf71f63526ec24dd9_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -628,7 +627,7 @@ id="我们现在有了最终的嵌入模型可以对下一个标记做出的最�
 是嵌入暗淡</p>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-5b3c042a93c2a044a82e2e64f84d3065_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-5b3c042a93c2a044a82e2e64f84d3065_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -637,7 +636,7 @@ alt="img" />
 id="最后让我们将嵌入解码到令牌值中">最后，让我们将嵌入解码到令牌值中</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-6e7276c4975ec431052164c8c49b946a_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-6e7276c4975ec431052164c8c49b946a_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
@@ -657,7 +656,7 @@ id="模型预测令牌编号-2983-作为下一个令牌这是-42-的令牌编号
 <h2 id="lets-go">Let's go</h2>
 <figure>
 <img
-src="C:\Users\10921\Desktop\llama3实现\v2-e436800962c747e6de871c364891ae90_720w.png" srcset="/img/loading.gif" lazyload
+src="/images/llama3实现/v2-e436800962c747e6de871c364891ae90_720w.png" srcset="/img/loading.gif" lazyload
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
