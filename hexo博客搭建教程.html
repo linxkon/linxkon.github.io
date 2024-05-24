@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/hexo.png">
 <meta property="article:published_time" content="2022-02-21T15:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-16T14:18:22.227Z">
+<meta property="article:modified_time" content="2024-05-24T07:06:04.263Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="博客搭建">
 <meta property="article:tag" content="知识管理">
@@ -414,21 +414,22 @@ alt="在这里插入图片描述" /></strong></p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs verilog">hexo c   #清除缓存文件 db<span class="hljs-variable">.json</span> 和已生成的静态文件 public<br>hexo g       #生成网站静态文件到默认设置的 public 文件夹(hexo <span class="hljs-keyword">generate</span> 的缩写)<br>hexo d       #自动生成网站静态文件，并部署到设定的仓库(hexo deploy 的缩写)<br></code></pre></td></tr></table></figure>
 <p><strong>注意deploy时会让输个yes</strong></p>
 <p><strong><em>*最后回到github上查看自己的仓库：*</em></strong></p>
-<p><strong><em>*<img
+<p><img
 src="/images/hexo博客搭建教程/5a62c4630f164385831ad449065b5b03.png" srcset="/img/loading.gif" lazyload
-alt="在这里插入图片描述" /> 这就表示上传成功。*</em></strong></p>
-<p>**<em>*</em>*现在就可以使用xxx.github.io来访问你的博客啦
-例如：我的用户名是goubin18，那么我的博客地址就是<code>goubin18.github.io</code>******</p>
-<p>**<em>*</em>*举例如下：******</p>
-<p>**<em>*</em>*<img
-src="/images/hexo博客搭建教程/9eefc08e36464040bc8fbe8d9716073b.png" srcset="/img/loading.gif" lazyload
-alt="在这里插入图片描述" />******</p>
+alt="在这里插入图片描述" /> 这就表示上传成功。</p>
+<p>现在就可以使用xxx.github.io来访问你的博客啦
+例如：我的用户名是linxkon，那么我的博客地址就是<code>linxkon.github.io</code></p>
+<p>举例如下：</p>
+<figure>
+<img src="/images/hexo博客搭建教程/9eefc08e36464040bc8fbe8d9716073b.png" srcset="/img/loading.gif" lazyload
+alt="在这里插入图片描述" />
+<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
+</figure>
 <h1 id="写在最后">写在最后：</h1>
 <blockquote>
-<p>**<em>*</em>*现在简单的博客已经搭建完成了 现在你的个人网站的地址是
+<p>现在简单的博客已经搭建完成了 现在你的个人网站的地址是
 xxx.github.io，如果觉得这个网址配不上帅气多金的你，你就可以设置个人域名了。但是需要花钱。
-小提示：
-操作要细心，如果出现了问题可以私信留言，大家一起想办法！******</p>
+小提示： 操作要细心，如果出现了问题可以私信留言，大家一起想办法！</p>
 </blockquote>
 
                 
@@ -548,23 +549,19 @@ xxx.github.io，如果觉得这个网址配不上帅气多金的你，你就可�
   
     <article id="comments" lazyload>
       
-  <div id="valine"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
         var options = Object.assign(
-          {"appId":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","appKey":"3bwflR7evMRYC6JTohHAE31C","path":"window.location.pathname","placeholder":"hello","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":null,"emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            el: "#valine",
-            path: window.location.pathname
+            id: '62bae08659ad111fa54ffa5e1c71eb27'
           }
         )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
       });
     });
   </script>
@@ -858,5 +855,23 @@ xxx.github.io，如果觉得这个网址配不上帅气多金的你，你就可�
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
 </body>
 </html>
