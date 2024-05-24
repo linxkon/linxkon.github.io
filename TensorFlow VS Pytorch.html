@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/tensorflow.png">
 <meta property="article:published_time" content="2023-02-26T06:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-21T08:24:55.913Z">
+<meta property="article:modified_time" content="2024-05-24T06:42:21.343Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="学习框架">
@@ -450,23 +450,19 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
   
     <article id="comments" lazyload>
       
-  <div id="valine"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
         var options = Object.assign(
-          {"appId":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","appKey":"3bwflR7evMRYC6JTohHAE31C","path":"window.location.pathname","placeholder":"hello","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":null,"emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            el: "#valine",
-            path: window.location.pathname
+            id: '85a9fc52af9dc2a0ae5fc0e9d4ddb85c'
           }
         )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
       });
     });
   </script>
@@ -760,23 +756,5 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
-</script>
 </body>
 </html>
