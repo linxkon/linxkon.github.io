@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/xdboost.png">
 <meta property="article:published_time" content="2022-09-01T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-31T00:44:13.820Z">
+<meta property="article:modified_time" content="2024-06-02T12:49:13.569Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="回归模型">
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          804 字
+          3.1k 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          7 分钟
+          26 分钟
         
       </span>
     
@@ -316,12 +316,12 @@
                 
                 <p>在机器学习中，参数调优是一门玄学，因为模型的最优参数可能依赖于许多场景。因此，不可能为参数调优创建一个全面的指南。本文尝试为XGBoost中的参数提供一些指导。</p>
 <span id="more"></span>
-<h3
-id="理解偏差-方差权衡bias-variance-tradeoff">1.理解偏差-方差权衡(Bias-Variance
-Tradeoff)</h3>
+<h2 id="一.-思路概述">一. 思路概述</h2>
+<h3 id="理解偏差-方差权衡bias-variance-tradeoff">1.1
+理解偏差-方差权衡(Bias-Variance Tradeoff)</h3>
 <p>如果你参加过机器学习或统计学课程，这可能是最重要的概念之一。当我们允许模型变得更加复杂（例如，增加深度）时，模型具有更好的拟合训练数据的能力，从而获得偏差较小的模型。然而，这种复杂的模型需要更多的数据来进行拟合。</p>
 <p>XGBoost中的大多数参数都涉及偏差和方差的权衡。最好的模型应该在模型复杂度和预测能力之间进行仔细权衡。参数文档会告诉你每个参数是否会使模型更保守。这可以帮助你在复杂模型和简单模型之间进行调整。</p>
-<h3 id="控制过拟合">2.控制过拟合</h3>
+<h3 id="控制过拟合">1.2 控制过拟合</h3>
 <p>当你观察到训练准确率高但测试准确率低时，很可能遇到了过拟合问题。</p>
 <p>在XGBoost中，一般有两种方法可以控制过拟合：</p>
 <blockquote>
@@ -333,7 +333,7 @@ Tradeoff)</h3>
 <p>​ <code>这包括subsample和colsample_bytree。</code></p>
 </blockquote>
 <p>你还可以减少步长eta。记住在这样做时增加num_round。</p>
-<h3 id="处理数据集不平衡">3.处理数据集不平衡</h3>
+<h3 id="处理数据集不平衡">1.3 处理数据集不平衡</h3>
 <p>对于诸如广告点击日志等常见情况，数据集极度不平衡。这会影响XGBoost模型的训练，有两种方法可以改进。</p>
 <blockquote>
 <p>如果你只关心预测的整体性能指标（AUC）</p>
@@ -347,11 +347,166 @@ Tradeoff)</h3>
 <li><p>将参数max_delta_step设置为一个有限的数值（例如1）以帮助收敛</p></li>
 </ul>
 </blockquote>
-<h3 id="减少内存使用">4.减少内存使用</h3>
+<h3 id="减少内存使用">1.4 减少内存使用</h3>
 <p>如果你使用类似sklearn.model_selection.GridSearchCV的HPO库，请控制它可以使用的线程数。最好让XGBoost并行运行，而不是让GridSearchCV同时运行多个实验。例如，为交叉验证创建一个数据折叠可以消耗大量内存：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 这会创建数据集的副本。X和X_train同时存在于内存中。</span><br><span class="hljs-comment"># 如果你在n_jobs大于1的情况下运行`GridSearchCV`，每个线程都会同时发生这种情况。</span><br>X_train, X_test, y_train, y_test = train_test_split(X, y)<br><br>df = pd.DataFrame()<br><span class="hljs-comment"># 这会创建数据框的新副本，即使你指定了inplace参数</span><br>new_df = df.drop(...)<br><br>array = np.array(...)<br><span class="hljs-comment"># 这可能会也可能不会复制数据，具体取决于数据类型</span><br>array.astype(np.float32)<br><br><span class="hljs-comment"># np默认使用双精度，你真的需要吗？</span><br>array = np.array(...)<br></code></pre></td></tr></table></figure>
 <p>你可以在文档中找到一些更具体的减少内存使用的实践。例如：与Dask的分布式XGBoost、XGBoost
 GPU支持。然而，在深入研究这些之前，要意识到数据副本的创建是一个好的起点。它通常消耗的内存比人们预期的要多得多</p>
+<h2 id="二.-xgb参数详解">二. XGB参数详解</h2>
+<p>在运行 XGBoost 之前, 我们必须设置三种类型的参数: 常规参数,
+提升器参数和任务参数.</p>
+<ul>
+<li>常规参数与我们用于提升的提升器有关，通常是树模型或线性模型</li>
+<li>提升器参数取决于你所选择的提升器</li>
+<li>学习任务的参数决定了学习场景,
+例如回归任务可以使用不同的参数进行排序相关的任务</li>
+<li>命令行参数的行为与 xgboost 的 CLI 版本相关</li>
+</ul>
+<h3 id="常规参数">2.1 常规参数</h3>
+<h4 id="booster-默认gbtree">booster [默认=gbtree]</h4>
+<p>选择使用哪种booster，可以是gbtree、gblinear或dart。gbtree和dart使用基于树的模型，而gblinear使用线性函数。</p>
+<h4 id="silent-默认0">silent [默认=0]</h4>
+<p>0表示打印运行信息，1表示静默模式。</p>
+<h4 id="nthread-默认值为可用的最大线程数如果未设置">nthread
+[默认值为可用的最大线程数，如果未设置]</h4>
+<p>用于运行xgboost的并行线程数。</p>
+<h4 id="num_pbuffer-由xgboost自动设置无需用户设置">num_pbuffer
+[由xgboost自动设置，无需用户设置]</h4>
+<p>预测缓冲区的大小，通常设置为训练实例的数量。缓冲区用于保存上一次boosting步骤的预测结果。</p>
+<h4 id="num_feature-由xgboost自动设置无需用户设置">num_feature
+[由xgboost自动设置，无需用户设置]</h4>
+<p>boosting过程中使用的特征维度，设置为特征的最大维度。</p>
+<h3 id="用于-tree-提升的参数">2.2 用于 Tree 提升的参数</h3>
+<h4 id="eta-默认0.3">⭐eta [默认=0.3]</h4>
+<p>用于更新的步长缩减，以防止过拟合。在每个提升步骤之后，我们可以直接获得新特征的权重。eta
+实际上是缩小了特征权重，使提升过程更加保守。 范围: [0,1]</p>
+<h4 id="gamma-默认0">⭐gamma [默认=0]</h4>
+<p>在树的叶节点上进行进一步分区所需的最小损失减少量。值越大，算法越保守。
+范围: [0,∞]</p>
+<h4 id="max_depth-默认6">⭐max_depth [默认=6]</h4>
+<p>树的最大深度，增加此值将使模型更加复杂/更容易过拟合。 范围: [1,∞]</p>
+<h4 id="min_child_weight-默认1">⭐min_child_weight [默认=1]</h4>
+<p>子节点所需的实例权重（赫西安矩阵）的最小和。如果树分区步骤导致叶节点的实例权重和小于
+min_child_weight，那么构建过程将放弃进一步分区。在线性回归模式下，这仅对应于每个节点所需的最小实例数。值越大，算法越保守。
+范围: [0,∞]</p>
+<h4 id="max_delta_step-默认0">max_delta_step [默认=0]</h4>
+<p>每棵树的权重估计允许的最大步长。如果设置为0，则表示没有约束。如果设置为正值，可以帮助使更新步骤更加保守。通常不需要此参数，但在类极不平衡的逻辑回归中可能会有所帮助。设置为1-10的值可能有助于控制更新。
+范围: [0,∞]</p>
+<h4 id="subsample-默认1">subsample [默认=1]</h4>
+<p>训练实例的子采样比例。设置为0.5表示XGBoost随机收集一半的数据实例来生长树，这将防止过拟合。
+范围: (0,1]</p>
+<h4 id="colsample_bytree-默认1">colsample_bytree [默认=1]</h4>
+<p>构建每棵树时的列的子采样比例。 范围: (0,1]</p>
+<h4 id="colsample_bylevel-默认1">colsample_bylevel [默认=1]</h4>
+<p>在每个层次上分割时的列的子采样比例。 范围: (0,1]</p>
+<h4 id="lambda-默认1">⭐lambda [默认=1]</h4>
+<p>权重上的L2正则化项，增加此值将使模型更加保守。</p>
+<h4 id="alpha-默认0">alpha [默认=0]</h4>
+<p>权重上的L1正则化项，增加此值将使模型更加保守。</p>
+<h4 id="tree_method-string-默认auto">tree_method, string
+[默认=‘auto’]</h4>
+<p>XGBoost中使用的树构建算法（参见参考文献中的描述）。
+分布式和外部存储版本仅支持近似算法。 选择：{‘auto’, ‘exact’,
+‘approx’}</p>
+<blockquote>
+<p>‘auto’: 使用启发式方法选择更快的算法。
+对于中小型数据集，将使用精确贪婪算法。
+对于非常大的数据集，将选择近似算法。
+由于旧行为始终在单机上使用精确贪婪算法，因此在选择近似算法时用户将收到通知。
+‘exact’: 精确贪婪算法。 ‘approx’: 使用素描和直方图的近似贪婪算法。</p>
+</blockquote>
+<h4 id="sketch_eps-默认0.03">sketch_eps, [默认=0.03]</h4>
+<p>仅用于近似贪婪算法。 这大致转换为 O(1 / sketch_eps)
+个箱子的数量。相比于直接选择箱子的数量，这种方法带有理论上的素描准确性保证。
+通常用户不需要调整此参数，但可以考虑设置为较低的值以获得更准确的枚举。
+范围: (0, 1)</p>
+<h4 id="scale_pos_weight-默认0">⭐scale_pos_weight, [默认=0]</h4>
+<p>控制正负权重的平衡，对不平衡类别有用。一个典型的考虑值是：sum(负例) /
+sum(正例)。详见参数调优中的更多讨论。参见 Higgs Kaggle 比赛的示例：R,
+py1, py2, py3</p>
+<h3 id="学习任务的参数">2.3 学习任务的参数</h3>
+<p>指定学习任务及相应的学习目标。可选的目标如下：</p>
+<h4 id="objective-默认值reglinear">objective [默认值=reg:linear]</h4>
+<blockquote>
+<ul>
+<li><p>“reg:linear” – 线性回归</p></li>
+<li><p>“reg:logistic” – 逻辑回归</p></li>
+<li><p>“binary:logistic” – 用于二分类的逻辑回归，输出概率</p></li>
+<li><p>“binary:logitraw” –
+用于二分类的逻辑回归，输出逻辑变换前的得分</p></li>
+<li><p>“count:poisson” – 计数数据的泊松回归，输出泊松分布的均值
+泊松回归中max_delta_step默认设为0.7（用于保障优化过程）</p></li>
+<li><p>“multi:softmax” –
+使用softmax目标设置XGBoost进行多类分类，还需要设置num_class（类别数）</p></li>
+<li><p>“multi:softprob” – 与softmax相同，但输出一个ndata *
+nclass的向量，可以进一步重塑为ndata,
+nclass矩阵。结果包含每个数据点属于每个类别的预测概率。</p></li>
+<li><p>“rank:pairwise” –
+设置XGBoost通过最小化成对损失来执行排序任务</p></li>
+<li><p>“reg:gamma” –
+用于严重度数据的伽玛回归，输出伽玛分布的均值</p></li>
+</ul>
+</blockquote>
+<h4 id="base_score-默认值0.5">base_score [默认值=0.5]</h4>
+<p>所有实例的初始预测得分，全局偏差
+对于足够多的迭代次数，改变这个值不会有太大影响。</p>
+<h4 id="eval_metric-默认值根据objective确定">⭐eval_metric
+[默认值根据objective确定]</h4>
+<p>验证数据的评估指标，将根据objective分配一个默认指标（回归任务为rmse，分类任务为error，排序任务为平均精度）
+用户可以添加多个评估指标，对于Python用户，请记住将指标作为参数对的列表传递，而不是映射，这样后面的‘eval_metric’不会覆盖前面的。</p>
+<p>可选的评估指标如下：</p>
+<blockquote>
+<ul>
+<li><p>“rmse”：均方根误差</p></li>
+<li><p>“mae”：平均绝对误差</p></li>
+<li><p>“logloss”：负对数似然</p></li>
+<li><p>“error”：二分类错误率。计算方法为
+#(错误案例)/#(所有案例)。对于预测，评估会将预测值大于0.5的实例视为正例，其余视为负例。</p></li>
+<li><p>“merror”：多类分类错误率。计算方法为
+#(错误案例)/#(所有案例)。</p></li>
+<li><p>“mlogloss”：多类对数损失</p></li>
+<li><p>“auc”：用于排序评估的曲线下面积</p></li>
+<li><p>“ndcg”：归一化折扣累积增益</p></li>
+<li><p>“map”：平均精度</p></li>
+<li><p>“ndcg@n”，“map@n”：n可以设为一个整数，用于截断评估列表中的前n个位置。</p></li>
+<li><p>“ndcg-”，“map-”，“ndcg@n-”，“map@n-”：在XGBoost中，NDCG和MAP将评估没有任何正样本的列表的得分为1。通过在评估指标中添加“-”，XGBoost将在某些条件下将这些得分评估为0。</p></li>
+<li><p>“gamma-deviance”： [伽玛回归的残差偏差]</p></li>
+</ul>
+</blockquote>
+<h4 id="seed-默认值0">seed [默认值=0]</h4>
+<p>随机数种子。</p>
+<h3 id="用于-dart-booster-的其它参数">2.4 用于 Dart Booster
+的其它参数</h3>
+<h4 id="sample_type-默认值uniform"><code>sample_type</code>
+[默认值=”uniform”]</h4>
+<p>采样算法的类型。<br />
+“uniform”：均匀选择丢弃的树。<br />
+“weighted”：按权重比例选择丢弃的树。</p>
+<h4 id="normalize_type-默认值tree"><code>normalize_type</code>
+[默认值=”tree”]</h4>
+<p>归一化算法的类型。<br />
+“tree”：新树的权重与每棵丢弃的树相同。<br />
+新树的权重为 1 / (k + 学习率)<br />
+丢弃的树按 k / (k + 学习率) 进行缩放。<br />
+“forest”：新树的权重与丢弃树（森林）的权重总和相同。<br />
+新树的权重为 1 / (1 + 学习率)<br />
+丢弃的树按 1 / (1 + 学习率) 进行缩放。</p>
+<h4 id="rate_drop-默认值0.0"><code>rate_drop</code> [默认值=0.0]</h4>
+<p>丢弃率。<br />
+范围：[0.0, 1.0]</p>
+<h3 id="用于-linear-booster-的参数">2.5 用于 Linear Booster 的参数</h3>
+<h4 id="skip_drop-默认值0.0"><code>skip_drop</code> [默认值=0.0]</h4>
+<p>跳过丢弃的概率。<br />
+如果跳过丢弃，新树将以与 gbtree 相同的方式添加。<br />
+范围：[0.0, 1.0]</p>
+<h4 id="lambda-默认值0">lambda [默认值=0]</h4>
+<p>权重的L2正则化项，增加这个值会使模型更加保守。</p>
+<p>alpha [默认值=0] 权重的L1正则化项，增加这个值会使模型更加保守。</p>
+<h4 id="lambda_bias">lambda_bias</h4>
+<p>偏置的L2正则化项，默认值为0（没有偏置的L1正则化，因为它不重要）。</p>
+<h3 id="三.-xgb代码示例">三. XGB代码示例</h3>
+<p>此代码用于二分类问题,使用XGB建模,并输出评估报告,绘制AUC曲线</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> xgboost <span class="hljs-keyword">as</span> xgb<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> roc_auc_score,roc_curve<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> classification_report<br><br><span class="hljs-comment"># 参数设置</span><br>params=&#123;<br><span class="hljs-string">&#x27;booster&#x27;</span>:<span class="hljs-string">&#x27;gblinear&#x27;</span>,<br><span class="hljs-string">&#x27;objective&#x27;</span>:<span class="hljs-string">&#x27;binary:logistic&#x27;</span>,<br><span class="hljs-string">&#x27;metric&#x27;</span>:<span class="hljs-string">&#x27;auc&#x27;</span>,<br><span class="hljs-string">&#x27;eval_metric&#x27;</span>:<span class="hljs-string">&#x27;auc&#x27;</span>,<br><span class="hljs-string">&#x27;eta&#x27;</span>:<span class="hljs-number">0.0425</span>,<br><span class="hljs-string">&#x27;max_depth&#x27;</span>:<span class="hljs-number">15</span>,<br><span class="hljs-string">&#x27;min_child_weight&#x27;</span>:<span class="hljs-number">20</span>,<br><span class="hljs-string">&#x27;gamma&#x27;</span>:<span class="hljs-number">0</span>,<br><span class="hljs-string">&#x27;subsample&#x27;</span>:<span class="hljs-number">1</span>,<br><span class="hljs-string">&#x27;colsample_bytree&#x27;</span>:<span class="hljs-number">1</span>,<br><span class="hljs-string">&#x27;scale_pos_weight&#x27;</span>:<span class="hljs-number">1</span><br>&#125;<br><br>dtrain = xgb.DMatrix(x, y)<br><br>lr_class_weight = xgb.train(params=params,dtrain=dtrain,num_boost_round=<span class="hljs-number">165</span>)<br><span class="hljs-comment"># 加载测试数据</span><br>data_test = test_slct3<br><br>data_test_encoding = pd.get_dummies(data_test)<br>y_test = data_test_encoding[<span class="hljs-string">&#x27;Attrition&#x27;</span>]<br>x_test = transfer.transform(data_test_encoding.drop(<span class="hljs-string">&#x27;Attrition&#x27;</span>, axis=<span class="hljs-number">1</span>))<br><br><span class="hljs-comment"># 使用xgb.DMatrix进行预测</span><br>y_pre_prob = lr_class_weight.predict(xgb.DMatrix(x_test))<br>y_pre = (y_pre_prob &gt;= <span class="hljs-number">0.70</span>).astype(<span class="hljs-built_in">int</span>)  <span class="hljs-comment"># 将概率转换为0或1</span><br><br>train_y_pre_prob = lr_class_weight.predict(xgb.DMatrix(x))<br>train_y_pre = (train_y_pre_prob &gt;= <span class="hljs-number">0.70</span>).astype(<span class="hljs-built_in">int</span>)  <span class="hljs-comment"># 将概率转换为0或1</span><br><br><span class="hljs-comment"># 计算并打印ROC AUC得分</span><br>roc_auc = roc_auc_score(y_test, y_pre_prob)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;ROC AUC Score: <span class="hljs-subst">&#123;roc_auc&#125;</span>&quot;</span>)<br><br><span class="hljs-comment"># 计算并打印ROC AUC得分</span><br>roc_auc = roc_auc_score(y_test, y_pre_prob)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;ROC AUC Score: <span class="hljs-subst">&#123;roc_auc&#125;</span>&quot;</span>)<br><br><span class="hljs-comment"># 生成并打印classification_report</span><br>report = classification_report(y_test, y_pre)<br><span class="hljs-built_in">print</span>(report)<br><span class="hljs-comment"># 绘制ROC曲线</span><br>fpr, tpr, _ = roc_curve(y_test, y_pre_prob)<br>fpr_train, tpr_train,_=roc_curve(y, train_y_pre_prob)<br>plt.plot(fpr, tpr, label=<span class="hljs-string">&#x27;evl ROC&#x27;</span>)<br>plt.plot(fpr_train, tpr_train, label=<span class="hljs-string">&#x27;Train ROC&#x27;</span>)<br>plt.plot([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-string">&#x27;k--&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;False Positive Rate&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;True Positive Rate&#x27;</span>)<br>plt.title(<span class="hljs-string">&#x27;ROC Curve&#x27;</span>)<br>plt.legend(loc=<span class="hljs-string">&#x27;best&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
 
                 
               </div>
