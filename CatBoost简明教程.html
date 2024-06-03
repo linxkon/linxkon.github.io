@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="一 CatBoost简介 CatBoost和XGBoost、LightGBM并称为GBDT的三大主流神器，都是在GBDT算法框架下的一种改进实现。 正如其名字所说那样，CatBoost主要是在类别特征上的处理上做了很多的改进。">
+    <meta name="description" content="一 CatBoost简介CatBoost和XGBoost、LightGBM并称为GBDT的三大主流神器，都是在GBDT算法框架下的一种改进实现。 正如其名字所说那样，CatBoost主要是在类别特征上的处理上做了很多的改进。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CatBoost简明教程">
 <meta property="og:url" content="https://linxkon.github.io/CatBoost%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="一 CatBoost简介 CatBoost和XGBoost、LightGBM并称为GBDT的三大主流神器，都是在GBDT算法框架下的一种改进实现。 正如其名字所说那样，CatBoost主要是在类别特征上的处理上做了很多的改进。">
+<meta property="og:description" content="一 CatBoost简介CatBoost和XGBoost、LightGBM并称为GBDT的三大主流神器，都是在GBDT算法框架下的一种改进实现。 正如其名字所说那样，CatBoost主要是在类别特征上的处理上做了很多的改进。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/catboost.png">
 <meta property="article:published_time" content="2022-10-11T15:21:13.000Z">
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k 字
+          3k 字
         
       </span>
     
@@ -314,8 +314,7 @@
             
               <div class="markdown-body">
                 
-                <h2 id="一-catboost简介"><strong>一 CatBoost简介</strong></h2>
-<p>CatBoost和XGBoost、LightGBM并称为GBDT的三大主流神器，都是在GBDT算法框架下的一种改进实现。</p>
+                <h2 id="一-CatBoost简介"><a href="#一-CatBoost简介" class="headerlink" title="一 CatBoost简介"></a><strong>一 CatBoost简介</strong></h2><p>CatBoost和XGBoost、LightGBM并称为GBDT的三大主流神器，都是在GBDT算法框架下的一种改进实现。</p>
 <p>正如其名字所说那样，CatBoost主要是在类别特征上的处理上做了很多的改进。</p>
 <span id="more"></span>
 <p>从用户使用角度来看，相比XGBoost和LightGBM，CatBoost具有如下特点。</p>
@@ -327,8 +326,7 @@
 <li>类别特征：XGBoost不支持类别特征，需要OneHot编码预处理。LightGBM支持类别特征，需转换成整数编码。CatBoost提供更强大的对类别特征的支持，直接支持字符串类型的类别特征，无需预处理。</li>
 <li>缺失值特征：XGBoost和LightGBM都可以自动处理特征缺失值，CatBoost不能自动处理缺失值(或者将缺失值视为最小值/最大值)。</li>
 <li>GPU支持：LightGBM与CatBoost支持GPU训练，XGBoost不支持GPU训练。</li>
-<li>可视化：CatBoost还自带一套可视化工具，可以在Jupyter
-Notebook或者TensorBoard中实时看到指标变化。</li>
+<li>可视化：CatBoost还自带一套可视化工具，可以在Jupyter Notebook或者TensorBoard中实时看到指标变化。</li>
 </ul>
 <p>CatBoost主要创新点如下：</p>
 <ul>
@@ -337,132 +335,54 @@ Notebook或者TensorBoard中实时看到指标变化。</li>
 <li>避免预测偏移的 Ordered Boosting 方法。</li>
 <li>使用对称二叉树作为基模型，有正则作用且预测极快。</li>
 </ul>
-<figure>
-<img src="/images/catboost/v2-98453423ce486634a73c57943fd8737f.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-98453423ce486634a73c57943fd8737f" />
-<figcaption
-aria-hidden="true">v2-98453423ce486634a73c57943fd8737f</figcaption>
-</figure>
-<h2 id="二-原理说明"><strong>二 原理说明</strong></h2>
-<h3 id="类别特征的ordered-target-statistics-数值编码方法"><strong>1,
-类别特征的Ordered Target Statistics 数值编码方法</strong></h3>
-<p>对于类别特征，如果类别数目不多，可以使用onehot编码。</p>
+<p><img src="/images/catboost/v2-98453423ce486634a73c57943fd8737f.jpg" srcset="/img/loading.gif" lazyload alt="v2-98453423ce486634a73c57943fd8737f"></p>
+<h2 id="二-原理说明"><a href="#二-原理说明" class="headerlink" title="二 原理说明"></a><strong>二 原理说明</strong></h2><h3 id="1-类别特征的Ordered-Target-Statistics-数值编码方法"><a href="#1-类别特征的Ordered-Target-Statistics-数值编码方法" class="headerlink" title="1, 类别特征的Ordered Target Statistics 数值编码方法"></a><strong>1, 类别特征的Ordered Target Statistics 数值编码方法</strong></h3><p>对于类别特征，如果类别数目不多，可以使用onehot编码。</p>
 <p>但如果类别数量成百上千，使用onehot编码会导致特征数量爆炸。</p>
 <p>CatBoost设计了一种基于预测目标统计值的方法可以将类别特征转化为数值特征。</p>
 <p>以风控领域的预测信贷用户是否会违约为例，假设有一个类别特征是根据身份证号码解析出来的用户所出生的城市。</p>
 <p>全国有几百个城市，转化为onehot编码会造成特征维数爆炸。</p>
-<p>一种非常make sense
-的方式是我们用某个城市用户的平均逾期率来作为该城市的数值特征编码。</p>
-<p>简而言之,我们用如下方式将 city = "上海" 这一类别特征取值
-代替为如下值。</p>
-<p>city_numeric("上海") = sample_count(city="上海" and label=1(逾期)) /
-sample_count(city="上海")</p>
+<p>一种非常make sense 的方式是我们用某个城市用户的平均逾期率来作为该城市的数值特征编码。</p>
+<p>简而言之,我们用如下方式将 city = “上海” 这一类别特征取值 代替为如下值。</p>
+<p>city_numeric(“上海”) = sample_count(city=”上海” and label=1(逾期)) / sample_count(city=”上海”)</p>
 <p>这就是所谓的 Target Statistics 编码方法。</p>
 <p>但是考虑到有一些小城市，比如黑龙江鹤岗市，可能在训练样本中数量很少甚至没有，这时候用训练样本中鹤岗市的用户平均逾期率来估计会比较不靠谱。</p>
 <p>例如鹤岗市只有1个样本，并且这个样本是逾期的，那么数值编码</p>
-<p>city_numeric("鹤岗") = sample_count(city="鹤岗" and label=1(逾期)) /
-sample_count(city="鹤岗") = 1.0</p>
+<p>city_numeric(“鹤岗”) = sample_count(city=”鹤岗” and label=1(逾期)) / sample_count(city=”鹤岗”) = 1.0</p>
 <p>我们可以考虑加入先验值来抑制这种小样本的波动。</p>
-<p>假设不区分城市，全部训练样本中用户的 逾期率 为 P = 0.1,
-我们可以在分子分母上分别加入 a = 100个 逾期率为P 的先验样本。</p>
-<p>city_numeric("鹤岗") = (sample_count(city="鹤岗" and label=1(逾期)) +
-a·P) / （sample_count(city="鹤岗")+ a） = 11/101</p>
+<p>假设不区分城市，全部训练样本中用户的 逾期率 为 P = 0.1, 我们可以在分子分母上分别加入 a = 100个 逾期率为P 的先验样本。</p>
+<p>city_numeric(“鹤岗”) = (sample_count(city=”鹤岗” and label=1(逾期)) + a·P) / （sample_count(city=”鹤岗”)+ a） = 11/101</p>
 <p>这样就合理多了。</p>
-<p>这种数值编码方式虽然好，但是会造成训练集中
-label的泄露，因为对于某个样本来说，其数值编码计算过程中已经把这个样本的
-label值纳入了计算过程中。</p>
-<p>未来要预测的验证集的数据分布未必与训练集相同，例如训练集中 上海市
-用户的平均逾期率为
-0.12，但是验证集中上海市用户的平均逾期率可能只有0.04，在训练集中这个
-city_numeric特征可能会特别好用，特别重要，但是在验证集中可能会变得没有那么好用，没有那么重要。</p>
-<p>为了让模型正确地评估 city_numeric
-特征的真实有效性和重要程度，我们可以拿出一部分数据来计算这个
-特征编码，用另外一部分数据来训练。但是这样会造成可用数据的减少。</p>
-<p>CatBoost巧妙地设计了如下trick，来缓解这个问题。先将样本随机打乱，然后每个样本只使用它排序在它前面的样本来计算其类别特征的数值编码。这样就防止了label的泄露，并且能够较为合理地评估
-这个特征的真实有效性。</p>
+<p>这种数值编码方式虽然好，但是会造成训练集中 label的泄露，因为对于某个样本来说，其数值编码计算过程中已经把这个样本的 label值纳入了计算过程中。</p>
+<p>未来要预测的验证集的数据分布未必与训练集相同，例如训练集中 上海市 用户的平均逾期率为 0.12，但是验证集中上海市用户的平均逾期率可能只有0.04，在训练集中这个 city_numeric特征可能会特别好用，特别重要，但是在验证集中可能会变得没有那么好用，没有那么重要。</p>
+<p>为了让模型正确地评估 city_numeric 特征的真实有效性和重要程度，我们可以拿出一部分数据来计算这个 特征编码，用另外一部分数据来训练。但是这样会造成可用数据的减少。</p>
+<p>CatBoost巧妙地设计了如下trick，来缓解这个问题。先将样本随机打乱，然后每个样本只使用它排序在它前面的样本来计算其类别特征的数值编码。这样就防止了label的泄露，并且能够较为合理地评估 这个特征的真实有效性。</p>
 <p>不过这种方式会造成排在前面的样本的类别特征的数值编码估计不是很准，为了减少这个影响，CatBoost会设计多个样本随机排列(默认4个)，在每次建树前从中随机取一个排列。</p>
-<p>以上就是所谓的 Ordered Target Statistics
-编码方法，也是CatBoost最重要的创新。</p>
-<figure>
-<img src="/images/catboost/v2-90cfdd4e26bbcdc3825abe0a84e727a5.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-90cfdd4e26bbcdc3825abe0a84e727a5" />
-<figcaption
-aria-hidden="true">v2-90cfdd4e26bbcdc3825abe0a84e727a5</figcaption>
-</figure>
-<h3
-id="基于贪心策略的特征交叉方法"><strong>2，基于贪心策略的特征交叉方法</strong></h3>
-<p>使用Ordered Target Statistics
-方法将类别特征转化成为数值特征以后，会影响到特征交叉，因为数值特征无法有效地进行交叉。</p>
-<p>依然以风控领域的预测信贷用户是否会违约为例，假设 city="北京市" 且
-job="保安"
-的用户信用特别好，但不是北京市所有的用户都信用好，也不是所有的保安都信用特别好。
-只有北京市的保安这个群体才信用好。</p>
-<p>如果我们将
-city转换为数值编码，也将保安转换为数值编码之后，我们得到两个数，这两个数相乘是没有意义的，我们无法表示
-北京市的保安这个群体。</p>
-<p>为了有效地利用特征交叉，CatBoost
-在将类别特征转换为数值编码的同时，会自动生成 交叉特征。</p>
+<p>以上就是所谓的 Ordered Target Statistics 编码方法，也是CatBoost最重要的创新。</p>
+<p><img src="/images/catboost/v2-90cfdd4e26bbcdc3825abe0a84e727a5.jpg" srcset="/img/loading.gif" lazyload alt="v2-90cfdd4e26bbcdc3825abe0a84e727a5"></p>
+<h3 id="2，基于贪心策略的特征交叉方法"><a href="#2，基于贪心策略的特征交叉方法" class="headerlink" title="2，基于贪心策略的特征交叉方法"></a><strong>2，基于贪心策略的特征交叉方法</strong></h3><p>使用Ordered Target Statistics 方法将类别特征转化成为数值特征以后，会影响到特征交叉，因为数值特征无法有效地进行交叉。</p>
+<p>依然以风控领域的预测信贷用户是否会违约为例，假设 city=”北京市” 且 job=”保安” 的用户信用特别好，但不是北京市所有的用户都信用好，也不是所有的保安都信用特别好。 只有北京市的保安这个群体才信用好。</p>
+<p>如果我们将 city转换为数值编码，也将保安转换为数值编码之后，我们得到两个数，这两个数相乘是没有意义的，我们无法表示 北京市的保安这个群体。</p>
+<p>为了有效地利用特征交叉，CatBoost 在将类别特征转换为数值编码的同时，会自动生成 交叉特征。</p>
 <p>如果让全部的类别特征之间都进行交叉，两两交叉，三三交叉，四四交叉，这个复杂度是指数级的，特征维度一定会爆炸。</p>
-<p>CatBoost使用一种贪心的策略来进行特征交叉。生成tree的第一次分裂，CatBoost不使用任何交叉特征。在后面的分裂中，CatBoost会使用生成tree所用到的全部原始特征和交叉特征
-跟 数据集中的全部 类别特征进行交叉。</p>
-<p>在定义CatBoost模型时，我们可以用'max_ctr_complexity'
-来控制允许的特征交叉的最大特征数量，如果设置为3，那么生成tree时所用到的交叉特征最多只会来自3个特征的交叉，也就是我们只能表示
-city='北京市' 且 job='保安' 且
-education='高中'这样的三阶交叉特征，而无法表示 city='北京市' 且
-job='保安' 且 education='高中' 且 hobby='抽烟' 这样的四阶交叉特征。</p>
-<h3 id="避免预测偏移的-ordered-boosting-方法"><strong>3，避免预测偏移的
-Ordered Boosting 方法。</strong></h3>
-<p>使用XGBoost或者LightGBM做模型时，我们可能经常会发现模型在训练集上拟合的很好，train_auc甚至达到了1.0,
-但是在验证集上却差了很多, va_auc
-可能只有0.7。这当然有可能是因为tree的数量太多了，或者是每棵tree的leaves太多了，总之模型太复杂了造成了过拟合。</p>
+<p>CatBoost使用一种贪心的策略来进行特征交叉。生成tree的第一次分裂，CatBoost不使用任何交叉特征。在后面的分裂中，CatBoost会使用生成tree所用到的全部原始特征和交叉特征 跟 数据集中的全部 类别特征进行交叉。</p>
+<p>在定义CatBoost模型时，我们可以用’max_ctr_complexity’ 来控制允许的特征交叉的最大特征数量，如果设置为3，那么生成tree时所用到的交叉特征最多只会来自3个特征的交叉，也就是我们只能表示 city=’北京市’ 且 job=’保安’ 且 education=’高中’这样的三阶交叉特征，而无法表示 city=’北京市’ 且 job=’保安’ 且 education=’高中’ 且 hobby=’抽烟’ 这样的四阶交叉特征。</p>
+<h3 id="3，避免预测偏移的-Ordered-Boosting-方法。"><a href="#3，避免预测偏移的-Ordered-Boosting-方法。" class="headerlink" title="3，避免预测偏移的 Ordered Boosting 方法。"></a><strong>3，避免预测偏移的 Ordered Boosting 方法。</strong></h3><p>使用XGBoost或者LightGBM做模型时，我们可能经常会发现模型在训练集上拟合的很好，train_auc甚至达到了1.0, 但是在验证集上却差了很多, va_auc 可能只有0.7。这当然有可能是因为tree的数量太多了，或者是每棵tree的leaves太多了，总之模型太复杂了造成了过拟合。</p>
 <p>但也有一些XGBoost和LightGBM自身算法的缺陷因素。我们知道LightGBM在训练下一棵tree的时候，需要计算前面这些tree构成的加法模型在所有样本上的一阶梯度和二阶梯度(Loss对模型预测结果的导数)，然后用这些梯度来决定下一棵树的结构和叶子节点取值。</p>
 <p>但是我们计算的这些一阶梯度和二阶梯度值是问题的。前面的这些tree都是在这些样本上训练的，现在我们又在这些样本上估计模型预测结果的一阶和二阶梯度。我们应该换一些新的样本才更合理。但是我们从哪里找这些新的样本呢？</p>
-<p>CatBoost
-的作者故伎重演。先将样本随机打乱，然后每个样本只使用排序在它前面的样本来训练模型。用这样的模型来估计这个样本预测结果的一阶和二阶梯度。然后用这些梯度构建一棵tree的结构，最终tree的每个叶子节点的取值，是使用全体样本进行计算的。</p>
-<p>这就是Ordered
-Boosting的主要思想。可以有效地减少梯度估计的误差，缓解预测偏移。但是会增加较多的计算量，影响训练速度。</p>
-<p>在定义CatBoost模型时，我们可以用'boosting_type'这个参数来设置是使用Ordered
-Boosting 还是 LightGBM那样的 Plain
-Boosting。如果不显式设置，CatBoost会根据样本和特征数量自己决定。</p>
-<figure>
-<img src="/images/catboost/v2-7dbcacde377b5172a666fb1d981efbbb.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-7dbcacde377b5172a666fb1d981efbbb" />
-<figcaption
-aria-hidden="true">v2-7dbcacde377b5172a666fb1d981efbbb</figcaption>
-</figure>
-<h3
-id="使用对称二叉树作为基模型有正则作用且预测极快"><strong>4，使用对称二叉树作为基模型，有正则作用且预测极快</strong></h3>
-<p>XGBoost和LightGBM采用的基模型是普通的二叉树，但是CatBoost采用的是对称的二叉树。</p>
+<p>CatBoost 的作者故伎重演。先将样本随机打乱，然后每个样本只使用排序在它前面的样本来训练模型。用这样的模型来估计这个样本预测结果的一阶和二阶梯度。然后用这些梯度构建一棵tree的结构，最终tree的每个叶子节点的取值，是使用全体样本进行计算的。</p>
+<p>这就是Ordered Boosting的主要思想。可以有效地减少梯度估计的误差，缓解预测偏移。但是会增加较多的计算量，影响训练速度。</p>
+<p>在定义CatBoost模型时，我们可以用’boosting_type’这个参数来设置是使用Ordered Boosting 还是 LightGBM那样的 Plain Boosting。如果不显式设置，CatBoost会根据样本和特征数量自己决定。</p>
+<p><img src="/images/catboost/v2-7dbcacde377b5172a666fb1d981efbbb.jpg" srcset="/img/loading.gif" lazyload alt="v2-7dbcacde377b5172a666fb1d981efbbb"></p>
+<h3 id="4，使用对称二叉树作为基模型，有正则作用且预测极快"><a href="#4，使用对称二叉树作为基模型，有正则作用且预测极快" class="headerlink" title="4，使用对称二叉树作为基模型，有正则作用且预测极快"></a><strong>4，使用对称二叉树作为基模型，有正则作用且预测极快</strong></h3><p>XGBoost和LightGBM采用的基模型是普通的二叉树，但是CatBoost采用的是对称的二叉树。</p>
 <p>这种对树结构上的约束有一定的正则作用。更为重要的是，它可以让CatBoost模型的推断过程极快。</p>
 <p>对于CatBoost的tree的预测过程来说，每个特征的分裂都是独立的，不分先后顺序，多个样本可以一起预测。</p>
-<figure>
-<img src="/images/catboost/v2-e99a44ac409aa702ed46dd07f1136cdb.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-e99a44ac409aa702ed46dd07f1136cdb" />
-<figcaption
-aria-hidden="true">v2-e99a44ac409aa702ed46dd07f1136cdb</figcaption>
-</figure>
-<h2 id="三-使用范例"><strong>三 使用范例</strong></h2>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!pip install catboost </span><br><span class="hljs-keyword">import</span> catboost <span class="hljs-keyword">as</span> cb <br><span class="hljs-built_in">print</span>(cb.__version__)<br></code></pre></td></tr></table></figure>
+<p><img src="/images/catboost/v2-e99a44ac409aa702ed46dd07f1136cdb.jpg" srcset="/img/loading.gif" lazyload alt="v2-e99a44ac409aa702ed46dd07f1136cdb"></p>
+<h2 id="三-使用范例"><a href="#三-使用范例" class="headerlink" title="三 使用范例"></a><strong>三 使用范例</strong></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!pip install catboost </span><br><span class="hljs-keyword">import</span> catboost <span class="hljs-keyword">as</span> cb <br><span class="hljs-built_in">print</span>(cb.__version__)<br></code></pre></td></tr></table></figure>
 <p>1.0.4</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> IPython.display <span class="hljs-keyword">import</span> display <br><br><span class="hljs-keyword">import</span> datetime,json<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> catboost <span class="hljs-keyword">as</span> cb <br><span class="hljs-keyword">from</span> catboost.datasets <span class="hljs-keyword">import</span> titanic<br><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> datasets<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> StratifiedKFold<br><br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> f1_score,roc_auc_score,accuracy_score<br><span class="hljs-keyword">import</span> plotly.graph_objs <span class="hljs-keyword">as</span> go <br><span class="hljs-keyword">import</span> plotly.express <span class="hljs-keyword">as</span> px <br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">printlog</span>(<span class="hljs-params">info</span>):<br>    nowtime = datetime.datetime.now().strftime(<span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&quot;</span>+<span class="hljs-string">&quot;==========&quot;</span>*<span class="hljs-number">8</span> + <span class="hljs-string">&quot;%s&quot;</span>%nowtime)<br>    <span class="hljs-built_in">print</span>(info+<span class="hljs-string">&#x27;...\n\n&#x27;</span>)<br>     <br><span class="hljs-comment">#================================================================================</span><br><span class="hljs-comment"># 一，准备数据</span><br><span class="hljs-comment">#================================================================================</span><br>printlog(<span class="hljs-string">&quot;step1: preparing data...&quot;</span>)<br><br>dfdata,dftest = titanic()<br><br>display(dfdata.head()) <br><br>label_col = <span class="hljs-string">&quot;Survived&quot;</span><br><br><span class="hljs-comment"># 填充空值特征</span><br>dfnull = pd.DataFrame(dfdata.isnull().<span class="hljs-built_in">sum</span>(axis=<span class="hljs-number">0</span>),columns = [<span class="hljs-string">&quot;null_cnt&quot;</span>]).query(<span class="hljs-string">&quot;null_cnt&gt;0&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;null_features:&quot;</span>) <br><span class="hljs-built_in">print</span>(dfnull)<br><br>dfdata.fillna(-<span class="hljs-number">9999</span>, inplace=<span class="hljs-literal">True</span>)<br>dftest.fillna(-<span class="hljs-number">9999</span>, inplace=<span class="hljs-literal">True</span>)<br><br><br><span class="hljs-comment"># 刷选类别特征</span><br>cate_cols = [x <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> dfdata.columns <br>             <span class="hljs-keyword">if</span> dfdata[x].dtype <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> [np.float32,np.float64] <span class="hljs-keyword">and</span> x!=label_col]<br><span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> cate_cols:<br>    dfdata[col] = pd.Categorical(dfdata[col]) <br>    dftest[col] = pd.Categorical(dftest[col]) <br><br><span class="hljs-comment"># 分割数据集</span><br>dftrain,dfvalid = train_test_split(dfdata, train_size=<span class="hljs-number">0.75</span>, random_state=<span class="hljs-number">42</span>)<br>Xtrain,Ytrain = dftrain.drop(label_col,axis = <span class="hljs-number">1</span>),dftrain[label_col]<br>Xvalid,Yvalid = dfvalid.drop(label_col,axis = <span class="hljs-number">1</span>),dfvalid[label_col]<br>cate_cols_indexs = np.where(Xtrain.columns.isin(cate_cols))[<span class="hljs-number">0</span>]<br><br><br><span class="hljs-comment"># 整理成Pool</span><br>pool_train = cb.Pool(data = Xtrain, label = Ytrain, cat_features=cate_cols)<br>pool_valid = cb.Pool(data = Xvalid, label = Yvalid, cat_features=cate_cols)<br><br><br><span class="hljs-comment">#================================================================================</span><br><span class="hljs-comment"># 二，设置参数</span><br><span class="hljs-comment">#================================================================================</span><br>printlog(<span class="hljs-string">&quot;step2: setting parameters...&quot;</span>)<br>                               <br>iterations = <span class="hljs-number">1000</span><br>early_stopping_rounds = <span class="hljs-number">200</span><br><br>params = &#123;<br>    <span class="hljs-string">&#x27;learning_rate&#x27;</span>: <span class="hljs-number">0.05</span>,<br>    <span class="hljs-string">&#x27;loss_function&#x27;</span>: <span class="hljs-string">&quot;Logloss&quot;</span>,<br>    <span class="hljs-string">&#x27;eval_metric&#x27;</span>: <span class="hljs-string">&quot;Accuracy&quot;</span>,<br>    <span class="hljs-string">&#x27;depth&#x27;</span>: <span class="hljs-number">6</span>,<br>    <span class="hljs-string">&#x27;min_data_in_leaf&#x27;</span>: <span class="hljs-number">20</span>,<br>    <span class="hljs-string">&#x27;random_seed&#x27;</span>: <span class="hljs-number">42</span>,<br>    <span class="hljs-string">&#x27;logging_level&#x27;</span>: <span class="hljs-string">&#x27;Silent&#x27;</span>,<br>    <span class="hljs-string">&#x27;use_best_model&#x27;</span>: <span class="hljs-literal">True</span>,<br>    <span class="hljs-string">&#x27;one_hot_max_size&#x27;</span>: <span class="hljs-number">5</span>,   <span class="hljs-comment">#类别数量多于此数将使用ordered target statistics编码方法,默认值为2。</span><br>    <span class="hljs-string">&#x27;boosting_type&#x27;</span>:<span class="hljs-string">&quot;Ordered&quot;</span>, <span class="hljs-comment">#Ordered 或者Plain,数据量较少时建议使用Ordered,训练更慢但能够缓解梯度估计偏差。</span><br>    <span class="hljs-string">&#x27;max_ctr_complexity&#x27;</span>: <span class="hljs-number">2</span>, <span class="hljs-comment">#特征组合的最大特征数量，设置为1取消特征组合，设置为2只做两个特征的组合,默认为4。</span><br>    <span class="hljs-string">&#x27;nan_mode&#x27;</span>: <span class="hljs-string">&#x27;Min&#x27;</span> <br>&#125;<br><br><br><span class="hljs-comment">#================================================================================</span><br><span class="hljs-comment"># 三，训练模型</span><br><span class="hljs-comment">#================================================================================</span><br>printlog(<span class="hljs-string">&quot;step3: training model...&quot;</span>)<br><br><br>model = cb.CatBoostClassifier(<br>    iterations = iterations,<br>    early_stopping_rounds = early_stopping_rounds,<br>    train_dir=<span class="hljs-string">&#x27;catboost_info/&#x27;</span>,<br>    **params<br>)<br><br><br><span class="hljs-comment">#直接训练</span><br>model.fit(<br>    pool_train,<br>    eval_set=pool_valid,<br>    plot=<span class="hljs-literal">True</span><br>)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;model.get_all_params():&quot;</span>)<br><span class="hljs-built_in">print</span>(model.get_all_params() )<br><br><br><span class="hljs-comment">#5折交叉验证</span><br>cv_data= cb.cv(<br>    cb.Pool(dfdata.drop(label_col,axis = <span class="hljs-number">1</span>), dfdata[label_col], cat_features=cate_cols_indexs),<br>    params,<br>    fold_count = <span class="hljs-number">3</span>,<br>    plot=<span class="hljs-literal">True</span><br>)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Best validation accuracy score: &#123;:.2f&#125;±&#123;:.2f&#125; on step &#123;&#125;&#x27;</span>.<span class="hljs-built_in">format</span>(<br>    np.<span class="hljs-built_in">max</span>(cv_data[<span class="hljs-string">&#x27;test-Accuracy-mean&#x27;</span>]),<br>    cv_data[<span class="hljs-string">&#x27;test-Accuracy-std&#x27;</span>][np.argmax(cv_data[<span class="hljs-string">&#x27;test-Accuracy-mean&#x27;</span>])],<br>    np.argmax(cv_data[<span class="hljs-string">&#x27;test-Accuracy-mean&#x27;</span>])<br>))<br><br><br><span class="hljs-comment">#================================================================================</span><br><span class="hljs-comment"># 四，评估模型</span><br><span class="hljs-comment">#================================================================================</span><br>printlog(<span class="hljs-string">&quot;step4: evaluating model ...&quot;</span>)<br><br><br>y_pred_train = model.predict(Xtrain)<br>y_pred_valid = model.predict(Xvalid)<br><br>train_score = f1_score(Ytrain,y_pred_train)<br>valid_score = f1_score(Yvalid,y_pred_valid)<br><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;train f1_score: &#123;:.5&#125; &#x27;</span>.<span class="hljs-built_in">format</span>(train_score))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;valid f1_score: &#123;:.5&#125; \n&#x27;</span>.<span class="hljs-built_in">format</span>(valid_score))   <br><br><br><br><span class="hljs-comment">#feature importance </span><br>dfimportance = model.get_feature_importance(prettified=<span class="hljs-literal">True</span>) <br>dfimportance = dfimportance.sort_values(by = <span class="hljs-string">&quot;Importances&quot;</span>).iloc[-<span class="hljs-number">20</span>:]<br>fig_importance = px.bar(dfimportance,x=<span class="hljs-string">&quot;Importances&quot;</span>,y=<span class="hljs-string">&quot;Feature Id&quot;</span>,title=<span class="hljs-string">&quot;Feature Importance&quot;</span>)<br><br>display(dfimportance)<br>display(fig_importance)<br><br><br><span class="hljs-comment">#score distribution</span><br>y_test_prob = model.predict_proba(dftest)[:,-<span class="hljs-number">1</span>]<br>trace1 = go.Histogram(x = y_test_prob,histnorm = <span class="hljs-string">&#x27;probability&#x27;</span>,nbinsx=<span class="hljs-number">50</span>)<br>layout = go.Layout(title = <span class="hljs-string">&quot;Score Distribution&quot;</span>,xaxis=&#123;<span class="hljs-string">&quot;title&quot;</span>:<span class="hljs-string">&quot;score&quot;</span>&#125;,yaxis = &#123;<span class="hljs-string">&quot;title&quot;</span>:<span class="hljs-string">&quot;frequecy&quot;</span>&#125;)<br>fig_distribution = go.Figure(data = [trace1])<br>fig_distribution.update_layout(layout)<br>display(fig_distribution)<br><br><br><span class="hljs-comment">#================================================================================</span><br><span class="hljs-comment"># 五，使用模型</span><br><span class="hljs-comment">#================================================================================</span><br>printlog(<span class="hljs-string">&quot;step5: using model ...&quot;</span>)<br><br>y_pred_test = model.predict(dftest)<br>y_pred_test_prob = model.predict_proba(dftest)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y_pred_test:\n&quot;</span>,y_pred_test[:<span class="hljs-number">10</span>])<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y_pred_test_prob:\n&quot;</span>,y_pred_test_prob[:<span class="hljs-number">10</span>])<br><br><br><br><span class="hljs-comment">#================================================================================</span><br><span class="hljs-comment"># 六，保存模型</span><br><span class="hljs-comment">#================================================================================</span><br>printlog(<span class="hljs-string">&quot;step6: saving model ...&quot;</span>)<br><br>model_dir = <span class="hljs-string">&#x27;catboost_model&#x27;</span><br>model.save_model(model_dir)<br>model_loaded = cb.CatBoostClassifier()<br>model.load_model(model_dir)<br></code></pre></td></tr></table></figure>
-<figure>
-<img src="/images/catboost/v2-c657c93122dd4eefaa9023a7ef49b495.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-c657c93122dd4eefaa9023a7ef49b495" />
-<figcaption
-aria-hidden="true">v2-c657c93122dd4eefaa9023a7ef49b495</figcaption>
-</figure>
-<figure>
-<img src="/images/catboost/v2-d451da5658789992a0a910062972049b.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-d451da5658789992a0a910062972049b" />
-<figcaption
-aria-hidden="true">v2-d451da5658789992a0a910062972049b</figcaption>
-</figure>
-<figure>
-<img src="/images/catboost/v2-86df3c443efed79653479c614bd73b4d.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-86df3c443efed79653479c614bd73b4d" />
-<figcaption
-aria-hidden="true">v2-86df3c443efed79653479c614bd73b4d</figcaption>
-</figure>
+<p><img src="/images/catboost/v2-c657c93122dd4eefaa9023a7ef49b495.jpg" srcset="/img/loading.gif" lazyload alt="v2-c657c93122dd4eefaa9023a7ef49b495"></p>
+<p><img src="/images/catboost/v2-d451da5658789992a0a910062972049b.jpg" srcset="/img/loading.gif" lazyload alt="v2-d451da5658789992a0a910062972049b"></p>
+<p><img src="/images/catboost/v2-86df3c443efed79653479c614bd73b4d.jpg" srcset="/img/loading.gif" lazyload alt="v2-86df3c443efed79653479c614bd73b4d"></p>
 
                 
               </div>

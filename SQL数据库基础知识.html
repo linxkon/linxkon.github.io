@@ -313,192 +313,210 @@
             
               <div class="markdown-body">
                 
-                <p>数据库操作在日常工作非常常见，以下知识点你都掌握了吗？
-<span id="more"></span></p>
-<h2 id="内容大纲">内容大纲</h2>
-<ul>
+                <p>数据库操作在日常工作非常常见，以下知识点你都掌握了吗？<br><span id="more"></span></p>
+<h2 id="内容大纲"><a href="#内容大纲" class="headerlink" title="内容大纲"></a>内容大纲</h2><ul>
 <li>SQL的相关概述</li>
 <li>环境搭建</li>
-<li>SQL语句分类
-<ul>
+<li>SQL语句分类<ul>
 <li>DDL</li>
 <li>DML</li>
 <li>DCL</li>
 <li>DQL</li>
-</ul></li>
+</ul>
+</li>
 <li>DDL语句之操作数据库</li>
 <li>DDL语句之操作数据表</li>
 <li>DML语句之操作表数据(增删改)</li>
 <li>DQL语句之操作表数据(查)</li>
 </ul>
-<hr />
-<h2 id="sql概念">1.SQL概念</h2>
-<p>结构化查询语言(Structured Query
-Language)简称SQL，是<strong>关系型数据库</strong>管理系统都需要遵循的规范，是数据库认识的语句。不同的数据库生产厂商都支持SQL语句，但都有自己特有内容.</p>
-<h3 id="数据库概念">1.1数据库概念</h3>
-<p>数据库就是存储数据的仓库，其本质是一个文件系统，按照特定的格式将数据存储起来，用户可以对数据库中的数据进行增加，修改，删除及查询(<strong>CURD)</strong>操作。</p>
+<hr>
+<h2 id="1-SQL概念"><a href="#1-SQL概念" class="headerlink" title="1.SQL概念"></a>1.SQL概念</h2><p>结构化查询语言(Structured Query Language)简称SQL，是<strong>关系型数据库</strong>管理系统都需要遵循的规范，是数据库认识的语句。不同的数据库生产厂商都支持SQL语句，但都有自己特有内容.</p>
+<h3 id="1-1数据库概念"><a href="#1-1数据库概念" class="headerlink" title="1.1数据库概念"></a>1.1数据库概念</h3><p>数据库就是存储数据的仓库，其本质是一个文件系统，按照特定的格式将数据存储起来，用户可以对数据库中的数据进行增加，修改，删除及查询(<strong>CURD)</strong>操作。</p>
 <ul>
-<li><p>C: Create, 增</p></li>
-<li><p>U: Update, 改</p></li>
-<li><p>R: Read, 查</p></li>
-<li><p>D: Delete, 删</p></li>
+<li><p>C: Create, 增</p>
+</li>
+<li><p>U: Update, 改</p>
+</li>
+<li><p>R: Read,   查</p>
+</li>
+<li><p>D: Delete, 删</p>
+</li>
 </ul>
-<h3
-id="关系型数据库与非关系型数据库">1.2关系型数据库与非关系型数据库</h3>
-<h4 id="关系型数据">关系型数据</h4>
-<p>指采用了<strong>关系模型</strong>来组织数据的数据库。
-关系模型指的就是<strong>二维表格</strong>模型，而一个关系型数据库就是由二维表及其之间的联系所组成的一个数据组织。</p>
-<h4 id="非关系型数据">非关系型数据</h4>
-<p>又被称为NoSQL（Not Only SQL
-)，<strong>意为不仅仅是SQL</strong>，对NoSQL
-最普遍的定义是“非关联型的”，强调 <strong>Key-Value</strong>
-的方式存储数据。</p>
-<h3 id="sql常用数据类型">1.3 SQL常用数据类型</h3>
-<p>-- SQL 根据每列值的不同, 数据类型也不同, 常用的如下.</p>
+<h3 id="1-2关系型数据库与非关系型数据库"><a href="#1-2关系型数据库与非关系型数据库" class="headerlink" title="1.2关系型数据库与非关系型数据库"></a>1.2关系型数据库与非关系型数据库</h3><h4 id="关系型数据"><a href="#关系型数据" class="headerlink" title="关系型数据"></a>关系型数据</h4><p>指采用了<strong>关系模型</strong>来组织数据的数据库。<br>关系模型指的就是<strong>二维表格</strong>模型，而一个关系型数据库就是由二维表及其之间的联系所组成的一个数据组织。</p>
+<h4 id="非关系型数据"><a href="#非关系型数据" class="headerlink" title="非关系型数据"></a>非关系型数据</h4><p>又被称为NoSQL（Not Only SQL )，<strong>意为不仅仅是SQL</strong>，对NoSQL 最普遍的定义是“非关联型的”，强调 <strong>Key-Value</strong> 的方式存储数据。</p>
+<h3 id="1-3-SQL常用数据类型"><a href="#1-3-SQL常用数据类型" class="headerlink" title="1.3 SQL常用数据类型"></a>1.3 SQL常用数据类型</h3><p>— SQL 根据每列值的不同, 数据类型也不同, 常用的如下.</p>
 <ul>
-<li><p>整数: int</p></li>
-<li><p>小数; decimal, float, double</p></li>
-<li><p>字符串: varchar(长度), char(长度)</p></li>
-<li><p>日期: date, datetime</p></li>
+<li><p>整数:     int</p>
+</li>
+<li><p>小数;     decimal, float, double</p>
+</li>
+<li><p>字符串:   varchar(长度), char(长度)</p>
+</li>
+<li><p>日期:       date, datetime</p>
+</li>
 </ul>
-<h2 id="mysql基础语法">2.MySql基础语法</h2>
-<ul>
-<li><p>建议先通过小皮安装MySql数据库,并将mysql.exe的路径添加到path</p></li>
-<li><p>建议通过Pycharm
-专业版或DataGrip运行MySql相关命令及可视化</p></li>
+<h2 id="2-MySql基础语法"><a href="#2-MySql基础语法" class="headerlink" title="2.MySql基础语法"></a>2.MySql基础语法</h2><ul>
+<li><p>建议先通过小皮安装MySql数据库,并将mysql.exe的路径添加到path</p>
+</li>
+<li><p>建议通过Pycharm 专业版或DataGrip运行MySql相关命令及可视化</p>
+</li>
 </ul>
-<h3 id="sql通用语法">2.1 SQL通用语法</h3>
-<ul>
-<li><ol type="1">
+<h3 id="2-1-SQL通用语法"><a href="#2-1-SQL通用语法" class="headerlink" title="2.1 SQL通用语法"></a>2.1 SQL通用语法</h3><ul>
+<li><ol>
 <li>SQL语句可以写单行, 也可以写多行, 最后以 分号; 结尾.</li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>为了阅读方便, 我们可以用 者 空格来隔开SQL语句.</li>
-</ol></li>
-<li><ol start="3" type="1">
+</ol>
+</li>
+<li><ol>
+<li>为了阅读方便, 我们可以用 \t 或者 空格来隔开SQL语句. </li>
+</ol>
+</li>
+<li><ol>
 <li>SQL语句不区分大小写, 为了阅读方便, 建议: 关键字大写, 其它小写.</li>
-</ol></li>
-<li><ol start="4" type="1">
-<li>SQL的注释写法如下 -- 单行注释 '# 单行注释' /<em> 多行 注释
+</ol>
+</li>
+<li><ol>
+<li>SQL的注释写法如下<br>— 单行注释<br>‘# 单行注释’<br>/<em><br>   多行<br>   注释
 </em>/</li>
-</ol></li>
+</ol>
+</li>
 </ul>
-<p>-- 5. 我们目前在PyCharm或者DataGrip中写SQL语句, 是选中执行的, 即:
-不要漏选, 防止出错.</p>
-<h3 id="sql语句分类">2.2 SQL语句分类</h3>
-<ul>
-<li><p><strong>DDL</strong>语句, DataBase Definition Language,
-数据定义语言</p>
+<p>— 5. 我们目前在PyCharm或者DataGrip中写SQL语句, 是选中执行的, 即: 不要漏选, 防止出错.</p>
+<h3 id="2-2-SQL语句分类"><a href="#2-2-SQL语句分类" class="headerlink" title="2.2 SQL语句分类"></a>2.2 SQL语句分类</h3><ul>
+<li><p><strong>DDL</strong>语句,   DataBase Definition Language, 数据定义语言</p>
 <blockquote>
 <p>作用对象: <strong>数据库, 数据表, 列的</strong>, 进行: CURD.</p>
-<p><strong>关键字: create, drop, alter, show</strong></p>
-</blockquote></li>
-<li><p><strong>DML</strong>语句, DataBase Manipulation Language,
-数据操作语言.</p>
+<p><strong>关键字:  create, drop, alter, show</strong></p>
+</blockquote>
+</li>
+<li><p><strong>DML</strong>语句, DataBase Manipulation Language, 数据操作语言.</p>
 <blockquote>
-<p>作用对象: <strong>表数据的, 进行: 增删改操作</strong>, 统称为:
-<strong>更新语句</strong></p>
-<p><strong>关键字: insert, delete, update</strong></p>
-</blockquote></li>
-<li><p><strong>DQL</strong>语句, DataBase Query Language,
-数据查询语言.</p>
+<p>作用对象: <strong>表数据的, 进行: 增删改操作</strong>, 统称为: <strong>更新语句</strong></p>
+<p><strong>关键字:  insert, delete, update</strong></p>
+</blockquote>
+</li>
+<li><p><strong>DQL</strong>语句, DataBase Query Language, 数据查询语言.</p>
 <blockquote>
 <p>作用对象: <strong>表数据的, 进行: 查询操作</strong>.</p>
-<p><strong>关键字: select, from, where...</strong></p>
-</blockquote></li>
-<li><p><strong>DCL</strong>语句, DataBase Control Language,
-数据控制语言.</p>
+<p><strong>关键字: select, from, where…</strong></p>
+</blockquote>
+</li>
+<li><p><strong>DCL</strong>语句, DataBase Control Language, 数据控制语言.</p>
 <blockquote>
-<p>作用对象: 设置权限, 访问级别(隔离级别), 创建用户等的...</p>
-</blockquote></li>
+<p>作用对象: 设置权限, 访问级别(隔离级别), 创建用户等的…</p>
+</blockquote>
+</li>
 </ul>
-<h2 id="ddl语句">3.DDL语句</h2>
-<h3 id="ddl操作数据库">3.1DDL操作数据库</h3>
-<ul>
-<li><ol type="1">
-<li><strong>查看</strong>所有的<strong>数据库</strong>.
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">show databases;         # ctrl + 回车, 执行该行代.<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="2" type="1">
-<li><strong>创建</strong>数据库. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">create database day01 character set &#x27;utf8&#x27;;                 # 创建day01数据库, 采用: utf8 码表.  库不存在就创建, 存在就: 报错.<br>create database if not exists day01 character set &#x27;utf8&#x27;;   # 创建day01数据库, 采用: utf8 码表.  库不存在就创建, 存在就: 啥也不做.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">上述格式, 语法糖1: character <span class="hljs-built_in">set</span> =&gt; 可以写成 charset</span><br>create database day02 charset &#x27;utf8&#x27;;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="3" type="1">
-<li><strong>查看</strong>对象数据库. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">show create database day01;     # utf8<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="4" type="1">
-<li><strong>修改</strong>数据库码表. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">alter database day03 charset =&#x27;gbk&#x27;;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="5" type="1">
-<li><strong>删除</strong>数据库. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">drop database day01;            # 删除数据库, 如果数据库存在就删除, 不存在就: 报错.<br>drop database if exists day01;  # 删除数据库, 如果数据库存在就删除, 不存在就: 啥也不做.<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="6" type="1">
-<li><strong>应用</strong>数据库. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">use day01; #之后: 建表, 查表, 查数据等操作, 都是基于数据库完成的.<br></code></pre></td></tr></table></figure> ### 3.2DDL操作数据表</li>
-</ol></li>
-<li><ol type="1">
-<li>查看当前库中, 所有的数据表. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">show tables;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>查看表结构. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">show create table student;      # 查看建表的详细过程.<br>describe student;               # 语法糖,  desc student;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="3" type="1">
-<li>创建数据表. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">create table if not exists student(<br>    sid int primary key,        # 学生id, primary key: 主键约束, 特点为: 唯一, 非空.<br>    name varchar(20) not null,  # 学生姓名, 非空约束(即: 不能为空)<br>    gender varchar(2),          # 学生性别<br>    age int                     # 学生年龄, 整数.<br>);<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="4" type="1">
-<li>删除数据表. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">drop table if exists student;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="5" type="1">
-<li>修改表(名字) <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">格式: rename table 旧表名 to 新表名;</span><br>rename table student to stu;<br></code></pre></td></tr></table></figure> ### 3.3 DDL操作列</li>
-</ol></li>
-<li><ol type="1">
-<li>查看表结构. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">desc stu;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>给表新增一列, desc varchar(200), 非空约束. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">alter table stu add `desc` varchar(200) not null;       # 如果列名和关键字重名, 记得用 反引号包裹.<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="3" type="1">
-<li>修改表的字段(列), 只修改: 数据类型, 约束. 将desc列改为: int类型..
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">alter table stu modify `desc` int;      # 因为没有加非空约束, 所以本次会认为, 不要非空约束了, 即: 会删除它.<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="4" type="1">
-<li>修改表的字段(列), 修改: 列名, 数据类型, 约束. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">-- 格式: alter table 表名 change 旧列名 新列名 数据类型 约束;<br>alter table stu change `desc` address varchar(10) not null;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="5" type="1">
-<li>删除表的字段 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">格式: alter table 表名 drop 旧列名;</span><br>alter table stu drop address;<br></code></pre></td></tr></table></figure> ## 4 DML语句 ### 4.1添加数据</li>
-</ol></li>
-<li><ol type="1">
-<li>查看表数据, 这个数据DQL语句, 先用一下, 稍后详解. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">select * from stu;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看表结构.</span><br>desc stu;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>添加表数据. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">场景1: 添加单条数据, 格式为: insert into 表名(列名1, 列名2, 列名3...) values(值1, 值2, 值3...);</span><br>insert into stu(sid, name, gender, age) values (1, &#x27;乔峰&#x27;, null, 38);<br><br>insert into stu(sid, name, gender, age) values (2, null, null, 38);     # 报错, name列有非空约束, 不能为null<br>场景2:添加多条数据, 格式为: insert into 表名(列名1, 列名2, 列名3...) values(值1, 值2, 值3...), (...), (...);<br>insert into stu(sid, name, gender, age)<br>values<br>    (2, &#x27;虚竹&#x27;, null, 26),<br>    (3, &#x27;段誉&#x27;, &#x27;男&#x27;, 21),<br>    (4, &#x27;阿朱&#x27;, &#x27;女&#x27;, 35),<br>    (5, &#x27;梦姑&#x27;, &#x27;女&#x27;, 23),<br>    (6, &#x27;钟灵儿&#x27;, &#x27;女&#x27;, 19);<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="3" type="1">
-<li>上述格式的变形版. 不一定非得是全列名, 只要值的个数, 类型 和
-列名的个数, 类型保持一致即可. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">insert into stu(sid, name) values (7, &#x27;木婉清&#x27;);<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="4" type="1">
-<li>上述格式的语法糖, 掌握, 实际开发一般是用这个.. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">insert into stu values (8, &#x27;鸠摩智&#x27;, &#x27;男&#x27;, 49);      # 如果不写列名, 则默认是: 全列名, 需要给每一个列都要传入值.<br></code></pre></td></tr></table></figure> ###
-4.2DML修改数据</li>
-</ol></li>
-<li><ol type="1">
-<li>修改 sid为3的数据, 姓名为: 段氏小王子, 渣男 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">update stu set name=&#x27;段氏小王子&#x27;, gender=&#x27;渣男&#x27; where sid = 3;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>危险操作, 修改数据时, 没有写 where条件,
-则会一次性修改表中所有的数据. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">update stu set name=&#x27;段氏小王子&#x27;, gender=&#x27;渣男&#x27;;<br></code></pre></td></tr></table></figure> ### 4.3DML删除数据</li>
-</ol></li>
-<li><ol type="1">
-<li>正常删除数据, 删除id &gt; 3的数据.(主键ID不变) <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">delete from stu where sid &gt; 3;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>删除数据, 删除id &gt; 3的数据.(主键ID改变) <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">truncate table stu where sid &gt; 3;<br></code></pre></td></tr></table></figure> ##
-5.备份表数据</li>
-</ol></li>
-<li><ol type="1">
-<li>场景1: 备份表不存在. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">create table stu_tmp select * from stu;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>场景1: 备份表存在. <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">insert into hero_tmp select * from hero;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
+<h2 id="3-DDL语句"><a href="#3-DDL语句" class="headerlink" title="3.DDL语句"></a>3.DDL语句</h2><h3 id="3-1DDL操作数据库"><a href="#3-1DDL操作数据库" class="headerlink" title="3.1DDL操作数据库"></a>3.1DDL操作数据库</h3><ul>
+<li><ol>
+<li><strong>查看</strong>所有的<strong>数据库</strong>.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">show databases;         # ctrl + 回车, 执行该行代.<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li><strong>创建</strong>数据库.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">create database day01 character set &#x27;utf8&#x27;;                 # 创建day01数据库, 采用: utf8 码表.  库不存在就创建, 存在就: 报错.<br>create database if not exists day01 character set &#x27;utf8&#x27;;   # 创建day01数据库, 采用: utf8 码表.  库不存在就创建, 存在就: 啥也不做.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">上述格式, 语法糖1: character <span class="hljs-built_in">set</span> =&gt; 可以写成 charset</span><br>create database day02 charset &#x27;utf8&#x27;;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li><strong>查看</strong>对象数据库.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">show create database day01;     # utf8<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li><strong>修改</strong>数据库码表.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">alter database day03 charset =&#x27;gbk&#x27;;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li><strong>删除</strong>数据库.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">drop database day01;            # 删除数据库, 如果数据库存在就删除, 不存在就: 报错.<br>drop database if exists day01;  # 删除数据库, 如果数据库存在就删除, 不存在就: 啥也不做.<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li><strong>应用</strong>数据库.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">use day01; #之后: 建表, 查表, 查数据等操作, 都是基于数据库完成的.<br></code></pre></td></tr></table></figure>
+<h3 id="3-2DDL操作数据表"><a href="#3-2DDL操作数据表" class="headerlink" title="3.2DDL操作数据表"></a>3.2DDL操作数据表</h3></li>
+</ol>
+</li>
+<li><ol>
+<li>查看当前库中, 所有的数据表.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">show tables;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>查看表结构.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">show create table student;      # 查看建表的详细过程.<br>describe student;               # 语法糖,  desc student;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>创建数据表.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">create table if not exists student(<br>    sid int primary key,        # 学生id, primary key: 主键约束, 特点为: 唯一, 非空.<br>    name varchar(20) not null,  # 学生姓名, 非空约束(即: 不能为空)<br>    gender varchar(2),          # 学生性别<br>    age int                     # 学生年龄, 整数.<br>);<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>删除数据表.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">drop table if exists student;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>修改表(名字)<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">格式: rename table 旧表名 to 新表名;</span><br>rename table student to stu;<br></code></pre></td></tr></table></figure>
+<h3 id="3-3-DDL操作列"><a href="#3-3-DDL操作列" class="headerlink" title="3.3 DDL操作列"></a>3.3 DDL操作列</h3></li>
+</ol>
+</li>
+<li><ol>
+<li>查看表结构.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">desc stu;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>给表新增一列, desc varchar(200), 非空约束.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">alter table stu add `desc` varchar(200) not null;       # 如果列名和关键字重名, 记得用 反引号包裹.<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>修改表的字段(列), 只修改: 数据类型, 约束.  将desc列改为: int类型..<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">alter table stu modify `desc` int;      # 因为没有加非空约束, 所以本次会认为, 不要非空约束了, 即: 会删除它.<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>修改表的字段(列), 修改: 列名, 数据类型, 约束.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">-- 格式: alter table 表名 change 旧列名 新列名 数据类型 约束;<br>alter table stu change `desc` address varchar(10) not null;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>删除表的字段<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">格式: alter table 表名 drop 旧列名;</span><br>alter table stu drop address;<br></code></pre></td></tr></table></figure>
+<h2 id="4-DML语句"><a href="#4-DML语句" class="headerlink" title="4 DML语句"></a>4 DML语句</h2><h3 id="4-1添加数据"><a href="#4-1添加数据" class="headerlink" title="4.1添加数据"></a>4.1添加数据</h3></li>
+</ol>
+</li>
+<li><ol>
+<li>查看表数据, 这个数据DQL语句, 先用一下, 稍后详解.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">select * from stu;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看表结构.</span><br>desc stu;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>添加表数据.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">场景1: 添加单条数据, 格式为: insert into 表名(列名1, 列名2, 列名3...) values(值1, 值2, 值3...);</span><br>insert into stu(sid, name, gender, age) values (1, &#x27;乔峰&#x27;, null, 38);<br><br>insert into stu(sid, name, gender, age) values (2, null, null, 38);     # 报错, name列有非空约束, 不能为null<br>场景2:添加多条数据, 格式为: insert into 表名(列名1, 列名2, 列名3...) values(值1, 值2, 值3...), (...), (...);<br>insert into stu(sid, name, gender, age)<br>values<br>    (2, &#x27;虚竹&#x27;, null, 26),<br>    (3, &#x27;段誉&#x27;, &#x27;男&#x27;, 21),<br>    (4, &#x27;阿朱&#x27;, &#x27;女&#x27;, 35),<br>    (5, &#x27;梦姑&#x27;, &#x27;女&#x27;, 23),<br>    (6, &#x27;钟灵儿&#x27;, &#x27;女&#x27;, 19);<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>上述格式的变形版.  不一定非得是全列名, 只要值的个数, 类型 和 列名的个数, 类型保持一致即可.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">insert into stu(sid, name) values (7, &#x27;木婉清&#x27;);<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>上述格式的语法糖, 掌握, 实际开发一般是用这个..<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">insert into stu values (8, &#x27;鸠摩智&#x27;, &#x27;男&#x27;, 49);      # 如果不写列名, 则默认是: 全列名, 需要给每一个列都要传入值.<br></code></pre></td></tr></table></figure>
+<h3 id="4-2DML修改数据"><a href="#4-2DML修改数据" class="headerlink" title="4.2DML修改数据"></a>4.2DML修改数据</h3></li>
+</ol>
+</li>
+<li><ol>
+<li>修改 sid为3的数据, 姓名为: 段氏小王子, 渣男<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">update stu set name=&#x27;段氏小王子&#x27;, gender=&#x27;渣男&#x27; where sid = 3;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>危险操作, 修改数据时, 没有写 where条件, 则会一次性修改表中所有的数据.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">update stu set name=&#x27;段氏小王子&#x27;, gender=&#x27;渣男&#x27;;<br></code></pre></td></tr></table></figure>
+<h3 id="4-3DML删除数据"><a href="#4-3DML删除数据" class="headerlink" title="4.3DML删除数据"></a>4.3DML删除数据</h3></li>
+</ol>
+</li>
+<li><ol>
+<li>正常删除数据, 删除id &gt; 3的数据.(主键ID不变)<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">delete from stu where sid &gt; 3;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>删除数据, 删除id &gt; 3的数据.(主键ID改变)<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">truncate table stu where sid &gt; 3;<br></code></pre></td></tr></table></figure>
+<h2 id="5-备份表数据"><a href="#5-备份表数据" class="headerlink" title="5.备份表数据"></a>5.备份表数据</h2></li>
+</ol>
+</li>
+<li><ol>
+<li>场景1: 备份表不存在.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">create table stu_tmp select * from stu;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><ol>
+<li>场景1: 备份表存在.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">insert into hero_tmp select * from hero;<br></code></pre></td></tr></table></figure></li>
+</ol>
+</li>
 </ul>
 
                 
