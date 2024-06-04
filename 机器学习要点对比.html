@@ -319,11 +319,11 @@
 <span id="more"></span>
 <p>Bagging是一种并行式的集成学习方法，其特点包括通过有放回的抽样产生不同的训练集，从而训练多个不同的学习器，并通过平均投票或多数表决的方式决定预测结果。此外，Bagging允许弱学习器并行训练，代表算法包括随机森林算法。</p>
 <p>Boosting是一种串行式的集成学习方法，其特点是随着学习的积累从弱到强，每加入一个弱学习器，整体能力会得到提升。Boosting对学习器进行加权投票，采用串行方式进行学习，具有明确的先后顺序。代表算法包括Adaboost、GBDT、XGBoost以及LightGBM。</p>
-<p><img src="/images/集成学习常见模型对比/集成学习对比示意.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<div class="table-container">
+<p><img src="/images/集成学习常见模型对比/集成学习对比示意.png" srcset="/img/loading.gif" lazyload /></p>
 <table>
+
 <thead>
-<tr>
+<tr class="header">
 <th>模型</th>
 <th>核心要点</th>
 <th>模型优缺点</th>
@@ -331,33 +331,43 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Bagging随机森林</td>
-<td>1. 随机有放回的抽样产生不同的训练集(boostrap)<br>2. 基于不同抽样训练多个基学习器（如决策树）<br>3. 通过投票或平均组合预测结果</td>
-<td>优点:<br>- 泛化错误率低<br>- 易于并行训练<br>缺点:<br>-性能上限低</td>
+<td>1. 随机有放回的抽样产生不同的训练集(boostrap)<br>2.
+基于不同抽样训练多个基学习器（如决策树）<br>3.
+通过投票或平均组合预测结果</td>
+<td>优点:<br>- 泛化错误率低<br>-
+易于并行训练<br>缺点:<br>-性能上限低</td>
 <td>1. 分类问题<br>2. 回归问题</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Adaptive Boosting</td>
-<td>1. 迭代构建弱学习器<br>2. 聚焦错误样本,每轮根据分类结果调整样本及模型权重<br>3. 组合加权弱学习器成强学习器</td>
-<td>优点:<br>- 泛化能力强<br>- 易于处理多种数据<br>缺点:<br>- 对离群点敏感<br>- 需要预处理高维或不平衡数据</td>
+<td>1. 迭代构建弱学习器<br>2.
+聚焦错误样本,每轮根据分类结果调整样本及模型权重<br>3.
+组合加权弱学习器成强学习器</td>
+<td>优点:<br>- 泛化能力强<br>- 易于处理多种数据<br>缺点:<br>-
+对离群点敏感<br>- 需要预处理高维或不平衡数据</td>
 <td>1. 分类问题<br>2. 图像识别</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>GBDT (梯度提升树)</td>
-<td>1. 迭代构建决策树<br>2. 拟合损失函数的负梯度训练新树<br>3. 累加方式构建最终模型</td>
-<td>优点:<br>- 准确性高<br>- 可以适应多种损失函数<br>缺点:<br>- 容易过拟合<br>- 计算量大</td>
+<td>1. 迭代构建决策树<br>2. 拟合损失函数的负梯度训练新树<br>3.
+累加方式构建最终模型</td>
+<td>优点:<br>- 准确性高<br>- 可以适应多种损失函数<br>缺点:<br>-
+容易过拟合<br>- 计算量大</td>
 <td>1. 回归问题<br>2. 排名问题<br>3. 分类问题</td>
 </tr>
-<tr>
+<tr class="even">
 <td>XGBoost</td>
-<td>1. 基于GBDT的高效实现<br>2. 加入正则化项解决GBDT过拟合问题<br>3. 损失函数泰勒二阶近似优化拟合函数<br/>4.支持并行化和缺失值处理</td>
-<td>优点:<br>- 速度快<br>- 准确性高,防止过拟合<br>- 支持多种目标函数和评估指标<br>缺点:<br>- 参数调整复杂<br>- 可能需要更多的内存</td>
+<td>1. 基于GBDT的高效实现<br>2. 加入正则化项解决GBDT过拟合问题<br>3.
+损失函数泰勒二阶近似优化拟合函数<br/>4.支持并行化和缺失值处理</td>
+<td>优点:<br>- 速度快<br>- 准确性高,防止过拟合<br>-
+支持多种目标函数和评估指标<br>缺点:<br>- 参数调整复杂<br>-
+可能需要更多的内存</td>
 <td>1. 赢取竞赛的首选算法<br>2. 排名问题<br>3. 分类和回归问题</td>
 </tr>
 </tbody>
 </table>
-</div>
 
                 
               </div>
@@ -613,7 +623,7 @@
     
     
       <span id="leancloud-site-uv-container" style="display: none">
-        用户访问量
+        访客量
         <span id="leancloud-site-uv"></span>
         次
       </span>

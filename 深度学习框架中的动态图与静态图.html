@@ -16,26 +16,26 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="大模型发展之路--从分治法至端到端,再到存算训一体 安克创新CEO阳萌对人工智能过去、现在和未来的思考。他认为大模型和transformer只是阶段性的算法实现,未来一定是仿生算法的大趋势。他还谈到了分治法作为经典的范式有其明显的局限,而端到端的方案是人类理性解决问题的必经之路。他指出,人工智能领域的范式每五到十年就会出现一个全新的范式,存算一体已经成为业界新宠。">
+    <meta name="description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【B站】大模型之路-从分治法至端到端,再到存算训一体">
-<meta property="og:url" content="https://linxkon.github.io/B%E7%AB%99_%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B1%95%E4%B9%8B%E8%B7%AF--%E4%BB%8E%E5%88%86%E6%B2%BB%E6%B3%95%E8%87%B3%E7%AB%AF%E5%88%B0%E7%AB%AF,%E5%86%8D%E5%88%B0%E5%AD%98%E7%AE%97%E8%AE%AD%E4%B8%80%E4%BD%93.html">
+<meta property="og:title" content="深度学习框架中的动态图与静态图">
+<meta property="og:url" content="https://linxkon.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%9B%BE%E4%B8%8E%E9%9D%99%E6%80%81%E5%9B%BE.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="大模型发展之路--从分治法至端到端,再到存算训一体 安克创新CEO阳萌对人工智能过去、现在和未来的思考。他认为大模型和transformer只是阶段性的算法实现,未来一定是仿生算法的大趋势。他还谈到了分治法作为经典的范式有其明显的局限,而端到端的方案是人类理性解决问题的必经之路。他指出,人工智能领域的范式每五到十年就会出现一个全新的范式,存算一体已经成为业界新宠。">
+<meta property="og:description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/B%E7%AB%99.png">
-<meta property="article:published_time" content="2024-05-12T07:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-28T14:04:48.112Z">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
+<meta property="article:published_time" content="2024-06-01T05:21:13.000Z">
+<meta property="article:modified_time" content="2024-06-04T02:23:31.253Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="深度学习">
-<meta property="article:tag" content="大模型">
-<meta property="article:tag" content="视频分享">
+<meta property="article:tag" content="笔记整理">
+<meta property="article:tag" content="概念">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/B%E7%AB%99.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
   
   
   
-  <title>【B站】大模型之路-从分治法至端到端,再到存算训一体 - AI·你所爱</title>
+  <title>深度学习框架中的动态图与静态图 - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="【B站】大模型之路-从分治法至端到端,再到存算训一体"></span>
+            <span id="subtitle" data-typed-text="深度学习框架中的动态图与静态图"></span>
           
         </div>
 
@@ -241,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-05-12 15:21" pubdate>
-          2024年5月12日 下午
+        <time datetime="2024-06-01 13:21" pubdate>
+          2024年6月1日 下午
         </time>
       </span>
     
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          840 字
+          763 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          8 分钟
+          7 分钟
         
       </span>
     
@@ -309,50 +309,64 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">【B站】大模型之路-从分治法至端到端,再到存算训一体</h1>
+            <h1 id="seo-header">深度学习框架中的动态图与静态图</h1>
             
             
               <div class="markdown-body">
                 
-                <h1
-id="大模型发展之路--从分治法至端到端再到存算训一体">大模型发展之路--从分治法至端到端,再到存算训一体</h1>
-<p>安克创新CEO阳萌对人工智能过去、现在和未来的思考。他认为大模型和transformer只是阶段性的算法实现,未来一定是仿生算法的大趋势。他还谈到了分治法作为经典的范式有其明显的局限,而端到端的方案是人类理性解决问题的必经之路。他指出,人工智能领域的范式每五到十年就会出现一个全新的范式,存算一体已经成为业界新宠。</p>
+                <p>深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static
+Computation
+Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。</p>
 <span id="more"></span>
-<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=1954475860&amp;bvid=BV1gC41177xR&amp;cid=1538517104&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
-</iframe>
-<h3
-id="人工智能领域的发展历程和未来趋势以及斯蒂文杨萌对于人工智能的看法和建议">人工智能领域的发展历程和未来趋势,以及斯蒂文杨萌对于人工智能的看法和建议。</h3>
-<p>00:01大模型解决不了英伟达的难题</p>
-<p>00:45人工智能的发展历程</p>
-<p>03:16人工智能领域的范式转变</p>
-<h3
-id="分治法在人工智能领域的应用并探讨了端到端算法和分支法的优缺点">分治法在人工智能领域的应用,并探讨了端到端算法和分支法的优缺点。</h3>
-<p>04:38分治法和端到端学习：分治法是一种解决问题的方法，而端到端学习则是一种新兴的方法。</p>
-<p>05:53分治法可以帮助解决自然语言处理和自动驾驶等领域的问题。</p>
-<p>08:29柔性连接和人类智能：人类的智能具有柔性连接的特点，而机器智能需要更多的研究来实现这样的特性。</p>
-<h3
-id="搜索算法工程师使用分治法进行搜索并探讨了算法硬件和数据在人工智能中的重要性">搜索算法工程师使用分治法进行搜索,并探讨了算法、硬件和数据在人工智能中的重要性。</h3>
-<p>09:04分治法在搜索引擎中的应用</p>
-<p>12:05GPU和transformer算法的关系</p>
-<p>13:10特斯拉和英伟达在自动驾驶领域的竞争</p>
-<h3
-id="gpu芯片的结构和工作原理以及现代大模型在训练和推理端的不同应用">GPU芯片的结构和工作原理,以及现代大模型在训练和推理端的不同应用。</h3>
-<p>13:28GPU是封装的芯片，其中包括运算核心和内存。在运算过程中，参数存在两边的内存中。</p>
-<p>14:12大模型的训练需要多卡参与，而推理是将参数从内存中搬运到计算中心进行计算。</p>
-<p>16:38Transformer模型不是一段一段地解决问题的，而是通过整体的参数进行端到端的解决问题。</p>
-<h3
-id="gpu的发展趋势和优势并提出了人类应该借鉴大脑的运行方式来设计未来的芯片">GPU的发展趋势和优势,并提出了人类应该借鉴大脑的运行方式来设计未来的芯片。</h3>
-<p>17:53计算性能与模型发展问题</p>
-<p>21:35GPU的不足与大脑的差异</p>
-<p>22:04适合大脑的计算芯片与内存位置</p>
-<h3
-id="存算一体的概念以及如何实现存算一体的芯片并探讨了其在未来ai发展中的潜力">存算一体的概念,以及如何实现存算一体的芯片,并探讨了其在未来AI发展中的潜力。</h3>
-<p>22:10存算一体芯片可以实现大模型的算法，节省能耗，是未来AI硬件的发展趋势。</p>
-<p>25:32存算一体芯片可以应用在智能家居、智能音箱等场景中。</p>
-<p>26:31安克创新正在研发存算一体芯片，并已经取得了一些成果。</p>
-<h3
-id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨了人工智能可能带来的影响">算法和硬件之间的关系，以及未来可能的发展趋势，同时探讨了人工智能可能带来的影响。</h3>
-<p>26:44下一代算法：下一代算法可能会是一种一边学习一边进化的算法。</p>
+<h3 id="一.-动态图dynamic-computation-graph">一. 动态图（Dynamic
+Computation Graph）</h3>
+<p>动态图，也称为即时执行模式（Eager
+Execution），是指在代码运行时即时构建和执行计算图。这种方式的特点是：</p>
+<ol type="1">
+<li><strong>即时性</strong>：每一行代码在运行时都会立即执行相应的计算操作。</li>
+<li><strong>灵活性</strong>：因为计算图是在运行时动态构建的，修改和调试都非常方便。可以轻松地使用Python的控制流（如条件语句和循环）构建复杂的模型。</li>
+<li><strong>直观性</strong>：代码更加直观和易于理解，便于调试和开发。</li>
+</ol>
+<p>代表性的深度学习框架有： - PyTorch - TensorFlow 2.x 的Eager
+Execution模式</p>
+<p>示例（PyTorch）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-comment"># 动态构建和执行计算图</span><br>x = torch.tensor([<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>], requires_grad=<span class="hljs-literal">True</span>)<br>y = x * <span class="hljs-number">2</span><br>z = y.mean()<br>z.backward()<br><br><span class="hljs-built_in">print</span>(x.grad)  <span class="hljs-comment"># 输出: tensor([0.6667, 0.6667, 0.6667])</span><br></code></pre></td></tr></table></figure>
+<h3 id="二.-静态图static-computation-graph">二. 静态图（Static
+Computation Graph）</h3>
+<p>静态图，也称为定义-运行模式（Define-and-Run），是指在代码运行之前，先定义好计算图，然后再执行。这种方式的特点是：</p>
+<ol type="1">
+<li><strong>高效性</strong>：由于计算图在运行前已经完全定义好，框架可以进行各种优化，提升执行效率和性能。</li>
+<li><strong>可移植性</strong>：静态图可以保存为文件，便于在不同环境中加载和运行。</li>
+<li><strong>可调度性</strong>：在执行前可以进行图的优化和分布式调度，提高资源利用率。</li>
+</ol>
+<p>代表性的深度学习框架有： - TensorFlow 1.x - TensorFlow 2.x 的Graph
+Execution模式</p>
+<p>示例（TensorFlow 1.x）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><br><span class="hljs-comment"># 定义计算图</span><br>x = tf.placeholder(tf.float32, shape=(<span class="hljs-literal">None</span>, <span class="hljs-number">3</span>))<br>y = x * <span class="hljs-number">2</span><br>z = tf.reduce_mean(y)<br><br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:<br>    <span class="hljs-comment"># 执行计算图</span><br>    result = sess.run(z, feed_dict=&#123;x: [[<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>]]&#125;)<br>    <span class="hljs-built_in">print</span>(result)  <span class="hljs-comment"># 输出: 4.0</span><br></code></pre></td></tr></table></figure>
+<h3 id="三.-对比总结">三. 对比总结</h3>
+<ol type="1">
+<li><strong>开发体验</strong>：
+<ul>
+<li><strong>动态图</strong>：开发体验更好，调试和代码修改更加方便，适合研究和快速原型开发。</li>
+<li><strong>静态图</strong>：需要先定义完整的计算图，修改和调试相对复杂，但更适合大规模训练和部署。</li>
+</ul></li>
+<li><strong>执行性能</strong>：
+<ul>
+<li><strong>动态图</strong>：灵活性高，但在大规模训练中，性能可能不如静态图。</li>
+<li><strong>静态图</strong>：由于可以进行多种优化，执行性能通常更高，适合在生产环境中部署。</li>
+</ul></li>
+<li><strong>灵活性</strong>：
+<ul>
+<li><strong>动态图</strong>：可以动态调整模型结构，支持复杂的控制流。</li>
+<li><strong>静态图</strong>：在定义时就确定了模型结构，灵活性相对较低。</li>
+</ul></li>
+<li><strong>适用场景</strong>：
+<ul>
+<li><strong>动态图</strong>：适用于研究、开发和模型调试。</li>
+<li><strong>静态图</strong>：适用于模型训练和部署，尤其是在资源受限的环境下。</li>
+</ul></li>
+</ol>
+<p>综合来看，动态图和静态图各有优劣，选择使用哪种方式取决于具体的应用需求和开发环境。在实际项目中，常常会根据不同的阶段和任务需求，灵活选择使用动态图或静态图。</p>
 
                 
               </div>
@@ -371,7 +385,7 @@ id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨�
     
       <span class="category-chain">
         
-  <a href="/categories/B%E7%AB%99/" class="category-chain-item">B站</a>
+  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
   
   
 
@@ -388,9 +402,9 @@ id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨�
       
         <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
       
-        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
       
-        <a href="/tags/%E8%A7%86%E9%A2%91%E5%88%86%E4%BA%AB/" class="print-no-link">#视频分享</a>
+        <a href="/tags/%E6%A6%82%E5%BF%B5/" class="print-no-link">#概念</a>
       
     </div>
   
@@ -402,8 +416,8 @@ id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>【B站】大模型之路-从分治法至端到端,再到存算训一体</div>
-      <div>https://linxkon.github.io/B站_大模型发展之路--从分治法至端到端,再到存算训一体.html</div>
+      <div>深度学习框架中的动态图与静态图</div>
+      <div>https://linxkon.github.io/深度学习框架中的动态图与静态图.html</div>
     </div>
     <div class="license-meta">
       
@@ -415,7 +429,7 @@ id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨�
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年5月12日</div>
+          <div>2024年6月1日</div>
         </div>
       
       
@@ -447,9 +461,9 @@ id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨�
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%A1%8C%E4%B8%9A%E7%9A%84%E4%B8%8D%E5%90%8C%E6%8A%80%E8%83%BD%E6%A0%91%E5%90%AB%E9%87%91%E9%87%8F%E5%88%86%E6%9E%90.html" title="AI行业技能点含金量统计分析">
+                      <a href="/ollama%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97.html" title="ollama部署常见问题解答">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">AI行业技能点含金量统计分析</span>
+                        <span class="hidden-mobile">ollama部署常见问题解答</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -457,8 +471,8 @@ id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨�
                   <article class="post-next col-6">
                     
                     
-                      <a href="/%E4%B8%80%E9%A6%96%E6%AD%8C%E7%9A%84%E6%97%B6%E9%97%B4-%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%B8%93%E5%B1%9Ellama3%E5%A4%A7%E6%A8%A1%E5%9E%8B.html" title="一首歌的时间部署本地Llama3大模型">
-                        <span class="hidden-mobile">一首歌的时间部署本地Llama3大模型</span>
+                      <a href="/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E9%A2%86%E5%9F%9F%E5%B8%B8%E8%A7%81%E6%A6%82%E5%BF%B5%E4%B8%AD%E8%8B%B1%E6%96%87%E6%B1%87%E7%BC%96.html" title="人工智能领域常见概念中英文汇编">
+                        <span class="hidden-mobile">人工智能领域常见概念中英文汇编</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -481,7 +495,7 @@ id="算法和硬件之间的关系以及未来可能的发展趋势同时探讨�
         var options = Object.assign(
           {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'dccd03fb72f075e7341cfc7550d0ae7e'
+            id: 'abd11e7ea6e0c4e950b1160e18e71452'
           }
         )
         var gitalk = new Gitalk(options);

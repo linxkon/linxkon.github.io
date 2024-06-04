@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          444 字
+          465 字
         
       </span>
     
@@ -316,17 +316,34 @@
                 
                 <p>栈作为一种基本的数据结构，其简单性和高效性使得它在各种计算和编程任务中具有广泛的应用。理解和掌握栈的原理和操作，对于编写高效、可靠的代码至关重要。</p>
 <span id="more"></span>
-<h3 id="什么是栈"><a href="#什么是栈" class="headerlink" title="什么是栈"></a>什么是栈</h3><p>栈是一种特殊的线性表，仅允许在表的一端进行插入和删除运算。这一端被称为栈顶（top），相对地，把另一端称为栈底（bottom）。向一个栈插入新元素又称作进栈、入栈或压栈（push），它是把新元素放到栈顶元素的上面，使之成为新的栈顶元素；从一个栈删除元素又称作出栈或退栈（pop），它是把栈顶元素删除掉，使其相邻的元素成为新的栈顶元素。所以栈具有“后入先出”的特点（LIFO）。</p>
-<h3 id="栈的作用"><a href="#栈的作用" class="headerlink" title="栈的作用"></a>栈的作用</h3><p>在程序执行过程中，函数调用是通过栈来管理的。每当一个函数被调用时，会将当前的执行环境（例如局部变量、参数和返回地址）压入栈中。当函数执行完毕后，这些信息会从栈中弹出，恢复之前的执行环境。</p>
+<h3 id="什么是栈">什么是栈</h3>
+<p>栈是一种特殊的线性表，仅允许在表的一端进行插入和删除运算。这一端被称为栈顶（top），相对地，把另一端称为栈底（bottom）。向一个栈插入新元素又称作进栈、入栈或压栈（push），它是把新元素放到栈顶元素的上面，使之成为新的栈顶元素；从一个栈删除元素又称作出栈或退栈（pop），它是把栈顶元素删除掉，使其相邻的元素成为新的栈顶元素。所以栈具有“后入先出”的特点（LIFO）。</p>
+<h3 id="栈的作用">栈的作用</h3>
+<p>在程序执行过程中，函数调用是通过栈来管理的。每当一个函数被调用时，会将当前的执行环境（例如局部变量、参数和返回地址）压入栈中。当函数执行完毕后，这些信息会从栈中弹出，恢复之前的执行环境。</p>
 <p>同时在一些回溯算法中，如深度优先搜索、迷宫求解等，使用栈来保存回溯路径，便于在需要时返回上一步。</p>
-<h3 id="递归函数中栈的内存演示"><a href="#递归函数中栈的内存演示" class="headerlink" title="递归函数中栈的内存演示"></a>递归函数中栈的内存演示</h3><blockquote>
+<h3 id="递归函数中栈的内存演示">递归函数中栈的内存演示</h3>
+<blockquote>
 <p>这里演示了一个爬台阶的案例，题目要求是有jieshu阶台阶，要求每次可以爬1阶或2阶，求解一共有多少爬法。</p>
 </blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">stairs</span>(<span class="hljs-params">jieshu</span>):<br>    <span class="hljs-keyword">if</span> jieshu ==<span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span><br>    <span class="hljs-keyword">elif</span> jieshu==<span class="hljs-number">2</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">2</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> (jieshu-<span class="hljs-number">1</span>)+stairs(jieshu-<span class="hljs-number">2</span>)<br><br>stairs(<span class="hljs-number">5</span>)<br></code></pre></td></tr></table></figure>
 <p>上述代码中</p>
-<h4 id="进栈的过程图示为："><a href="#进栈的过程图示为：" class="headerlink" title="进栈的过程图示为："></a>进栈的过程图示为：</h4><p><img src="/images/递归进出栈内存图/递归可视化_进栈.png" srcset="/img/loading.gif" lazyload alt="递归可视化_进栈"></p>
-<h4 id="出栈的过程为："><a href="#出栈的过程为：" class="headerlink" title="出栈的过程为："></a>出栈的过程为：</h4><p><img src="/images/递归进出栈内存图/递归可视化_出栈.png" srcset="/img/loading.gif" lazyload alt="递归可视化_出栈"></p>
-<h4 id="总的流程示意："><a href="#总的流程示意：" class="headerlink" title="总的流程示意："></a>总的流程示意：</h4><p><img src="/images/递归进出栈内存图/递归可视化.png" srcset="/img/loading.gif" lazyload alt="递归可视化"></p>
+<h4 id="进栈的过程图示为">进栈的过程图示为：</h4>
+<figure>
+<img src="/images/递归进出栈内存图/递归可视化_进栈.png" srcset="/img/loading.gif" lazyload
+alt="递归可视化_进栈" />
+<figcaption aria-hidden="true">递归可视化_进栈</figcaption>
+</figure>
+<h4 id="出栈的过程为">出栈的过程为：</h4>
+<figure>
+<img src="/images/递归进出栈内存图/递归可视化_出栈.png" srcset="/img/loading.gif" lazyload
+alt="递归可视化_出栈" />
+<figcaption aria-hidden="true">递归可视化_出栈</figcaption>
+</figure>
+<h4 id="总的流程示意">总的流程示意：</h4>
+<figure>
+<img src="/images/递归进出栈内存图/递归可视化.png" srcset="/img/loading.gif" lazyload alt="递归可视化" />
+<figcaption aria-hidden="true">递归可视化</figcaption>
+</figure>
 
                 
               </div>
@@ -580,7 +597,7 @@
     
     
       <span id="leancloud-site-uv-container" style="display: none">
-        用户访问量
+        访客量
         <span id="leancloud-site-uv"></span>
         次
       </span>
