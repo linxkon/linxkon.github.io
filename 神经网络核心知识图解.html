@@ -16,16 +16,16 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：   神经网络核心知识点梳理">
+    <meta name="description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：   神经网络核心知识点梳理  1.网络结构 1.1 输入层  1x2矩阵的输入数据X1和X2 Bias(偏置)项作为额外输入,增强模型表达能力  1.2 隐藏层  6维度的神经元结构 每个神经元包含加权求和(Σ)和激活函数(f) 常用激活函数:  Sigmoid:">
 <meta property="og:type" content="article">
-<meta property="og:title" content="神经网络核心知识点梳理">
+<meta property="og:title" content="神经网络核心知识点梳理--一图了然">
 <meta property="og:url" content="https://linxkon.github.io/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%A7%A3.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：   神经网络核心知识点梳理">
+<meta property="og:description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：   神经网络核心知识点梳理  1.网络结构 1.1 输入层  1x2矩阵的输入数据X1和X2 Bias(偏置)项作为额外输入,增强模型表达能力  1.2 隐藏层  6维度的神经元结构 每个神经元包含加权求和(Σ)和激活函数(f) 常用激活函数:  Sigmoid:">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
 <meta property="article:published_time" content="2023-05-01T10:21:13.000Z">
-<meta property="article:modified_time" content="2024-06-09T08:35:42.559Z">
+<meta property="article:modified_time" content="2024-07-04T14:40:59.163Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="笔记整理">
@@ -35,7 +35,7 @@
   
   
   
-  <title>神经网络核心知识点梳理 - AI·你所爱</title>
+  <title>神经网络核心知识点梳理--一图了然 - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="神经网络核心知识点梳理"></span>
+            <span id="subtitle" data-typed-text="神经网络核心知识点梳理--一图了然"></span>
           
         </div>
 
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          55 字
+          1.8k 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          1 分钟
+          15 分钟
         
       </span>
     
@@ -309,7 +309,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">神经网络核心知识点梳理</h1>
+            <h1 id="seo-header">神经网络核心知识点梳理--一图了然</h1>
             
             
               <div class="markdown-body">
@@ -320,6 +320,143 @@
 alt="神经网络核心知识点梳理" />
 <figcaption aria-hidden="true">神经网络核心知识点梳理</figcaption>
 </figure>
+<h2 id="网络结构">1.网络结构</h2>
+<h3 id="输入层">1.1 输入层</h3>
+<ul>
+<li>1x2矩阵的输入数据X1和X2</li>
+<li>Bias(偏置)项作为额外输入,增强模型表达能力</li>
+</ul>
+<h3 id="隐藏层">1.2 隐藏层</h3>
+<ul>
+<li>6维度的神经元结构</li>
+<li>每个神经元包含加权求和(Σ)和激活函数(f)</li>
+<li><a
+href="https://linxkon.github.io/%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.html">常用激活函数:</a>
+<ul>
+<li><strong>Sigmoid</strong>: σ(x) = 1 / (1 + e^(-x))</li>
+<li><strong>Tanh</strong>: tanh(x) = (e^x - e^(-x)) / (e^x +
+e^(-x))</li>
+<li><strong>ReLU</strong>: f(x) = max(0, x)</li>
+<li><strong>Leaky ReLU</strong>: f(x) = max(αx, x), 其中α是小正数</li>
+</ul></li>
+</ul>
+<h3 id="输出层">1.3 输出层</h3>
+<ul>
+<li>1x4矩阵输出,对应4个分类</li>
+<li>使用Softmax函数进行概率映射</li>
+<li>交叉熵损失计算</li>
+</ul>
+<h3 id="权重矩阵">1.4 权重矩阵</h3>
+<ul>
+<li>Wa_i: 2x6维度,连接输入层和隐藏层</li>
+<li>Wb_i: 6x4维度,连接隐藏层和输出层</li>
+</ul>
+<h2 id="训练过程详解">2.训练过程详解</h2>
+<h3 id="前向传播">2.1 前向传播</h3>
+<ul>
+<li>数据从输入层经过加权和激活,传递到输出层</li>
+<li>隐藏层计算: H = f(X * Wa_i + b1)</li>
+<li>输出层计算: Y = softmax(H * Wb_i + b2)</li>
+</ul>
+<h3 id="概率映射">2.2 概率映射</h3>
+<ul>
+<li>Softmax函数: Si = e^zi / Σ(e^zj)</li>
+<li>将神经网络的原始输出转换为概率分布</li>
+<li>确保输出和为1,便于多分类问题的概率解释</li>
+<li>得出概率结果方便下一步概率计算</li>
+</ul>
+<blockquote>
+<p><strong>多分类问题</strong>使用softmax进行概率映射</p>
+<p><strong>二分类问题</strong>用sigmoid进行概率映射</p>
+</blockquote>
+<h3 id="损失计算">2.3 损失计算</h3>
+<p>损失计算可以分为分类损失和回归损失两种,</p>
+<ul>
+<li><p><label><input type="checkbox" /><a
+href="https://linxkon.github.io/分类问题与回归问题的损失函数.html">详见本文</a></label></p></li>
+<li><p>多分类交叉熵损失(Cross Entropy Loss): L = -Σ(yi * log(ŷi))
+其中yi为真实标签,ŷi为预测概率</p></li>
+<li><p>对于二分类问题,可使用二元交叉熵: L = -(y * log(ŷ) + (1-y) *
+log(1-ŷ))</p></li>
+<li><p>损失函数用于量化模型预测与真实标签的差异,惩罚与真实标签差异大的</p></li>
+</ul>
+<h3 id="反向传播">2.4 反向传播</h3>
+<ul>
+<li>计算损失函数对各层参数的梯度</li>
+<li>使用链式法则逐层计算梯度</li>
+<li>∂L/∂W = ∂L/∂Y * ∂Y/∂Z * ∂Z/∂W 其中Z为激活函数输入,W为权重</li>
+</ul>
+<h3 id="梯度下降">2.5 梯度下降</h3>
+<h5 id="梯度下降相关概念">梯度下降相关概念:</h5>
+<ul>
+<li>正向传播+损失计算得出损失值来之后,我们希望找到损失函数取值最小的<strong>w(权重)</strong></li>
+<li>因损失函数皆为凸函数(碗的形状),即寻找令损失函数的导数为0的w</li>
+<li>并不是所有损失函数都能直接求导找到这个点,所以我们通过反向传播+梯度下降的方式迭代去求该w</li>
+<li>我们知道函数的导数方向(即梯度)是函数增长最快的方向,我们想要得到令损失函数导数为0的w,就要找到损失函数的负梯度方向</li>
+<li>基于以上思路,假设我们当前的w是W_old,我们求此刻损失函数的偏导值,增加符号以得到它的负梯度方向,并乘以系数η控制其前进的步伐大小,得到
+η * ∂L/∂W,再用W_old- η *
+∂L/∂W得到W_new,新的w可以让损失函数的取值更小,以此类推,便可以通过多次迭代求得令损失函数取得最小值的w</li>
+</ul>
+<p>综上,梯度下降的公式为:</p>
+<p><strong>W = W - η * ∂L/∂W</strong></p>
+<blockquote>
+<p><strong>W</strong>：表示模型的参数（或权重），这些是我们希望优化的值。</p>
+<p><strong>η</strong>（学习率）：这是一个超参数，控制每次更新步伐的大小。较大的学习率会导致更大的步伐，较小的学习率则会导致较小的步伐。选择合适的学习率非常重要，太大可能导致不稳定的收敛，太小可能导致收敛速度太慢。</p>
+<p><strong>L</strong>（损失函数）：这是我们希望最小化的函数，它衡量了模型预测值与实际值之间的差距。</p>
+<p><strong>∂L/∂W</strong>（损失函数对参数的梯度）：这是损失函数相对于参数的导数，表示了在当前参数值下，损失函数的变化率。通过计算这个梯度，我们可以知道如何调整参数
+W来减少损失函数的值。</p>
+</blockquote>
+<p><strong>根据梯度下降时batchsize的不同,梯度下降的方法可以划分为</strong></p>
+<blockquote>
+<p><strong>BGD批量梯度下降:</strong>全量样本all
+in训练,大型数据集基本不可行</p>
+<p><strong>SGD随机梯度下降:</strong>随机抽取单样本放入模型训练,受异常值影响,梯度更新时波动较大,训练时间长</p>
+<p><strong>MiniBatch小批量梯度下降:</strong>根据需求自由定义batchsize,兼具BGD和SGD的优点,收敛相对较快,最为常用</p>
+</blockquote>
+<h4 id="梯度下降优化方法">2.5.2梯度下降优化方法</h4>
+<p>在某些情况下（如线性回归），损失函数是凸函数，找到其导数为零的点可以找到全局最小值。但在更复杂的模型（如深度神经网络）中，损失函数通常是非凸的，导数为零的点不一定是全局最小值,也可能是鞍点(局部最优点)。因此，需要使用适当的优化算法来逼近最优解。</p>
+<h5 id="动量momentum">动量(Momentum):</h5>
+<p>v = γv - η * ∂L/∂W W = W + v γ为动量系数,通常取0.9</p>
+<h5 id="adam优化器">Adam优化器:</h5>
+<p><strong>结合动量和自适应学习率</strong> mt = β1<em>mt-1 +
+(1-β1)</em>gt vt = β2<em>vt-1 + (1-β2)</em>gt^2 W = W - η * mt /
+(sqrt(vt) + ε) 其中β1, β2为超参数,通常取0.9和0.999</p>
+<h3 id="正则化技术">2.6 正则化技术</h3>
+<ul>
+<li>L1正则化: 添加|W|项到损失函数,促进稀疏性</li>
+<li>L2正则化: 添加||W||^2项,防止权重过大</li>
+<li>Dropout: 训练时随机"丢弃"一部分神经元,防止过拟合</li>
+<li>批量归一化(Batch Normalization):
+对每一层的输入进行标准化,加速训练收敛</li>
+</ul>
+<h2 id="高级训练技巧">3.高级训练技巧</h2>
+<h3 id="参数初始化">3.1 参数初始化</h3>
+<ul>
+<li>Xavier初始化: Var(W) = 1/nin</li>
+<li>Kaiming初始化: Var(W) = 2/nin (适用于ReLU激活)</li>
+<li>均匀分布初始化</li>
+<li>正态分布初始化</li>
+<li>固定值初始化</li>
+</ul>
+<h3 id="学习率调整">3.2 学习率调整</h3>
+<ul>
+<li>学习率衰减: η = η0 / (1 + kt)</li>
+<li>周期性学习率调整: Cosine Annealing</li>
+<li>学习率预热(Warm-up): 从小学习率逐步增加到初始学习率</li>
+</ul>
+<h3 id="批量训练策略">3.3 批量训练策略</h3>
+<ul>
+<li>Mini-Batch: 平衡计算效率和梯度估计准确性</li>
+<li>批大小选择: 较大批量可提高并行度,但可能影响泛化性</li>
+</ul>
+<h3 id="进阶优化策略">3.4 进阶优化策略</h3>
+<ul>
+<li>梯度裁剪: 防止梯度爆炸</li>
+<li>学习率自适应: 如Adagrad、RMSprop等算法</li>
+<li>早停(Early Stopping): 监控验证集性能,及时停止训练防止过拟合</li>
+</ul>
+<hr />
+<p>深入理解神经网络的结构、训练过程和优化技巧,对于构建高效且性能优异的模型至关重要。从基础的前向传播、损失计算,到复杂的优化算法和正则化技术,每个环节都在平衡模型的拟合能力和泛化性能。通过合理运用这些技术,我们可以训练出既能准确拟合训练数据,又具有良好泛化能力的神经网络模型。</p>
 
                 
               </div>
@@ -369,7 +506,7 @@ alt="神经网络核心知识点梳理" />
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>神经网络核心知识点梳理</div>
+      <div>神经网络核心知识点梳理--一图了然</div>
       <div>https://linxkon.github.io/神经网络核心知识图解.html</div>
     </div>
     <div class="license-meta">
@@ -746,5 +883,23 @@ alt="神经网络核心知识点梳理" />
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
 </body>
 </html>
