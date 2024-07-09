@@ -1,0 +1,1119 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="1.什么是模型蒸馏 在工业级的应用中, 除了要求模型要有好的预测效果之外, 往往还希望它的&quot;消耗&quot;足够小. 也就是说一般希望部署在线上的应用模型消耗较小的资源. 这些资源包括存储空间, 包括算力. 在深度学习背景下, 如果希望模型的效果足够好, 通常会有两种方案: - 使用更大规模的参数. - 使用集成模型, 将多个弱模型集成起来. 注意: 上面两种方案往往需要较大的计算资源, 对部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识蒸馏的原理与实现">
+<meta property="og:url" content="https://linxkon.github.io/%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="1.什么是模型蒸馏 在工业级的应用中, 除了要求模型要有好的预测效果之外, 往往还希望它的&quot;消耗&quot;足够小. 也就是说一般希望部署在线上的应用模型消耗较小的资源. 这些资源包括存储空间, 包括算力. 在深度学习背景下, 如果希望模型的效果足够好, 通常会有两种方案: - 使用更大规模的参数. - 使用集成模型, 将多个弱模型集成起来. 注意: 上面两种方案往往需要较大的计算资源, 对部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F.png">
+<meta property="article:published_time" content="2023-01-13T12:21:13.000Z">
+<meta property="article:modified_time" content="2024-07-09T03:04:12.500Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="剪枝">
+<meta property="article:tag" content="模型处理">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F.png">
+  
+  
+  
+  <title>知识蒸馏的原理与实现 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="知识蒸馏的原理与实现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-13 20:21" pubdate>
+          2023年1月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          85 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">知识蒸馏的原理与实现</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="什么是模型蒸馏">1.什么是模型蒸馏</h2>
+<p>在工业级的应用中, 除了要求模型要有好的预测效果之外,
+往往还希望它的"消耗"足够小.
+也就是说一般希望部署在线上的应用模型消耗较小的资源.
+这些资源包括存储空间, 包括算力.</p>
+<p>在深度学习背景下, 如果希望模型的效果足够好, 通常会有两种方案: -
+使用更大规模的参数. - 使用集成模型, 将多个弱模型集成起来.</p>
+<p>注意: 上面两种方案往往需要较大的计算资源, 对部署非常不利.
+由此产生了模型压缩的动机: 我们希望有一个小模型,
+但又能达到大模型一样或相当的效果.</p>
+<p>模型蒸馏是一种通过将一个复杂模型（教师模型）的知识转移给一个简单模型（学生模型）的方法，以提高学生模型的性能。在减小模型体积的同时，保持或提升模型性能。
+- 知识蒸馏的概念最早由Hinton在2015年提出, 在2019年后火热起来. -
+知识蒸馏在目前已经成为一种既前沿又常用的提高模型泛化能力和部署优势的方法.</p>
+<h2 id="知识蒸馏的原理和算法">2.知识蒸馏的原理和算法</h2>
+<h3 id="教师模型">2.1 教师模型</h3>
+<ul>
+<li><strong>定义：</strong>
+复杂的、高性能的模型，通常是大型深度神经网络。</li>
+<li><strong>特点：</strong> 参数量大，能够学习复杂的特征和关系。</li>
+</ul>
+<h3 id="学生模型">2.2 学生模型</h3>
+<ul>
+<li><strong>定义：</strong>
+简化的、小型的模型，通常是教师模型的子集。</li>
+<li><strong>特点：</strong> 参数量较小，适用于资源受限的场景。</li>
+</ul>
+<h3 id="蒸馏过程">2.3 蒸馏过程</h3>
+<p>下图非常直观, 又经典的展示了知识蒸馏的架构图, 相当于有两部分的分支: *
+一部分是大模型的softmax分布作为"知识标签", 让小模型去学习. *
+一部分是真实label(ground truth)作为"真实标签", 让小模型去匹配.</p>
+<figure>
+<img src="/images/模型蒸馏/3_2.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>我们对知识蒸馏进行公式化处理:
+先训练好一个精度较高的Teacher网络(一般是复杂度较高的大规模预训练模型),
+然后将Teacher网络的预测结果q作为Student网络的"学习目标",
+来训练Student网络(一般是速度较快的小规模模型),
+最终使得Student网络的结果p接近于q. 损失函数如下:</p>
+<figure>
+<img src="/images/模型蒸馏/3_4.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<blockquote>
+<ul>
+<li>上式中CE是交叉熵(Cross Entropy), y是真实标签,
+q是Teacher网络的输出结果, p是Student网络的输出结果.</li>
+</ul>
+</blockquote>
+<p>原始论文中提出了softmax-T公式来计算上图中的q:</p>
+<figure>
+<img src="/images/模型蒸馏/3_3.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<blockquote>
+<ul>
+<li>上式中pi是Student网络学习的对象, 也就是所谓的软目标(soft targets),
+zi是神经网络softmax前的输出logits.</li>
+</ul>
+</blockquote>
+<p>不同的温度系数T值, 对softmax-T算法有不同的影响, 总结如下: -
+如果将T值取1, softmax-T公式就成为softmax公式,
+根据logits输出各个类别的概率. - 如果T越接近于0, 则最大值会越接近1,
+其他值会接近0, 类似于退化成one-hot编码. - 如果T越大,
+则输出的结果分布越平缓, 相当于标签平滑的原理, 起到保留相似信息的作用. -
+如果T趋于无穷大, 则演变成均匀分布.</p>
+<h2
+id="模型蒸馏的代码实现----详细代码见github">3.模型蒸馏的代码实现----详细代码见<a
+target="_blank" rel="noopener" href="https://github.com/linxkon/">github</a></h2>
+<p>工具类函数的路径为：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">05</span>-bert_distil<span class="hljs-regexp">/src/u</span>tils.py<br></code></pre></td></tr></table></figure>
+<p>导入工具包如下：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-keyword">import</span> torch<br><span class="hljs-title">from</span> tqdm <span class="hljs-keyword">import</span> tqdm<br><span class="hljs-keyword">import</span> time<br><span class="hljs-title">from</span> datetime <span class="hljs-keyword">import</span> timedelta<br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> pickle <span class="hljs-keyword">as</span> pkl<br></code></pre></td></tr></table></figure>
+<h3 id="工具类函数build_vocab">3.1 工具类函数build_vocab()</h3>
+<p>build_vocab()是位于utils.py中的独立函数，用于将文本数据中的单词映射为索引。函数的主要步骤如下：</p>
+<ol type="1">
+<li><strong>初始化：</strong>
+函数开始时定义了三个特殊符号（<code>UNK</code>, <code>PAD</code>,
+<code>CLS</code>），它们分别代表未知符号、填充符号和综合信息符号。这些符号在构建词汇表时将被添加。</li>
+<li><strong>遍历文本文件：</strong>
+函数通过打开指定路径的文本文件，逐行遍历文件中的内容。每行通常包含一段文本，这里选择每行的第一个字段作为内容。</li>
+<li><strong>分词和构建词汇表：</strong>
+对每个内容使用给定的分词器进行分词，然后更新词汇表字典。分词的结果是将文本划分为单词或子词，而词汇表字典则记录了每个单词出现的次数。</li>
+<li><strong>筛选高频词汇：</strong>
+对词汇表字典根据词频进行排序，选择出现频率较高的词汇。这里根据参数
+<code>min_freq</code> 指定的最小出现频率进行筛选。</li>
+<li><strong>构建最终词汇表：</strong>
+将选定的高频词汇构建为字典，将每个词汇映射到一个唯一的索引。此外，函数还将特殊符号（<code>UNK</code>,
+<code>PAD</code>,
+<code>CLS</code>）添加到词汇表中，分别赋予它们额外的索引。</li>
+<li><strong>返回结果：</strong>
+返回构建好的词汇表字典，其中每个词汇都与一个唯一的索引相关联。这个词汇表后续可用于将文本数据转换为模型可接受的输入形式，即将文本中的每个单词映射为对应的索引。</li>
+</ol>
+<p>具体实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs python">UNK, PAD, CLS = <span class="hljs-string">&quot;[UNK]&quot;</span>, <span class="hljs-string">&quot;[PAD]&quot;</span>, <span class="hljs-string">&quot;[CLS]&quot;</span>  <span class="hljs-comment"># padding符号, bert中综合信息符号</span><br>MAX_VOCAB_SIZE = <span class="hljs-number">10000</span>  <span class="hljs-comment"># 词表长度限制</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">build_vocab</span>(<span class="hljs-params">file_path, tokenizer, max_size, min_freq</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    构建词汇表的函数。</span><br><span class="hljs-string"></span><br><span class="hljs-string">    参数：</span><br><span class="hljs-string">    - file_path (str): 包含文本数据的文件路径。</span><br><span class="hljs-string">    - tokenizer (function): 用于分词的函数，接受一个字符串并返回分词后的结果。</span><br><span class="hljs-string">    - max_size (int): 词汇表的最大大小，即保留的词汇数量上限。</span><br><span class="hljs-string">    - min_freq (int): 词汇表中词语的最小出现频率，低于此频率的词汇将被过滤掉。</span><br><span class="hljs-string"></span><br><span class="hljs-string">    返回：</span><br><span class="hljs-string">    - vocab_dic (dict): 一个字典，将词汇映射到索引的词汇表。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    vocab_dic = &#123;&#125;  <span class="hljs-comment"># 用于存储词汇表的字典，键为单词，值为单词出现的次数</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(file_path, <span class="hljs-string">&quot;r&quot;</span>, encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> tqdm(f):<br>            line = line.strip()<br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> line:<br>                <span class="hljs-keyword">continue</span><br>            content = line.split(<span class="hljs-string">&quot;\t&quot;</span>)[<span class="hljs-number">0</span>]  <span class="hljs-comment"># 以制表符分隔的文本，这里取第一列的内容</span><br>            <span class="hljs-comment"># 使用给定的分词器（tokenizer）对文本进行分词，并更新词汇表</span><br>            <span class="hljs-keyword">for</span> word <span class="hljs-keyword">in</span> tokenizer(content):<br>                vocab_dic[word] = vocab_dic.get(word, <span class="hljs-number">0</span>) + <span class="hljs-number">1</span><br>        <span class="hljs-comment"># 根据词频对词汇表进行排序，并选择出现频率较高的词汇</span><br>        vocab_list = <span class="hljs-built_in">sorted</span>([_ <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> vocab_dic.items() <span class="hljs-keyword">if</span> _[<span class="hljs-number">1</span>] &gt;= min_freq],<br>                            key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">1</span>], reverse=<span class="hljs-literal">True</span>)[:max_size]<br>        <span class="hljs-comment"># 将选定的词汇构建为字典，键为单词，值为索引</span><br>        vocab_dic = &#123;word_count[<span class="hljs-number">0</span>]: idx <span class="hljs-keyword">for</span> idx, word_count <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(vocab_list)&#125;<br>        <span class="hljs-comment"># 添加特殊符号到词汇表，例如未知符号（UNK）、填充符号（PAD）</span><br>        vocab_dic.update(&#123;UNK: <span class="hljs-built_in">len</span>(vocab_dic), PAD: <span class="hljs-built_in">len</span>(vocab_dic) + <span class="hljs-number">1</span>,CLS: <span class="hljs-built_in">len</span>(vocab_dic) + <span class="hljs-number">2</span>&#125;)<br>    <span class="hljs-keyword">return</span> vocab_dic<br></code></pre></td></tr></table></figure>
+<h3 id="工具类函数build_dataset_cnn">3.2
+工具类函数build_dataset_CNN()</h3>
+<p>build_dataset_CNN()是位于utils.py中的独立函数，用于创建专为text_cnn模型设计的数据集。以下是代码的主要作用：</p>
+<p><code>d_dataset_CNN</code>
+的函数，用于创建专为卷积神经网络（CNN）模型设计的数据集。以下是代码的主要作用：</p>
+<ol type="1">
+<li>分词（Tokenization）：定义了一个简单的字符级分词器，将每个输入文本转换为单个字符的列表。</li>
+<li><strong>构建词汇表（Vocabulary Building）：</strong></li>
+</ol>
+<p>函数首先检查是否存在指定路径 <code>config.vocab_path</code>
+下的词汇表文件。如果存在，则加载词汇表；否则，使用训练数据构建新的词汇表。</p>
+<ol type="1">
+<li><strong>加载数据集（Dataset Loading）：</strong></li>
+</ol>
+<p><code>load_dataset</code> 是 <code>build_dataset_CNN</code>
+内部的辅助函数，用于从给定文件（训练、验证、测试）加载数据集。</p>
+<ol type="1">
+<li><strong>数据集拆分（Dataset Splitting）：</strong></li>
+</ol>
+<p>函数通过在相应文件路径上调用 <code>load_dataset</code>
+来加载训练、验证和测试的数据集，并返回。</p>
+<p>具体实现如下所示：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">def build_dataset_CNN(config):<br>    <span class="hljs-comment"># 定义字符级别分词器</span><br>    tokenizer = lambda x: [y <span class="hljs-keyword">for</span> y <span class="hljs-keyword">in</span> x]  <br>    <span class="hljs-comment"># 检查是否存在词汇表文件，如果存在则加载，否则构建新的词汇表</span><br>    <span class="hljs-keyword">if</span> os.path.exists(config.vocab_path):<br>        vocab = pkl.<span class="hljs-built_in">load</span>(<span class="hljs-built_in">open</span>(config.vocab_path, <span class="hljs-string">&quot;rb&quot;</span>))<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-comment"># 构建词汇表</span><br>        vocab = build_vocab(config.train_path, tokenizer=tokenizer, max_size=MAX_VOCAB_SIZE, min_freq=<span class="hljs-number">1</span>)<br>        <span class="hljs-comment"># 保存词汇表</span><br>        pkl.dump(vocab, <span class="hljs-built_in">open</span>(config.vocab_path, <span class="hljs-string">&quot;wb&quot;</span>))<br>    print(f<span class="hljs-string">&quot;Vocab size: &#123;len(vocab)&#125;&quot;</span>)<br><br>    <span class="hljs-comment"># 定义加载数据集的辅助函数</span><br>    def load_dataset(path, pad_size=<span class="hljs-number">32</span>):<br>        contents = []<br>        <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(path, <span class="hljs-string">&quot;r&quot;</span>, encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>) <span class="hljs-keyword">as</span> f:<br>            <span class="hljs-keyword">for</span> <span class="hljs-built_in">line</span> <span class="hljs-keyword">in</span> tqdm(f):<br>                lin = <span class="hljs-built_in">line</span>.strip()<br>                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> lin:<br>                    continue<br>                content, label = lin.<span class="hljs-built_in">split</span>(<span class="hljs-string">&quot;\t&quot;</span>)<br>                words_line = []<br>                <span class="hljs-keyword">token</span> = tokenizer(content)<br>                seq_len = <span class="hljs-built_in">len</span>(<span class="hljs-keyword">token</span>)<br><br>                <span class="hljs-comment"># 填充或截断序列至指定长度</span><br>                <span class="hljs-keyword">if</span> pad_size:<br>                    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(<span class="hljs-keyword">token</span>) &lt; pad_size:<br>                        <span class="hljs-keyword">token</span>.extend([PAD] * (pad_size - <span class="hljs-built_in">len</span>(<span class="hljs-keyword">token</span>)))<br>                    <span class="hljs-keyword">else</span>:<br>                        <span class="hljs-keyword">token</span> = <span class="hljs-keyword">token</span>[:pad_size]<br>                        seq_len = pad_size<br><br>                <span class="hljs-comment"># 将词转换为对应的id</span><br>                <span class="hljs-keyword">for</span> <span class="hljs-built_in">word</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">token</span>:<br>                    words_line.append(vocab.<span class="hljs-built_in">get</span>(<span class="hljs-built_in">word</span>, vocab.<span class="hljs-built_in">get</span>(UNK)))<br><br>                <span class="hljs-comment"># 将数据添加到 contents 列表</span><br>                contents.append((words_line, int(label), seq_len))<br>        <span class="hljs-literal">return</span> contents  <span class="hljs-comment"># [([...], 0), ([...], 1), ...]</span><br><br>    <span class="hljs-comment"># 加载训练、验证和测试数据集</span><br>    train = load_dataset(config.train_path, config.pad_size)<br>    dev = load_dataset(config.dev_path, config.pad_size)<br>    test = load_dataset(config.test_path, config.pad_size)<br><br>    <span class="hljs-literal">return</span> vocab, train, dev, test<br></code></pre></td></tr></table></figure>
+<h3 id="其他工具类函数">3.3 其他工具类函数</h3>
+<p>其他工具类函数build_dataset(),
+build_iterator()，get_time_dif()都位于utils.py中的独立函数，这些函数与Bert模型章节是一样的，不再赘述。</p>
+<h2 id="模型类">4.模型类</h2>
+<h3 id="teacher模型">4.1 Teacher模型</h3>
+<p>Teacher模型采用BERT，接下来实现一个基于BERT的文本分类模型，并包含了相关的配置信息。该部分代码在：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">05</span>-bert_distil<span class="hljs-regexp">/src/m</span>odels/bert.py<br></code></pre></td></tr></table></figure>
+<p>主要内容包含：</p>
+<p>配置类 <code>Config</code>：和模型类 <code>Model</code>：</p>
+<p>首先<strong>导入工具包</strong>：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> os<br><span class="hljs-title">from</span> transformers <span class="hljs-keyword">import</span> BertModel, BertTokenizer, BertConfig<br></code></pre></td></tr></table></figure>
+<h4 id="实现config类代码">1 实现Config类代码</h4>
+<p>配置类 <code>Config</code>中主要包含以下内容：</p>
+<ul>
+<li><code>Config</code> 类包含了用于模型训练和数据处理的各种参数。</li>
+<li>定义了模型名称、数据集路径、训练集、验证集、测试集文件路径、类别名单等信息。</li>
+<li>包含模型训练结果和量化模型存储结果的路径。</li>
+<li>配置了训练设备（GPU或CPU）、类别数、epoch数、mini-batch大小、句子长度等。</li>
+<li>BERT预训练模型的路径、分词器、BERT模型配置、隐藏层大小等。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Config</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        配置类，包含模型和训练所需的各种参数。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        self.model_name = <span class="hljs-string">&quot;bert&quot;</span> <span class="hljs-comment"># 模型名称</span><br>        self.data_path = <span class="hljs-string">&quot;/Users/mac/Desktop/投满分项目/03-code/04-bert/data/data1/&quot;</span> <span class="hljs-comment">#数据集的根路径</span><br>        self.train_path = self.data_path + <span class="hljs-string">&quot;train.txt&quot;</span>  <span class="hljs-comment"># 训练集</span><br>        self.dev_path = self.data_path + <span class="hljs-string">&quot;dev.txt&quot;</span>  <span class="hljs-comment"># 验证集</span><br>        self.test_path = self.data_path + <span class="hljs-string">&quot;test.txt&quot;</span>  <span class="hljs-comment"># 测试集</span><br>        self.class_list = [x.strip() <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-built_in">open</span>(self.data_path + <span class="hljs-string">&quot;class.txt&quot;</span>).readlines()]  <span class="hljs-comment"># 类别名单</span><br><br>        self.save_path = <span class="hljs-string">&quot;/Users/mac/Desktop/投满分项目/03-code/04-bert/src/saved_dic&quot;</span> <span class="hljs-comment">#模型训练结果保存路径</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(self.save_path):<br>            os.mkdir(self.save_path)<br>        self.save_path += <span class="hljs-string">&quot;/&quot;</span> + self.model_name + <span class="hljs-string">&quot;.pt&quot;</span>  <span class="hljs-comment"># 模型训练结果</span><br><br><br>        <span class="hljs-comment"># 模型训练+预测的时候, 放开下一行代码, 在GPU上运行.</span><br>        self.device = torch.device(<span class="hljs-string">&quot;cuda&quot;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;cpu&quot;</span>)  <br><br>        self.num_classes = <span class="hljs-built_in">len</span>(self.class_list)  <span class="hljs-comment"># 类别数</span><br>        self.num_epochs = <span class="hljs-number">2</span>  <span class="hljs-comment"># epoch数</span><br>        self.batch_size = <span class="hljs-number">128</span>  <span class="hljs-comment"># mini-batch大小</span><br>        self.pad_size = <span class="hljs-number">32</span>  <span class="hljs-comment"># 每句话处理成的长度(短填长切)</span><br>        self.learning_rate = <span class="hljs-number">5e-5</span>  <span class="hljs-comment"># 学习率</span><br>        self.bert_path = <span class="hljs-string">&quot;/Users/mac/Desktop/投满分项目/03-code/04-bert/data/bert_pretrain&quot;</span> <span class="hljs-comment"># 预训练BERT模型的路径</span><br>        self.tokenizer = BertTokenizer.from_pretrained(self.bert_path) <span class="hljs-comment"># BERT模型的分词器</span><br>        self.bert_config = BertConfig.from_pretrained(self.bert_path + <span class="hljs-string">&#x27;/bert_config.json&#x27;</span>) <span class="hljs-comment"># BERT模型的配置</span><br>        self.hidden_size = <span class="hljs-number">768</span> <span class="hljs-comment"># BERT模型的隐藏层大小</span><br></code></pre></td></tr></table></figure>
+<h4 id="实现model类代码">2.实现Model类代码</h4>
+<p><strong>模型类 <code>Model</code></strong>主要实现以下内容：</p>
+<ul>
+<li><code>Model</code> 类继承自
+<code>nn.Module</code>，实现了一个基于BERT的文本分类模型。</li>
+<li>在初始化方法中，加载预训练的BERT模型和配置，并定义了一个全连接层用于文本分类。</li>
+<li>在前向传播方法中，通过BERT模型获取句子的表示，然后通过全连接层进行分类</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Model</span>(nn.<span class="hljs-title class_">Module</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span>, config</span>):<br>        <span class="hljs-variable language_">super</span>(<span class="hljs-title class_">Model</span>, <span class="hljs-variable language_">self</span>).__init__()<br>        <span class="hljs-comment"># 预训练BERT模型</span><br>        <span class="hljs-variable language_">self</span>.bert = <span class="hljs-title class_">BertModel</span>.from_pretrained(config.bert_path, config=config.bert_config)<br>        <span class="hljs-comment"># 全连接层，用于文本分类</span><br>        <span class="hljs-variable language_">self</span>.fc = nn.<span class="hljs-title class_">Linear</span>(config.hidden_size, config.num_classes)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span>, x</span>):<br>        <span class="hljs-comment"># x: 模型输入，包含句子、句子长度和填充掩码。</span><br>        context = x[<span class="hljs-number">0</span>]  <span class="hljs-comment"># 输入的句子</span><br>        mask = x[<span class="hljs-number">2</span>]  <span class="hljs-comment"># 对padding部分进行mask，和句子一个size，padding部分用0表示，如：[1, 1, 1, 1, 0, 0]</span><br>        <span class="hljs-comment"># _是占位符，接收模型的所有输出，而 pooled 是池化的结果,将整个句子的信息压缩成一个固定长度的向量</span><br>        _, pooled = <span class="hljs-variable language_">self</span>.bert(context, attention_mask=mask, return_dict=<span class="hljs-title class_">False</span>)<br>        <span class="hljs-comment"># 模型输出，用于文本分类</span><br>        out = <span class="hljs-variable language_">self</span>.fc(pooled)<br>        <span class="hljs-keyword">return</span> out<br></code></pre></td></tr></table></figure>
+<p>bert.py文件提供了一个简单而灵活的BERT文本分类模型，通过配置类可以方便地调整模型参数，适应不同的文本分类任务，通过model类构建整个网络结构。</p>
+<h3 id="student模型">4.2 Student模型</h3>
+<p>Student模型采用textCNN，接下来实现一个基于textCNN的文本分类模型，并包含了相关的配置信息。该部分代码在：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">05</span>-bert_distil<span class="hljs-regexp">/src/m</span>odels/textCNN.py<br></code></pre></td></tr></table></figure>
+<p>首先看textCNN模型的架构图:</p>
+<figure>
+<img src="/images/模型蒸馏/2_3.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>导入相关的工具包：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.nn.functional <span class="hljs-keyword">as</span> F<br><span class="hljs-keyword">import</span> os<br></code></pre></td></tr></table></figure>
+<h4 id="实现config类代码-1">1.实现Config类代码</h4>
+<p>config配置类用于设置存储模型的各种参数和路径。包括数据集的路径、模型保存路径、设备选择、超参数等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Config</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        self.model_name = <span class="hljs-string">&quot;textCNN&quot;</span><br>        self.data_path = <span class="hljs-string">&quot;/Users/mac/Desktop/投满分项目/03-code/05-bert_distil/data/data/&quot;</span><br>        self.train_path = self.data_path + <span class="hljs-string">&quot;train.txt&quot;</span>  <span class="hljs-comment"># 训练集</span><br>        self.dev_path = self.data_path + <span class="hljs-string">&quot;dev.txt&quot;</span>  <span class="hljs-comment"># 验证集</span><br>        self.test_path = self.data_path + <span class="hljs-string">&quot;test.txt&quot;</span>  <span class="hljs-comment"># 测试集</span><br>        self.class_list = [x.strip() <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-built_in">open</span>(self.data_path+<span class="hljs-string">&quot;class.txt&quot;</span>, encoding=<span class="hljs-string">&quot;utf-8&quot;</span>).readlines()]<br>        self.vocab_path = self.data_path + <span class="hljs-string">&quot;vocab.pkl&quot;</span>  <span class="hljs-comment"># 词表</span><br>        self.save_path = <span class="hljs-string">&quot;/Users/mac/Desktop/投满分项目/03-code/05-bert_distil/src/saved_dict&quot;</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(self.save_path):<br>            os.mkdir(self.save_path)<br>        self.save_path += <span class="hljs-string">&quot;/&quot;</span> + self.model_name + <span class="hljs-string">&quot;.pt&quot;</span>  <span class="hljs-comment"># 模型训练结果</span><br>        self.device = torch.device(<span class="hljs-string">&quot;cuda&quot;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;cpu&quot;</span>)  <span class="hljs-comment"># 设备</span><br><br>        self.dropout = <span class="hljs-number">0.5</span>  <span class="hljs-comment"># 随机失活</span><br>        self.require_improvement = <span class="hljs-number">1000</span>  <span class="hljs-comment"># 若超过1000batch效果还没提升，则提前结束训练</span><br>        self.num_classes = <span class="hljs-built_in">len</span>(self.class_list)  <span class="hljs-comment"># 类别数</span><br>        self.n_vocab = <span class="hljs-number">0</span>  <span class="hljs-comment"># 词表大小，在运行时赋值</span><br>        self.num_epochs = <span class="hljs-number">3</span>  <span class="hljs-comment"># epoch数</span><br>        self.batch_size = <span class="hljs-number">128</span>  <span class="hljs-comment"># mini-batch大小</span><br>        self.pad_size = <span class="hljs-number">32</span>  <span class="hljs-comment"># 每句话处理成的长度(短填长切)</span><br>        self.learning_rate = <span class="hljs-number">1e-3</span>  <span class="hljs-comment"># 学习率</span><br>        self.embed = <span class="hljs-number">300</span>  <span class="hljs-comment"># 字向量维度</span><br>        self.filter_sizes = (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>) <span class="hljs-comment"># 卷积核的大小</span><br>        self.num_filters = <span class="hljs-number">256</span> <span class="hljs-comment"># 卷积核的数量</span><br></code></pre></td></tr></table></figure>
+<h4 id="实现model类代码-1">2.实现Model类代码</h4>
+<p>TextCNN（卷积神经网络用于文本分类）模型包含词嵌入层、多个卷积核大小的卷积层、池化层、随机失活层和全连接层。其中，卷积层通过不同大小的卷积核捕捉不同范围的文本信息，随机失活层用于防止过拟合，全连接层用于输出最终的分类结果。包含以下三个方法：</p>
+<ol type="1">
+<li><strong><code>__init__</code> 方法：</strong>
+初始化模型。它包括词嵌入层，多个卷积层，池化层，随机失活层和全连接层。</li>
+<li><strong><code>conv_and_pool</code> 方法：</strong>
+定义卷积和池化的操作。ReLU激活函数应用于卷积输出，然后通过最大池化层进行池化。</li>
+<li><strong><code>forward</code> 方法：</strong>
+定义前向传播逻辑。通过词嵌入层将输入文本序列转换为嵌入表示，然后应用多个卷积核并进行池化。最后，通过全连接层生成最终的分类结果。</li>
+</ol>
+<p>具体实现如下：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs crystal"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Model</span>(<span class="hljs-title">nn</span>.<span class="hljs-title">Module</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span></span>(<span class="hljs-keyword">self</span>, config):<br>        <span class="hljs-keyword">super</span>(Model, <span class="hljs-keyword">self</span>).__init__()<br>        <span class="hljs-keyword">self</span>.embedding = nn.Embedding(config.n_vocab, config.embed, padding_idx=config.n_vocab - <span class="hljs-number">1</span>) <span class="hljs-comment"># 词嵌入层</span><br>        <span class="hljs-keyword">self</span>.convs = nn.ModuleList(<br>            [nn.Conv2d(<span class="hljs-number">1</span>, config.num_filters, (k, config.embed)) <span class="hljs-keyword">for</span> k in config.filter_sizes]<br>        )   <span class="hljs-comment"># 卷积层列表，包含不同卷积核大小的卷积层</span><br>        <span class="hljs-keyword">self</span>.dropout = nn.Dropout(config.dropout)  <span class="hljs-comment"># 随机失活层</span><br>        <span class="hljs-keyword">self</span>.fc = nn.Linear(config.num_filters * len(config.filter_sizes), config.num_classes)   <span class="hljs-comment"># 全连接层</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">conv_and_pool</span></span>(<span class="hljs-keyword">self</span>, x, conv):<br>        <span class="hljs-comment"># 卷积和池化操作</span><br>        x = F.relu(conv(x)).squeeze(<span class="hljs-number">3</span>)<br>        x = F.max_pool1d(x, x.size(<span class="hljs-number">2</span>)).squeeze(<span class="hljs-number">2</span>)<br>        <span class="hljs-keyword">return</span> x<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">forward</span></span>(<span class="hljs-keyword">self</span>, x):<br>        <span class="hljs-comment"># 前向传播</span><br>        <span class="hljs-keyword">out</span> = <span class="hljs-keyword">self</span>.embedding(x[<span class="hljs-number">0</span>])<br>        <span class="hljs-keyword">out</span> = <span class="hljs-keyword">out</span>.unsqueeze(<span class="hljs-number">1</span>)<br>        <span class="hljs-comment"># 对每个卷积层进行卷积和池化操作，然后拼接在一起</span><br>        <span class="hljs-keyword">out</span> = torch.cat([<span class="hljs-keyword">self</span>.conv_and_pool(<span class="hljs-keyword">out</span>, conv) <span class="hljs-keyword">for</span> conv in <span class="hljs-keyword">self</span>.convs], <span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">out</span> = <span class="hljs-keyword">self</span>.dropout(<span class="hljs-keyword">out</span>)  <span class="hljs-comment"># 随机失活</span><br>        <span class="hljs-keyword">out</span> = <span class="hljs-keyword">self</span>.fc(<span class="hljs-keyword">out</span>)   <span class="hljs-comment"># 全连接层</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">out</span><br></code></pre></td></tr></table></figure>
+<h2
+id="编写训练函数测试函数评估函数">5.编写训练函数,测试函数,评估函数</h2>
+<p>这几个函数共同编写在一个代码文件中:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">05</span>-bert_distil<span class="hljs-regexp">/src/</span>train_eval.py<br></code></pre></td></tr></table></figure>
+<p>首先导入相关的工具包：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.nn.functional <span class="hljs-keyword">as</span> F<br><span class="hljs-title">from</span> sklearn <span class="hljs-keyword">import</span> metrics<br><span class="hljs-keyword">import</span> time<br><span class="hljs-title">from</span> utils <span class="hljs-keyword">import</span> get_time_dif<br><span class="hljs-title">from</span> transformers.optimization <span class="hljs-keyword">import</span> AdamW<br><span class="hljs-title">from</span> tqdm <span class="hljs-keyword">import</span> tqdm<br><span class="hljs-keyword">import</span> math<br><span class="hljs-keyword">import</span> logging<br></code></pre></td></tr></table></figure>
+<p>在具体实现之前，我们先看下训练的架构图：</p>
+<figure>
+<img src="/images/模型蒸馏/3_2.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>以下是模型蒸馏的基本训练步骤：</p>
+<ol type="1">
+<li><strong>准备教师模型（bert大模型）：</strong>
+使用一个较大的模型进行训练, 这个模型在任务上表现很好。</li>
+<li><strong>使用教师模型生成软目标：</strong>
+对训练数据集进行推理，得到教师模型的输出概率分布（软目标）。这些概率分布包含了模型对每个类别的置信度信息。</li>
+<li><strong>准备学生模型（textcnn小模型）：</strong>
+初始化一个较小的模型，这是我们要训练的目标模型。</li>
+<li><strong>使用软目标和硬标签进行训练：</strong>
+使用原始的硬标签（实际标签）和教师模型生成的软目标来训练学生模型。损失函数由两部分组成：</li>
+<li><strong>硬标签损失（通常为交叉熵损失）：</strong>
+学生模型的输出与实际标签之间的差距。</li>
+<li><strong>软目标损失：</strong>
+学生模型的输出与教师模型生成的软目标之间的差距。这通常使用 KL
+散度（Kullback-Leibler Divergence）来度量。</li>
+<li><strong>调整温度参数：</strong> KL
+散度的计算涉及一个温度参数，该参数可以调整软目标的分布。温度较高会使分布更加平滑。在训练过程中，可以逐渐降低温度以提高蒸馏效果。</li>
+</ol>
+<p>通过这个过程，学生模型可以通过教师模型的知识进行训练，达到在小模型上获得类似大模型性能的目的。模型蒸馏在资源受限的环境中特别有用，例如移动设备或边缘设备上。</p>
+<h3 id="获取teacher网络输出的函数">5.1 获取Teacher网络输出的函数</h3>
+<p>使用Bert作为Teacher模型, 需要用Bert对全部训练数据做预测,
+并将结果预先存储进一个list中. 这些预测结果就是soft targets,
+未来给Student模型做"学习标签"使用.具体步骤如下所示：</p>
+<ol type="1">
+<li>将教师模型设置为评估（推断）模式，通过
+<code>teacher_model.eval()</code>
+实现。在评估模式下，模型不会计算梯度，这有助于提高推断速度并减少内存消耗。</li>
+<li>创建一个空列表
+<code>teacher_outputs</code>，用于存储教师模型对训练集每个批次的输出。</li>
+<li>遍历训练集迭代器
+<code>train_iter</code>，对每个批次的数据调用教师模型，获取模型的输出。</li>
+<li>将每个批次的输出添加到 <code>teacher_outputs</code> 列表中。</li>
+<li>最后，返回包含教师模型对训练集所有批次输出的结果。</li>
+</ol>
+<p>具体实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">fetch_teacher_outputs</span>(<span class="hljs-params">teacher_model, train_iter</span>):<br>    <span class="hljs-comment"># 将教师模型设置为评估（推断）模式，避免在获取输出时进行梯度计算</span><br>    teacher_model.<span class="hljs-built_in">eval</span>()<br>    <span class="hljs-comment"># 用于存储教师模型对训练集的输出</span><br>    teacher_outputs = []<br>    <span class="hljs-comment"># 禁用梯度计算</span><br>    <span class="hljs-keyword">with</span> torch.no_grad():<br>        <span class="hljs-comment"># 遍历训练集数据</span><br>        <span class="hljs-keyword">for</span> i, (data_batch, labels_batch) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(train_iter):<br>            <span class="hljs-comment"># 获取教师模型的输出</span><br>            outputs = teacher_model(data_batch)<br>            <span class="hljs-comment"># 将输出添加到列表中</span><br>            teacher_outputs.append(outputs)<br>    <span class="hljs-comment"># 返回教师模型对训练集的所有输出</span><br>    <span class="hljs-keyword">return</span> teacher_outputs<br></code></pre></td></tr></table></figure>
+<p>需要注意的是Teacher模型和Student模型的DataLoader不是同一个,
+batch_size和顺序都要保持一致, 才能保证后续的训练样本与soft
+targets对齐!</p>
+<h3 id="损失函数">5.2 损失函数</h3>
+<figure>
+<img src="images/image-20231117114309994.png" srcset="/img/loading.gif" lazyload
+alt="image-20231117114309994" />
+<figcaption aria-hidden="true">image-20231117114309994</figcaption>
+</figure>
+<p>通常采用的交叉熵损失函数, 有一点需要注意,
+F.cross_entropy()对输入有限制, 要求label必须是one-hot格式的.
+但Teacher网络的输出soft targets是概率分布的形式,
+不匹配，因此采用KL散度作为soft targets的loss, 注意:
+Pytorch中的KL散度函数可以接收概率分布形式的label.包含的步骤是：</p>
+<ol type="1">
+<li><code>loss_fn</code> 是用于一般的交叉熵损失函数，适用于训练 BERT
+模型。</li>
+<li><code>criterion</code> 是定义 KL 散度损失的 PyTorch 损失类。</li>
+<li><code>loss_fn_kd</code>
+是蒸馏损失函数，用于蒸馏训练。它接受三个参数：<code>outputs</code>（学生模型的输出），<code>labels</code>（真实标签），<code>teacher_outputs</code>（教师模型的输出）。</li>
+<li>设置两个超参数：<code>alpha</code>
+控制软损失和硬损失的权重，<code>T</code>
+是温度参数，影响软化的程度。</li>
+<li>计算学生模型（Student）的输出分布值和教师模型（Teacher）的输出分布值。对学生模型的输出进行
+log_softmax 处理，对教师模型的输出进行 softmax 处理。</li>
+<li>计算软损失，即学生模型和教师模型的输出分布之间的 KL 散度损失。</li>
+<li>计算硬损失，即学生模型和真实标签的交叉熵损失。</li>
+<li>计算总损失，通过加权软损失和硬损失得到。</li>
+</ol>
+<p>具体实现如下所示：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-comment"># 交叉熵损失: 训练bert模型</span><br>def loss_fn<span class="hljs-punctuation">(</span>outputs<span class="hljs-punctuation">,</span> labels<span class="hljs-punctuation">)</span><span class="hljs-operator">:</span><br>    <span class="hljs-built_in">return</span> nn.CrossEntropyLoss<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span>outputs<span class="hljs-punctuation">,</span> labels<span class="hljs-punctuation">)</span><br><br><span class="hljs-comment"># KL散度损失（要求student输入为log-probabilities,软目标为probabilities）</span><br>criterion <span class="hljs-operator">=</span> nn.KLDivLoss<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br><br><span class="hljs-comment"># 定义蒸馏损失函数</span><br>def loss_fn_kd<span class="hljs-punctuation">(</span>outputs<span class="hljs-punctuation">,</span> labels<span class="hljs-punctuation">,</span> teacher_outputs<span class="hljs-punctuation">)</span><span class="hljs-operator">:</span><br>    <span class="hljs-comment"># 设置两个重要超参数</span><br>    alpha <span class="hljs-operator">=</span> <span class="hljs-number">0.8</span><br>    <span class="hljs-built_in">T</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span><br><br>    <span class="hljs-comment"># 1.学生网络的带有T参数的log_softmax输出分布</span><br>    output_student <span class="hljs-operator">=</span> F.log_softmax<span class="hljs-punctuation">(</span>outputs <span class="hljs-operator">/</span> <span class="hljs-built_in">T</span><span class="hljs-punctuation">,</span> <span class="hljs-built_in">dim</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-punctuation">)</span><br>    <span class="hljs-comment"># 2.教师网络的带有T参数的softmax输出分布</span><br>    output_teacher <span class="hljs-operator">=</span> F.softmax<span class="hljs-punctuation">(</span>teacher_outputs <span class="hljs-operator">/</span> <span class="hljs-built_in">T</span><span class="hljs-punctuation">,</span> <span class="hljs-built_in">dim</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-punctuation">)</span><br><br>    <span class="hljs-comment"># 3.计算软目标损失,使用KLDivLoss(),第一个参数为student网络输出, 第二个参数为teacher网络输出</span><br>    soft_loss <span class="hljs-operator">=</span> criterion<span class="hljs-punctuation">(</span>output_student<span class="hljs-punctuation">,</span> output_teacher<span class="hljs-punctuation">)</span><br><br>    <span class="hljs-comment"># 4.硬目标损失，学生网络的输出概率和真实标签之间的损失, 因为真实标签是one-hot编码, 因此直接使用交叉熵损失即可</span><br>    hard_loss <span class="hljs-operator">=</span> F.cross_entropy<span class="hljs-punctuation">(</span>outputs<span class="hljs-punctuation">,</span> labels<span class="hljs-punctuation">)</span><br><br>    <span class="hljs-comment"># 5.计算总损失</span><br>    <span class="hljs-comment"># 原始论文中已经证明, 引入T会导致软目标产生的梯度和真实目标产生的梯度相比只有1/(T*T)</span><br>    <span class="hljs-comment"># 因此计算完软目标的loss值后要乘以T^2.</span><br>    KD_loss <span class="hljs-operator">=</span> soft_loss <span class="hljs-operator">*</span> alpha <span class="hljs-operator">*</span> <span class="hljs-built_in">T</span> <span class="hljs-operator">*</span> <span class="hljs-built_in">T</span> <span class="hljs-operator">+</span> hard_loss <span class="hljs-operator">*</span> <span class="hljs-punctuation">(</span><span class="hljs-number">1.0</span> <span class="hljs-operator">-</span> alpha<span class="hljs-punctuation">)</span><br>    <span class="hljs-built_in">return</span> KD_loss<br></code></pre></td></tr></table></figure>
+<h3 id="teacher模型训练函数">5.3 Teacher模型训练函数</h3>
+<p>该部分的内容与Bert模型章节的训练函数是类似的，具体步骤包含以下内容：</p>
+<ol type="1">
+<li>初始化训练开始时间，将模型设置为训练模式。</li>
+<li>对模型参数进行优化，使用AdamW优化器，同时设置不同参数组的权重衰减。</li>
+<li>迭代训练，每个epoch内遍历训练集。在每个batch内，进行前向传播、损失计算、反向传播和参数更新。</li>
+<li>每400个batch，打印一次训练信息，并在验证集上进行评估。判断当前模型是否是最佳模型，如果是则保存。</li>
+<li>训练完成后，在测试集上进行最终测试。</li>
+</ol>
+<p>具体实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">config, model, train_iter, dev_iter, test_iter</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    参数:</span><br><span class="hljs-string">    - config: 包含超参数和设置的配置对象。</span><br><span class="hljs-string">    - model: 要训练的神经网络模型。</span><br><span class="hljs-string">    - train_iter: 用于训练数据集的迭代器。</span><br><span class="hljs-string">    - dev_iter: 用于验证（开发）数据集的迭代器。</span><br><span class="hljs-string">    - test_iter: 用于测试数据集的迭代器。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 记录训练开始时间</span><br>    start_time = time.time()<br>    <span class="hljs-comment"># 将模型设置为训练模式</span><br>    model.train()<br>    <span class="hljs-comment"># 获取模型参数</span><br>    param_optimizer = <span class="hljs-built_in">list</span>(model.named_parameters())<br>    no_decay = [<span class="hljs-string">&quot;bias&quot;</span>, <span class="hljs-string">&quot;LayerNorm.bias&quot;</span>, <span class="hljs-string">&quot;LayerNorm.weight&quot;</span>]<br>    <span class="hljs-comment"># 分组参数并设置优化的权重衰减</span><br>    optimizer_grouped_parameters = [<br>        &#123;<br>            <span class="hljs-string">&quot;params&quot;</span>: [p <span class="hljs-keyword">for</span> n, p <span class="hljs-keyword">in</span> param_optimizer <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">any</span>(nd <span class="hljs-keyword">in</span> n <span class="hljs-keyword">for</span> nd <span class="hljs-keyword">in</span> no_decay)],<br>            <span class="hljs-string">&quot;weight_decay&quot;</span>: <span class="hljs-number">0.01</span><br>        &#125;,<br>        &#123;<br>            <span class="hljs-string">&quot;params&quot;</span>: [p <span class="hljs-keyword">for</span> n, p <span class="hljs-keyword">in</span> param_optimizer <span class="hljs-keyword">if</span> <span class="hljs-built_in">any</span>(nd <span class="hljs-keyword">in</span> n <span class="hljs-keyword">for</span> nd <span class="hljs-keyword">in</span> no_decay)],<br>            <span class="hljs-string">&quot;weight_decay&quot;</span>: <span class="hljs-number">0.0</span><br>        &#125;]<br>    <span class="hljs-comment"># 使用AdamW优化器，设置学习率</span><br>    optimizer = AdamW(optimizer_grouped_parameters, lr=config.learning_rate)<br>    <span class="hljs-comment"># 记录最佳验证损失</span><br>    dev_best_loss = <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)<br>    <span class="hljs-comment"># 遍历每个epoch</span><br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(config.num_epochs):<br>        total_batch = <span class="hljs-number">0</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Epoch [&#123;&#125;/&#123;&#125;]&quot;</span>.<span class="hljs-built_in">format</span>(epoch + <span class="hljs-number">1</span>, config.num_epochs))<br>        <span class="hljs-comment"># 遍历训练数据集的每个batch</span><br>        <span class="hljs-keyword">for</span> i, (trains, labels) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(tqdm(train_iter)):<br>            <span class="hljs-comment"># 梯度清零</span><br>            model.zero_grad()<br>            <span class="hljs-comment"># 前向传播</span><br>            outputs = model(trains)<br>            <span class="hljs-comment"># 计算损失</span><br>            loss = loss_fn(outputs, labels)<br>            <span class="hljs-comment"># 反向传播和优化</span><br>            loss.backward()<br>            optimizer.step()<br>            total_batch += <span class="hljs-number">1</span><br>            <span class="hljs-comment"># 每400个batch打印一次训练信息</span><br>            <span class="hljs-keyword">if</span> total_batch % <span class="hljs-number">400</span> == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> total_batch &gt; <span class="hljs-number">0</span>:<br>                true = labels.data.cpu()<br>                predic = torch.<span class="hljs-built_in">max</span>(outputs.data, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].cpu()<br>                train_acc = metrics.accuracy_score(true, predic)<br>                <span class="hljs-comment"># 在验证集上进行评估</span><br>                dev_acc, dev_loss = evaluate(config, model, dev_iter)<br>                <span class="hljs-comment"># 检查当前模型是否是最佳模型</span><br>                <span class="hljs-keyword">if</span> dev_loss &lt; dev_best_loss:<br>                    dev_best_loss = dev_loss<br>                    <span class="hljs-comment"># 当模型有提升时保存模型权重</span><br>                    torch.save(model.state_dict(), config.save_path)<br>                    improve = <span class="hljs-string">&quot;*&quot;</span><br>                <span class="hljs-keyword">else</span>:<br>                    improve = <span class="hljs-string">&quot;&quot;</span><br>                time_dif = get_time_dif(start_time)<br>                msg = <span class="hljs-string">&quot;Iter: &#123;0:&gt;6&#125;,  Train Loss: &#123;1:&gt;5.2&#125;,  Train Acc: &#123;2:&gt;6.2%&#125;,  Val Loss: &#123;3:&gt;5.2&#125;,  Val Acc: &#123;4:&gt;6.2%&#125;,  Time: &#123;5&#125; &#123;6&#125;&quot;</span><br>                <span class="hljs-built_in">print</span>(msg.<span class="hljs-built_in">format</span>(total_batch, loss.item(), train_acc, dev_loss, dev_acc, time_dif, improve))<br>                <span class="hljs-comment"># 将模型重新设置为训练模式</span><br>                model.train()<br>    <span class="hljs-comment"># 在测试集上测试最终的模型</span><br>    test(config, model, test_iter)<br></code></pre></td></tr></table></figure>
+<h3 id="知识蒸馏训练函数">5.4 知识蒸馏训练函数</h3>
+<p>使用知识蒸馏（Knowledge
+Distillation）的方式训练深度学习模型的训练函数完成的任务如下所示：</p>
+<ol type="1">
+<li>初始化优化器和其他训练参数,将CNN模型设置为训练模式，BERT模型设置为评估模式。</li>
+<li>获取BERT模型的输出，作为教师模型的预测结果。</li>
+<li>遍历每个epoch，对CNN模型进行训练。计算蒸馏损失（软损失）和交叉熵损失（硬损失）的组合，并进行反向传播和优化。</li>
+<li>在训练过程中输出训练信息，包括训练损失、准确率以及在验证集上的表现。保存在验证集上表现最好的CNN模型。</li>
+<li>在训练结束后，使用测试集对最终的CNN模型进行测试。</li>
+</ol>
+<p>具体的实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">train_kd</span>(<span class="hljs-params">cnn_config, bert_model, cnn_model,</span><br><span class="hljs-params">             bert_train_iter, cnn_train_iter, cnn_dev_iter, cnn_test_iter</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    使用知识蒸馏（Knowledge Distillation）的方式训练模型。</span><br><span class="hljs-string"></span><br><span class="hljs-string">    参数:</span><br><span class="hljs-string">    - cnn_config: 包含CNN模型超参数和设置的配置对象。</span><br><span class="hljs-string">    - bert_model: BERT模型。</span><br><span class="hljs-string">    - cnn_model: CNN模型。</span><br><span class="hljs-string">    - bert_train_iter: 用于BERT模型训练的迭代器。</span><br><span class="hljs-string">    - cnn_train_iter: 用于CNN模型训练的迭代器。</span><br><span class="hljs-string">    - cnn_dev_iter: 用于CNN模型验证的迭代器。</span><br><span class="hljs-string">    - cnn_test_iter: 用于CNN模型测试的迭代器。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 记录训练开始时间</span><br>    start_time = time.time()<br>    <span class="hljs-comment"># 获取CNN模型参数</span><br>    param_optimizer = <span class="hljs-built_in">list</span>(cnn_model.named_parameters())<br>    no_decay = [<span class="hljs-string">&quot;bias&quot;</span>, <span class="hljs-string">&quot;LayerNorm.bias&quot;</span>, <span class="hljs-string">&quot;LayerNorm.weight&quot;</span>]<br>    optimizer_grouped_parameters = [<br>        &#123;<br>            <span class="hljs-string">&quot;params&quot;</span>: [p <span class="hljs-keyword">for</span> n, p <span class="hljs-keyword">in</span> param_optimizer <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">any</span>(nd <span class="hljs-keyword">in</span> n <span class="hljs-keyword">for</span> nd <span class="hljs-keyword">in</span> no_decay)],<br>            <span class="hljs-string">&quot;weight_decay&quot;</span>: <span class="hljs-number">0.01</span><br>        &#125;,<br>        &#123;<br>            <span class="hljs-string">&quot;params&quot;</span>: [p <span class="hljs-keyword">for</span> n, p <span class="hljs-keyword">in</span> param_optimizer <span class="hljs-keyword">if</span> <span class="hljs-built_in">any</span>(nd <span class="hljs-keyword">in</span> n <span class="hljs-keyword">for</span> nd <span class="hljs-keyword">in</span> no_decay)],<br>            <span class="hljs-string">&quot;weight_decay&quot;</span>: <span class="hljs-number">0.0</span><br>        &#125;]<br><br>    <span class="hljs-comment"># 使用AdamW优化器，设置学习率</span><br>    optimizer = AdamW(optimizer_grouped_parameters, lr=cnn_config.learning_rate)<br>    <span class="hljs-comment"># 记录最佳验证损失</span><br>    dev_best_loss = <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)<br>    <span class="hljs-comment"># 将CNN模型设置为训练模式</span><br>    cnn_model.train()<br>    <span class="hljs-comment"># 将BERT模型设置为评估模式</span><br>    bert_model.<span class="hljs-built_in">eval</span>()<br>    <span class="hljs-comment"># 获取BERT模型的输出作为教师模型的预测结果</span><br>    teacher_outputs = fetch_teacher_outputs(bert_model, bert_train_iter)<br>    <span class="hljs-comment"># 遍历每个epoch</span><br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(cnn_config.num_epochs):<br>        total_batch = <span class="hljs-number">0</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Epoch [&#123;&#125;/&#123;&#125;]&quot;</span>.<span class="hljs-built_in">format</span>(epoch + <span class="hljs-number">1</span>, cnn_config.num_epochs))<br>        <span class="hljs-comment"># 遍历CNN模型训练数据集的每个batch</span><br>        <span class="hljs-keyword">for</span> i, (trains, labels) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(tqdm(cnn_train_iter)):<br>            <span class="hljs-comment"># 梯度清零</span><br>            cnn_model.zero_grad()<br>            <span class="hljs-comment"># 前向传播</span><br>            outputs = cnn_model(trains)<br>            <span class="hljs-comment"># 计算蒸馏损失</span><br>            loss = loss_fn_kd(outputs, labels, teacher_outputs[i])<br>            <span class="hljs-comment"># 反向传播和优化</span><br>            loss.backward()<br>            optimizer.step()<br>            total_batch += <span class="hljs-number">1</span><br>            <span class="hljs-comment"># 每400个batch打印一次训练信息</span><br>            <span class="hljs-keyword">if</span> total_batch % <span class="hljs-number">400</span> == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> total_batch &gt; <span class="hljs-number">0</span>:<br>                true = labels.data.cpu()<br>                predic = torch.<span class="hljs-built_in">max</span>(outputs.data, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].cpu()<br>                train_acc = metrics.accuracy_score(true, predic)<br>                <span class="hljs-comment"># 在CNN验证集上进行评估</span><br>                dev_acc, dev_loss = evaluate(cnn_config, cnn_model, cnn_dev_iter)<br>                <span class="hljs-comment"># 检查当前CNN模型是否是最佳模型</span><br>                <span class="hljs-keyword">if</span> dev_loss &lt; dev_best_loss:<br>                    dev_best_loss = dev_loss<br>                    torch.save(cnn_model.state_dict(), cnn_config.save_path)<br>                    improve = <span class="hljs-string">&quot;*&quot;</span><br>                <span class="hljs-keyword">else</span>:<br>                    improve = <span class="hljs-string">&quot;&quot;</span><br>                time_dif = get_time_dif(start_time)<br>                msg = <span class="hljs-string">&quot;Iter: &#123;0:&gt;6&#125;,  Train Loss: &#123;1:&gt;5.2&#125;,  Train Acc: &#123;2:&gt;6.2%&#125;,  Val Loss: &#123;3:&gt;5.2&#125;,  Val Acc: &#123;4:&gt;6.2%&#125;,  Time: &#123;5&#125; &#123;6&#125;&quot;</span><br>                <span class="hljs-built_in">print</span>(msg.<span class="hljs-built_in">format</span>(total_batch, loss.item(), train_acc, dev_loss, dev_acc, time_dif, improve))<br>                <span class="hljs-comment"># 将CNN模型重新设置为训练模式</span><br>                cnn_model.train()<br>    <span class="hljs-comment"># 在CNN测试集上测试最终的CNN模型</span><br>    test(cnn_config, cnn_model, cnn_test_iter)<br></code></pre></td></tr></table></figure>
+<h3 id="评估函数和测试函数">5.5 评估函数和测试函数</h3>
+<p>评估函数和测试函数的实现与bert章节是一样的，这里不再赘述。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">test</span>(<span class="hljs-params">config, model, test_iter</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    模型测试函数，用于在测试集上进行最终的模型测试。</span><br><span class="hljs-string">    参数：</span><br><span class="hljs-string">    - config: 配置信息对象。</span><br><span class="hljs-string">    - model: 待测试的模型。</span><br><span class="hljs-string">    - test_iter: 测试集的数据迭代器。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    model.load_state_dict(torch.load(config.save_path,map_location=torch.device(config.device)))<br>    model.<span class="hljs-built_in">eval</span>()<br>    start_time = time.time()<br>    <span class="hljs-comment"># 调用验证函数计算评估指标</span><br>    test_acc, test_loss, test_report, test_confusion = evaluate(config, model, test_iter, test=<span class="hljs-literal">True</span>)<br><br>    <span class="hljs-comment"># 打印测试结果信息:输出测试集上的损失、准确率、分类报告和混淆矩阵等信息</span><br>    msg = <span class="hljs-string">&quot;Test Loss: &#123;0:&gt;5.2&#125;,  Test Acc: &#123;1:&gt;6.2%&#125;&quot;</span><br>    <span class="hljs-built_in">print</span>(msg.<span class="hljs-built_in">format</span>(test_loss, test_acc))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Precision, Recall and F1-Score...&quot;</span>)<br>    <span class="hljs-built_in">print</span>(test_report)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Confusion Matrix...&quot;</span>)<br>    <span class="hljs-built_in">print</span>(test_confusion)<br>    time_dif = get_time_dif(start_time)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Time usage:&quot;</span>, time_dif)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">evaluate</span>(<span class="hljs-params">config, model, data_iter, test=<span class="hljs-literal">False</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    模型评估函数。</span><br><span class="hljs-string">    参数：</span><br><span class="hljs-string">    - config: 配置信息对象。</span><br><span class="hljs-string">    - model: 待评估的模型。</span><br><span class="hljs-string">    - data_iter: 数据迭代器。</span><br><span class="hljs-string">    - test: 是否为测试集评估。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    model.<span class="hljs-built_in">eval</span>()<br>    loss_total = <span class="hljs-number">0</span><br>    <span class="hljs-comment"># 预测结果</span><br>    predict_all = np.array([], dtype=<span class="hljs-built_in">int</span>)<br>    <span class="hljs-comment"># label信息</span><br>    labels_all = np.array([], dtype=<span class="hljs-built_in">int</span>)<br>    <span class="hljs-comment"># 不进行梯度计算</span><br>    <span class="hljs-keyword">with</span> torch.no_grad():<br>        <span class="hljs-comment"># 遍历数据集</span><br>        <span class="hljs-keyword">for</span> texts, labels <span class="hljs-keyword">in</span> data_iter:<br>            <span class="hljs-comment"># 将数据送入网络中</span><br>            outputs = model(texts)<br>            <span class="hljs-comment"># 损失函数</span><br>            loss = F.cross_entropy(outputs, labels)<br>            <span class="hljs-comment"># 损失和</span><br>            loss_total += loss<br>            <span class="hljs-comment"># 获取label信息</span><br>            labels = labels.data.cpu().numpy()<br>            <span class="hljs-comment"># 获取预测结果</span><br>            predic = torch.<span class="hljs-built_in">max</span>(outputs.data, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].cpu().numpy()<br>            labels_all = np.append(labels_all, labels)<br>            predict_all = np.append(predict_all, predic)<br>    <span class="hljs-comment"># 计算准确率</span><br>    acc = metrics.accuracy_score(labels_all, predict_all)<br>    <span class="hljs-keyword">if</span> test:<br>        <span class="hljs-comment"># 如果是测试集评估，计算分类报告和混淆矩阵</span><br>        report = metrics.classification_report(labels_all, predict_all, target_names=config.class_list, digits=<span class="hljs-number">4</span>)<br>        confusion = metrics.confusion_matrix(labels_all, predict_all)<br>        <span class="hljs-keyword">return</span> acc, loss_total / <span class="hljs-built_in">len</span>(data_iter), report, confusion<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-comment"># 如果是验证集评估，仅返回准确率和平均损失</span><br>        <span class="hljs-keyword">return</span> acc, loss_total / <span class="hljs-built_in">len</span>(data_iter)<br></code></pre></td></tr></table></figure>
+<h2 id="编写运行主函数">6.编写运行主函数</h2>
+<p>该部分代码在</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-number">05</span>-bert_distil/src/<span class="hljs-built_in">run</span>.py<br></code></pre></td></tr></table></figure>
+<p>中，用于训练深度学习模型（BERT或使用知识蒸馏的TextCNN）。具体任务是通过命令行参数
+<code>--task</code>
+指定的方式进行，可以选择训练BERT模型（<code>trainbert</code>）或者训练使用知识蒸馏的TextCNN模型（<code>train_kd</code>）。</p>
+<p>执行过程如下：</p>
+<ol type="1">
+<li>根据命令行参数选择任务，如果是<code>trainbert</code>，则加载BERT模型进行训练；如果是<code>train_kd</code>，则加载BERT模型作为教师模型，加载TextCNN模型作为学生模型，进行知识蒸馏训练。</li>
+<li>初始化相关配置，包括随机种子等。</li>
+<li>加载数据集，对于<code>trainbert</code>任务，加载BERT数据集；对于<code>train_kd</code>任务，加载TextCNN的数据集和BERT的训练数据集。</li>
+<li>加载模型，对于<code>trainbert</code>任务，加载BERT模型；对于<code>train_kd</code>任务，加载BERT和TextCNN模型。</li>
+<li>执行训练，对于<code>trainbert</code>任务，调用<code>train</code>函数；对于<code>train_kd</code>任务，调用<code>train_kd</code>函数。</li>
+</ol>
+<p>此脚本的设计使得可以方便地选择不同的任务，并在一个脚本中完成相应模型的训练过程。</p>
+<p>具体实现如下所示：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">import numpy as np<br>import torch<br>from train_eval import train_kd, train<br>from importlib import import_module<br>import argparse<br>from utils import <span class="hljs-keyword">build_dataset, </span><span class="hljs-keyword">build_iterator, </span><span class="hljs-keyword">build_dataset_CNN</span><br><span class="hljs-keyword"></span><br><span class="hljs-comment"># 解析命令行参数</span><br>parser = argparse.ArgumentParser(description=<span class="hljs-string">&quot;Chinese Text Classification&quot;</span>)<br>parser.<span class="hljs-keyword">add_argument(&quot;--task&quot;, </span>type=str, default=<span class="hljs-string">&#x27;train_kd&#x27;</span>, help=<span class="hljs-string">&quot;choose a task: trainbert, or train_kd&quot;</span>)<br>args = parser.parse_args()<br><br>if __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-comment"># 根据任务类型选择不同的模型和配置</span><br>    if args.task == <span class="hljs-string">&quot;trainbert&quot;</span>:<br>        model_name = <span class="hljs-string">&quot;bert&quot;</span><br>        x = import_module(<span class="hljs-string">&quot;models.&quot;</span> + model_name)  <span class="hljs-comment"># 动态导入模型</span><br>        <span class="hljs-built_in">config</span> = x.Config()  <span class="hljs-comment"># 使用模型的配置</span><br>        <span class="hljs-comment"># 初始化</span><br>        np.random.seed(<span class="hljs-number">1</span>)<br>        torch.manual_seed(<span class="hljs-number">1</span>)<br>        torch.cuda.manual_seed_all(<span class="hljs-number">1</span>)<br>        torch.<span class="hljs-keyword">backends.cudnn.deterministic </span>= True  <span class="hljs-comment"># 保证每次结果一样</span><br>        <span class="hljs-comment"># 数据集构建</span><br>        print(<span class="hljs-string">&quot;Loading data for Bert Model...&quot;</span>)<br>        train_data, dev_data, test_data = <span class="hljs-keyword">build_dataset(config) </span> <span class="hljs-comment"># 构建数据集</span><br>        train_iter = <span class="hljs-keyword">build_iterator(train_data, </span><span class="hljs-built_in">config</span>)  <span class="hljs-comment"># 构建数据迭代器</span><br>        dev_iter = <span class="hljs-keyword">build_iterator(dev_data, </span><span class="hljs-built_in">config</span>)<br>        test_iter = <span class="hljs-keyword">build_iterator(test_data, </span><span class="hljs-built_in">config</span>)<br>        <span class="hljs-comment"># 模型实例化与训练</span><br>        model = x.Model(<span class="hljs-built_in">config</span>).to(<span class="hljs-built_in">config</span>.device)  <span class="hljs-comment"># 实例化模型，并将模型移动到设备上</span><br>        train(<span class="hljs-built_in">config</span>, model, train_iter, dev_iter, test_iter)<br><br>    if args.task == <span class="hljs-string">&quot;train_kd&quot;</span>:<br>        <span class="hljs-comment"># 加载bert模型</span><br>        model_name = <span class="hljs-string">&quot;bert&quot;</span><br>        <span class="hljs-keyword">bert_module </span>= import_module(<span class="hljs-string">&quot;models.&quot;</span> + model_name)<br>        <span class="hljs-keyword">bert_config </span>= <span class="hljs-keyword">bert_module.Config() </span> <span class="hljs-comment"># 使用BERT模型的配置</span><br>        <span class="hljs-comment"># 加载cnn模型</span><br>        model_name = <span class="hljs-string">&quot;textCNN&quot;</span><br>        cnn_module = import_module(<span class="hljs-string">&quot;models.&quot;</span> + model_name)<br>        cnn_config = cnn_module.Config()  <span class="hljs-comment"># 使用TextCNN模型的配置</span><br>        <span class="hljs-comment"># 初始化</span><br>        np.random.seed(<span class="hljs-number">1</span>)<br>        torch.manual_seed(<span class="hljs-number">1</span>)<br>        torch.cuda.manual_seed_all(<span class="hljs-number">1</span>)<br>        torch.<span class="hljs-keyword">backends.cudnn.deterministic </span>= True  <span class="hljs-comment"># 保证每次结果一样</span><br>        <span class="hljs-comment"># 构建bert数据集，因为只需要训练结果作为软目标，这里不需要dev_iter和test_iter</span><br>        <span class="hljs-keyword">bert_train_data, </span>_, _ = <span class="hljs-keyword">build_dataset(bert_config)</span><br><span class="hljs-keyword"></span>        <span class="hljs-keyword">bert_train_iter </span>= <span class="hljs-keyword">build_iterator(bert_train_data, </span><span class="hljs-keyword">bert_config)</span><br><span class="hljs-keyword"></span>        <span class="hljs-comment"># 构建cnn数据集</span><br>        vocab, cnn_train_data, cnn_dev_data, cnn_test_data = <span class="hljs-keyword">build_dataset_CNN(cnn_config)</span><br><span class="hljs-keyword"></span>        cnn_train_iter = <span class="hljs-keyword">build_iterator(cnn_train_data, </span>cnn_config)<br>        cnn_dev_iter = <span class="hljs-keyword">build_iterator(cnn_dev_data, </span>cnn_config)<br>        cnn_test_iter = <span class="hljs-keyword">build_iterator(cnn_test_data, </span>cnn_config)<br>        cnn_config.n_vocab = len(vocab)<br>        <span class="hljs-comment"># 加载训练好的teacher模型</span><br>        <span class="hljs-keyword">bert_model </span>= <span class="hljs-keyword">bert_module.Model(bert_config).to(bert_config.device)</span><br><span class="hljs-keyword"></span>        <span class="hljs-comment"># 加载student模型</span><br>        cnn_model = cnn_module.Model(cnn_config).to(cnn_config.device)<br>        print(<span class="hljs-string">&quot;Teacher and student models loaded, start training&quot;</span>)<br>        train_kd(<span class="hljs-keyword">bert_config, </span>cnn_config, <span class="hljs-keyword">bert_model, </span>cnn_model,<br>                 <span class="hljs-keyword">bert_train_iter, </span>cnn_train_iter, cnn_dev_iter, cnn_test_iter) <br></code></pre></td></tr></table></figure>
+<h3 id="训练teacher模型">6.1 训练Teacher模型</h3>
+<p>执行训练Teacher模型，如下所示：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># 将--task修改为trainbert，直接执行run文件</span><br>parser.add_argument(<span class="hljs-string">&quot;--task&quot;</span>, <span class="hljs-attribute">type</span>=str, <span class="hljs-attribute">default</span>=<span class="hljs-string">&#x27;trainbert&#x27;</span>, <span class="hljs-attribute">help</span>=<span class="hljs-string">&quot;choose a task: trainbert, or train_kd&quot;</span>)<br><br><span class="hljs-comment"># 或者 直接在命令行运行训练Teacher模型的代码</span><br>python run.py --task trainbert<br></code></pre></td></tr></table></figure>
+<ul>
+<li>输出结果:</li>
+</ul>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs tap">Loading data for Bert Model...<br>180000it [00:37, 4820.80it/s]<br>10000it [00:02, 4954.00it/s]<br>10000it [00:02, 4952.50it/s]<br>Epoch [1/3]<br> 14%|█████████▉                                                            | 200/1407 [02:06&lt;13:26,  1.50it/s]Iter:    200,  Train Loss:   0.3,  Train Acc: 91.41%,  Val Loss:  0.29,  Val Acc: 90.86%,  Time: 0:02:26 *<br> 28%|███████████████████▉                                                  | 400/1407 [04:44&lt;11:46,  1.43it/s]Iter:    400,  Train Loss:  0.34,  Train Acc: 90.62%,  Val Loss:  0.26,  Val Acc: 92.10%,  Time: 0:05:07 *<br> 43%|█████████████████████████████▊                                        | 600/1407 [07:26&lt;09:25,  1.43it/s]Iter:    600,  Train Loss:  0.29,  Train Acc: 91.41%,  Val Loss:  0.25,  Val Acc: 92.10%,  Time: 0:07:49 *<br> 57%|███████████████████████████████████████▊                              | 800/1407 [10:08&lt;07:06,  1.42it/s]Iter:    800,  Train Loss:  0.15,  Train Acc: 94.53%,  Val Loss:  0.22,  Val Acc: 92.85%,  Time: 0:10:31 *<br> 71%|█████████████████████████████████████████████████                    | 1000/1407 [12:50&lt;04:43,  1.44it/s]Iter:   1000,  Train Loss:  0.17,  Train Acc: 94.53%,  Val Loss:  0.22,  Val Acc: 93.00%,  Time: 0:13:10 <br>No optimization for a long time, auto-stopping...<br>Test Loss:   0.2,  Test Acc: 93.64%<br>Precision, Recall and F1-Score...<br>               precision    recall  f1-score   support<br><br>      finance     0.9246    0.9320    0.9283      1000<br>       realty     0.9484    0.9370    0.9427      1000<br>       stocks     0.8787    0.8980    0.8882      1000<br>    education     0.9511    0.9730    0.9619      1000<br>      science     0.9236    0.8950    0.9091      1000<br>      society     0.9430    0.9270    0.9349      1000<br>     politics     0.9267    0.9100    0.9183      1000<br>       sports     0.9780    0.9780    0.9780      1000<br>         game     0.9514    0.9600    0.9557      1000<br>entertainment     0.9390    0.9540    0.9464      1000<br><br>     accuracy                         0.9364     10000<br>    macro avg     0.9365    0.9364    0.9364     10000<br> weighted avg     0.9365    0.9364    0.9364     10000<br><br>Confusion Matrix...<br>[[932 <span class="hljs-number"> 10 </span><span class="hljs-number"> 37 </span> <span class="hljs-number"> 2 </span> <span class="hljs-number"> 5 </span> <span class="hljs-number"> 5 </span> <span class="hljs-number"> 7 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 1 </span>  0]<br> [<span class="hljs-number"> 13 </span>937 <span class="hljs-number"> 11 </span> <span class="hljs-number"> 2 </span> <span class="hljs-number"> 4 </span><span class="hljs-number"> 10 </span> <span class="hljs-number"> 5 </span> <span class="hljs-number"> 5 </span> <span class="hljs-number"> 5 </span>  8]<br> [<span class="hljs-number"> 49 </span><span class="hljs-number"> 12 </span>898  <span class="hljs-number"> 1 </span><span class="hljs-number"> 19 </span> <span class="hljs-number"> 1 </span><span class="hljs-number"> 15 </span> <span class="hljs-number"> 0 </span> <span class="hljs-number"> 2 </span>  3]<br> [ <span class="hljs-number"> 1 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 0 </span>973  <span class="hljs-number"> 0 </span> <span class="hljs-number"> 8 </span> <span class="hljs-number"> 7 </span> <span class="hljs-number"> 0 </span> <span class="hljs-number"> 1 </span>  9]<br> [ <span class="hljs-number"> 4 </span> <span class="hljs-number"> 4 </span><span class="hljs-number"> 28 </span> <span class="hljs-number"> 7 </span>895 <span class="hljs-number"> 10 </span><span class="hljs-number"> 12 </span> <span class="hljs-number"> 2 </span><span class="hljs-number"> 27 </span> 11]<br> [ <span class="hljs-number"> 2 </span> <span class="hljs-number"> 8 </span> <span class="hljs-number"> 4 </span><span class="hljs-number"> 16 </span> <span class="hljs-number"> 5 </span>927 <span class="hljs-number"> 18 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 5 </span> 14]<br> [ <span class="hljs-number"> 3 </span> <span class="hljs-number"> 8 </span><span class="hljs-number"> 34 </span><span class="hljs-number"> 12 </span> <span class="hljs-number"> 9 </span><span class="hljs-number"> 19 </span>910  <span class="hljs-number"> 0 </span> <span class="hljs-number"> 0 </span>  5]<br> [ <span class="hljs-number"> 2 </span> <span class="hljs-number"> 3 </span> <span class="hljs-number"> 2 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 4 </span>978  <span class="hljs-number"> 1 </span>  7]<br> [ <span class="hljs-number"> 0 </span> <span class="hljs-number"> 2 </span> <span class="hljs-number"> 4 </span> <span class="hljs-number"> 0 </span><span class="hljs-number"> 24 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 3 </span> <span class="hljs-number"> 1 </span>960   5]<br> [ <span class="hljs-number"> 2 </span> <span class="hljs-number"> 3 </span> <span class="hljs-number"> 4 </span> <span class="hljs-number"> 9 </span> <span class="hljs-number"> 7 </span> <span class="hljs-number"> 1 </span> <span class="hljs-number"> 1 </span><span class="hljs-number"> 12 </span> <span class="hljs-number"> 7 </span>954]]<br>Time usage: 0:00:19<br> 71%|█████████████████████████████████████████████████                    | 1000/1407 [13:29&lt;05:29,  1.24it/s]<br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>结论: Teacher模型在测试集上的表现是Test Acc: 93.64%</li>
+</ul>
+</blockquote>
+<h3 id="训练student模型">6.2 训练Student模型</h3>
+<p>设定Config中的重要参数如下:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># 模型迭代3轮</span><br><span class="hljs-attr">self.num_epochs</span> = <span class="hljs-number">3</span><br><br><span class="hljs-comment"># 卷积核尺寸分别选2, 3, 4</span><br><span class="hljs-attr">self.filter_sizes</span> = (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>)<br><br><span class="hljs-comment"># 卷积核的个数512</span><br><span class="hljs-attr">self.num_filters</span> = <span class="hljs-number">512</span><br></code></pre></td></tr></table></figure>
+<p>执行run文件</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># 将--task修改为train_kd，直接执行run文件</span><br>parser.add_argument(<span class="hljs-string">&quot;--task&quot;</span>, <span class="hljs-attribute">type</span>=str, <span class="hljs-attribute">default</span>=<span class="hljs-string">&#x27;train_kd&#x27;</span>, <span class="hljs-attribute">help</span>=<span class="hljs-string">&quot;choose a task: trainbert, or train_kd&quot;</span>)<br><span class="hljs-comment"># 或直接在命令行运行训练Student模型的代码</span><br>python run.py --task train_kd<br></code></pre></td></tr></table></figure>
+<ul>
+<li>输出结果:</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">180000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:37</span>, <span class="hljs-number">4862.</span><span class="hljs-string">22it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:02</span>, <span class="hljs-number">4988.</span><span class="hljs-string">47it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:02</span>, <span class="hljs-number">4981.</span><span class="hljs-string">50it/s</span>]<br><span class="hljs-attr">Vocab size:</span> <span class="hljs-number">4762</span><br><span class="hljs-string">180000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:02</span>, <span class="hljs-number">69598.</span><span class="hljs-string">12it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:00</span>, <span class="hljs-number">82889.</span><span class="hljs-string">25it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:00</span>, <span class="hljs-number">82326.</span><span class="hljs-string">33it/s</span>]<br><span class="hljs-string">Data</span> <span class="hljs-string">loaded,</span> <span class="hljs-string">now</span> <span class="hljs-string">load</span> <span class="hljs-string">teacher</span> <span class="hljs-string">model</span><br><span class="hljs-string">Teacher</span> <span class="hljs-string">and</span> <span class="hljs-string">student</span> <span class="hljs-string">models</span> <span class="hljs-string">loaded,</span> <span class="hljs-string">start</span> <span class="hljs-string">training</span><br><span class="hljs-string">Epoch</span> [<span class="hljs-number">1</span><span class="hljs-string">/20</span>]<br> <span class="hljs-number">14</span><span class="hljs-string">%|█████████▉</span>                                                            <span class="hljs-string">|</span> <span class="hljs-number">199</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:08&lt;00:50</span>, <span class="hljs-number">23.</span><span class="hljs-string">87it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.29</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">69.53</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.85</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">82.36</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:05:32</span> <span class="hljs-string">*</span><br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▉</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">400</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:17&lt;00:42</span>, <span class="hljs-number">23.</span><span class="hljs-string">95it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.27</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">73.44</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.81</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">84.00</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:05:40</span> <span class="hljs-string">*</span><br> <span class="hljs-number">43</span><span class="hljs-string">%|█████████████████████████████▊</span>                                        <span class="hljs-string">|</span> <span class="hljs-number">598</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:25&lt;00:33</span>, <span class="hljs-number">23.</span><span class="hljs-string">86it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">600</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.24</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">83.59</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.76</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">85.97</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:05:49</span> <span class="hljs-string">*</span><br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">799</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:34&lt;00:25</span>, <span class="hljs-number">23.</span><span class="hljs-string">91it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.23</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">83.59</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.76</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">85.49</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:05:58</span> <br> <span class="hljs-number">71</span><span class="hljs-string">%|█████████████████████████████████████████████████</span>                    <span class="hljs-string">|</span> <span class="hljs-number">1000</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:43&lt;00:17</span>, <span class="hljs-number">23.</span><span class="hljs-string">89it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1000</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.21</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">84.38</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.74</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">85.94</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:07</span> <span class="hljs-string">*</span><br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1198</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:52&lt;00:08</span>, <span class="hljs-number">23.</span><span class="hljs-string">80it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.22</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">85.94</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.72</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">86.92</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:16</span> <span class="hljs-string">*</span><br> <span class="hljs-number">99</span><span class="hljs-string">%|████████████████████████████████████████████████████████████████████▌|</span> <span class="hljs-number">1399</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:01&lt;00:00</span>, <span class="hljs-number">23.</span><span class="hljs-string">85it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.24</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">79.69</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.72</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">86.87</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:24</span> <span class="hljs-string">*</span><br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:01&lt;00:00</span>, <span class="hljs-number">22.</span><span class="hljs-string">73it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">2</span><span class="hljs-string">/20</span>]<br> <span class="hljs-number">14</span><span class="hljs-string">%|█████████▊</span>                                                            <span class="hljs-string">|</span> <span class="hljs-number">198</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:08&lt;00:50</span>, <span class="hljs-number">23.</span><span class="hljs-string">95it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.23</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">85.16</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>   <span class="hljs-number">0.7</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.34</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:33</span> <span class="hljs-string">*</span><br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▊</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">399</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:17&lt;00:42</span>, <span class="hljs-number">23.</span><span class="hljs-string">92it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.23</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">82.81</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.68</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.36</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:42</span> <span class="hljs-string">*</span><br> <span class="hljs-number">43</span><span class="hljs-string">%|█████████████████████████████▊</span>                                        <span class="hljs-string">|</span> <span class="hljs-number">600</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:25&lt;00:33</span>, <span class="hljs-number">24.</span><span class="hljs-string">06it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">600</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>   <span class="hljs-number">0.2</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">91.41</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.68</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.26</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:51</span> <span class="hljs-string">*</span><br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▋</span>                              <span class="hljs-string">|</span> <span class="hljs-number">798</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:34&lt;00:25</span>, <span class="hljs-number">23.</span><span class="hljs-string">98it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.21</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">87.50</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.67</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.83</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:00</span> <span class="hljs-string">*</span><br> <span class="hljs-number">71</span><span class="hljs-string">%|█████████████████████████████████████████████████▋</span>                    <span class="hljs-string">|</span> <span class="hljs-number">999</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:43&lt;00:17</span>, <span class="hljs-number">23.</span><span class="hljs-string">94it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1000</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.19</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">91.41</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.68</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.52</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:09</span> <br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1200</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:52&lt;00:08</span>, <span class="hljs-number">24.</span><span class="hljs-string">00it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>   <span class="hljs-number">0.2</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">88.28</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.67</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.07</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:17</span> <span class="hljs-string">*</span><br> <span class="hljs-number">99</span><span class="hljs-string">%|████████████████████████████████████████████████████████████████████▌|</span> <span class="hljs-number">1398</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:00&lt;00:00</span>, <span class="hljs-number">23.</span><span class="hljs-string">81it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.21</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">86.72</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.67</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.87</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:26</span> <span class="hljs-string">*</span><br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:01&lt;00:00</span>, <span class="hljs-number">22.</span><span class="hljs-string">79it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">3</span><span class="hljs-string">/20</span>]<br> <span class="hljs-number">14</span><span class="hljs-string">%|█████████▊</span>                                                            <span class="hljs-string">|</span> <span class="hljs-number">198</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:08&lt;00:50</span>, <span class="hljs-number">23.</span><span class="hljs-string">90it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.22</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">85.16</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.15</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:35</span> <span class="hljs-string">*</span><br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▊</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">399</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:17&lt;00:42</span>, <span class="hljs-number">23.</span><span class="hljs-string">98it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.21</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">84.38</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.43</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:44</span> <span class="hljs-string">*</span><br> <span class="hljs-number">43</span><span class="hljs-string">%|█████████████████████████████▊</span>                                        <span class="hljs-string">|</span> <span class="hljs-number">600</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:25&lt;00:33</span>, <span class="hljs-number">24.</span><span class="hljs-string">07it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">600</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>   <span class="hljs-number">0.2</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">91.41</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.65</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.54</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:53</span> <br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▋</span>                              <span class="hljs-string">|</span> <span class="hljs-number">798</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:34&lt;00:25</span>, <span class="hljs-number">23.</span><span class="hljs-string">95it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>   <span class="hljs-number">0.2</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">88.28</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.50</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:08:01</span> <br> <span class="hljs-number">71</span><span class="hljs-string">%|█████████████████████████████████████████████████▋</span>                    <span class="hljs-string">|</span> <span class="hljs-number">999</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:43&lt;00:17</span>, <span class="hljs-number">23.</span><span class="hljs-string">93it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1000</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.18</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">90.62</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.66</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.14</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:08:10</span> <br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1200</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:52&lt;00:08</span>, <span class="hljs-number">24.</span><span class="hljs-string">03it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.19</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">92.97</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.65</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.36</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:08:19</span> <br> <span class="hljs-number">99</span><span class="hljs-string">%|████████████████████████████████████████████████████████████████████▌|</span> <span class="hljs-number">1398</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:00&lt;00:00</span>, <span class="hljs-number">24.</span><span class="hljs-string">01it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>   <span class="hljs-number">0.2</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">86.72</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.65</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.24</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:08:28</span> <br><span class="hljs-literal">No</span> <span class="hljs-string">optimization</span> <span class="hljs-string">for</span> <span class="hljs-string">a</span> <span class="hljs-string">long</span> <span class="hljs-string">time,</span> <span class="hljs-string">auto-stopping...</span><br><span class="hljs-attr">Test Loss:</span>  <span class="hljs-number">0.62</span><span class="hljs-string">,</span>  <span class="hljs-attr">Test Acc:</span> <span class="hljs-number">89.89</span><span class="hljs-string">%</span><br><span class="hljs-string">Precision,</span> <span class="hljs-string">Recall</span> <span class="hljs-string">and</span> <span class="hljs-string">F1-Score...</span><br>               <span class="hljs-string">precision</span>    <span class="hljs-string">recall</span>  <span class="hljs-string">f1-score</span>   <span class="hljs-string">support</span><br><br>      <span class="hljs-string">finance</span>     <span class="hljs-number">0.9297</span>    <span class="hljs-number">0.8730</span>    <span class="hljs-number">0.9005</span>      <span class="hljs-number">1000</span><br>       <span class="hljs-string">realty</span>     <span class="hljs-number">0.9341</span>    <span class="hljs-number">0.9070</span>    <span class="hljs-number">0.9203</span>      <span class="hljs-number">1000</span><br>       <span class="hljs-string">stocks</span>     <span class="hljs-number">0.8183</span>    <span class="hljs-number">0.8780</span>    <span class="hljs-number">0.8471</span>      <span class="hljs-number">1000</span><br>    <span class="hljs-string">education</span>     <span class="hljs-number">0.9564</span>    <span class="hljs-number">0.9430</span>    <span class="hljs-number">0.9496</span>      <span class="hljs-number">1000</span><br>      <span class="hljs-string">science</span>     <span class="hljs-number">0.8964</span>    <span class="hljs-number">0.8220</span>    <span class="hljs-number">0.8576</span>      <span class="hljs-number">1000</span><br>      <span class="hljs-string">society</span>     <span class="hljs-number">0.8359</span>    <span class="hljs-number">0.9220</span>    <span class="hljs-number">0.8768</span>      <span class="hljs-number">1000</span><br>     <span class="hljs-string">politics</span>     <span class="hljs-number">0.8920</span>    <span class="hljs-number">0.8590</span>    <span class="hljs-number">0.8752</span>      <span class="hljs-number">1000</span><br>       <span class="hljs-string">sports</span>     <span class="hljs-number">0.9436</span>    <span class="hljs-number">0.9540</span>    <span class="hljs-number">0.9488</span>      <span class="hljs-number">1000</span><br>         <span class="hljs-string">game</span>     <span class="hljs-number">0.9263</span>    <span class="hljs-number">0.9050</span>    <span class="hljs-number">0.9155</span>      <span class="hljs-number">1000</span><br><span class="hljs-string">entertainment</span>     <span class="hljs-number">0.8736</span>    <span class="hljs-number">0.9260</span>    <span class="hljs-number">0.8990</span>      <span class="hljs-number">1000</span><br><br>     <span class="hljs-string">accuracy</span>                         <span class="hljs-number">0.8989</span>     <span class="hljs-number">10000</span><br>    <span class="hljs-string">macro</span> <span class="hljs-string">avg</span>     <span class="hljs-number">0.9006</span>    <span class="hljs-number">0.8989</span>    <span class="hljs-number">0.8991</span>     <span class="hljs-number">10000</span><br> <span class="hljs-string">weighted</span> <span class="hljs-string">avg</span>     <span class="hljs-number">0.9006</span>    <span class="hljs-number">0.8989</span>    <span class="hljs-number">0.8991</span>     <span class="hljs-number">10000</span><br><br><span class="hljs-string">Confusion</span> <span class="hljs-string">Matrix...</span><br>[[<span class="hljs-number">873</span>   <span class="hljs-number">9</span>  <span class="hljs-number">68</span>   <span class="hljs-number">1</span>   <span class="hljs-number">6</span>  <span class="hljs-number">19</span>  <span class="hljs-number">14</span>   <span class="hljs-number">3</span>   <span class="hljs-number">3</span>   <span class="hljs-number">4</span>]<br> [ <span class="hljs-number">15</span> <span class="hljs-number">907</span>  <span class="hljs-number">13</span>   <span class="hljs-number">2</span>   <span class="hljs-number">4</span>  <span class="hljs-number">18</span>  <span class="hljs-number">13</span>   <span class="hljs-number">6</span>   <span class="hljs-number">2</span>  <span class="hljs-number">20</span>]<br> [ <span class="hljs-number">38</span>  <span class="hljs-number">24</span> <span class="hljs-number">878</span>   <span class="hljs-number">1</span>  <span class="hljs-number">18</span>  <span class="hljs-number">10</span>  <span class="hljs-number">23</span>   <span class="hljs-number">2</span>   <span class="hljs-number">4</span>   <span class="hljs-number">2</span>]<br> [  <span class="hljs-number">1</span>   <span class="hljs-number">2</span>   <span class="hljs-number">4</span> <span class="hljs-number">943</span>   <span class="hljs-number">4</span>  <span class="hljs-number">19</span>   <span class="hljs-number">6</span>   <span class="hljs-number">5</span>   <span class="hljs-number">3</span>  <span class="hljs-number">13</span>]<br> [  <span class="hljs-number">2</span>   <span class="hljs-number">3</span>  <span class="hljs-number">54</span>   <span class="hljs-number">5</span> <span class="hljs-number">822</span>  <span class="hljs-number">30</span>  <span class="hljs-number">26</span>   <span class="hljs-number">2</span>  <span class="hljs-number">36</span>  <span class="hljs-number">20</span>]<br> [  <span class="hljs-number">1</span>  <span class="hljs-number">14</span>   <span class="hljs-number">4</span>  <span class="hljs-number">19</span>   <span class="hljs-number">6</span> <span class="hljs-number">922</span>  <span class="hljs-number">14</span>   <span class="hljs-number">1</span>   <span class="hljs-number">2</span>  <span class="hljs-number">17</span>]<br> [  <span class="hljs-number">8</span>   <span class="hljs-number">8</span>  <span class="hljs-number">35</span>   <span class="hljs-number">9</span>  <span class="hljs-number">11</span>  <span class="hljs-number">47</span> <span class="hljs-number">859</span>   <span class="hljs-number">5</span>   <span class="hljs-number">2</span>  <span class="hljs-number">16</span>]<br> [  <span class="hljs-number">1</span>   <span class="hljs-number">1</span>   <span class="hljs-number">3</span>   <span class="hljs-number">1</span>   <span class="hljs-number">3</span>  <span class="hljs-number">12</span>   <span class="hljs-number">3</span> <span class="hljs-number">954</span>   <span class="hljs-number">1</span>  <span class="hljs-number">21</span>]<br> [  <span class="hljs-number">0</span>   <span class="hljs-number">0</span>   <span class="hljs-number">9</span>   <span class="hljs-number">2</span>  <span class="hljs-number">37</span>   <span class="hljs-number">6</span>   <span class="hljs-number">5</span>  <span class="hljs-number">15</span> <span class="hljs-number">905</span>  <span class="hljs-number">21</span>]<br> [  <span class="hljs-number">0</span>   <span class="hljs-number">3</span>   <span class="hljs-number">5</span>   <span class="hljs-number">3</span>   <span class="hljs-number">6</span>  <span class="hljs-number">20</span>   <span class="hljs-number">0</span>  <span class="hljs-number">18</span>  <span class="hljs-number">19</span> <span class="hljs-number">926</span>]]<br><span class="hljs-attr">Time usage:</span> <span class="hljs-number">0</span><span class="hljs-string">:00:00</span><br> <span class="hljs-number">99</span><span class="hljs-string">%|████████████████████████████████████████████████████████████████████▌|</span> <span class="hljs-number">1398</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:01&lt;00:00</span>, <span class="hljs-number">22.</span><span class="hljs-string">65it/s</span>]<br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>结论: Student模型在测试集上的表现是Test Acc: 89.89%</li>
+</ul>
+</blockquote>
+<h3 id="调参训练student模型">6.3 调参训练Student模型</h3>
+<ul>
+<li>对Config类中的若干超参数做出重要修改:</li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># 模型迭代30轮</span><br><span class="hljs-attribute">self</span>.num_epochs = <span class="hljs-number">30</span><br><br><span class="hljs-comment"># 卷积核尺寸分别选2, 3, 4, 5</span><br><span class="hljs-attribute">self</span>.filter_sizes = (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)<br><br><span class="hljs-comment"># 卷积核的个数1024</span><br><span class="hljs-attribute">self</span>.num_filters = <span class="hljs-number">1024</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>调参后再次训练Student模型:</li>
+</ul>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># 将--task修改为train_kd，直接执行run文件</span><br>parser.add_argument(<span class="hljs-string">&quot;--task&quot;</span>, <span class="hljs-attribute">type</span>=str, <span class="hljs-attribute">default</span>=<span class="hljs-string">&#x27;train_kd&#x27;</span>, <span class="hljs-attribute">help</span>=<span class="hljs-string">&quot;choose a task: trainbert, or train_kd&quot;</span>)<br><span class="hljs-comment"># 或直接在命令行运行训练Student模型的代码</span><br>python run.py --task train_kd<br></code></pre></td></tr></table></figure>
+<ul>
+<li>输出结果:</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">180000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:37</span>, <span class="hljs-number">4830.</span><span class="hljs-string">81it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:02</span>, <span class="hljs-number">4935.</span><span class="hljs-string">57it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:02</span>, <span class="hljs-number">4955.</span><span class="hljs-string">57it/s</span>]<br><span class="hljs-attr">Vocab size:</span> <span class="hljs-number">4762</span><br><span class="hljs-string">180000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:02</span>, <span class="hljs-number">69735.</span><span class="hljs-string">78it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:00</span>, <span class="hljs-number">82937.</span><span class="hljs-string">77it/s</span>]<br><span class="hljs-string">10000it</span> [<span class="hljs-number">00</span><span class="hljs-string">:00</span>, <span class="hljs-number">82402.</span><span class="hljs-string">02it/s</span>]<br><span class="hljs-string">Data</span> <span class="hljs-string">loaded,</span> <span class="hljs-string">now</span> <span class="hljs-string">load</span> <span class="hljs-string">teacher</span> <span class="hljs-string">model</span><br><span class="hljs-string">Teacher</span> <span class="hljs-string">and</span> <span class="hljs-string">student</span> <span class="hljs-string">models</span> <span class="hljs-string">loaded,</span> <span class="hljs-string">start</span> <span class="hljs-string">training</span><br><span class="hljs-string">Epoch</span> [<span class="hljs-number">1</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▊</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">399</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:39&lt;01:40</span>, <span class="hljs-number">10.</span><span class="hljs-string">06it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.29</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">75.00</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.76</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">84.65</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:00</span> <span class="hljs-string">*</span><br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">800</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:20&lt;01:00</span>, <span class="hljs-number">10.</span><span class="hljs-string">05it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.24</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">82.81</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.71</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">86.89</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:06:41</span> <span class="hljs-string">*</span><br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1200</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:01&lt;00:20</span>, <span class="hljs-number">10.</span><span class="hljs-string">06it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.23</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">82.81</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.72</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">85.35</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:07:22</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:23&lt;00:00</span>,  <span class="hljs-number">9.</span><span class="hljs-string">80it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">2</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▉</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">400</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:39&lt;01:40</span>, <span class="hljs-number">10.</span><span class="hljs-string">06it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.23</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">79.69</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.67</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.46</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:08:24</span> <span class="hljs-string">*</span><br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">800</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:20&lt;01:00</span>, <span class="hljs-number">10.</span><span class="hljs-string">08it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.21</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">86.72</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.66</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.74</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:09:04</span> <span class="hljs-string">*</span><br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1199</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:01&lt;00:20</span>, <span class="hljs-number">10.</span><span class="hljs-string">09it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.21</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">92.19</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.67</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">88.86</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:09:45</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:22&lt;00:00</span>,  <span class="hljs-number">9.</span><span class="hljs-string">85it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">3</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▉</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">400</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:39&lt;01:39</span>, <span class="hljs-number">10.</span><span class="hljs-string">13it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.22</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">82.81</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.63</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.46</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:10:46</span> <span class="hljs-string">*</span><br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">799</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:20&lt;00:59</span>, <span class="hljs-number">10.</span><span class="hljs-string">15it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>   <span class="hljs-number">0.2</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">92.97</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.56</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:11:27</span> <br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1199</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:00&lt;00:20</span>, <span class="hljs-number">10.</span><span class="hljs-string">15it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.19</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">92.19</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.66</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:12:08</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:22&lt;00:00</span>,  <span class="hljs-number">9.</span><span class="hljs-string">89it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">4</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▉</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">400</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:39&lt;01:39</span>, <span class="hljs-number">10.</span><span class="hljs-string">17it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.19</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">90.62</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.44</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:13:08</span> <br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">799</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:19&lt;00:59</span>, <span class="hljs-number">10.</span><span class="hljs-string">18it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.18</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">95.31</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.62</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.96</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:13:49</span> <span class="hljs-string">*</span><br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1199</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:00&lt;00:20</span>, <span class="hljs-number">10.</span><span class="hljs-string">18it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.18</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">92.19</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.69</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:14:29</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:21&lt;00:00</span>,  <span class="hljs-number">9.</span><span class="hljs-string">92it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">5</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▊</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">399</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:39&lt;01:38</span>, <span class="hljs-number">10.</span><span class="hljs-string">25it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>   <span class="hljs-number">0.2</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">88.28</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.63</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.28</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:15:30</span> <br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">799</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:19&lt;00:59</span>, <span class="hljs-number">10.</span><span class="hljs-string">29it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.19</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">90.62</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.60</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:16:10</span> <br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1199</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:59&lt;00:20</span>, <span class="hljs-number">10.</span><span class="hljs-string">29it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.17</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">96.88</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">89.51</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">0</span><span class="hljs-string">:16:50</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:20&lt;00:00</span>, <span class="hljs-number">10.</span><span class="hljs-string">02it/s</span>]<br><br><span class="hljs-string">......</span><br><span class="hljs-string">......</span><br><span class="hljs-string">......</span><br><br><span class="hljs-string">Epoch</span> [<span class="hljs-number">28</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▉</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">400</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:38&lt;01:36</span>, <span class="hljs-number">10.</span><span class="hljs-string">40it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.15</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">98.44</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.58</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:08:43</span> <br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">800</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:17&lt;00:58</span>, <span class="hljs-number">10.</span><span class="hljs-string">43it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.16</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">98.44</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.63</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">91.09</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:09:22</span> <br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1200</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:57&lt;00:19</span>, <span class="hljs-number">10.</span><span class="hljs-string">43it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.15</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">96.88</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.55</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:10:02</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:18&lt;00:00</span>, <span class="hljs-number">10.</span><span class="hljs-string">17it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">29</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▉</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">400</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:38&lt;01:36</span>, <span class="hljs-number">10.</span><span class="hljs-string">41it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.15</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">97.66</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.78</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:11:01</span> <br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">800</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:17&lt;00:58</span>, <span class="hljs-number">10.</span><span class="hljs-string">42it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.16</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">98.44</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.63</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.58</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:11:40</span> <br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1200</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:57&lt;00:19</span>, <span class="hljs-number">10.</span><span class="hljs-string">41it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.15</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">97.66</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.62</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.72</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:12:20</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:18&lt;00:00</span>, <span class="hljs-number">10.</span><span class="hljs-string">17it/s</span>]<br><span class="hljs-string">Epoch</span> [<span class="hljs-number">30</span><span class="hljs-string">/30</span>]<br> <span class="hljs-number">28</span><span class="hljs-string">%|███████████████████▉</span>                                                  <span class="hljs-string">|</span> <span class="hljs-number">400</span><span class="hljs-string">/1407</span> [<span class="hljs-number">00</span><span class="hljs-string">:38&lt;01:36</span>, <span class="hljs-number">10.</span><span class="hljs-string">40it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">400</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.16</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">98.44</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.65</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.66</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:13:19</span> <br> <span class="hljs-number">57</span><span class="hljs-string">%|███████████████████████████████████████▊</span>                              <span class="hljs-string">|</span> <span class="hljs-number">800</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:17&lt;00:58</span>, <span class="hljs-number">10.</span><span class="hljs-string">43it/s</span>]<span class="hljs-attr">Iter:</span>    <span class="hljs-number">800</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.15</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">98.44</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.63</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.79</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:13:59</span> <br> <span class="hljs-number">85</span><span class="hljs-string">%|██████████████████████████████████████████████████████████▊</span>          <span class="hljs-string">|</span> <span class="hljs-number">1200</span><span class="hljs-string">/1407</span> [<span class="hljs-number">01</span><span class="hljs-string">:57&lt;00:19</span>, <span class="hljs-number">10.</span><span class="hljs-string">40it/s</span>]<span class="hljs-attr">Iter:</span>   <span class="hljs-number">1200</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Loss:</span>  <span class="hljs-number">0.15</span><span class="hljs-string">,</span>  <span class="hljs-attr">Train Acc:</span> <span class="hljs-number">99.22</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Val Loss:</span>  <span class="hljs-number">0.64</span><span class="hljs-string">,</span>  <span class="hljs-attr">Val Acc:</span> <span class="hljs-number">90.65</span><span class="hljs-string">%,</span>  <span class="hljs-attr">Time:</span> <span class="hljs-number">1</span><span class="hljs-string">:14:38</span> <br><span class="hljs-number">100</span><span class="hljs-string">%|█████████████████████████████████████████████████████████████████████|</span> <span class="hljs-number">1407</span><span class="hljs-string">/1407</span> [<span class="hljs-number">02</span><span class="hljs-string">:18&lt;00:00</span>, <span class="hljs-number">10.</span><span class="hljs-string">17it/s</span>]<br><span class="hljs-attr">Test Loss:</span>   <span class="hljs-number">0.6</span><span class="hljs-string">,</span>  <span class="hljs-attr">Test Acc:</span> <span class="hljs-number">91.25</span><span class="hljs-string">%</span><br><span class="hljs-string">Precision,</span> <span class="hljs-string">Recall</span> <span class="hljs-string">and</span> <span class="hljs-string">F1-Score...</span><br>               <span class="hljs-string">precision</span>    <span class="hljs-string">recall</span>  <span class="hljs-string">f1-score</span>   <span class="hljs-string">support</span><br><br>      <span class="hljs-string">finance</span>     <span class="hljs-number">0.9105</span>    <span class="hljs-number">0.9050</span>    <span class="hljs-number">0.9077</span>      <span class="hljs-number">1000</span><br>       <span class="hljs-string">realty</span>     <span class="hljs-number">0.9311</span>    <span class="hljs-number">0.9320</span>    <span class="hljs-number">0.9315</span>      <span class="hljs-number">1000</span><br>       <span class="hljs-string">stocks</span>     <span class="hljs-number">0.8912</span>    <span class="hljs-number">0.8440</span>    <span class="hljs-number">0.8670</span>      <span class="hljs-number">1000</span><br>    <span class="hljs-string">education</span>     <span class="hljs-number">0.9532</span>    <span class="hljs-number">0.9570</span>    <span class="hljs-number">0.9551</span>      <span class="hljs-number">1000</span><br>      <span class="hljs-string">science</span>     <span class="hljs-number">0.8836</span>    <span class="hljs-number">0.8730</span>    <span class="hljs-number">0.8783</span>      <span class="hljs-number">1000</span><br>      <span class="hljs-string">society</span>     <span class="hljs-number">0.8306</span>    <span class="hljs-number">0.9270</span>    <span class="hljs-number">0.8762</span>      <span class="hljs-number">1000</span><br>     <span class="hljs-string">politics</span>     <span class="hljs-number">0.9041</span>    <span class="hljs-number">0.8770</span>    <span class="hljs-number">0.8904</span>      <span class="hljs-number">1000</span><br>       <span class="hljs-string">sports</span>     <span class="hljs-number">0.9733</span>    <span class="hljs-number">0.9470</span>    <span class="hljs-number">0.9600</span>      <span class="hljs-number">1000</span><br>         <span class="hljs-string">game</span>     <span class="hljs-number">0.9467</span>    <span class="hljs-number">0.9240</span>    <span class="hljs-number">0.9352</span>      <span class="hljs-number">1000</span><br><span class="hljs-string">entertainment</span>     <span class="hljs-number">0.9108</span>    <span class="hljs-number">0.9390</span>    <span class="hljs-number">0.9247</span>      <span class="hljs-number">1000</span><br><br>     <span class="hljs-string">accuracy</span>                         <span class="hljs-number">0.9125</span>     <span class="hljs-number">10000</span><br>    <span class="hljs-string">macro</span> <span class="hljs-string">avg</span>     <span class="hljs-number">0.9135</span>    <span class="hljs-number">0.9125</span>    <span class="hljs-number">0.9126</span>     <span class="hljs-number">10000</span><br> <span class="hljs-string">weighted</span> <span class="hljs-string">avg</span>     <span class="hljs-number">0.9135</span>    <span class="hljs-number">0.9125</span>    <span class="hljs-number">0.9126</span>     <span class="hljs-number">10000</span><br><br><span class="hljs-string">Confusion</span> <span class="hljs-string">Matrix...</span><br>[[<span class="hljs-number">905</span>  <span class="hljs-number">10</span>  <span class="hljs-number">38</span>   <span class="hljs-number">4</span>   <span class="hljs-number">5</span>  <span class="hljs-number">19</span>  <span class="hljs-number">11</span>   <span class="hljs-number">3</span>   <span class="hljs-number">0</span>   <span class="hljs-number">5</span>]<br> [ <span class="hljs-number">13</span> <span class="hljs-number">932</span>  <span class="hljs-number">13</span>   <span class="hljs-number">2</span>   <span class="hljs-number">3</span>  <span class="hljs-number">17</span>   <span class="hljs-number">6</span>   <span class="hljs-number">3</span>   <span class="hljs-number">4</span>   <span class="hljs-number">7</span>]<br> [ <span class="hljs-number">54</span>  <span class="hljs-number">23</span> <span class="hljs-number">844</span>   <span class="hljs-number">1</span>  <span class="hljs-number">32</span>   <span class="hljs-number">6</span>  <span class="hljs-number">33</span>   <span class="hljs-number">1</span>   <span class="hljs-number">4</span>   <span class="hljs-number">2</span>]<br> [  <span class="hljs-number">2</span>   <span class="hljs-number">2</span>   <span class="hljs-number">1</span> <span class="hljs-number">957</span>   <span class="hljs-number">4</span>  <span class="hljs-number">15</span>   <span class="hljs-number">6</span>   <span class="hljs-number">1</span>   <span class="hljs-number">3</span>   <span class="hljs-number">9</span>]<br> [  <span class="hljs-number">3</span>   <span class="hljs-number">5</span>  <span class="hljs-number">24</span>   <span class="hljs-number">5</span> <span class="hljs-number">873</span>  <span class="hljs-number">32</span>  <span class="hljs-number">17</span>   <span class="hljs-number">3</span>  <span class="hljs-number">25</span>  <span class="hljs-number">13</span>]<br> [  <span class="hljs-number">2</span>  <span class="hljs-number">15</span>   <span class="hljs-number">3</span>  <span class="hljs-number">18</span>   <span class="hljs-number">5</span> <span class="hljs-number">927</span>  <span class="hljs-number">12</span>   <span class="hljs-number">0</span>   <span class="hljs-number">1</span>  <span class="hljs-number">17</span>]<br> [ <span class="hljs-number">12</span>  <span class="hljs-number">10</span>  <span class="hljs-number">16</span>  <span class="hljs-number">10</span>  <span class="hljs-number">14</span>  <span class="hljs-number">48</span> <span class="hljs-number">877</span>   <span class="hljs-number">2</span>   <span class="hljs-number">3</span>   <span class="hljs-number">8</span>]<br> [  <span class="hljs-number">2</span>   <span class="hljs-number">0</span>   <span class="hljs-number">3</span>   <span class="hljs-number">1</span>   <span class="hljs-number">2</span>  <span class="hljs-number">21</span>   <span class="hljs-number">4</span> <span class="hljs-number">947</span>   <span class="hljs-number">1</span>  <span class="hljs-number">19</span>]<br> [  <span class="hljs-number">0</span>   <span class="hljs-number">0</span>   <span class="hljs-number">3</span>   <span class="hljs-number">3</span>  <span class="hljs-number">43</span>   <span class="hljs-number">8</span>   <span class="hljs-number">2</span>   <span class="hljs-number">5</span> <span class="hljs-number">924</span>  <span class="hljs-number">12</span>]<br> [  <span class="hljs-number">1</span>   <span class="hljs-number">4</span>   <span class="hljs-number">2</span>   <span class="hljs-number">3</span>   <span class="hljs-number">7</span>  <span class="hljs-number">23</span>   <span class="hljs-number">2</span>   <span class="hljs-number">8</span>  <span class="hljs-number">11</span> <span class="hljs-number">939</span>]]<br><span class="hljs-attr">Time usage:</span> <span class="hljs-number">0</span><span class="hljs-string">:00:01</span><br></code></pre></td></tr></table></figure>
+<p>结论: 调参后的Student模型在测试集上的表现是Test Acc: 91.25%</p>
+<p>完成知识蒸馏后, 我们获得了两个模型, Teacher模型和Student模型：</p>
+<figure>
+<img src="/images/模型蒸馏/image-20231117134733605.png" srcset="/img/loading.gif" lazyload
+alt="image-20231117134733605" />
+<figcaption aria-hidden="true">image-20231117134733605</figcaption>
+</figure>
+<p>从上述结果中可以看出:</p>
+<p>Teacher模型大小为409.2MB, Student模型大小为11.3MB和23.1MB.</p>
+<p>Teacher模型测试集准确率为93.64%,
+Student模型测试集准确率为89.89%和91.25%.</p>
+<h2 id="结论">7.结论</h2>
+<p>模型进行知识蒸馏后模型大小和准确率的变化：</p>
+<p>1、模型大小明显减少.</p>
+<ul>
+<li>BERT模型409.2MB, 最优的textCNN模型23.1MB.</li>
+<li>模型大小压缩为原来的5.65%, 缩小了17.7倍.</li>
+</ul>
+<p>2、模型在测试集上准确率仅有2.39%的下降.</p>
+<ul>
+<li>BERT模型准确率93.64%</li>
+<li>textCNN模型知识蒸馏后30个epochs准确率91.25%</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E6%8A%80%E6%9C%AF/" class="category-chain-item">模型压缩技术</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+      
+        <a href="/tags/%E5%89%AA%E6%9E%9D/" class="print-no-link">#剪枝</a>
+      
+        <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%A4%84%E7%90%86/" class="print-no-link">#模型处理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>知识蒸馏的原理与实现</div>
+      <div>https://linxkon.github.io/模型蒸馏.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年1月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E6%A8%A1%E5%9E%8B%E5%89%AA%E6%9E%9Dpruning.html" title="模型剪枝原理与实现">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">模型剪枝原理与实现</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%9F%BA%E4%BA%8EGRU%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9E%84%E5%BB%BA%E5%B8%A6%E7%BC%96-%E8%A7%A3%E7%A0%81%E5%99%A8%E5%92%8C%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E7%9A%84%E8%8B%B1%E8%AF%91%E6%B3%95%E4%BB%BB%E5%8A%A1%E5%AE%9E%E7%8E%B0.html" title="基于GRU模型的带编-解码器和注意力机制的英译法任务实现">
+                        <span class="hidden-mobile">基于GRU模型的带编-解码器和注意力机制的英译法任务实现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'fb51654c90b0e4b700db7a5b65596ab9'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>
