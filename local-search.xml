@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>常见大模型榜单整理</title>
+    <link href="/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%92%E8%A1%8C%E6%A6%9C.html"/>
+    <url>/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%92%E8%A1%8C%E6%A6%9C.html</url>
+    
+    <content type="html"><![CDATA[<p>大模型的发展日新月异,乱花渐欲迷人眼,那到底哪个模型更强呢,不同模型又有哪些各自擅长的领域呢?这里整理几个比较权威的LLM评测榜单和数据集供诸君参考.</p><span id="more"></span><h3 id="lmsys-chatbot-arena"><ahref="https://chat.lmsys.org/?leaderboard">LMSYS Chatbot Arena</a></h3><ul><li>LMSYS Chatbot Arena是一个众包的开放平台，用于大语言模型（LLM）的评估。收集了超过 1,000,000次人类成对比较，使用 Bradley-Terry 模型对 LLM 进行排名，并以 Elo评分展示模型的评级。</li></ul><p>https://chat.lmsys.org/?leaderboard</p><h3 id="opencompass"><ahref="https://rank.opencompass.org.cn/home">OpenCompass</a></h3><ul><li>OpenCompass是一个开源项目,提供丰富的算法和功能支持，能够帮助社区更便捷地对NLP模型的性能进行公平全面的评估。</li></ul><p>https://rank.opencompass.org.cn/home</p><h3id="司南评测httpswww.modelscope.cnstudiosopencompasscompassarena">司南评测(https://www.modelscope.cn/studios/opencompass/CompassArena)</h3><ul><li>国产版LMSYS Chatbot Arena</li></ul><h3 id="mmlu">MMLU</h3><ul><li><strong>MMLU</strong> ： 全称Massive Multitask LanguageUnderstanding，是一种针对大模型的<strong>语言理解能力的测评</strong>，是目前最著名的大模型语义理解测评之一，由UCBerkeley大学的研究人员在2020年9月推出。该测试涵盖57项任务，包括初等数学、美国历史、计算机科学、法律等。任务涵盖的知识很广泛，语言是英文，用以评测大模型基本的知识覆盖范围和理解能力。</li></ul><p>https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu</p><h3 id="c-eval">C-Eval</h3><ul><li><strong>C-Eval</strong> ： C-Eval是一个全面的中文基础模型评估套件。由上海交通大学、清华大学和匹兹堡大学研究人员在2023年5月份联合推出，它包含了13948个多项选择题，涵盖了52个不同的学科和四个难度级别。用以<strong>评测大模型中文理解能力</strong>。</li></ul><p>https://cevalbenchmark.com/static/leaderboard.html</p><h3 id="gsm8k">GSM8K</h3><ul><li><strong>GSM8K</strong> ：OpenAI发布的大模型数学推理能力评测基准，涵盖了8500个中学水平的高质量数学题数据集。数据集比之前的数学文字题数据集规模更大，语言更具多样性，题目也更具挑战性。该项测试在2021年10月份发布，至今仍然是非常困难的一种测试基准.</li></ul><p>https://paperswithcode.com/sota/arithmetic-reasoning-on-gsm8k</p><h3 id="agi-eval">AGI Eval</h3><ul><li><strong>AGI Eval</strong> ：微软发布的大模型基础能力评测基准，在2023年4月推出，主要评测大模型在人类认知和解决问题的一般能力，涵盖全球20种面向普通人类考生的官方、公共和高标准录取和资格考试，包含中英文数据。因此，该测试更加倾向于<strong>人类考试结果</strong>，涵盖了中英文，论文地址：https://arxiv.org/abs/2304.06364</li></ul><h3 id="lmsys榜单">LMSYS榜单</h3><iframe aria-hidden="true" tabindex="-1" src="about:blank" style="box-sizing: border-box; border: 0px; display: block; vertical-align: middle; top: 0px; left: 0px; width: 1146.4px; height: 62.2px; overflow: hidden; opacity: 0; pointer-events: none; z-index: -1;"></iframe><table><thead><tr class="header"><th>🤖 Model</th><th>⭐ Arena Elo</th><th>📈 MT-bench</th><th>📚 MMLU</th><th>Organization</th><th>License</th></tr></thead><tbody><tr class="odd"><td><ahref="https://openai.com/index/hello-gpt-4o/">GPT-4o-2024-05-13</a></td><td>1287</td><td></td><td>88.7</td><td>OpenAI</td><td>Proprietary</td></tr><tr class="even"><td><ahref="https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4">GPT-4-Turbo-2024-04-09</a></td><td>1252</td><td></td><td></td><td>OpenAI</td><td>Proprietary</td></tr><tr class="odd"><td><ahref="https://openai.com/blog/new-models-and-developer-products-announced-at-devday">GPT-4-1106-preview</a></td><td>1250</td><td>9.32</td><td></td><td>OpenAI</td><td>Proprietary</td></tr><tr class="even"><td><ahref="https://blog.google/technology/ai/google-gemini-next-generation-model-february-2024/">Gemini1.5 Pro API-0409-Preview</a></td><td>1248</td><td></td><td>81.9</td><td>Google</td><td>Proprietary</td></tr><tr class="odd"><td><a href="https://www.anthropic.com/news/claude-3-family">Claude 3Opus</a></td><td>1246</td><td></td><td>86.8</td><td>Anthropic</td><td>Proprietary</td></tr><tr class="even"><td><ahref="https://openai.com/blog/new-models-and-developer-products-announced-at-devday">GPT-4-0125-preview</a></td><td>1244</td><td></td><td></td><td>OpenAI</td><td>Proprietary</td></tr><tr class="odd"><td><a href="https://www.01.ai/">Yi-Large-preview</a></td><td>1236</td><td></td><td></td><td>01 AI</td><td>Proprietary</td></tr><tr class="even"><td><a href="https://bard.google.com/">Bard (Gemini Pro)</a></td><td>1208</td><td></td><td></td><td>Google</td><td>Proprietary</td></tr></tbody></table>]]></content>
+    
+    
+    <categories>
+      
+      <category>大模型</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>大模型</tag>
+      
+      <tag>排行榜</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>基于多模态信息抽取的菜品知识图谱构建</title>
     <link href="/%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%A8%A1%E6%80%81%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96%E7%9A%84%E8%8F%9C%E5%93%81%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%9E%84%E5%BB%BA.html"/>
     <url>/%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%A8%A1%E6%80%81%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96%E7%9A%84%E8%8F%9C%E5%93%81%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%9E%84%E5%BB%BA.html</url>
@@ -79,33 +106,6 @@
       <tag>基础知识</tag>
       
       <tag>中英文</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>常见大模型榜单整理</title>
-    <link href="/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%92%E8%A1%8C%E6%A6%9C.html"/>
-    <url>/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%92%E8%A1%8C%E6%A6%9C.html</url>
-    
-    <content type="html"><![CDATA[<p>大模型的发展日新月异,乱花渐欲迷人眼,那到底哪个模型更强呢,不同模型又有哪些各自擅长的领域呢?这里整理几个比较权威的LLM评测榜单和数据集供诸君参考.</p><span id="more"></span><h3 id="lmsys-chatbot-arena"><ahref="https://chat.lmsys.org/?leaderboard">LMSYS Chatbot Arena</a></h3><ul><li>LMSYS Chatbot Arena是一个众包的开放平台，用于大语言模型（LLM）的评估。收集了超过 1,000,000次人类成对比较，使用 Bradley-Terry 模型对 LLM 进行排名，并以 Elo评分展示模型的评级。</li></ul><p>https://chat.lmsys.org/?leaderboard</p><h3 id="opencompass"><ahref="https://rank.opencompass.org.cn/home">OpenCompass</a></h3><ul><li>OpenCompass是一个开源项目,提供丰富的算法和功能支持，能够帮助社区更便捷地对NLP模型的性能进行公平全面的评估。</li></ul><p>https://rank.opencompass.org.cn/home</p><h3 id="mmlu">MMLU</h3><ul><li><strong>MMLU</strong> ： 全称Massive Multitask LanguageUnderstanding，是一种针对大模型的<strong>语言理解能力的测评</strong>，是目前最著名的大模型语义理解测评之一，由UCBerkeley大学的研究人员在2020年9月推出。该测试涵盖57项任务，包括初等数学、美国历史、计算机科学、法律等。任务涵盖的知识很广泛，语言是英文，用以评测大模型基本的知识覆盖范围和理解能力。</li></ul><p>https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu</p><h3 id="c-eval">C-Eval</h3><ul><li><strong>C-Eval</strong> ： C-Eval是一个全面的中文基础模型评估套件。由上海交通大学、清华大学和匹兹堡大学研究人员在2023年5月份联合推出，它包含了13948个多项选择题，涵盖了52个不同的学科和四个难度级别。用以<strong>评测大模型中文理解能力</strong>。</li></ul><p>https://cevalbenchmark.com/static/leaderboard.html</p><h3 id="gsm8k">GSM8K</h3><ul><li><strong>GSM8K</strong> ：OpenAI发布的大模型数学推理能力评测基准，涵盖了8500个中学水平的高质量数学题数据集。数据集比之前的数学文字题数据集规模更大，语言更具多样性，题目也更具挑战性。该项测试在2021年10月份发布，至今仍然是非常困难的一种测试基准.</li></ul><p>https://paperswithcode.com/sota/arithmetic-reasoning-on-gsm8k</p><h3 id="agi-eval">AGI Eval</h3><ul><li><strong>AGI Eval</strong> ：微软发布的大模型基础能力评测基准，在2023年4月推出，主要评测大模型在人类认知和解决问题的一般能力，涵盖全球20种面向普通人类考生的官方、公共和高标准录取和资格考试，包含中英文数据。因此，该测试更加倾向于<strong>人类考试结果</strong>，涵盖了中英文，论文地址：https://arxiv.org/abs/2304.06364</li></ul><h3 id="lmsys榜单">LMSYS榜单</h3><iframe aria-hidden="true" tabindex="-1" src="about:blank" style="box-sizing: border-box; border: 0px; display: block; vertical-align: middle; top: 0px; left: 0px; width: 1146.4px; height: 62.2px; overflow: hidden; opacity: 0; pointer-events: none; z-index: -1;"></iframe><table><thead><tr class="header"><th>🤖 Model</th><th>⭐ Arena Elo</th><th>📈 MT-bench</th><th>📚 MMLU</th><th>Organization</th><th>License</th></tr></thead><tbody><tr class="odd"><td><ahref="https://openai.com/index/hello-gpt-4o/">GPT-4o-2024-05-13</a></td><td>1287</td><td></td><td>88.7</td><td>OpenAI</td><td>Proprietary</td></tr><tr class="even"><td><ahref="https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4">GPT-4-Turbo-2024-04-09</a></td><td>1252</td><td></td><td></td><td>OpenAI</td><td>Proprietary</td></tr><tr class="odd"><td><ahref="https://openai.com/blog/new-models-and-developer-products-announced-at-devday">GPT-4-1106-preview</a></td><td>1250</td><td>9.32</td><td></td><td>OpenAI</td><td>Proprietary</td></tr><tr class="even"><td><ahref="https://blog.google/technology/ai/google-gemini-next-generation-model-february-2024/">Gemini1.5 Pro API-0409-Preview</a></td><td>1248</td><td></td><td>81.9</td><td>Google</td><td>Proprietary</td></tr><tr class="odd"><td><a href="https://www.anthropic.com/news/claude-3-family">Claude 3Opus</a></td><td>1246</td><td></td><td>86.8</td><td>Anthropic</td><td>Proprietary</td></tr><tr class="even"><td><ahref="https://openai.com/blog/new-models-and-developer-products-announced-at-devday">GPT-4-0125-preview</a></td><td>1244</td><td></td><td></td><td>OpenAI</td><td>Proprietary</td></tr><tr class="odd"><td><a href="https://www.01.ai/">Yi-Large-preview</a></td><td>1236</td><td></td><td></td><td>01 AI</td><td>Proprietary</td></tr><tr class="even"><td><a href="https://bard.google.com/">Bard (Gemini Pro)</a></td><td>1208</td><td></td><td></td><td>Google</td><td>Proprietary</td></tr></tbody></table>]]></content>
-    
-    
-    <categories>
-      
-      <category>大模型</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>大模型</tag>
-      
-      <tag>排行榜</tag>
       
     </tags>
     
