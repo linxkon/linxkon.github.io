@@ -16,26 +16,25 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="本篇文章试图使用最简洁易懂的文字对一个典型神经网络做一个较为完整的介绍。力求读者在读完本篇文章后对神经网络能有一个清晰且全面的认识。 任务描述 如下图，我们已知四个数据点(1,1)(-1,1)(-1,-1)(1,-1)，这四个点分别对应I~IV象限，如果这时候给我们一个新的坐标点（比如(2,2)），那么它应该属于哪个象限呢？（没错，当然是第I象限，但我们的任务是要让机器知道） “分类”是神经">
+    <meta name="description" content="本文档将逐步指导您在CentOS操作系统上安装Neo4j 5.21.2。 前提条件 在开始安装之前，请确保您有以下条件： - 一台运行CentOS的机器 - 具有sudo权限的用户 - 已经安装了curl和wget工具 步骤1：更新系统 首先，更新您的CentOS系统，以确保所有软件包都是最新的。 1sudo yum update -y 步骤2：安装OpenJDK 11 Neo4">
 <meta property="og:type" content="article">
-<meta property="og:title" content="神经网络简明教程">
-<meta property="og:url" content="https://linxkon.github.io/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA%E7%9A%84%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.html">
+<meta property="og:title" content="在CentOS上安装Neo4j 5x">
+<meta property="og:url" content="https://linxkon.github.io/%E5%9C%A8CentOS%E4%B8%8A%E5%AE%89%E8%A3%85Neo4j%205.21.2%E7%9A%84%E6%AD%A5%E9%AA%A4.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="本篇文章试图使用最简洁易懂的文字对一个典型神经网络做一个较为完整的介绍。力求读者在读完本篇文章后对神经网络能有一个清晰且全面的认识。 任务描述 如下图，我们已知四个数据点(1,1)(-1,1)(-1,-1)(1,-1)，这四个点分别对应I~IV象限，如果这时候给我们一个新的坐标点（比如(2,2)），那么它应该属于哪个象限呢？（没错，当然是第I象限，但我们的任务是要让机器知道） “分类”是神经">
+<meta property="og:description" content="本文档将逐步指导您在CentOS操作系统上安装Neo4j 5.21.2。 前提条件 在开始安装之前，请确保您有以下条件： - 一台运行CentOS的机器 - 具有sudo权限的用户 - 已经安装了curl和wget工具 步骤1：更新系统 首先，更新您的CentOS系统，以确保所有软件包都是最新的。 1sudo yum update -y 步骤2：安装OpenJDK 11 Neo4">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
-<meta property="article:published_time" content="2023-01-02T06:21:13.000Z">
-<meta property="article:modified_time" content="2024-06-23T09:12:52.158Z">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1.jpg">
+<meta property="article:published_time" content="2023-01-11T06:21:13.000Z">
+<meta property="article:modified_time" content="2024-07-20T13:21:02.715Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="深度学习">
-<meta property="article:tag" content="笔记整理">
-<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="技术整理">
+<meta property="article:tag" content="环境配置">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1.jpg">
   
   
   
-  <title>神经网络简明教程 - AI·你所爱</title>
+  <title>在CentOS上安装Neo4j 5x - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +229,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="神经网络简明教程"></span>
+            <span id="subtitle" data-typed-text="在CentOS上安装Neo4j 5x"></span>
           
         </div>
 
@@ -241,8 +240,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-01-02 14:21" pubdate>
-          2023年1月2日 下午
+        <time datetime="2023-01-11 14:21" pubdate>
+          2023年1月11日 下午
         </time>
       </span>
     
@@ -253,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          556 字
         
       </span>
     
@@ -264,7 +263,7 @@
         
         
         
-          22 分钟
+          5 分钟
         
       </span>
     
@@ -309,151 +308,63 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">神经网络简明教程</h1>
+            <h1 id="seo-header">在CentOS上安装Neo4j 5x</h1>
             
             
               <div class="markdown-body">
                 
-                <p>本篇文章试图使用最简洁易懂的文字对一个典型神经网络做一个较为完整的介绍。力求读者在读完本篇文章后对神经网络能有一个清晰且全面的认识。</p>
-<h2 id="任务描述">任务描述</h2>
-<p>如下图，我们已知四个数据点(1,1)(-1,1)(-1,-1)(1,-1)，这四个点分别对应I~IV象限，如果这时候给我们一个新的坐标点（比如(2,2)），那么它应该属于哪个象限呢？（没错，当然是第I象限，但我们的任务是要让机器知道）</p>
-<p>“分类”是神经网络的一大应用，我们使用神经网络完成这个分类任务。</p>
-<figure>
-<img src="/images/深度学习/v2-98d50ca5e3a5c1a35eec112813b696f5.jpg" srcset="/img/loading.gif" lazyload
-alt="分类任务" />
-<figcaption aria-hidden="true">分类任务</figcaption>
-</figure>
-<h2 id="两层神经网络">两层神经网络</h2>
-<p>这里我们构建一个两层神经网络，理论上两层神经网络已经可以拟合任意函数。这个神经网络的结构如下图：</p>
-<figure>
-<img src="/images/深度学习/v2-3ecd2eacd744c89bf89335aad73851b3.jpg" srcset="/img/loading.gif" lazyload
-alt="图1.两层神经网络的一种典型结构" />
-<figcaption
-aria-hidden="true">图1.两层神经网络的一种典型结构</figcaption>
-</figure>
-<p>是不是觉得有点复杂，没关系，我们一步步看，其实很容易理解。</p>
-<h2
-id="简化的两层神经网络分析"><strong>1.简化的两层神经网络分析</strong></h2>
-<p>首先去掉图1中一些难懂的东西，如下图（请仔细看一下图中的标注）：</p>
-<figure>
-<img src="/images/深度学习/v2-370e530f126a785c9c11b550a126499b.jpg" srcset="/img/loading.gif" lazyload
-alt="图2.简化过后的两层神经网络" />
-<figcaption aria-hidden="true">图2.简化过后的两层神经网络</figcaption>
-</figure>
-<p><strong>1.1.输入层</strong></p>
-<p>在我们的例子中，输入层是坐标值，例如（1,1），这是一个包含两个元素的数组，也可以看作是一个1<em>2的矩阵。输入层的元素维度与输入量的特征息息相关，如果输入的是一张32</em>32像素的灰度图像，那么输入层的维度就是32*32。</p>
-<p><strong>1.2.从输入层到隐藏层</strong></p>
-<p>连接输入层和隐藏层的是W1和b1。由X计算得到H十分简单，就是矩阵运算：</p>
-<figure>
-<img
-src="https://pic2.zhimg.com/80/v2-b31ecd1eea01a5e52968075778cb9699_720w.webp" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>如果你学过线性代数，对这个式子一定不陌生。如上图中所示，在设定隐藏层为50维（也可以理解成50个神经元）之后，矩阵H的大小为（1*50）的矩阵。</p>
-<p><strong>1.3.从隐藏层到输出层</strong></p>
-<p>连接隐藏层和输出层的是W2和b2。同样是通过矩阵运算进行的：</p>
-<figure>
-<img
-src="https://pic4.zhimg.com/80/v2-0c8c9f5ea2376623cb31ba74e9256627_720w.webp" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p><strong>1.4.分析</strong></p>
-<p>通过上述两个线性方程的计算，我们就能得到最终的输出Y了，但是如果你还对线性代数的计算有印象的话，应该会知道：*<strong>一系列线性方程的运算最终都可以用一个线性方程表示*</strong>。也就是说，上述两个式子联立后可以用一个线性方程表达。对于两次神经网络是这样，就算网络深度加到100层，也依然是这样。这样的话神经网络就失去了意义。</p>
-<p>所以这里要对网络注入灵魂：<strong>激活层</strong>。</p>
-<h2 id="激活层">2.激活层</h2>
-<p>简而言之，激活层是为矩阵运算的结果添加非线性的。常用的激活函数有三种，分别是阶跃函数、Sigmoid和ReLU。不要被奇怪的函数名吓到，其实它们的形式都很简单，如下图：</p>
-<figure>
-<img src="/images/深度学习/v2-d23194bd4a68209b7cfcf994899d2381.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-d23194bd4a68209b7cfcf994899d2381" />
-<figcaption
-aria-hidden="true">v2-d23194bd4a68209b7cfcf994899d2381</figcaption>
-</figure>
-<p>图3.三种常用的激活函数</p>
-<p>阶跃函数：当输入小于等于0时，输出0；当输入大于0时，输出1。</p>
-<p>Sigmoid：当输入趋近于正无穷/负无穷时，输出无限接近于1/0。</p>
-<p>ReLU：当输入小于0时，输出0；当输入大于0时，输出等于输入。</p>
-<p>其中，阶跃函数输出值是跳变的，且只有二值，较少使用；Sigmoid函数在当x的绝对值较大时，曲线的斜率变化很小（梯度消失），并且计算较复杂；ReLU是当前较为常用的激活函数。</p>
-<p>激活函数具体是怎么计算的呢？</p>
-<p>假如经过公式<strong>H=X*W1+b1</strong>计算得到的H值为：(1,-2,3,-4,7...)，那么经过阶跃函数激活层后就会变为(1,0,1,0,1...)，经过ReLU激活层之后会变为(1,0,3,0,7...)。</p>
-<p>需要注意的是，每个隐藏层计算（矩阵线性运算）之后，都需要加一层激活层，要不然该层线性计算是没有意义的。</p>
-<p>此时的神经网络变成了如下图所示的形式：</p>
-<figure>
-<img src="/images/深度学习/v2-c9b81dba190eb6768f419147d1b86c0d.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-c9b81dba190eb6768f419147d1b86c0d" />
-<figcaption
-aria-hidden="true">v2-c9b81dba190eb6768f419147d1b86c0d</figcaption>
-</figure>
-<p>图4.加上激活层的两层神经网络</p>
-<p>神经网络是分为“训练”和“使用”两个步骤的。如果是在“使用”的步骤，图4就已经完成整个过程了，在求得的Y（大小为1*4）矩阵中，数值最大的就代表着当前分类。</p>
-<p>但是对于用于“训练”的网络，图4还远远不够。起码当前的输出Y，还不够“漂亮”。</p>
-<h2 id="输出的正规化"><strong>3.输出的正规化</strong></h2>
-<p>在图4中，输出Y的值可能会是(3,1,0.1,0.5)这样的矩阵，诚然我们可以找到里边的最大值“3”，从而找到对应的分类为I，但是这并不直观。我们想让最终的输出为<strong>概率</strong>，也就是说可以生成像(90%,5%,2%,3%)这样的结果，这样做不仅可以找到最大概率的分类，而且可以知道各个分类计算的概率值。</p>
-<p>具体是怎么计算的呢？</p>
-<p>计算公式如下：</p>
-<figure>
-<img
-src="https://pic4.zhimg.com/80/v2-3ad93ae576918ff385485dab6a2e6b87_720w.webp" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>简单来说分三步进行：（1）以e为底对所有元素求指数幂；（2）将所有指数幂求和；（3）分别将这些指数幂与该和做商。</p>
-<p>这样求出的结果中，所有元素的和一定为1，而每个元素可以代表概率值。</p>
-<p>我们将使用这个计算公式做输出结果正规化处理的层叫做“Softmax”层。此时的神经网络将变成如下图所示：</p>
-<figure>
-<img src="/images/深度学习/v2-3ecd2eacd744c89bf89335aad73851b3.jpg" srcset="/img/loading.gif" lazyload
-alt="输出正规化之后的神经网络" />
-<figcaption aria-hidden="true">输出正规化之后的神经网络</figcaption>
-</figure>
-<h2 id="如何衡量输出的好坏">4.如何衡量输出的好坏</h2>
-<p>通过Softmax层之后，我们得到了I，II，III和IV这四个类别分别对应的概率，但是要注意，这是神经网络计算得到的概率值结果，而非真实的情况。</p>
-<p>比如，Softmax输出的结果是(90%,5%,3%,2%)，真实的结果是(100%,0,0,0)。虽然输出的结果可以正确分类，但是与真实结果之间是有差距的，一个优秀的网络对结果的预测要无限接近于100%，为此，我们需要将Softmax输出结果的好坏程度做一个“量化”。</p>
-<p>一种直观的解决方法，是用1减去Softmax输出的概率，比如1-90%=0.1。不过更为常用且巧妙的方法是，求<strong>对数的负数</strong>。</p>
-<p>还是用90%举例，对数的负数就是：-log0.9=0.046</p>
-<p>可以想见，概率越接近100%，该计算结果值越接近于0，说明结果越准确，该输出叫做“<strong>交叉熵损失</strong>（Cross
-Entropy Error）”。</p>
-<p>我们训练神经网络的目的，就是尽可能地减少这个“交叉熵损失”。</p>
-<p>此时的网络如下图：</p>
-<figure>
-<img src="/images/深度学习/v2-4c10b2e5e2d4001423524de264a57b05.jpg" srcset="/img/loading.gif" lazyload
-alt="图6.计算交叉熵损失后的神经网络" />
-<figcaption
-aria-hidden="true">图6.计算交叉熵损失后的神经网络</figcaption>
-</figure>
-<h2 id="反向传播与参数优化">5.反向传播与参数优化</h2>
-<p>上边的1~4节，讲述了神经网络的正向传播过程。一句话复习一下：<strong>神经网络的传播都是形如Y=WX+b的矩阵运算；为了给矩阵运算加入非线性，需要在隐藏层中加入激活层；输出层结果需要经过Softmax层处理为概率值，并通过交叉熵损失来量化当前网络的优劣。</strong></p>
-<p>算出交叉熵损失后，就要开始反向传播了。其实反向传播就是一个<strong>参数优化</strong>的过程，优化对象就是网络中的所有W和b（因为其他所有参数都是确定的）。</p>
-<p>神经网络的神奇之处，就在于它可以自动做W和b的优化，在深度学习中，参数的数量有时会上亿，不过其优化的原理和我们这个两层神经网络是一样的。</p>
-<p>这里举一个形象的例子描述一下这个参数优化的原理和过程：</p>
-<p>假设我们操纵着一个球型机器行走在沙漠中</p>
-<figure>
-<img src="/images/深度学习/v2-40db4875838c6dd2e4762f9d378030b8.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-40db4875838c6dd2e4762f9d378030b8" />
-<figcaption
-aria-hidden="true">v2-40db4875838c6dd2e4762f9d378030b8</figcaption>
-</figure>
-<p>我们在机器中操纵着四个旋钮，分别叫做W1，b1，W2，b2。当我们旋转其中的某个旋钮时，球形机器会发生移动，但是旋转旋钮大小和机器运动方向之间的对应关系是不知道的。而我们的目的就是<strong>走到沙漠的最低点</strong>。</p>
-<figure>
-<img src="/images/深度学习/v2-a2397f4b4b12cb3602e0b26842b59ae0.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-a2397f4b4b12cb3602e0b26842b59ae0" />
-<figcaption
-aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
-</figure>
-<p>此时我们该怎么办？只能挨个试喽。</p>
-<p>如果增大W1后，球向上走了，那就减小W1。</p>
-<p>如果增大b1后，球向下走了，那就继续增大b1。</p>
-<p>如果增大W2后，球向下走了一大截，那就多增大些W2。</p>
-<p>。。。</p>
-<p>这就是进行参数优化的形象解释（有没有想到求导？），这个方法叫做梯度下降法。</p>
-<p>当我们的球形机器走到最低点时，也就代表着我们的交叉熵损失达到最小（接近于0）。</p>
-<p>关于反向传播，还有许多可以讲的，但是因为内容较多，就放在下一篇文章中说吧。不过上述例子对于理解神经网络参数优化的过程，还是很有帮助的。</p>
-<p><strong>6.迭代</strong></p>
-<p>神经网络需要反复迭代。</p>
-<p>如上述例子中，第一次计算得到的概率是90%，交叉熵损失值是0.046；将该损失值反向传播，使W1,b1,W2,b2做相应微调；再做第二次运算，此时的概率可能就会提高到92%，相应地，损失值也会下降，然后再反向传播损失值，微调参数W1,b1,W2,b2。依次类推，损失值越来越小，直到我们满意为止。</p>
-<p>此时我们就得到了理想的W1,b1,W2,b2。</p>
-<p>此时如果将任意一组坐标作为输入，利用图4或图5的流程，就能得到分类结果。</p>
-<p>此时,我们一个简单的基本神经网络模型就构建完成啦~</p>
+                <p>本文档将逐步指导您在CentOS操作系统上安装Neo4j 5.21.2。</p>
+<h3 id="前提条件">前提条件</h3>
+<p>在开始安装之前，请确保您有以下条件： - 一台运行CentOS的机器 -
+具有<code>sudo</code>权限的用户 -
+已经安装了<code>curl</code>和<code>wget</code>工具</p>
+<h3 id="步骤1更新系统">步骤1：更新系统</h3>
+<p>首先，更新您的CentOS系统，以确保所有软件包都是最新的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo yum update -y<br></code></pre></td></tr></table></figure>
+<h3 id="步骤2安装openjdk-11">步骤2：安装OpenJDK 11</h3>
+<p>Neo4j 5.21.2需要Java 11环境。我们将安装OpenJDK 11。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo yum install -y java-11-openjdk-devel<br></code></pre></td></tr></table></figure>
+<h3 id="步骤3添加neo4j-yum存储库">步骤3：添加Neo4j Yum存储库</h3>
+<p>我们需要将Neo4j的Yum存储库添加到我们的系统中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo rpm --import https://debian.neo4j.com/neotechnology.gpg.key<br>sudo sh -c <span class="hljs-string">&#x27;echo -e &quot;[neo4j]\nname=Neo4j RPM Repository\nbaseurl=https://yum.neo4j.com/stable\nenabled=1\ngpgcheck=1&quot; &gt; /etc/yum.repos.d/neo4j.repo&#x27;</span><br></code></pre></td></tr></table></figure>
+<h3 id="步骤4安装neo4j">步骤4：安装Neo4j</h3>
+<p>现在我们可以安装Neo4j 5.21.2。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo yum install -y neo4j-5.21.2<br></code></pre></td></tr></table></figure>
+<h3 id="步骤5启动neo4j服务">步骤5：启动Neo4j服务</h3>
+<p>安装完成后，启动Neo4j服务并设置为开机启动。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo systemctl start neo4j<br>sudo systemctl <span class="hljs-built_in">enable</span> neo4j<br></code></pre></td></tr></table></figure>
+<h3 id="步骤6配置防火墙">步骤6：配置防火墙</h3>
+<p>默认情况下，Neo4j使用7474端口。我们需要确保防火墙允许该端口的流量。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo firewall-cmd --permanent --zone=public --add-port=7474/tcp<br>sudo firewall-cmd --reload<br></code></pre></td></tr></table></figure>
+<h3 id="步骤7访问neo4j-web界面">步骤7：访问Neo4j Web界面</h3>
+<p>打开浏览器，访问以下URL：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">http:</span><span class="hljs-comment">//&lt;YOUR_SERVER_IP&gt;:7474</span><br></code></pre></td></tr></table></figure>
+<p>您将看到Neo4j的登录界面。初次登录时，默认的用户名和密码均为<code>neo4j</code>。系统会提示您更改默认密码。</p>
+<h3 id="步骤8验证安装">步骤8：验证安装</h3>
+<p>为了确保Neo4j安装成功并正在运行，您可以检查Neo4j服务的状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo systemctl status neo4j<br></code></pre></td></tr></table></figure>
+<p>如果一切正常，您将看到服务正在运行的状态。</p>
+<h3 id="结论">结论</h3>
+<p>通过以上步骤，您已经成功在CentOS上安装并配置了Neo4j
+5.21.2。您现在可以开始使用Neo4j构建和查询图数据库。</p>
+<h2 id="数据库备份与替换">## 数据库备份与替换</h2>
+<ol type="1">
+<li><p>关闭neo4j服务: <figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">sudo systemctl stop neo4j<br></code></pre></td></tr></table></figure></p></li>
+<li><p>备份数据</p></li>
+</ol>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">cp</span> /var/lib/neo4j/data /var/lib/neo4j/data_bak<br></code></pre></td></tr></table></figure></p>
+<ol start="2" type="1">
+<li>替换数据目录:</li>
+</ol>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">rm</span> -rf /var/lib/neo4j/data<br>sudo unzip /usr/my_python/data.zip -d /var/lib/neo4j/<br>sudo <span class="hljs-built_in">chown</span> -R neo4j:neo4j /var/lib/neo4j/data<br></code></pre></td></tr></table></figure></p>
+<ol start="3" type="1">
+<li><p>重启neo4j服务: <figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">sudo systemctl <span class="hljs-literal">start</span> neo4j<br></code></pre></td></tr></table></figure></p></li>
+<li><p>检查服务状态: <figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs fortran">sudo systemctl <span class="hljs-keyword">status</span> neo4j<br></code></pre></td></tr></table></figure></p></li>
+</ol>
+<p>您需要我解释这些命令的作用吗?或者您对某个步骤有任何疑问吗?</p>
+<hr />
+<p>此文档旨在帮助用户在CentOS系统上安装Neo4j
+5.21.2，如有任何问题，请参考官方文档或联系技术支持。</p>
 
                 
               </div>
@@ -472,7 +383,7 @@ aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
+  <a href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" class="category-chain-item">知识图谱</a>
   
   
 
@@ -487,11 +398,9 @@ aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+        <a href="/tags/%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/" class="print-no-link">#技术整理</a>
       
-        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
-      
-        <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#神经网络</a>
+        <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="print-no-link">#环境配置</a>
       
     </div>
   
@@ -503,8 +412,8 @@ aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>神经网络简明教程</div>
-      <div>https://linxkon.github.io/神经网络构建的简明教程.html</div>
+      <div>在CentOS上安装Neo4j 5x</div>
+      <div>https://linxkon.github.io/在CentOS上安装Neo4j 5.21.2的步骤.html</div>
     </div>
     <div class="license-meta">
       
@@ -516,7 +425,7 @@ aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年1月2日</div>
+          <div>2023年1月11日</div>
         </div>
       
       
@@ -548,9 +457,9 @@ aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/%E5%9C%A8CentOS%E4%B8%8A%E5%AE%89%E8%A3%85Neo4j%205.21.2%E7%9A%84%E6%AD%A5%E9%AA%A4.html" title="在CentOS上安装Neo4j 5x">
+                      <a href="/Transformer%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-%E5%9F%BA%E4%BA%8EPytorch.html" title="Transformer的代码实现-基于Pytorch">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">在CentOS上安装Neo4j 5x</span>
+                        <span class="hidden-mobile">Transformer的代码实现-基于Pytorch</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -558,8 +467,8 @@ aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/%E5%85%89%E5%BD%B1%E9%9B%862022.html" title="光影集-2022">
-                        <span class="hidden-mobile">光影集-2022</span>
+                      <a href="/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA%E7%9A%84%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.html" title="神经网络简明教程">
+                        <span class="hidden-mobile">神经网络简明教程</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -582,7 +491,7 @@ aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
         var options = Object.assign(
           {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'b467cc139c9dee16cefd723fc782be72'
+            id: '256b7616b7cd7306dce070d1a6af344e'
           }
         )
         var gitalk = new Gitalk(options);
