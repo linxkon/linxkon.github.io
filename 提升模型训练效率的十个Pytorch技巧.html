@@ -1,0 +1,948 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="One cycle学习率策略 Batch size num workers &amp; pin memory 自动混合精度训练 torch.backends.cudnn.benchmark torch.nn.parallel.DistributedDataParallel 梯度累加 梯度裁剪 BN前卷积层中的bias 陋习改正   在使用 PyTorch 进行深度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提升模型训练效率的十个Pytorch技巧">
+<meta property="og:url" content="https://linxkon.github.io/%E6%8F%90%E5%8D%87%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%95%88%E7%8E%87%E7%9A%84%E5%8D%81%E4%B8%AAPytorch%E6%8A%80%E5%B7%A7.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="One cycle学习率策略 Batch size num workers &amp; pin memory 自动混合精度训练 torch.backends.cudnn.benchmark torch.nn.parallel.DistributedDataParallel 梯度累加 梯度裁剪 BN前卷积层中的bias 陋习改正   在使用 PyTorch 进行深度">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/acc.jpg">
+<meta property="article:published_time" content="2023-10-02T12:21:13.000Z">
+<meta property="article:modified_time" content="2024-07-22T12:18:09.229Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="pytorch">
+<meta property="article:tag" content="干货总结">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/acc.jpg">
+  
+  
+  
+  <title>提升模型训练效率的十个Pytorch技巧 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="提升模型训练效率的十个Pytorch技巧"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-02 20:21" pubdate>
+          2023年10月2日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">提升模型训练效率的十个Pytorch技巧</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<ol type="1">
+<li>One cycle学习率策略</li>
+<li>Batch size</li>
+<li>num workers &amp; pin memory</li>
+<li>自动混合精度训练</li>
+<li>torch.backends.cudnn.benchmark</li>
+<li>torch.nn.parallel.DistributedDataParallel</li>
+<li>梯度累加</li>
+<li>梯度裁剪</li>
+<li>BN前卷积层中的bias</li>
+<li>陋习改正</li>
+</ol>
+</blockquote>
+<p>在使用 PyTorch
+进行深度学习模型训练时，提升训练效率和性能是至关重要的。以下是一些常用的
+PyTorch 技巧，帮助提升模型训练效率：</p>
+<h3 id="one-cycle-学习率策略">1. One Cycle 学习率策略</h3>
+<p>One Cycle Learning Rate Policy 是一种动态调整学习率的方法，由 Leslie
+N. Smith
+提出。其核心思想是在训练的前半部分逐渐增加学习率，然后在后半部分逐渐减小，从而加速收敛并提高模型的泛化能力。One
+Cycle 策略主要包含以下几个步骤：</p>
+<ul>
+<li><strong>增加阶段</strong>：从一个较小的初始学习率开始，逐步增加到一个较高的最大学习率。</li>
+<li><strong>减小阶段</strong>：从最大学习率开始，逐步减小到一个比初始学习率更小的终止学习率。</li>
+<li><strong>动量调整</strong>：同时调整动量值，在学习率增加时减小动量，在学习率减小时增加动量。</li>
+</ul>
+<figure>
+<img src="/images/torch_acc/image-20240722143759040.png" srcset="/img/loading.gif" lazyload
+alt="image-20240722143759040" />
+<figcaption aria-hidden="true">image-20240722143759040</figcaption>
+</figure>
+<p>使用 One Cycle 学习率策略的好处包括： - 加快收敛速度。 -
+避免模型陷入局部最优。 - 改善训练的稳定性。</p>
+<p>在 PyTorch 中，可以使用
+<code>torch.optim.lr_scheduler.OneCycleLR</code> 来实现 One Cycle
+策略。例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><br><span class="hljs-comment"># 定义优化器</span><br>optimizer = optim.SGD(model.parameters(), lr=<span class="hljs-number">0.1</span>, momentum=<span class="hljs-number">0.9</span>)<br><br><span class="hljs-comment"># 定义学习率调度器</span><br>scheduler = optim.lr_scheduler.OneCycleLR(optimizer, max_lr=<span class="hljs-number">0.1</span>, <br>                                          steps_per_epoch=<span class="hljs-built_in">len</span>(train_loader), epochs=<span class="hljs-number">10</span>)<br><br><span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10</span>):<br>    <span class="hljs-keyword">for</span> batch <span class="hljs-keyword">in</span> train_loader:<br>        <span class="hljs-comment"># 正向传播</span><br>        outputs = model(inputs)<br>        loss = criterion(outputs, targets)<br><br>        <span class="hljs-comment"># 反向传播</span><br>        optimizer.zero_grad()<br>        loss.backward()<br>        optimizer.step()<br><br>        <span class="hljs-comment"># 学习率调度</span><br>        scheduler.step()<br></code></pre></td></tr></table></figure>
+<h3 id="batch-size">2. Batch Size</h3>
+<p>Batch size 是指在一次迭代中传递给模型的样本数量。调整 batch size
+可以显著影响模型的训练速度和性能：</p>
+<figure>
+<img src="/images/torch_acc/image-20240722143849741.png" srcset="/img/loading.gif" lazyload
+alt="image-20240722143849741" />
+<figcaption aria-hidden="true">image-20240722143849741</figcaption>
+</figure>
+<ul>
+<li><strong>较大 batch size</strong>：
+<ul>
+<li>提高 GPU 的利用率，因为每次迭代处理更多数据。</li>
+<li>减少更新模型参数的频率，可能会导致收敛速度变慢。</li>
+</ul></li>
+<li><strong>较小 batch size</strong>：
+<ul>
+<li>提高模型的泛化能力，因为更新更频繁，参数更易于捕捉数据分布的细微变化。</li>
+<li>在内存允许的情况下，可以使用较大的 batch size 来提高训练速度。</li>
+</ul></li>
+</ul>
+<p>在训练中，可以逐步增加 batch size
+来找到内存和速度之间的平衡。还可以使用 <a
+target="_blank" rel="noopener" href="https://pytorch-lightning.readthedocs.io/en/stable/guides/speed.html#gradient-accumulation">Gradient
+Accumulation</a> 来模拟较大的 batch size 而不增加显存使用。</p>
+<h3 id="num_workers-pin_memory">3. num_workers &amp; pin_memory</h3>
+<figure>
+<img src="/images/torch_acc/image-20240722145932986.png" srcset="/img/loading.gif" lazyload
+alt="image-20240722145932986" />
+<figcaption aria-hidden="true">image-20240722145932986</figcaption>
+</figure>
+<p><strong>num_workers</strong> 和 <strong>pin_memory</strong> 是
+<code>DataLoader</code> 中的两个重要参数，它们影响数据加载效率：</p>
+<ul>
+<li><strong>num_workers</strong>：指定数据加载时使用的子进程数量。增大
+<code>num_workers</code>
+可以提高数据加载速度，但设置过高可能导致资源竞争或内存不足。
+<ul>
+<li>对于 CPU 核心较多的机器，可以尝试增大
+<code>num_workers</code>，通常设置为 CPU 核心数的 2 到 4 倍。</li>
+<li>对于小数据集或 IO 受限的情况，适当的增大 <code>num_workers</code>
+也可以提升性能。</li>
+</ul></li>
+<li><strong>pin_memory</strong>：如果设置为 True，DataLoader
+会在将张量转移到 GPU 前将它们锁页到内存中。对于 CUDA
+后端，这通常可以加快数据转移速度。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.utils.data <span class="hljs-keyword">import</span> DataLoader<br><br>train_loader = DataLoader(dataset, batch_size=<span class="hljs-number">64</span>, shuffle=<span class="hljs-literal">True</span>, <br>                          num_workers=<span class="hljs-number">4</span>, pin_memory=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+<h3 id="自动混合精度训练">4. 自动混合精度训练</h3>
+<p>自动混合精度（AMP）训练是一种通过使用半精度（FP16）和单精度（FP32）混合计算来加速模型训练的方法。AMP
+可以有效减少显存使用并提高训练速度，同时通常不会影响模型精度。</p>
+<p>在 PyTorch 中，可以使用 <code>torch.cuda.amp</code>
+模块来实现自动混合精度训练：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.cuda.amp <span class="hljs-keyword">import</span> autocast, GradScaler<br><br><span class="hljs-comment"># 初始化 scaler</span><br>scaler = GradScaler()<br><br><span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):<br>    <span class="hljs-keyword">for</span> inputs, targets <span class="hljs-keyword">in</span> train_loader:<br>        <span class="hljs-comment"># 前向传播</span><br>        <span class="hljs-keyword">with</span> autocast():  <span class="hljs-comment"># 启用混合精度</span><br>            outputs = model(inputs)<br>            loss = criterion(outputs, targets)<br><br>        <span class="hljs-comment"># 反向传播</span><br>        optimizer.zero_grad()<br>        <span class="hljs-comment"># 使用 scaler 缩放梯度</span><br>        scaler.scale(loss).backward()<br>        <span class="hljs-comment"># 更新参数</span><br>        scaler.step(optimizer)<br>        <span class="hljs-comment"># 更新 scaler</span><br>        scaler.update()<br></code></pre></td></tr></table></figure>
+<p><strong>自动混合精度训练的优点：</strong></p>
+<ul>
+<li><strong>内存效率</strong>：减少显存使用，使得可以增大 batch
+size。</li>
+<li><strong>速度提升</strong>：在不显著影响模型精度的前提下加速训练。</li>
+</ul>
+<p>注意：使用 AMP 时需要确保梯度不会溢出，并使用 <code>GradScaler</code>
+来防止数值不稳定性。</p>
+<h3 id="动态调整卷积操作">5. 动态调整卷积操作</h3>
+<ul>
+<li><strong>功能</strong>：<code>torch.backends.cudnn.benchmark</code>
+是 PyTorch 中一个设置，可以动态调整卷积操作的算法以提高 GPU
+上的性能。</li>
+<li><strong>工作原理</strong>：在 GPU
+上进行卷积操作时，有多种算法可供选择。<code>benchmark</code> 会让 cuDNN
+进行测试，以选择最适合当前卷积层配置（如输入大小、批量大小等）的算法。这对于输入大小固定的场景尤其有用，因为可以显著减少算法选择带来的开销。</li>
+<li><strong>使用建议</strong>：在输入大小不变的情况下开启，可以提升性能。但是如果输入大小会变（比如处理变长序列），不建议开启，因为每次输入改变时都需要重新测试，反而降低性能。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br>torch.backends.cudnn.benchmark = <span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+<h3 id="分布式训练模块ddp">6. 分布式训练模块DDP</h3>
+<figure>
+<img src="/images/torch_acc/image-20240722150144297.png" srcset="/img/loading.gif" lazyload
+alt="image-20240722150144297" />
+<figcaption aria-hidden="true">image-20240722150144297</figcaption>
+</figure>
+<ul>
+<li><strong>功能</strong>：<code>DistributedDataParallel</code>（DDP）是
+PyTorch 中用于分布式训练的模块，允许跨多 GPU
+和多节点并行地训练模型。</li>
+<li><strong>工作原理</strong>：DDP 将模型复制到多个 GPU 上，每个 GPU
+上的模型处理一部分数据。各个 GPU
+之间通过梯度同步机制确保更新的一致性。</li>
+<li><strong>使用建议</strong>：在多 GPU 训练中优先使用 DDP，而不是
+<code>DataParallel</code>，因为 DDP 的通信开销较小，且更具扩展性。使用
+DDP 可以充分利用多个 GPU 和节点的计算资源，加快训练过程。</li>
+<li><strong>拓展:</strong>huggingface中的</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.distributed <span class="hljs-keyword">as</span> dist<br><br><span class="hljs-comment"># 初始化分布式环境</span><br>dist.init_process_group(backend=<span class="hljs-string">&#x27;nccl&#x27;</span>)<br><br><span class="hljs-comment"># 创建模型</span><br>model = nn.Linear(<span class="hljs-number">10</span>, <span class="hljs-number">10</span>).cuda()<br><span class="hljs-comment"># 使用 DistributedDataParallel</span><br>model = nn.parallel.DistributedDataParallel(model)<br></code></pre></td></tr></table></figure>
+<h3 id="梯度累加">7. 梯度累加</h3>
+<ul>
+<li><strong>功能</strong>：梯度累加（Gradient
+Accumulation）是一种技术，可以通过多次反向传播累积梯度，模拟更大批量的训练效果，而不需要增加显存占用。</li>
+<li><strong>工作原理</strong>：将一个大批量划分为多个小批量，每个小批量计算完损失后执行反向传播，但不立即更新权重，而是累积梯度，直到累积一定次数后才执行优化器的
+<code>step</code> 操作更新模型权重。</li>
+<li><strong>使用建议</strong>：适用于显存不足以支撑大批量训练的情况，通过这种方式可以有效提高模型的泛化能力。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python">accumulation_steps = <span class="hljs-number">4</span>  <span class="hljs-comment"># 累积4个小批量</span><br><br>optimizer = torch.optim.Adam(model.parameters(), lr=<span class="hljs-number">1e-3</span>)<br>model.train()<br><br><span class="hljs-keyword">for</span> i, (inputs, labels) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(dataloader):<br>    outputs = model(inputs)<br>    loss = loss_function(outputs, labels)<br>    loss = loss / accumulation_steps  <span class="hljs-comment"># 平均损失</span><br>    loss.backward()  <span class="hljs-comment"># 反向传播</span><br><br>    <span class="hljs-keyword">if</span> (i + <span class="hljs-number">1</span>) % accumulation_steps == <span class="hljs-number">0</span>:<br>        optimizer.step()  <span class="hljs-comment"># 更新权重</span><br>        optimizer.zero_grad()  <span class="hljs-comment"># 清空梯度</span><br></code></pre></td></tr></table></figure>
+<h3 id="梯度裁剪">8. 梯度裁剪</h3>
+<ul>
+<li><strong>功能</strong>：梯度裁剪（Gradient
+Clipping）用于控制梯度的大小，防止梯度爆炸问题。</li>
+<li><strong>工作原理</strong>：在反向传播时对梯度进行裁剪，如果梯度的范数超过预设阈值，则按比例缩小，使得训练更稳定。</li>
+<li><strong>使用建议</strong>：在 RNN
+或者深度网络中使用，有助于稳定训练过程，尤其是在处理梯度爆炸问题时。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.nn.utils <span class="hljs-keyword">import</span> clip_grad_norm_<br><br>max_norm = <span class="hljs-number">1.0</span>  <span class="hljs-comment"># 设置最大梯度范数</span><br><br><span class="hljs-keyword">for</span> inputs, labels <span class="hljs-keyword">in</span> dataloader:<br>    optimizer.zero_grad()<br>    outputs = model(inputs)<br>    loss = loss_function(outputs, labels)<br>    loss.backward()<br>    <br>    clip_grad_norm_(model.parameters(), max_norm)  <span class="hljs-comment"># 梯度裁剪</span><br>    optimizer.step()<br></code></pre></td></tr></table></figure>
+<h3 id="bn-前卷积层中的-bias">9. BN 前卷积层中的 bias</h3>
+<ul>
+<li><strong>功能</strong>：在 Batch
+Normalization（BN）层前的卷积层中通常不需要使用偏置（bias）项。</li>
+<li><strong>工作原理</strong>：BN
+层会对每个特征进行标准化并重新添加缩放和偏移参数，因此卷积层的偏置会被
+BN 层的偏置覆盖，成为冗余。</li>
+<li><strong>使用建议</strong>：在使用 BN
+的模型中，可以去掉卷积层中的偏置参数，以减少计算量和内存使用，尤其是在较大模型中有显著效果。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-comment"># 定义卷积和BN层</span><br>conv = nn.Conv2d(in_channels=<span class="hljs-number">3</span>, out_channels=<span class="hljs-number">16</span>, kernel_size=<span class="hljs-number">3</span>, bias=<span class="hljs-literal">False</span>)<br>bn = nn.BatchNorm2d(<span class="hljs-number">16</span>)<br></code></pre></td></tr></table></figure>
+<h3
+id="减少不必要的数据复制和设备之间的数据传输">10.减少不必要的数据复制和设备之间的数据传输</h3>
+<ol type="1">
+<li><strong>避免频繁使用 <code>torch.cpu()</code> 和
+<code>torch.cuda()</code></strong>：
+<ul>
+<li><strong>建议：</strong> 在训练过程中，尽量减少在 CPU 和 GPU
+之间频繁切换张量。这是因为这种操作涉及大量的数据传输，会显著降低训练速度。</li>
+<li><strong>优化方法：</strong> 尽量将所有计算都放在 GPU
+上进行，以减少数据在设备之间的传输。</li>
+</ul></li>
+<li><strong>避免使用 <code>torch.tensor()</code></strong>：
+<ul>
+<li><strong>原因：</strong> <code>torch.tensor()</code>
+每次调用都会复制数据，导致额外的内存开销。</li>
+<li><strong>替代方法：</strong> 使用
+<code>torch.as_tensor()</code>，这会共享数据，不会进行复制，从而提高效率。</li>
+</ul></li>
+<li><strong>使用 <code>torch.as_tensor()</code> 和
+<code>torch.from_numpy()</code></strong>：
+<ul>
+<li><strong><code>torch.as_tensor()</code>:</strong>
+直接将已有的数据转化为张量，并且不会进行数据的复制，适合在已有数据需要转换为张量时使用。</li>
+<li><strong><code>torch.from_numpy()</code>:</strong> 可以将 NumPy
+数组转换为张量，且不会复制数据。这个方法适用于已有数据在 NumPy
+格式时。</li>
+</ul></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/pytorch/" class="category-chain-item">pytorch</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+      
+        <a href="/tags/pytorch/" class="print-no-link">#pytorch</a>
+      
+        <a href="/tags/%E5%B9%B2%E8%B4%A7%E6%80%BB%E7%BB%93/" class="print-no-link">#干货总结</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>提升模型训练效率的十个Pytorch技巧</div>
+      <div>https://linxkon.github.io/提升模型训练效率的十个Pytorch技巧.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E4%B8%80%E4%B8%AA%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E5%9C%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E6%98%BE%E5%8D%A1%E4%B8%8A%E8%BF%90%E8%A1%8C%E5%91%A2%EF%BC%9F.html" title="如何知道一个大模型是否可以在自己的显卡上运行呢？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何知道一个大模型是否可以在自己的显卡上运行呢？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%94%A8wordcoloud%E7%94%9F%E6%88%90%E8%B6%85%E7%82%AB%E9%85%B7%E7%9A%84%E8%AF%8D%E4%BA%91-%E5%86%85%E5%90%ABpython%E6%BA%90%E7%A0%81.html" title="用wordcoloud生成超炫酷的词云_内含python源码">
+                        <span class="hidden-mobile">用wordcoloud生成超炫酷的词云_内含python源码</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '51f59e33bf19efd55a35569568f1e43a'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>
