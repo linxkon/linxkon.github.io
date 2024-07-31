@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/git.png">
 <meta property="article:published_time" content="2020-05-03T22:21:13.000Z">
-<meta property="article:modified_time" content="2024-07-19T02:05:27.798Z">
+<meta property="article:modified_time" content="2024-07-31T11:55:08.338Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="代码管理">
@@ -127,7 +127,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>AI·你所爱 | Linxkon</strong>
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.3k 字
         
       </span>
     
@@ -263,7 +263,7 @@
         
         
         
-          10 分钟
+          12 分钟
         
       </span>
     
@@ -382,6 +382,31 @@ GitHub、GitLab 或 Bitbucket
 将指定分支合并到当前分支。</p></li>
 <li><p><strong>删除分支</strong> <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git branch -d &lt;branch_name&gt;<br></code></pre></td></tr></table></figure>
 删除指定的分支。</p></li>
+</ol>
+<h4 id="要将-dev-分支的更改合并到-master-分支可以按照以下步骤操作">要将
+<code>dev</code> 分支的更改合并到 <code>master</code>
+分支，可以按照以下步骤操作：</h4>
+<ol type="1">
+<li><p><strong>切换到 <code>master</code> 分支：</strong> 首先，确保你在
+<code>master</code> 分支上。</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git checkout <span class="hljs-literal">master</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>更新 <code>master</code> 分支：</strong> 确保你的
+<code>master</code> 分支是最新的。</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git pull origin <span class="hljs-literal">master</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>合并 <code>dev</code> 分支到 <code>master</code>
+分支：</strong> 将 <code>dev</code> 分支的更改合并到 <code>master</code>
+分支。</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cos">git <span class="hljs-keyword">merge</span> dev<br></code></pre></td></tr></table></figure></li>
+<li><p><strong>解决冲突（如果有）：</strong>
+如果在合并过程中遇到冲突，Git
+会提示你解决冲突。你需要手动编辑冲突的文件，解决冲突后，添加解决冲突的文件。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">git <span class="hljs-built_in">add</span> &lt;conflicted_file&gt;<br></code></pre></td></tr></table></figure></li>
+<li><p><strong>完成合并：</strong>
+如果有冲突需要解决，解决完冲突并添加文件后，完成合并。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">git commit</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>推送更改到远程 <code>master</code> 分支：</strong>
+将合并后的 <code>master</code> 分支推送到远程仓库。</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">git <span class="hljs-built_in">push</span> <span class="hljs-built_in">origin</span> master<br></code></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="远程操作">远程操作</h3>
 <ol type="1">
