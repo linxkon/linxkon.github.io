@@ -16,26 +16,26 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
+    <meta name="description" content="1. 数据准备和预处理  大规模数据收集（网络爬虫、数据库购买等） 数据清洗和过滤（去重、去噪、内容审核等） 数据格式化和标准化 数据增强（如回译、同义词替换等）  2. 预训练（Pretraining）  数据集：来自互联网的原始数据，包含数万亿个单词，质量较低但数量庞大 算法：语言模型，通过预测下一个token进行训练（涉及其他自监督学习任务，如masked langua">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度学习框架中的动态图与静态图">
-<meta property="og:url" content="https://linxkon.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%9B%BE%E4%B8%8E%E9%9D%99%E6%80%81%E5%9B%BE.html">
+<meta property="og:title" content="大型语言模型训练流程">
+<meta property="og:url" content="https://linxkon.github.io/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
+<meta property="og:description" content="1. 数据准备和预处理  大规模数据收集（网络爬虫、数据库购买等） 数据清洗和过滤（去重、去噪、内容审核等） 数据格式化和标准化 数据增强（如回译、同义词替换等）  2. 预训练（Pretraining）  数据集：来自互联网的原始数据，包含数万亿个单词，质量较低但数量庞大 算法：语言模型，通过预测下一个token进行训练（涉及其他自监督学习任务，如masked langua">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
-<meta property="article:published_time" content="2023-04-01T05:21:13.000Z">
-<meta property="article:modified_time" content="2024-06-08T06:53:27.963Z">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.png">
+<meta property="article:published_time" content="2023-03-09T15:21:13.000Z">
+<meta property="article:modified_time" content="2024-08-01T01:23:18.135Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="大模型">
 <meta property="article:tag" content="笔记整理">
-<meta property="article:tag" content="概念">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.png">
   
   
   
-  <title>深度学习框架中的动态图与静态图 - AI·你所爱</title>
+  <title>大型语言模型训练流程 - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="深度学习框架中的动态图与静态图"></span>
+            <span id="subtitle" data-typed-text="大型语言模型训练流程"></span>
           
         </div>
 
@@ -241,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-01 13:21" pubdate>
-          2023年4月1日 下午
+        <time datetime="2023-03-09 23:21" pubdate>
+          2023年3月9日 晚上
         </time>
       </span>
     
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          763 字
+          1.1k 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          7 分钟
+          10 分钟
         
       </span>
     
@@ -309,64 +309,149 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">深度学习框架中的动态图与静态图</h1>
+            <h1 id="seo-header">大型语言模型训练流程</h1>
             
             
               <div class="markdown-body">
                 
-                <p>深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static
-Computation
-Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。</p>
-<span id="more"></span>
-<h3 id="一.-动态图dynamic-computation-graph">一. 动态图（Dynamic
-Computation Graph）</h3>
-<p>动态图，也称为即时执行模式（Eager
-Execution），是指在代码运行时即时构建和执行计算图。这种方式的特点是：</p>
-<ol type="1">
-<li><strong>即时性</strong>：每一行代码在运行时都会立即执行相应的计算操作。</li>
-<li><strong>灵活性</strong>：因为计算图是在运行时动态构建的，修改和调试都非常方便。可以轻松地使用Python的控制流（如条件语句和循环）构建复杂的模型。</li>
-<li><strong>直观性</strong>：代码更加直观和易于理解，便于调试和开发。</li>
+                <h2 id="数据准备和预处理">1. 数据准备和预处理</h2>
+<ul>
+<li>大规模数据收集（网络爬虫、数据库购买等）</li>
+<li>数据清洗和过滤（去重、去噪、内容审核等）</li>
+<li>数据格式化和标准化</li>
+<li>数据增强（如回译、同义词替换等）</li>
+</ul>
+<h2 id="预训练pretraining">2. 预训练（Pretraining）</h2>
+<ul>
+<li><strong>数据集</strong>：来自互联网的原始数据，包含数万亿个单词，质量较低但数量庞大</li>
+<li><strong>算法</strong>：语言模型，通过预测下一个token进行训练（涉及其他自监督学习任务，如masked
+language modeling）</li>
+<li><strong>模型</strong>：基础模型（Base
+model），需要数千个GPU进行数月的大规模分布式训练</li>
+<li><strong>示例</strong>：GPT、LLaMA、PaLM等</li>
+<li><strong>备注</strong>：可以部署这个模型，过程涉及模型检查点保存和验证</li>
+</ul>
+<h2 id="监督微调supervised-finetuning">3. 监督微调（Supervised
+Finetuning）</h2>
+<ul>
+<li><strong>数据集</strong>：由承包商编写的理想助手响应（包括提示和响应对），数量在1万到10万对之间，质量较高</li>
+<li><strong>特点</strong>：
+<ul>
+<li>数据集创建是关键挑战，需要精心设计提示和回答，以涵盖各种场景和任务</li>
+<li>可能使用其他语言模型生成部分数据，然后人工筛选</li>
+<li>可能引入特定领域的数据，以增强模型在某些领域的能力</li>
+</ul></li>
+<li><strong>算法</strong>：语言模型，通过预测下一个token进行训练</li>
+<li><strong>模型</strong>：SFT模型（Supervised Finetuning
+Model），从基础模型初始化，需要1到100个GPU，训练时间为数天</li>
+<li><strong>示例</strong>：Vicuna-13B</li>
+<li><strong>备注</strong>：可以部署这个模型</li>
+</ul>
+<h2 id="奖励模型reward-modeling">4. 奖励模型（Reward Modeling）</h2>
+<ul>
+<li><strong>数据集</strong>：构建人类偏好数据集，由承包商编写的比较数据，数量在10万到100万之间，质量较高</li>
+<li><strong>算法</strong>：二元分类或其它排序评分机制，通过预测一致性奖励来进行训练</li>
+<li><strong>模型</strong>：RM模型（Reward
+Model），从SFT模型初始化，需要1到100个GPU，训练时间为数天</li>
+<li><strong>备注</strong>：可以部署这个模型</li>
+</ul>
+<h2 id="强化学习reinforcement-learning">5. 强化学习（Reinforcement
+Learning）</h2>
+<ul>
+<li><strong>数据集</strong>：由承包商编写的提示数据，数量在1万到10万之间，质量较高</li>
+<li><strong>算法</strong>：强化学习，通过生成最大化奖励的token进行训练</li>
+<li><strong>模型</strong>：RL模型（Reinforcement Learning
+Model），从SFT模型初始化并使用奖励模型，需要1到100个GPU，训练时间为数天</li>
+<li><strong>示例</strong>：ChatGPT和Claude</li>
+<li><strong>备注</strong>：可以部署这个模型，训练时监控和防止模型退化</li>
+</ul>
+<h2 id="领域适应domain-adaptation">6. 领域适应（Domain Adaptation）</h2>
+<ul>
+<li>收集特定领域数据</li>
+<li>在预训练模型基础上继续训练，使其适应特定领域</li>
+<li>如Low-Rank Adaptation（LoRA），实质属Finetuning的一种</li>
+</ul>
+<h2 id="多任务学习multi-task-learning可选">7. 多任务学习（Multi-task
+Learning，可选）</h2>
+<ul>
+<li>设计多种下游任务</li>
+<li>联合训练模型以提高泛化能力</li>
+</ul>
+<h2 id="多模态扩展如果适用">8. 多模态扩展（如果适用）</h2>
+<ul>
+<li>图像、音频等其他模态数据的整合</li>
+<li>跨模态任务的训练</li>
+</ul>
+<h2 id="模型压缩和优化">9. 模型压缩和优化</h2>
+<ul>
+<li>知识蒸馏（Knowledge Distillation）</li>
+<li>模型量化（Quantization）</li>
+<li>模型剪枝（Pruning）</li>
+<li>模型结构搜索（Neural Architecture Search）</li>
+</ul>
+<h2 id="安全性和伦理性强化">10. 安全性和伦理性强化</h2>
+<ul>
+<li>偏见检测和缓解</li>
+<li>有害内容过滤训练</li>
+<li>隐私保护机制实现（如联邦学习）</li>
+</ul>
+<h2 id="模型评估和基准测试">11. 模型评估和基准测试</h2>
+<ul>
+<li>在各种NLP任务上进行评估</li>
+<li>与其他模型比较性能</li>
+<li>进行人类评估</li>
+</ul>
+<h2 id="部署准备">12. 部署准备</h2>
+<ul>
+<li>模型服务化（如ONNX转换、TensorRT优化等）</li>
+<li>API设计和实现</li>
+<li>性能优化（如推理加速）</li>
+</ul>
+<h2 id="持续学习和更新">13. 持续学习和更新</h2>
+<ul>
+<li>收集用户反馈</li>
+<li>增量训练或定期重训练</li>
+<li>A/B测试新版本</li>
+</ul>
+<h2 id="模型解释性和可视化">14. 模型解释性和可视化</h2>
+<ul>
+<li>注意力可视化</li>
+<li>决策树提取</li>
+<li>概念激活向量分析</li>
+</ul>
+<h2 id="额外说明">额外说明</h2>
+<h4 id="流程说明">流程说明</h4>
+<blockquote>
+<ul>
+<li>整个流程可能是迭代的，而不是严格的线性过程。例如，可能在RL后再进行SFT。</li>
+<li>多模态模型（如GPT-4）的训练可能涉及更复杂的流程和数据处理。</li>
+</ul>
+</blockquote>
+<p><strong>大模型对齐</strong>(Large Language Model
+Alignment)涉及阶段</p>
+<blockquote>
+<ol type="a">
+<li>监督微调(Supervised Finetuning):</li>
 </ol>
-<p>代表性的深度学习框架有： - PyTorch - TensorFlow 2.x 的Eager
-Execution模式</p>
-<p>示例（PyTorch）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-comment"># 动态构建和执行计算图</span><br>x = torch.tensor([<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>], requires_grad=<span class="hljs-literal">True</span>)<br>y = x * <span class="hljs-number">2</span><br>z = y.mean()<br>z.backward()<br><br><span class="hljs-built_in">print</span>(x.grad)  <span class="hljs-comment"># 输出: tensor([0.6667, 0.6667, 0.6667])</span><br></code></pre></td></tr></table></figure>
-<h3 id="二.-静态图static-computation-graph">二. 静态图（Static
-Computation Graph）</h3>
-<p>静态图，也称为定义-运行模式（Define-and-Run），是指在代码运行之前，先定义好计算图，然后再执行。这种方式的特点是：</p>
-<ol type="1">
-<li><strong>高效性</strong>：由于计算图在运行前已经完全定义好，框架可以进行各种优化，提升执行效率和性能。</li>
-<li><strong>可移植性</strong>：静态图可以保存为文件，便于在不同环境中加载和运行。</li>
-<li><strong>可调度性</strong>：在执行前可以进行图的优化和分布式调度，提高资源利用率。</li>
+<ul>
+<li>这是对齐的第一个关键步骤。通过高质量的指令-响应对数据集,训练模型遵循人类指令和偏好。</li>
+<li>目标是使模型的输出与人类期望一致,包括内容、格式和风格。</li>
+</ul>
+<ol start="2" type="a">
+<li>奖励模型训练(Reward Modeling):</li>
 </ol>
-<p>代表性的深度学习框架有： - TensorFlow 1.x - TensorFlow 2.x 的Graph
-Execution模式</p>
-<p>示例（TensorFlow 1.x）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><br><span class="hljs-comment"># 定义计算图</span><br>x = tf.placeholder(tf.float32, shape=(<span class="hljs-literal">None</span>, <span class="hljs-number">3</span>))<br>y = x * <span class="hljs-number">2</span><br>z = tf.reduce_mean(y)<br><br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:<br>    <span class="hljs-comment"># 执行计算图</span><br>    result = sess.run(z, feed_dict=&#123;x: [[<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>]]&#125;)<br>    <span class="hljs-built_in">print</span>(result)  <span class="hljs-comment"># 输出: 4.0</span><br></code></pre></td></tr></table></figure>
-<h3 id="三.-对比总结">三. 对比总结</h3>
-<ol type="1">
-<li><strong>开发体验</strong>：
 <ul>
-<li><strong>动态图</strong>：开发体验更好，调试和代码修改更加方便，适合研究和快速原型开发。</li>
-<li><strong>静态图</strong>：需要先定义完整的计算图，修改和调试相对复杂，但更适合大规模训练和部署。</li>
-</ul></li>
-<li><strong>执行性能</strong>：
-<ul>
-<li><strong>动态图</strong>：灵活性高，但在大规模训练中，性能可能不如静态图。</li>
-<li><strong>静态图</strong>：由于可以进行多种优化，执行性能通常更高，适合在生产环境中部署。</li>
-</ul></li>
-<li><strong>灵活性</strong>：
-<ul>
-<li><strong>动态图</strong>：可以动态调整模型结构，支持复杂的控制流。</li>
-<li><strong>静态图</strong>：在定义时就确定了模型结构，灵活性相对较低。</li>
-</ul></li>
-<li><strong>适用场景</strong>：
-<ul>
-<li><strong>动态图</strong>：适用于研究、开发和模型调试。</li>
-<li><strong>静态图</strong>：适用于模型训练和部署，尤其是在资源受限的环境下。</li>
-</ul></li>
+<li>这个阶段直接定义了"对齐"的标准。奖励模型捕捉了更细粒度的人类偏好。</li>
+<li>通过比较不同响应的优劣,训练模型理解什么是"好的"输出。</li>
+</ul>
+<ol start="3" type="a">
+<li>强化学习(Reinforcement Learning):</li>
 </ol>
-<p>综合来看，动态图和静态图各有优劣，选择使用哪种方式取决于具体的应用需求和开发环境。在实际项目中，常常会根据不同的阶段和任务需求，灵活选择使用动态图或静态图。</p>
+<ul>
+<li>使用奖励模型来优化语言模型,使其行为更符合人类偏好。</li>
+<li>这个阶段将之前定义的对齐标准应用到模型的实际输出中。</li>
+</ul>
+</blockquote>
 
                 
               </div>
@@ -385,7 +470,7 @@ Execution模式</p>
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
+  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="category-chain-item">大模型</a>
   
   
 
@@ -402,9 +487,9 @@ Execution模式</p>
       
         <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
       
-        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
       
-        <a href="/tags/%E6%A6%82%E5%BF%B5/" class="print-no-link">#概念</a>
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
       
     </div>
   
@@ -416,8 +501,8 @@ Execution模式</p>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>深度学习框架中的动态图与静态图</div>
-      <div>https://linxkon.github.io/深度学习框架中的动态图与静态图.html</div>
+      <div>大型语言模型训练流程</div>
+      <div>https://linxkon.github.io/大型语言模型训练工作流.html</div>
     </div>
     <div class="license-meta">
       
@@ -429,7 +514,7 @@ Execution模式</p>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年4月1日</div>
+          <div>2023年3月9日</div>
         </div>
       
       
@@ -461,9 +546,9 @@ Execution模式</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%A7%A3.html" title="神经网络核心知识点梳理--一图了然">
+                      <a href="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%9B%BE%E4%B8%8E%E9%9D%99%E6%80%81%E5%9B%BE.html" title="深度学习框架中的动态图与静态图">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">神经网络核心知识点梳理--一图了然</span>
+                        <span class="hidden-mobile">深度学习框架中的动态图与静态图</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -471,8 +556,8 @@ Execution模式</p>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.html" title="大型语言模型训练流程">
-                        <span class="hidden-mobile">大型语言模型训练流程</span>
+                      <a href="/TensorFlow%20VS%20Pytorch.html" title="Pytorch VS TensorFlow">
+                        <span class="hidden-mobile">Pytorch VS TensorFlow</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -495,7 +580,7 @@ Execution模式</p>
         var options = Object.assign(
           {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'abd11e7ea6e0c4e950b1160e18e71452'
+            id: 'aff898002342e87aa507c572c1c5f304'
           }
         )
         var gitalk = new Gitalk(options);
