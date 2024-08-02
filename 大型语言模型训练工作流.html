@@ -16,16 +16,16 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="更新内容 这里是近期(2024年8月1日)更新的lamma3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
+    <meta name="description" content="更新内容 这里是近期(2024年8月1日)更新的LLaMA3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大型语言模型LLM训练流程详解">
 <meta property="og:url" content="https://linxkon.github.io/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="更新内容 这里是近期(2024年8月1日)更新的lamma3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
+<meta property="og:description" content="更新内容 这里是近期(2024年8月1日)更新的LLaMA3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.png">
 <meta property="article:published_time" content="2024-08-02T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-08-02T12:48:44.077Z">
+<meta property="article:modified_time" content="2024-08-02T12:55:00.109Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="大模型">
@@ -315,7 +315,7 @@
               <div class="markdown-body">
                 
                 <h2 id="更新内容">更新内容</h2>
-<p>这里是近期(2024年8月1日)更新的lamma3.1的模型后训练（Post-training）策略和流程</p>
+<p>这里是近期(2024年8月1日)更新的LLaMA3.1的模型后训练（Post-training）策略和流程</p>
 <blockquote>
 <p>在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。</p>
 <p>每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。</p>
@@ -405,6 +405,9 @@ model），需要数千个GPU进行数月的大规模分布式训练</li>
 <li><strong>示例</strong>：GPT、LLaMA、PaLM等</li>
 <li><strong>备注</strong>：可以部署这个模型，过程涉及模型检查点保存和验证</li>
 </ul>
+<blockquote>
+<p>以下阶段统称后训练</p>
+</blockquote>
 <h2 id="监督微调supervised-finetuning">3. 监督微调（Supervised
 Finetuning）</h2>
 <ul>
