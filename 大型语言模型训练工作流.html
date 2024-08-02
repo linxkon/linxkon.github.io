@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.png">
 <meta property="article:published_time" content="2024-08-02T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-08-02T12:55:00.109Z">
+<meta property="article:modified_time" content="2024-08-02T23:59:01.513Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="大模型">
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.2k 字
+          3.4k 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          27 分钟
+          28 分钟
         
       </span>
     
@@ -658,31 +658,20 @@ Model），通过共享表示学习多个任务。可用1到100个GPU，训练�
 <h4
 id="大模型对齐large-language-model-alignment与rlhf"><strong>大模型对齐</strong>(Large
 Language Model Alignment)与RLHF</h4>
-<p>大模型对齐的三个阶段,都使用了<strong>RLHF</strong>（Reinforcement
-Learning from Human Feedback）人类反馈强化学习的方法</p>
-<blockquote>
-<ol type="a">
-<li>监督微调(Supervised Finetuning):</li>
-</ol>
-<ul>
-<li>这是对齐的第一个关键步骤。通过高质量的指令-响应对数据集,训练模型遵循人类指令和偏好。</li>
-<li>目标是使模型的输出与人类期望一致,包括内容、格式和风格。</li>
-</ul>
-<ol start="2" type="a">
-<li>奖励模型训练(Reward Modeling):</li>
-</ol>
-<ul>
-<li>这个阶段直接定义了"对齐"的标准。奖励模型捕捉了更细粒度的人类偏好。</li>
-<li>通过比较不同响应的优劣,训练模型理解什么是"好的"输出。</li>
-</ul>
-<ol start="3" type="a">
-<li>强化学习(Reinforcement Learning):</li>
-</ol>
-<ul>
-<li>使用奖励模型来优化语言模型,使其行为更符合人类偏好。</li>
-<li>这个阶段将之前定义的对齐标准应用到模型的实际输出中。</li>
-</ul>
-</blockquote>
+<p>大模型对齐指的是在预训练的基础上，进一步将大模型的输出与任务场景和人类的价值观相统一，大模型对齐分为SFT，RLHF两个阶段,<strong>RLHF</strong>（Reinforcement
+Learning from Human
+Feedback）指的是人类反馈强化学习的方法，它一般涵盖奖励模型和强化学习两个步骤。
+<img src="/images/llama3模型架构/SFT与RLHF.jpg" srcset="/img/loading.gif" lazyload alt="SFT与RLHF" />
+<strong>监督微调（SFT）</strong>
+定义：在新任务的小规模标注数据集上，使用有监督学习的方法对预训练模型进行微调，以使其适应新任务。
+步骤：加载预训练模型 → 准备新任务的数据集 → 调整模型输出层 →
+在新任务数据集上训练模型。
+应用：适用于那些有明确标注数据集的任务，如文本分类、命名实体识别等。
+<strong>基于人类反馈的强化学习微调（RLHF)</strong>
+定义：在SFT的基础上，通过强化学习和人类反馈来进一步微调模型，使其输出更加符合人类的偏好或期望。
+步骤：首先进行SFT → 收集人类反馈数据 → 训练奖励模型 →
+使用奖励模型指导强化学习过程来微调模型。
+应用：适用于那些需要高度人类判断或创造力的任务，如对话生成、文本摘要等。</p>
 <p>通过将人类的反馈作为奖励信号来优化模型的行为，使其更符合人类期望。</p>
 
                 
