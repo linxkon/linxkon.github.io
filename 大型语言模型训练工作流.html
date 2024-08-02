@@ -16,16 +16,16 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="1. 数据准备和预处理  大规模数据收集（网络爬虫、数据库购买等） 数据清洗和过滤（去重、去噪、内容审核等） 数据格式化和标准化 数据增强（如回译、同义词替换等）  2. 预训练（Pretraining）  数据集：来自互联网的原始数据，包含数万亿个单词，质量较低但数量庞大 算法：语言模型，通过预测下一个token进行训练（涉及其他自监督学习任务，如masked langua">
+    <meta name="description" content="更新内容 这里是近期(2024年8月1日)更新的lamma3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
 <meta property="og:type" content="article">
-<meta property="og:title" content="大型语言模型训练流程">
+<meta property="og:title" content="大型语言模型LLM训练流程详解">
 <meta property="og:url" content="https://linxkon.github.io/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="1. 数据准备和预处理  大规模数据收集（网络爬虫、数据库购买等） 数据清洗和过滤（去重、去噪、内容审核等） 数据格式化和标准化 数据增强（如回译、同义词替换等）  2. 预训练（Pretraining）  数据集：来自互联网的原始数据，包含数万亿个单词，质量较低但数量庞大 算法：语言模型，通过预测下一个token进行训练（涉及其他自监督学习任务，如masked langua">
+<meta property="og:description" content="更新内容 这里是近期(2024年8月1日)更新的lamma3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.png">
-<meta property="article:published_time" content="2023-03-09T15:21:13.000Z">
-<meta property="article:modified_time" content="2024-08-01T01:23:18.135Z">
+<meta property="article:published_time" content="2024-08-02T12:21:13.000Z">
+<meta property="article:modified_time" content="2024-08-02T12:48:44.077Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="大模型">
@@ -35,7 +35,7 @@
   
   
   
-  <title>大型语言模型训练流程 - AI·你所爱</title>
+  <title>大型语言模型LLM训练流程详解 - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="大型语言模型训练流程"></span>
+            <span id="subtitle" data-typed-text="大型语言模型LLM训练流程详解"></span>
           
         </div>
 
@@ -241,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-03-09 23:21" pubdate>
-          2023年3月9日 晚上
+        <time datetime="2024-08-02 20:21" pubdate>
+          2024年8月2日 晚上
         </time>
       </span>
     
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          3.2k 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          10 分钟
+          27 分钟
         
       </span>
     
@@ -309,12 +309,86 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">大型语言模型训练流程</h1>
+            <h1 id="seo-header">大型语言模型LLM训练流程详解</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="数据准备和预处理">1. 数据准备和预处理</h2>
+                <h2 id="更新内容">更新内容</h2>
+<p>这里是近期(2024年8月1日)更新的lamma3.1的模型后训练（Post-training）策略和流程</p>
+<blockquote>
+<p>在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。</p>
+<p>每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。</p>
+</blockquote>
+<figure>
+<img src="/images/llama3模型架构/llm训练流程.png" srcset="/img/loading.gif" lazyload alt="LLM pipline" />
+<figcaption aria-hidden="true">LLM pipline</figcaption>
+</figure>
+<h4 id="提示收集">1.提示收集</h4>
+<ul>
+<li><strong>Collected
+Prompts（收集的提示）</strong>：开始于收集各种输入提示。</li>
+</ul>
+<h4 id="响应生成">2. 响应生成</h4>
+<ul>
+<li><strong>K Generations per
+Prompt（每个提示生成K个响应）</strong>：每个提示生成多个响应（K个），以供后续选择和优化。</li>
+</ul>
+<h4 id="响应筛选">3. 响应筛选</h4>
+<ul>
+<li>Rejection Sampling（拒绝采样）
+<ul>
+<li>使用奖励模型对生成的响应进行评分</li>
+<li>通过拒绝采样来选择质量较高的响应</li>
+<li>有助于筛选出最优的生成结果</li>
+</ul></li>
+</ul>
+<h4 id="奖励模型">4. 奖励模型</h4>
+<p>在预训练检查点的基础上训练奖励模型（Reward Model,
+RM），利用人类标注的偏好数据进行训练，主要目标是根据偏好数据进行排序和选择。</p>
+<ul>
+<li>奖励模型使用（选择的、被拒绝的）响应对进行训练，此外，还可以通过对选择的响应进行编辑以创建第三种“编辑响应”。</li>
+<li>将提示和多个响应连接为单行进行训练，响应随机打乱，以提高训练效率。</li>
+</ul>
+<h4 id="监督微调">5. 监督微调</h4>
+<p>使用奖励模型对人类注释的提示进行拒绝采样，再结合合成数据进行监督微调。微调时使用交叉熵损失，采用的学习率和训练步数在实验中取得了良好的效果。</p>
+<ul>
+<li><strong>SFT
+Data（监督微调数据）</strong>：从拒绝采样中选出的高质量数据</li>
+<li><strong>Specialized Per-Capability
+Data（专门化的每项能力数据）</strong>：
+<ul>
+<li>这些数据专注于特定能力的提升，比如推理、编码、事实性、多语言支持、工具使用、长上下文理解以及精准指令执行等。</li>
+</ul></li>
+<li>SFT Model（监督微调模型）
+<ul>
+<li>利用SFT数据进行监督微调训练</li>
+<li>提高模型在特定任务上的表现</li>
+<li>使用<strong>Specialized Per-capability SFT
+data</strong>，针对特定能力进行微调</li>
+</ul></li>
+</ul>
+<p>使用交叉熵损失对目标标记进行训练，并对提示标记进行损失掩码。</p>
+<p>大模型采用1e-5的学习率，训练步数为8500至9000步。</p>
+<h4 id="直接偏好优化">6. 直接偏好优化</h4>
+<p>DPO是在人类偏好数据上对齐模型的进一步优化步骤，旨在提高模型生成结果的满意度。</p>
+<p>通过调整DPO的超参数（如学习率和正则化项）优化模型表现。使用DPO进行训练时，采用1e-5的学习率，并设定超参数β。</p>
+<ul>
+<li>Final DPO Model（最终直接偏好优化模型）
+<ul>
+<li>在SFT模型基础上进行直接偏好优化（DPO）训练</li>
+<li>进一步对齐模型的输出与人类偏好</li>
+</ul></li>
+</ul>
+<h4 id="模型迭代">7. 模型迭代</h4>
+<ul>
+<li>Best models from previous rounds（来自前几轮的最佳模型）
+<ul>
+<li>每轮训练后，选择表现最好的模型进入下一轮训练</li>
+</ul></li>
+</ul>
+<h1 id="llm经典训练流程">LLM经典训练流程</h1>
+<h2 id="数据准备和预处理">1. 数据准备和预处理</h2>
 <ul>
 <li>大规模数据收集（网络爬虫、数据库购买等）</li>
 <li>数据清洗和过滤（去重、去噪、内容审核等）</li>
@@ -349,38 +423,189 @@ Model），从基础模型初始化，需要1到100个GPU，训练时间为数�
 </ul>
 <h2 id="奖励模型reward-modeling">4. 奖励模型（Reward Modeling）</h2>
 <ul>
-<li><strong>数据集</strong>：构建人类偏好数据集，由承包商编写的比较数据，数量在10万到100万之间，质量较高</li>
-<li><strong>算法</strong>：二元分类或其它排序评分机制，通过预测一致性奖励来进行训练</li>
+<li><strong>数据集</strong>：构建人类偏好数据集，由承包商编写的<strong>比较数据</strong>，数量在10万到100万之间，质量较高</li>
+</ul>
+<blockquote>
+<p>比较对（pairwise
+comparisons）形式，即对于两个输出，标注出哪一个更符合人类偏好</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>输入</th>
+<th>输出1</th>
+<th>输出2</th>
+<th>人类偏好</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>用户：天气怎么样？</td>
+<td>答：今天晴天，温度25度。</td>
+<td>答：今天天气不错，适合出门。</td>
+<td>输出1</td>
+</tr>
+<tr class="even">
+<td>用户：今天天气如何？</td>
+<td>答：温度大约20度，适合户外活动。</td>
+<td>答：今天天气挺好的。</td>
+<td>输出1</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<ul>
+<li><strong>算法</strong>：<strong>二元分类</strong>或其它<strong>排序评分</strong>机制，通过预测一致性奖励来进行训练</li>
 <li><strong>模型</strong>：RM模型（Reward
 Model），从SFT模型初始化，需要1到100个GPU，训练时间为数天</li>
-<li><strong>备注</strong>：可以部署这个模型</li>
+<li><strong>备注</strong>：<strong>奖励模型可以独立部署</strong>，<strong>用于评估模型输出的质量</strong>。</li>
 </ul>
 <h2 id="强化学习reinforcement-learning">5. 强化学习（Reinforcement
 Learning）</h2>
 <ul>
 <li><strong>数据集</strong>：由承包商编写的提示数据，数量在1万到10万之间，质量较高</li>
-<li><strong>算法</strong>：强化学习，通过生成最大化奖励的token进行训练</li>
-<li><strong>模型</strong>：RL模型（Reinforcement Learning
-Model），从SFT模型初始化并使用奖励模型，需要1到100个GPU，训练时间为数天</li>
+</ul>
+<blockquote>
+<table>
+
+<thead>
+<tr class="header">
+<th>输入</th>
+<th>目标输出</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>用户：天气怎么样？</td>
+<td>答：今天晴天，气温在25度左右，非常适合户外活动。</td>
+</tr>
+<tr class="even">
+<td>用户：今天天气如何？</td>
+<td>答：今天天气不错，气温大约20度，适合散步。</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<ul>
+<li><p><strong>模型</strong>：<strong>RL模型</strong>（Reinforcement
+Learning
+Model），从SFT模型初始化并<strong>使用奖励模型</strong>，需要1到100个GPU，训练时间为数天</p></li>
+<li><p><strong>算法</strong>：强化学习，通过生成最大化奖励的token进行训练</p></li>
+</ul>
+<blockquote>
+<p>常用强化学习算法包括Proximal Policy
+Optimization（PPO）等，使用奖励模型（RM）来提供反馈。</p>
+<p>当模型生成的输出获得较高的奖励分数时，调整参数以增加生成此类输出的概率。</p>
+<p>当模型生成的输出获得较低的奖励分数时，调整参数以减少生成此类输出的概率。</p>
+</blockquote>
+<ul>
 <li><strong>示例</strong>：ChatGPT和Claude</li>
 <li><strong>备注</strong>：可以部署这个模型，训练时监控和防止模型退化</li>
 </ul>
 <h2 id="领域适应domain-adaptation">6. 领域适应（Domain Adaptation）</h2>
 <ul>
-<li>收集特定领域数据</li>
-<li>在预训练模型基础上继续训练，使其适应特定领域</li>
-<li>如Low-Rank Adaptation（LoRA），实质属Finetuning的一种</li>
+<li><strong>数据集</strong>：来自源领域和目标领域的数据，源领域数据较为丰富，目标领域数据稀缺或分布不同，数量因领域而异</li>
 </ul>
-<h2 id="多任务学习multi-task-learning可选">7. 多任务学习（Multi-task
-Learning，可选）</h2>
+<blockquote>
+<table>
+
+<thead>
+<tr class="header">
+<th>输入</th>
+<th>目标输出</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>源领域：猫的图片</td>
+<td>猫（分类标签）</td>
+</tr>
+<tr class="even">
+<td>目标领域：新环境中的猫的图片</td>
+<td>猫（分类标签），需要模型适应目标领域的视觉特征变化</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <ul>
-<li>设计多种下游任务</li>
-<li>联合训练模型以提高泛化能力</li>
+<li><strong>模型</strong>：<strong>领域适应模型</strong>（Domain
+Adaptation
+Model），通常使用迁移学习技术，将预训练模型在源领域的知识迁移到目标领域。可使用1到10个GPU，训练时间从数小时到数天不等，具体取决于数据规模和复杂度。</li>
+<li><strong>算法</strong>：使用<strong>对抗性训练</strong>（如DANN：Domain-Adversarial
+Neural Networks）或<strong>重加权方法</strong>（如TCA：Transfer
+Component Analysis）来最小化源领域和目标领域的分布差异</li>
+</ul>
+<blockquote>
+<p>领域适应通常涉及在源领域预训练模型，然后在目标领域进行微调或通过对抗性损失调整模型，使其在目标领域上表现良好。</p>
+<p>主要思想是通过<strong>对抗性训练</strong>使模型对源领域和目标领域的数据分布差异不敏感。</p>
+<p>通过减少源领域和目标领域特征空间的分布差异，提高模型在目标领域的性能。</p>
+</blockquote>
+<h2 id="多任务学习multi-task-learning">7. 多任务学习（Multi-task
+Learning）</h2>
+<p>主要内容:设计多种下游任务 , 联合训练模型以提高泛化能力</p>
+<ul>
+<li><strong>数据集</strong>：多任务学习需要来自多个相关任务的数据集，各任务数据量可根据实际情况调整，通常任务间有某种程度的相关性</li>
+</ul>
+<blockquote>
+<table>
+<thead>
+<tr class="header">
+<th>输入</th>
+<th>目标输出</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>任务1：语法纠正</td>
+<td>正确的句子（语言修正）</td>
+</tr>
+<tr class="even">
+<td>任务2：情感分析</td>
+<td>情感标签（正面、负面、中性）</td>
+</tr>
+<tr class="odd">
+<td>任务3：机器翻译</td>
+<td>目标语言翻译（英语翻译为法语）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<ul>
+<li><strong>模型</strong>：<strong>多任务学习模型</strong>（Multi-task
+Learning
+Model），通过共享表示学习多个任务。可用1到100个GPU，训练时间因任务和数据量而异，从数小时到数天不等。</li>
+<li><strong>算法</strong>：使用<strong>共享参数架构</strong>（如共享编码器-解码器）或<strong>任务特定头</strong>，在多个相关任务间共享知识和表示</li>
+</ul>
+<blockquote>
+<p>多任务学习通过共享网络的部分结构来共同训练多个任务。</p>
+<p>共享部分捕获任务间的通用特征，而每个任务也有其特定的参数以捕获专门特性。</p>
+<p>这种方法有助于利用相关任务的信息来增强模型的泛化能力和性能。</p>
+</blockquote>
+<ul>
+<li><strong>示例</strong>：QWEN的多任务学习应用，包括问答、文本分类和实体识别等任务</li>
+<li><strong>备注</strong>：多任务学习模型需注意任务间的权衡与平衡，可能需要调整不同任务的损失函数权重</li>
 </ul>
 <h2 id="多模态扩展如果适用">8. 多模态扩展（如果适用）</h2>
 <ul>
-<li>图像、音频等其他模态数据的整合</li>
-<li>跨模态任务的训练</li>
+<li><strong>数据集</strong>：构建多模态数据集，包括文本、图像、音频和视频等模态，规模可达数十亿样本，数据多样性高，标注质量优良。</li>
+</ul>
+<blockquote>
+<p>数据集包含多模态的配对样本，例如文本与图像的对齐关系、音频与视频的关联信息等，数据应覆盖多种场景和领域，以支持模型的广泛应用。</p>
+</blockquote>
+<ul>
+<li><strong>模型</strong>：多模态大模型（如CLIP、DALL-E），基于Transformer架构，支持多模态信息的联合学习和表征，训练时需高性能计算资源。</li>
+</ul>
+<blockquote>
+<p>模型能够处理和融合来自多种模态的信息，使用跨模态对齐机制学习不同模态之间的关系。初始模型可能需要在大规模数据上进行预训练，并通过微调适应特定任务。</p>
+</blockquote>
+<ul>
+<li><strong>算法</strong>：使用<strong>跨模态对齐</strong>算法，如<strong>对比学习</strong>和<strong>自监督学习</strong>，通过优化不同模态表示之间的一致性来提高模型性能。</li>
+</ul>
+<blockquote>
+<p>对比学习可以用于学习文本和图像的共同表示空间，通过最小化相似模态的距离和最大化不相似模态的距离，实现模态对齐和信息融合。</p>
+</blockquote>
+<ul>
+<li><strong>备注</strong>：多模态模型需要大量计算资源，训练时应注意数据隐私和伦理问题，未来发展方向包括提高模型的泛化能力和降低计算成本。</li>
 </ul>
 <h2 id="模型压缩和优化">9. 模型压缩和优化</h2>
 <ul>
@@ -427,8 +652,11 @@ Learning，可选）</h2>
 <li>多模态模型（如GPT-4）的训练可能涉及更复杂的流程和数据处理。</li>
 </ul>
 </blockquote>
-<p><strong>大模型对齐</strong>(Large Language Model
-Alignment)涉及阶段</p>
+<h4
+id="大模型对齐large-language-model-alignment与rlhf"><strong>大模型对齐</strong>(Large
+Language Model Alignment)与RLHF</h4>
+<p>大模型对齐的三个阶段,都使用了<strong>RLHF</strong>（Reinforcement
+Learning from Human Feedback）人类反馈强化学习的方法</p>
 <blockquote>
 <ol type="a">
 <li>监督微调(Supervised Finetuning):</li>
@@ -452,6 +680,7 @@ Alignment)涉及阶段</p>
 <li>这个阶段将之前定义的对齐标准应用到模型的实际输出中。</li>
 </ul>
 </blockquote>
+<p>通过将人类的反馈作为奖励信号来优化模型的行为，使其更符合人类期望。</p>
 
                 
               </div>
@@ -501,7 +730,7 @@ Alignment)涉及阶段</p>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>大型语言模型训练流程</div>
+      <div>大型语言模型LLM训练流程详解</div>
       <div>https://linxkon.github.io/大型语言模型训练工作流.html</div>
     </div>
     <div class="license-meta">
@@ -514,7 +743,7 @@ Alignment)涉及阶段</p>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年3月9日</div>
+          <div>2024年8月2日</div>
         </div>
       
       
@@ -546,18 +775,12 @@ Alignment)涉及阶段</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%9B%BE%E4%B8%8E%E9%9D%99%E6%80%81%E5%9B%BE.html" title="深度学习框架中的动态图与静态图">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">深度学习框架中的动态图与静态图</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/TensorFlow%20VS%20Pytorch.html" title="Pytorch VS TensorFlow">
-                        <span class="hidden-mobile">Pytorch VS TensorFlow</span>
+                      <a href="/lamma3.1%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84.html" title="LLaMA 3.1 模型架构技术解析及代码实现">
+                        <span class="hidden-mobile">LLaMA 3.1 模型架构技术解析及代码实现</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
