@@ -16,16 +16,16 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="入门篇 1 ollama是什么？ Ollama 是一个支持在本地运行大语言模型的工具，兼容 Windows、Linux 和 MacOS 操作系统。使用 Ollama，您仅需一行命令即可启动模型。 2 如何安装？  Windows和MacOS用户，从下面链接下载安装即可： 下载地址：https:&#x2F;&#x2F;ollama.com&#x2F;download  运行前注意先修改模型下载存放目录（见问题6">
+    <meta name="description" content="本文将分为以下章节对 Ollama 进行介绍：  Ollama 基本介绍，它的作用是什么 Ollama 软件安装、一些常用的系统参数设置 Ollama 管理本地已有大模型（包括终端对话界面） Ollama 导入模型到本地的三种方式：直接从 Ollama 远程仓库拉取、通过 GGUF 模型权重文件导入到本地、通过 safetensors 模型权限文件导入到本地 基于 WebUI">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ollama部署常见问题解答">
 <meta property="og:url" content="https://linxkon.github.io/ollama%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="入门篇 1 ollama是什么？ Ollama 是一个支持在本地运行大语言模型的工具，兼容 Windows、Linux 和 MacOS 操作系统。使用 Ollama，您仅需一行命令即可启动模型。 2 如何安装？  Windows和MacOS用户，从下面链接下载安装即可： 下载地址：https:&#x2F;&#x2F;ollama.com&#x2F;download  运行前注意先修改模型下载存放目录（见问题6">
+<meta property="og:description" content="本文将分为以下章节对 Ollama 进行介绍：  Ollama 基本介绍，它的作用是什么 Ollama 软件安装、一些常用的系统参数设置 Ollama 管理本地已有大模型（包括终端对话界面） Ollama 导入模型到本地的三种方式：直接从 Ollama 远程仓库拉取、通过 GGUF 模型权重文件导入到本地、通过 safetensors 模型权限文件导入到本地 基于 WebUI">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/ollama.png">
 <meta property="article:published_time" content="2024-06-01T12:44:13.000Z">
-<meta property="article:modified_time" content="2024-06-03T02:34:46.992Z">
+<meta property="article:modified_time" content="2024-08-04T07:19:05.237Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="大模型">
 <meta name="twitter:card" content="summary_large_image">
@@ -251,7 +251,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.8k 字
+          4.3k 字
         
       </span>
     
@@ -262,7 +262,7 @@
         
         
         
-          23 分钟
+          36 分钟
         
       </span>
     
@@ -312,84 +312,92 @@
             
               <div class="markdown-body">
                 
-                <h2 id="入门篇">入门篇</h2>
-<h3 id="ollama是什么">1 ollama是什么？</h3>
-<p>Ollama 是一个支持在本地运行大语言模型的工具，兼容 Windows、Linux 和
-MacOS 操作系统。使用 Ollama，您仅需一行命令即可启动模型。</p>
-<h3 id="如何安装">2 如何安装？</h3>
-<ul>
-<li>Windows和MacOS用户，从下面链接下载安装即可：
-下载地址：https://ollama.com/download</li>
-</ul>
-<p>运行前注意先修改模型下载存放目录（见问题6）</p>
-<p>执行下面命令，会自动下载模型（阿里qwen），并开始运行：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">ollama run qwen<br></code></pre></td></tr></table></figure>
-<h3 id="ollama支持哪些模型">4 ollama支持哪些模型？</h3>
-<p>官方支持的模型，可以在 https://ollama.com/library 上面找到。</p>
-<p>下面列出了部分模型</p>
-<table>
-
-<thead>
-<tr class="header">
-<th>模型名称</th>
-<th>概要</th>
-<th>其他</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>llama3</td>
-<td>Meta Llama 3: The most capable openly available LLM to date</td>
-<td>8B, 70B, 1.9M Pulls, 68 Tags, Updated 12 days ago</td>
-</tr>
-<tr class="even">
-<td>codestral</td>
-<td>Codestral is Mistral AI’s first-ever code model designed for code
-generation tasks</td>
-<td>22B, 22K Pulls, 18 Tags, Updated yesterday</td>
-</tr>
-<tr class="odd">
-<td>phi3</td>
-<td>Phi-3 is a family of lightweight 3B (Mini) and 14B (Medium)
-state-of-the-art open models by Microsoft</td>
-<td>3B, 14B, 513K Pulls, 70 Tags, Updated 5 days ago</td>
-</tr>
-<tr class="even">
-<td>aya</td>
-<td>Aya 23, released by Cohere, is a new family of state-of-the-art,
-multilingual models that support 23 languages</td>
-<td>8B, 35B, 31.5K Pulls, 35 Tags, Updated 10 days ago</td>
-</tr>
-<tr class="odd">
-<td>mistral</td>
-<td>The 7B model released by Mistral AI, updated to version 0.3</td>
-<td>7B, 1.1M Pulls, 84 Tags, Updated 11 days ago</td>
-</tr>
-<tr class="even">
-<td>gemma</td>
-<td>Gemma is a family of lightweight, state-of-the-art open models built
-by Google DeepMind. Updated to version 1.1</td>
-<td>2B, 7B</td>
-</tr>
-</tbody>
-</table>
-<h2 id="进阶篇">进阶篇</h2>
-<h3 id="模型下载后存放到哪里了">5 模型下载后存放到哪里了？</h3>
-<p>默认情况下，模型下载后存放在下面的位置：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">macOS: ~/.ollama/models<br>Linux: /usr/share/ollama/.ollama/models #作为系统服务启动时<br>Linux: /home/&lt;username&gt;/.ollama/models #当前用户启动时<br>Windows: C:\Users\&lt;username&gt;\.ollama\models<br></code></pre></td></tr></table></figure>
-<h3 id="如何修改下载模型的默认存放目录">6
-如何修改下载模型的默认存放目录？</h3>
+                <blockquote>
+<p>本文将分为以下章节对 Ollama 进行介绍：</p>
+<ol type="1">
+<li>Ollama 基本介绍，它的作用是什么</li>
+<li>Ollama 软件安装、一些常用的系统参数设置</li>
+<li>Ollama 管理本地已有大模型（包括终端对话界面）</li>
+<li>Ollama 导入模型到本地的三种方式：直接从 Ollama 远程仓库拉取、通过
+GGUF 模型权重文件导入到本地、通过 safetensors
+模型权限文件导入到本地</li>
+<li>基于 WebUI 部署 Ollama 可视化对话界面</li>
+<li>Ollama 客户端 API 应用，包括 Python API 和 Java API 接口应用</li>
+</ol>
+</blockquote>
+<h2 id="ollama-是什么它与-llama-有什么关系">Ollama 是什么，它与 Llama
+有什么关系？</h2>
+<p><strong>Ollama</strong>官网：https://ollama.com/，官方网站的介绍就一句话：<strong>Get
+up and running with large language models.</strong>
+（开始使用大语言模型。）</p>
+<p><strong>Ollama</strong>是一个开源的
+LLM（大型语言模型）服务工具，用于简化在本地运行大语言模型、降低使用大语言模型的门槛，使得大模型的开发者、研究人员和爱好者能够在本地环境快速实验、管理和部署最新大语言模型，包括如<strong>Qwen2</strong>、<strong>Llama3</strong>、<strong>Phi3</strong>、<strong>Gemma2</strong>等开源的大型语言模型。</p>
+<p><strong>Ollama</strong>支持的大语言模型列表，可通过搜索模型名称查看：https://ollama.com/library</p>
+<p><strong>Ollama</strong>官方 GitHub 源代码仓库：<a
+target="_blank" rel="noopener" href="https://github.com/ollama/ollama">https://github.com/ollama/ollama/</a></p>
+<p><strong>Llama</strong>是 Meta
+公司开源的备受欢迎的一个通用大语言模型，和其他大模型一样，<strong>Llama</strong>可以通过<strong>Ollama</strong>进行管理部署和推理等。</p>
+<p>因此，<code>Ollama</code>与<code>Llama</code>的关系：<code>Llama</code>是大语言模型，而<code>Ollama</code>是大语言模型（不限于<code>Llama</code>模型）便捷的管理和运维工具，它们只是名字后面部分恰巧相同而已！</p>
+<figure>
+<img src="/images/ollama/01.png" srcset="/img/loading.gif" lazyload alt="Ollama官网" />
+<figcaption aria-hidden="true">Ollama官网</figcaption>
+</figure>
+<h2 id="ollama-安装和常用系统参数设置">Ollama
+安装和常用系统参数设置</h2>
+<p>在官网首页，我们可以直接下载<strong>Ollama</strong>安装程序（支持
+Windows/MacOS/Linux）：https://ollama.com/</p>
+<p><strong>Ollama</strong>的安装过程，与安装其他普通软件并没有什么两样，安装完成之后，有几个常用的系统<strong>环境变量</strong>参数建议进行设置：</p>
+<ol type="1">
+<li><strong>OLLAMA_MODELS</strong>：模型文件存放目录，默认目录为当前用户目录（Windows
+目录：<code>C:\Users%username%.ollama\models</code>，MacOS
+目录：<code>~/.ollama/models</code>，Linux
+目录：<code>/usr/share/ollama/.ollama/models</code>），如果是 Windows
+系统<strong>建议修改</strong>（如：D:），避免 C 盘空间吃紧</li>
+<li><strong>OLLAMA_HOST</strong>：Ollama
+服务监听的网络地址，默认为<strong>127.0.0.1</strong>，如果允许其他电脑访问
+Ollama（如：局域网中的其他电脑），<strong>建议设置</strong>成<strong>0.0.0.0</strong>，从而允许其他网络访问</li>
+<li><strong>OLLAMA_PORT</strong>：Ollama
+服务监听的默认端口，默认为<strong>11434</strong>，如果端口有冲突，可以修改设置成其他端口（如：<strong>8080</strong>等）</li>
+<li><strong>OLLAMA_ORIGINS</strong>：HTTP
+客户端请求来源，半角逗号分隔列表，若本地使用无严格要求，可以设置成星号，代表不受限制</li>
+<li><strong>OLLAMA_KEEP_ALIVE</strong>：大模型加载到内存中后的存活时间，默认为<strong>5m</strong>即
+5 分钟（如：纯数字如 300 代表 300 秒，0
+代表处理请求响应后立即卸载模型，任何负数则表示一直存活）；我们可设置成<strong>24h</strong>，即模型在内存中保持
+24 小时，提高访问速度</li>
+<li><strong>OLLAMA_NUM_PARALLEL</strong>：请求处理并发数量，默认为<strong>1</strong>，即单并发串行处理请求，可根据实际情况进行调整</li>
+<li><strong>OLLAMA_MAX_QUEUE</strong>：请求队列长度，默认值为<strong>512</strong>，可以根据情况设置，超过队列长度请求被抛弃</li>
+<li><strong>OLLAMA_DEBUG</strong>：输出 Debug
+日志标识，应用研发阶段可以设置成<strong>1</strong>，即输出详细日志信息，便于排查问题</li>
+<li><strong>OLLAMA_MAX_LOADED_MODELS</strong>：最多同时加载到内存中模型的数量，默认为<strong>1</strong>，即只能有
+1 个模型在内存中</li>
+</ol>
+<h2 id="ollama-管理本地已有大模型">Ollama 管理本地已有大模型</h2>
+<p>【展示本地大模型列表：<code>ollama list</code>】</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama list</span><br>NAME            ID              SIZE    MODIFIED<br>gemma2:9b       c19987e1e6e2    5.4 GB  7 days ago<br>qwen2:7b        e0d4e1163c58    4.4 GB  10 days ago<br></code></pre></td></tr></table></figure>
+<p>可以看到，本地有 2
+个大模型，它们的名称（<strong>NAME</strong>）分别为<strong>gemma2:9b</strong>和<strong>qwen2:7b</strong>。</p>
+<p>【删除单个本地大模型：<code>ollama rm 本地模型名称</code>】</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama <span class="hljs-built_in">rm</span> gemma2:9b</span><br>deleted &#x27;gemma2:9b&#x27;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama list</span><br>NAME            ID              SIZE    MODIFIED<br>qwen2:7b        e0d4e1163c58    4.4 GB  10 days ago<br></code></pre></td></tr></table></figure>
+<p>通过<code>rm</code>命令删除了<strong>gemma2:9b</strong>大模型之后，再次通过<code>list</code>命令查看，本地只有<strong>qwen2:7b</strong>一个大模型了。</p>
+<p>【设置模型下载目录：<code>ollama run 本地模型名</code>】</p>
+<blockquote>
+<p>模型默认存储地址为:</p>
+<p>macOS: ~/.ollama/models Linux: /usr/share/ollama/.ollama/models
+#作为系统服务启动时 Linux: /home/<username>/.ollama/models
+#当前用户启动时 Windows: C:&lt;username&gt;.ollama</p>
+</blockquote>
+<blockquote>
 <p><strong>Windows用户</strong></p>
 <ol type="1">
 <li>设置 OLLAMA_MODELS</li>
 </ol>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text"># 只设置当前用户<br>setx OLLAMA_MODELS &quot;D:\ollama_model&quot; <br># 为所有用户设置<br>setx OLLAMA_MODELS &quot;D:\ollama_model&quot; /M<br></code></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-comment"># 只设置当前用户</span><br>setx OLLAMA_MODELS <span class="hljs-string">&quot;D:\ollama_model&quot;</span> <br><span class="hljs-comment"># 为所有用户设置</span><br>setx OLLAMA_MODELS <span class="hljs-string">&quot;D:\ollama_model&quot;</span> <span class="hljs-string">/M</span><br><br>TEXT<br></code></pre></td></tr></table></figure>
 <ol type="1">
 <li>重启终端（setx命令在Windows中设置环境变量时，这个变量的更改只会在新打开的命令提示符窗口或终端会话中生效。）</li>
 <li>重启ollama服务</li>
 </ol>
 <p><strong>Linux一般用户</strong></p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text"># 打开下面文件<br>nano ~/.bashrc<br># 添加设置<br>export OLLAMA_MODELS=&quot;/path/to/ollama_model&quot;<br></code></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># 打开下面文件</span><br>nano ~/.bashrc<br><span class="hljs-comment"># 添加设置</span><br><span class="hljs-built_in">export</span> <span class="hljs-attribute">OLLAMA_MODELS</span>=<span class="hljs-string">&quot;/path/to/ollama_model&quot;</span><br><br>TEXT<br></code></pre></td></tr></table></figure>
 <ol type="1">
 <li>重启终端</li>
 <li>重启ollama服务： ollama serve</li>
@@ -398,124 +406,169 @@ by Google DeepMind. Updated to version 1.1</td>
 启动服务</p>
 <p><strong>Liunx root 服务模式</strong>
 在服务文件中设置环境变量，并且要为新的目录设置ollama用户的读写权限</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs text"># 打开服务文件<br>sudo nano /etc/systemd/system/ollama.service<br># 在文件中Service字段后添加<br>[Service]<br>Environment=&quot;OLLAMA_MODELS=/home/xxx/ollama/models&quot;<br>Environment=&quot;http_proxy=xxxxxx&quot;<br><br># 设置目录访问权限 (根据反馈做了些调整)<br>sudo chown ollama:ollama /home/xxx/ollama<br>sudo chmod u+w /home/xxx/ollama<br>sudo chown ollama:ollama /home/xxx/ollama/models<br>sudo chmod u+w /home/xxx/ollama/models<br><br># 重启服务<br>sudo systemctl daemon-reload<br>sudo systemctl restart ollama.service<br><br># 确认状态<br>sudo systemctl status ollama.service<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 打开服务文件</span><br>sudo nano /etc/systemd/system/ollama.service<br><span class="hljs-comment"># 在文件中Service字段后添加</span><br>[Service]<br>Environment=<span class="hljs-string">&quot;OLLAMA_MODELS=/home/xxx/ollama/models&quot;</span><br>Environment=<span class="hljs-string">&quot;http_proxy=xxxxxx&quot;</span><br><br><span class="hljs-comment"># 设置目录访问权限 (根据反馈做了些调整)</span><br>sudo <span class="hljs-built_in">chown</span> ollama:ollama /home/xxx/ollama<br>sudo <span class="hljs-built_in">chmod</span> u+w /home/xxx/ollama<br>sudo <span class="hljs-built_in">chown</span> ollama:ollama /home/xxx/ollama/models<br>sudo <span class="hljs-built_in">chmod</span> u+w /home/xxx/ollama/models<br><br><span class="hljs-comment"># 重启服务</span><br>sudo systemctl daemon-reload<br>sudo systemctl restart ollama.service<br><br><span class="hljs-comment"># 确认状态</span><br>sudo systemctl status ollama.service<br><br>TEXT<br></code></pre></td></tr></table></figure>
 <p>注：有小伙伴反馈，修改模型存储目录时，如果只设置
 /home/xxx/ollama/models 目录的权限会出现 mkdir
 没有权限的错误。所以，建议对目录 /home/xxx/ollama/models 和
-/home/xxx/ollama 都为ollama用户赋予读写权限（2024.04.28）。</p>
-<h3 id="ollama下载的模型与huggingface上的模型有什么区别">7
-ollama下载的模型与huggingface上的模型有什么区别？</h3>
-<p>通常情况下，Qwen 模型的表示方法为 <code>Qwen1.5-4B-Chat</code>。在
-Ollama 中，<code>Qwen</code> 指代的是与 Hugging Face 上的
-<code>qwen1_5-4B-Chat-q4_0.gguf</code> 模型相对应的版本，这是一个经过 4
-位量化处理的模型。</p>
-<p><strong>ollama提供的qwen模型：默认为4B，4bit量化模型，大小为2.3G</strong></p>
-<h3 id="什么是modelfile-它的作用是什么">8 什么是Modelfile？
-它的作用是什么？</h3>
-<p>在创建自定义模型时，需要一个配置文件来指定模型推理相关的设置。</p>
-<p>这个文件仅在创建自定义模型过程中是必需的。若需修改模型推理的参数，必须重新创建模型，可以通过在
-<code>modelfile</code> 中调整参数来实现。</p>
-<h3 id="自定义模型如何-create-自定义模型基于gguf格式">9 自定义模型：如何
-create 自定义模型（基于GGUF格式）？</h3>
-<p>制作自定义模型的过程如下（GGUF格式），以qwen1.5 0.5B模型为例：</p>
+/home/xxx/ollama 都为ollama用户赋予读写权限（2024)</p>
+</blockquote>
+<p>【启动本地模型：<code>ollama run 本地模型名</code>】</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama run qwen2:0.5b</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt;</span><br></code></pre></td></tr></table></figure>
+<p>启动成功之后，就可以通过终端对话界面进行对话了（本命令下面也会讲到，其他详细暂且忽略）</p>
+<p>【查看本地运行中模型列表：<code>ollama ps</code>】</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama ps</span><br>NAME            ID              SIZE    PROCESSOR       UNTIL<br>qwen2:0.5b      6f48b936a09f    693 MB  100% CPU        4 minutes from now<br></code></pre></td></tr></table></figure>
+<p>通过<code>ps</code>命名可以看到，本地<strong>qwen2:0.5b</strong>大模型正在运行中。</p>
+<p>【复制本地大模型：<code>ollama cp 本地存在的模型名 新复制模型名</code>】</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama <span class="hljs-built_in">cp</span> qwen2:0.5b Qwen2-0.5B</span><br>copied &#x27;qwen2:0.5b&#x27; to &#x27;Qwen2-0.5B&#x27;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama list</span><br>NAME                    ID              SIZE    MODIFIED<br>Qwen2-0.5B:latest       6f48b936a09f    352 MB  4 seconds ago<br>qwen2:0.5b              6f48b936a09f    352 MB  29 minutes ago<br>qwen2:7b                e0d4e1163c58    4.4 GB  10 days ago<br></code></pre></td></tr></table></figure>
+<p>上面<code>cp</code>命令，把本地<strong>qwen2:0.5b</strong>复制了一份，新模型名为<strong>Qwen2-0.5B</strong></p>
+<p>下面介绍三种通过 Ollama 下载到本地大模型方式：</p>
 <ol type="1">
-<li>下载模型 qwen1_5-0_5b-chat-q4_0.gguf</li>
+<li>方式一：直接通过 Ollama
+远程仓库下载，这是最直接的方式，也是最推荐、最常用的方式</li>
+<li>方式二：如果已经有 GGUF 模型权重文件了，不想重新下载，也可以通过
+Ollama 把该文件直接导入到本地（不推荐、不常用）</li>
+<li>方式三：如果已经有 safetensors
+模型权重文件，也不想重新下载，也可以通过 Ollama
+把该文件直接导入到本地（不推荐、不常用）</li>
 </ol>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">wget https://huggingface.co/Qwen/Qwen1.5-0.5B-Chat-GGUF/resolve/main/qwen1_5-0_5b-chat-q4_0.gguf<br></code></pre></td></tr></table></figure>
+<h2 id="方式一ollama-从远程仓库下载大模型到本地">方式一：Ollama
+从远程仓库下载大模型到本地</h2>
+<p>【下载或者更新本地大模型：<code>ollama pull 本地/远程仓库模型名称</code>】</p>
+<p>本<code>pull</code>命令从 Ollama
+远程仓库完整下载或增量更新模型文件，模型名称<strong>格式</strong>为：<strong>模型名称:参数规格</strong>；如<code>ollama pull qwen2:0.5b</code>
+则代表从 Ollama
+仓库下载<strong>qwen2</strong>大模型的<strong>0.5b</strong>参数规格大模型文件到本地磁盘：</p>
+<figure>
+<img src="/images/ollama/02.png" srcset="/img/loading.gif" lazyload alt="Qwen2模型列表" />
+<figcaption aria-hidden="true">Qwen2模型列表</figcaption>
+</figure>
+<p>如果参数规格标记为<code>latest</code>则代表为默认参数规格，下载时<strong>可以</strong>不用指定，如<strong>Qwen2</strong>的<strong>7b</strong>被标记为<code>latest</code>，则<code>ollama pull qwen2</code>和<code>ollama pull qwen2:7b</code>这
+2
+个命令的意义是一样的，都下载的为<strong>7b</strong>参数规格模型。为了保证后续维护方便、避免误操作等，<strong>建议</strong>不管是否为默认参数规格，我们下载命令中均明确参数规格。</p>
+<p>值得一提的是，今天开始<strong>GLM4</strong>支持 Ollama
+部署和推理，特意列出它的下载命令：<code>ollama pull glm4:9b</code>（和其他模型相比，其实并没有特殊支出）。需要注意的是：Ollama
+最低版本为<strong>0.2.0</strong>才能支持<strong>GLM4</strong>大模型！</p>
+<figure>
+<img src="/images/ollama/03.png" srcset="/img/loading.gif" lazyload alt="GLM4模型列表" />
+<figcaption aria-hidden="true">GLM4模型列表</figcaption>
+</figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama pull qwen2:0.5b</span><br>pulling manifest<br>pulling manifest<br>pulling manifest<br>pulling manifest<br>pulling manifest<br>pulling 8de95da68dc4... 100% ▕████████████████████████▏ 352 MB<br>pulling 62fbfd9ed093... 100% ▕████████████████████████▏  182 B<br>pulling c156170b718e... 100% ▕████████████████████████▏  11 KB<br>pulling f02dd72bb242... 100% ▕████████████████████████▏   59 B<br>pulling 2184ab82477b... 100% ▕████████████████████████▏  488 B<br>verifying sha256 digest<br>writing manifest<br>removing any unused layers<br>success<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama list</span><br>NAME            ID              SIZE    MODIFIED<br>qwen2:0.5b      6f48b936a09f    352 MB  9 minutes ago<br>qwen2:7b        e0d4e1163c58    4.4 GB  10 days ago<br></code></pre></td></tr></table></figure>
+<p>若本地不存在大模型，则<strong>下载</strong>完整模型文件到本地磁盘；若本地磁盘存在该大模型，则<strong>增量</strong>下载大模型更新文件到本地磁盘。</p>
+<p>从上面最后的<code>list</code>命令结果可以看到，本地存在了<strong>qwen2:0.5b</strong>这个名称的大模型。</p>
+<p>【下载且运行本地大模型：<code>ollama run 本地/远程仓库模型名称</code>】</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama run qwen2:0.5b</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt;</span><br></code></pre></td></tr></table></figure>
+<p>若本地不存在大模型，则<strong>下载</strong>完整模型文件到本地磁盘（类似于<code>pull</code>命令），然后<strong>启动</strong>大模型；若本地存在大模型，则直接启动（不进行更新）。</p>
+<p>启动成功后，默认为终端对客界面：</p>
+<figure>
+<img src="/images/ollama/04.png" srcset="/img/loading.gif" lazyload alt="Ollama终端对话界面" />
+<figcaption aria-hidden="true">Ollama终端对话界面</figcaption>
+</figure>
 <ol type="1">
-<li>准备modelfile文件</li>
+<li>若需要输入多行文本，需要用<strong>三引号</strong>包裹，如：<code>"""这里是多行文本"""</code></li>
+<li><code>/clear</code>清除对话上下文信息</li>
+<li><code>/bye</code>则退出对话窗口</li>
+<li><code>/set parameter num_ctx 4096</code>可设置窗口大小为 4096 个
+Token，也可以通过请求设置，如：<code>curl &lt;http://localhost:11434/api/generate&gt; -d '&#123; "model": "qwen2:7b", "prompt": "Why is the sky blue?", "options": &#123; "num_ctx": 4096 &#125;&#125;'</code></li>
+<li><code>/show info</code>可以查看当前模型详情： ，</li>
 </ol>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs text">#FROM qwen1_5-0_5b-chat-q4_0.gguf<br>FROM ./qwen1_5-0_5b-chat-q4_0.gguf<br><br># set the temperature to 1 [higher is more creative, lower is more coherent]<br>PARAMETER temperature 0.7<br>PARAMETER top_p 0.8<br>PARAMETER repeat_penalty 1.05<br>PARAMETER top_k 20<br><br>TEMPLATE &quot;&quot;&quot;&#123;&#123; if and .First .System &#125;&#125;&lt;|im_start|&gt;system<br>&#123;&#123; .System &#125;&#125;&lt;|im_end|&gt;<br>&#123;&#123; end &#125;&#125;&lt;|im_start|&gt;user<br>&#123;&#123; .Prompt &#125;&#125;&lt;|im_end|&gt;<br>&lt;|im_start|&gt;assistant<br>&#123;&#123; .Response &#125;&#125;&quot;&quot;&quot;<br><br># set the system message<br>SYSTEM &quot;&quot;&quot;<br>You are a helpful assistant.<br>&quot;&quot;&quot;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">&gt;&gt;&gt; /show info<br>  Model<br>        arch                    qwen2<br>        parameters              494.03M<br>        quantization            Q4_0<br>        context length          32768<br>        embedding length        896<br> <br>  Parameters<br>        stop    &quot;&lt;|im_start|&gt;&quot;<br>        stop    &quot;&lt;|im_end|&gt;&quot;<br> <br>  License<br>        Apache License<br>        Version 2.0, January 2004<br></code></pre></td></tr></table></figure>
+<h2 id="方式二ollama-导入-gguf-模型文件到本地磁盘">方式二：Ollama 导入
+GGUF 模型文件到本地磁盘</h2>
+<p>若我们已经从 HF 或者 ModeScope 下载了 GGUF
+文件（文件名为：<strong>Meta-Llama-3-8B-Instruct.Q4_K_M.gguf</strong>），在我们存放<code>Llama3-8B</code>的
+GGUF
+模型文件目录中，创建一个文件名为<code>Modelfile</code>的文件，该文件的内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">FROM ./Meta-Llama-3-8B-Instruct.Q4_K_M.gguf<br></code></pre></td></tr></table></figure>
+<p>然后，打开终端，执行命令导入模型文件：<code>ollama create 模型名称 -f ./Modelfile</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama create Llama-3-8B -f ./Modelfile</span><br>transferring model data<br>using existing layer sha256:647a2b64cbcdbe670432d0502ebb2592b36dd364d51a9ef7a1387b7a4365781f<br>creating new layer sha256:459d7c837b2bd7f895a15b0a5213846912693beedaf0257fbba2a508bc1c88d9<br>writing manifest<br>success<br></code></pre></td></tr></table></figure>
+<p>导入成功之后，我们就可以通过<code>list</code>命名，看到名为<strong>Llama-3-8B</strong>的本地模型了，后续可以和其他模型一样进行管理了。</p>
+<h2
+id="方式三ollama-导入-safetensors-模型文件到到本地磁盘">方式三：Ollama
+导入 safetensors 模型文件到到本地磁盘</h2>
+<p>官方操作文档：https://ollama.fan/getting-started/import/#importing-pytorch-safetensors</p>
+<p>若我们已经从 HF 或者 ModeScope 下载了 safetensors
+文件（文件目录为：<strong>Mistral-7B</strong>），</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">git lfs install<br> <br>git clone https://www.modelscope.cn/rubraAI/Mistral-7B-Instruct-v0.3.git Mistral-7B<br></code></pre></td></tr></table></figure>
+<p>然后，我们转换模型（结果：<code>Mistral-7B-v0.3.bin</code>）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">python llm/llama.cpp/convert.py ./Mistral-7B --outtype f16 --outfile Mistral-7B-v0.3.bin<br></code></pre></td></tr></table></figure>
+<p>接下来，进行量化量化：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">llm/llama.cpp/quantize Mistral-7B-v0.3.bin Mistral-7B-v0.3_Q4.bin q4_0<br></code></pre></td></tr></table></figure>
+<p>最后，通过 Ollama
+导入到本地磁盘，创建<code>Modelfile</code>模型文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">FROM Mistral-7B-v0.3_Q4.bin<br></code></pre></td></tr></table></figure>
+<p>执行导入命令，导入模型文件：<code>ollama create 模型名称 -f ./Modelfile</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">ollama create Mistral-7B-v0.3 -f ./Modelfile</span><br>transferring model data<br>using existing layer sha256:647a2b64cbcdbe670432d0502ebb2592b36dd364d51a9ef7a1387b7a4365781f<br>creating new layer sha256:459d7c837b2bd7f895a15b0a5213846912693beedaf0257fbba2a508bc1c88d9<br>writing manifest<br>success<br></code></pre></td></tr></table></figure>
+<p>导入成功之后，我们就可以通过<code>list</code>命名，看到名为<strong>Mistral-7B-v0.3</strong>的本地模型了，后续可以和其他模型一样进行管理了。</p>
+<h2 id="基于-webui-部署-ollama-可视化对话界面">基于 WebUI 部署 Ollama
+可视化对话界面</h2>
+<p><strong>Ollama</strong>自带控制台对话界面体验总归是不太好，接下来部署
+Web 可视化聊天界面：</p>
 <ol type="1">
-<li>创建模型</li>
+<li>下载并安装 Node.js 工具：https://nodejs.org/zh-cn</li>
+<li>下载<code>ollama-webui</code>工程代码：<code>git clone https://github.com/ollama-webui/ollama-webui-lite ollama-webui</code></li>
+<li>切换<code>ollama-webui</code>代码的目录：<code>cd ollama-webui</code></li>
+<li>设置 Node.js
+工具包镜像源（下载提速）：<code>npm config set registry http://mirrors.cloud.tencent.com/npm/</code></li>
+<li>安装 Node.js 依赖的工具包：<code>npm install</code></li>
+<li>最后，启动 Web 可视化界面：<code>npm run dev</code></li>
 </ol>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">ollama create qwen0_5b -f Modelfile<br></code></pre></td></tr></table></figure>
-<h3 id="自定义模型模型创建后去了哪里">10
-自定义模型：模型创建后去了哪里？</h3>
-<p>模型被创建后，会被存放在以下位置： 模型文本被存储在：
-<code>/home/&lt;username&gt;/.ollama/models/blobs</code>
-配置文件位于：<code>/home/&lt;username&gt;/.ollama/models/manifests/registry.ollama.ai/library/qwen0_5b/latest</code></p>
-<h3 id="如何重新修改模型的-temperature-等参数">11 如何重新修改模型的
-temperature 等参数？</h3>
-<p>模型被创建后，修改temperature等参数，需要重新create模型。</p>
-<p>通过以下命令可以查看一个模型的 modelfile 设置</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs text">$ ollama show --modelfile qwen0_5b<br># Modelfile generated by &quot;ollama show&quot;<br># To build a new Modelfile based on this one, replace the FROM line with:<br># FROM qwen0_5b:latest<br><br>FROM /home/&lt;username&gt;/.ollama/models/blobs/sha256:46a9de8316739892e2721fdc49f8353155e4c1bcfa0b17867cb590d2dfdf1d99<br>TEMPLATE &quot;&quot;&quot;&#123;&#123; if and .First .System &#125;&#125;&lt;|im_start|&gt;system<br>&#123;&#123; .System &#125;&#125;&lt;|im_end|&gt;<br>&#123;&#123; end &#125;&#125;&lt;|im_start|&gt;user<br>&#123;&#123; .Prompt &#125;&#125;&lt;|im_end|&gt;<br>&lt;|im_start|&gt;assistant<br>&#123;&#123; .Response &#125;&#125;&quot;&quot;&quot;<br>SYSTEM &quot;&quot;&quot;<br>You are a helpful assistant.<br>&quot;&quot;&quot;<br>PARAMETER repeat_penalty 1.05<br>PARAMETER temperature 0.7<br>PARAMETER top_k 20<br>PARAMETER top_p 0.8<br></code></pre></td></tr></table></figure>
-<p>可以看到这些数据都被存放到了
-/home//.ollama/models/blobs/sha256:46a9de8316739892e2721fdc49f8353155e4c1bcfa0b17867cb590d2dfdf1d99
-文件中（此文件是二进制文件）。通过重新create模型，可以修改里面的参数。</p>
-<h3 id="如何导入-pytorchsafetensors-格式的模型">12 如何导入
-PyTorch，Safetensors 格式的模型？</h3>
-<p>ollama只支持GGUF格式的模型进行导入。对于pytorch和safetensors的模型，需要转换为gguf格式之后再导入。
-具体步骤，请参考：https://github.com/ollama/ollama/blob/main/docs/import.md</p>
-<h3 id="是否可以链接webui有什么webui推荐">13
-是否可以链接WebUI，有什么WebUI推荐？</h3>
-<p>ollama github首页中推荐了多种WebUI和终端访问方法的相关项目。
-https://github.com/ollama/ollama （Community Integrations部分）</p>
-<p><strong>安装教程：Windows上如何安装Open WebUI</strong> B站：</p>
-<iframe width="560" height="315" src="https://player.bilibili.com/player.html?bvid=BV1Ex421Q723&amp;page=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="box-sizing: border-box; color: rgb(53, 55, 64); font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Segoe UI&quot;, Arial, freesans, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
-</iframe>
-<p>油管：</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/VfeCri0yplc?si=UCoZpuOyyJ-ymjix" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="box-sizing: border-box; color: rgb(53, 55, 64); font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Segoe UI&quot;, Arial, freesans, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
-</iframe>
-<p><strong>Linux安装教程请访问：</strong>
-https://techdiylife.github.io/blog/blog.html?category1=c02&amp;blogid=0036</p>
-<h3 id="如何对ollama进行速度评价">14 如何对ollama进行速度评价？</h3>
-<p>当以普通用户身份启动服务时，可以在终端界面查看推理速度。比如
-{"function":"print_timings","level":"INFO","line":257,"msg":"prompt eval
-time = 25.55 ms / 12 tokens ( 2.13 ms per token, 469.70 tokens per
-second)","n_prompt_tokens_processed":12,"n_tokens_second":469.70408642555196,"slot_id":0,"t_prompt_processing":25.548,"t_token":2.129,"task_id":111,"tid":"140543230871296","timestamp":1711096105}</p>
-<p>可以看到有：2.13 ms per token, 469.70 tokens per second</p>
-<p>在Windows或者Linux上以服务启动时，也可以在日志文件中找到这些数据。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text"># Windows<br>C:\Users\&lt;username&gt;\AppData\Local\Ollama\server.log<br>#MacOS<br>cat ~/.ollama/logs/server.log<br># Linux<br>sudo systemctl status ollama.service &gt; xxx.log<br></code></pre></td></tr></table></figure>
-<h3 id="ollama是否可以对模型精度评价">15
-Ollama是否可以对模型精度评价？</h3>
-<p>在ollama工具中，没有直接的方式来评估模型性能。然而，在<code>llama.cpp</code>中，有提供测试数据集，以及使用Perplexity指标来进行模型评估的示例。</p>
-<p>常见LLM大模型评估方法如下：</p>
-<ul>
-<li><strong>主观评价</strong>：通过人工审查模型的输出，评估其生成内容的质量和相关性。</li>
-<li><strong>测试集评价</strong>：利用特定的测试数据集，对模型性能进行量化评估。这种方法的细节可以参考相关模型的技术报告。</li>
-<li><strong>利用其他模型进行评价</strong>：例如，使用GPT-4对ollama模型的输出结果进行评估，以此来比较不同模型的性能。</li>
-</ul>
-<h3 id="linux系统中以服务模式运行ollama如何查看运行日志">16
-Linux系统中以服务模式运行ollama，如何查看运行日志？</h3>
-<p>使用以下命令可以查看ollama的日志：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text"># 查看服务日志<br>sudo systemctl status ollama.service<br><br># 查看用户日志<br>sudo journalctl -u ollama<br></code></pre></td></tr></table></figure>
-<h3 id="linux系统中如何卸载ollama">17 Linux系统中如何卸载Ollama？</h3>
-<p>在Windows和MacOS上，卸载ollama的过程与卸载其他软件相同，支持一键卸载。</p>
-<p>而在Linux上，卸载ollama需要执行更多步骤，包括关闭运行中的服务以及删除相关文件。具体操作步骤，请参考官方文档中的“Uninstall”部分：
-https://github.com/ollama/ollama/blob/main/docs/linux.md</p>
-<h3 id="上网需要使用代理时模型无法下载怎么办">18
-上网需要使用代理时，模型无法下载怎么办？</h3>
-<p><strong>出现错误：</strong> Error: pull model manifest: Get
-"https://registry.ollama.ai/v2/library/qwen/manifests/0.5b": dial tcp
-34.120.132.20:443: i/o timeout</p>
-<p><strong>原因分析：</strong> 代理设置不正确。</p>
+<figure>
+<img src="/images/ollama/05.jpg" srcset="/img/loading.gif" lazyload alt="Ollam WebUI启动成功" />
+<figcaption aria-hidden="true">Ollam WebUI启动成功</figcaption>
+</figure>
+<p>如果看到以上输出，代表 Web 可视化界面已经成功了！</p>
+<p>浏览器打开 Web 可视化界面：http://localhost:3000/</p>
+<figure>
+<img src="/images/ollama/06.png" srcset="/img/loading.gif" lazyload alt="Ollam WebUI对话界面" />
+<figcaption aria-hidden="true">Ollam WebUI对话界面</figcaption>
+</figure>
+<h2 id="ollama-客户端http-访问服务">Ollama 客户端：HTTP 访问服务</h2>
+<p>Ollama 默认提供了<code>generate</code>和<code>chat</code>这 2
+个原始的 API 接口，使用方式如下：</p>
 <ol type="1">
-<li><strong>服务文件中设置环境变量（sudo安装时）</strong>：
-在以服务启动后，默认以<code>ollama</code>用户的身份运行。可以为ollama.service
-服务设置环境变量。</li>
+<li><code>generate</code>接口的使用样例：</li>
 </ol>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs text"># 打开服务文件<br>sudo nano /etc/systemd/system/ollama.service<br># 在文件中Service字段后添加<br>[Service]<br>Environment=&quot;http_proxy=xxxxxx&quot;<br><br># 重启服务<br>sudo systemctl daemon-reload<br>sudo systemctl restart ollama.service<br><br># 确认状态<br>sudo systemctl status ollama.service<br></code></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">curl http://localhost:11434/api/generate -d &quot;&#123;<br>  &#x27;model&#x27;: &#x27;qwen:0.5b&#x27;,<br>  &#x27;prompt&#x27;: &#x27;为什么天空是蓝色的？&#x27;<br>&#125;&quot;<br></code></pre></td></tr></table></figure>
 <ol type="1">
-<li><strong>以当前用户身份启动服务(一般用户)</strong>：
-通过为当前用户设置代理，然后以当前用户的身份启动服务。这要求当前用户具有启动该服务所需的权限。</li>
+<li><code>chat</code>接口的使用样例：</li>
 </ol>
-<ul>
-<li><p>方法1：.bashrc中设置</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text"># 在本地账户 .bashrc 文件中加入<br>export HTTP_PROXY=xxxxxxxxxxx<br>export HTTPS_PROXY=xxxxxxxxxxx<br><br># 启动服务<br>ollama serve 启动（不能使用 sudo systemctl start ollama.service）<br></code></pre></td></tr></table></figure></li>
-<li><p>方法2：通过下面的方式启动服务</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">HTTPS_PROXY=xxxxxxxxxxx ollama serve<br></code></pre></td></tr></table></figure></li>
-</ul>
-<p>参考资料：https://github.com/ollama/ollama/issues/1859</p>
-<h3 id="有多个gpu时如何指定使用单张gpu">19
-有多个GPU时，如何指定使用单张GPU？</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">curl http://localhost:11434/api/chat -d &#x27;&#123;<br>  &quot;model&quot;: &quot;qwen:7b&quot;,<br>  &quot;messages&quot;: [<br>    &#123; &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;为什么天空是蓝色的？&quot; &#125;<br>  ]<br>&#125;&#x27;<br></code></pre></td></tr></table></figure>
+<p>接下来的<strong>Python</strong>和<strong>Java</strong>客户端应用，都是对这
+2 个接口的封装。</p>
+<h2 id="ollama-客户端python-api-应用">Ollama 客户端：Python API
+应用</h2>
+<p>我们把 Ollama 集成到 Python 应用中，只需要以下简单 2 步即可：</p>
+<p><strong>第一步</strong>，安装 Python 依赖包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install ollama<br></code></pre></td></tr></table></figure>
+<p><strong>第二步</strong>，使用 Ollama
+接口，<code>stream=True</code>代表按照流式输出：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> ollama<br> <br><span class="hljs-comment"># 流式输出</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">api_generate</span>(<span class="hljs-params">text:<span class="hljs-built_in">str</span></span>):<br>  <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;提问：<span class="hljs-subst">&#123;text&#125;</span>&#x27;</span>)<br> <br>  stream = ollama.generate(<br>    stream=<span class="hljs-literal">True</span>,<br>    model=<span class="hljs-string">&#x27;qwen:7b&#x27;</span>,<br>    prompt=text,<br>    )<br> <br>  <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-----------------------------------------&#x27;</span>)<br>  <span class="hljs-keyword">for</span> chunk <span class="hljs-keyword">in</span> stream:<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> chunk[<span class="hljs-string">&#x27;done&#x27;</span>]:<br>      <span class="hljs-built_in">print</span>(chunk[<span class="hljs-string">&#x27;response&#x27;</span>], end=<span class="hljs-string">&#x27;&#x27;</span>, flush=<span class="hljs-literal">True</span>)<br>    <span class="hljs-keyword">else</span>:<br>      <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)<br>      <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-----------------------------------------&#x27;</span>)<br>      <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;总耗时：<span class="hljs-subst">&#123;chunk[<span class="hljs-string">&#x27;total_duration&#x27;</span>]&#125;</span>&#x27;</span>)<br>      <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-----------------------------------------&#x27;</span>)<br> <br> <br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>  <span class="hljs-comment"># 流式输出</span><br>  api_generate(text=<span class="hljs-string">&#x27;天空为什么是蓝色的？&#x27;</span>)<br> <br>  <span class="hljs-comment"># 非流式输出</span><br>  content = ollama.generate(model=<span class="hljs-string">&#x27;qwen:0.5b&#x27;</span>, prompt=<span class="hljs-string">&#x27;天空为什么是蓝色的？&#x27;</span>)<br>  <span class="hljs-built_in">print</span>(content)<br></code></pre></td></tr></table></figure>
+<h2 id="ollama-客户端java-api-应用springboot-应用">Ollama 客户端：Java
+API 应用（SpringBoot 应用）</h2>
+<p>我们也可以把 Ollama 集成到 SpringBoot 应用中，只需要以下简单 3
+步即可：</p>
+<p><strong>第一步</strong>，在总<code>pom.xml</code>中新增 SpringBoot
+Starter 依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>io.springboot.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-ollama-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><strong>第二步</strong>，在 SpringBoot
+配置文件<code>application.properties</code>中增加 Ollama 配置信息：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">server.port</span>=<span class="hljs-string">8088</span><br><span class="hljs-attr">spring.application.name</span>=<span class="hljs-string">NTopicBootX</span><br><span class="hljs-attr">spring.ai.ollama.base-url</span>=<span class="hljs-string">http://localhost:11434</span><br><span class="hljs-attr">spring.ai.ollama.chat.options.model</span>=<span class="hljs-string">qwen:0.5b</span><br></code></pre></td></tr></table></figure>
+<p>配置文件指定了 Ollama API
+地址和端口，同时指定了默认模型<strong>qwen:0.5b</strong>（注意：模型需要在本地已经存在）</p>
+<p><strong>第三步</strong>，使用<code>OllamaChatClient</code>进行文字生成或者对话：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.springframework.ai.chat.ChatResponse;<br><span class="hljs-keyword">import</span> org.springframework.ai.chat.prompt.Prompt;<br><span class="hljs-keyword">import</span> org.springframework.ai.ollama.OllamaChatClient;<br><span class="hljs-keyword">import</span> org.springframework.ai.ollama.api.OllamaOptions;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Qualifier;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.GetMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestParam;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestController;<br> <br><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">OllamaClientController</span> &#123;<br> <br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-meta">@Qualifier(&quot;ollamaChatClient&quot;)</span><br>    <span class="hljs-keyword">private</span> OllamaChatClient ollamaChatClient;<br> <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * http://localhost:8088/ollama/chat/v1?msg=天空为什么是蓝色的？</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@GetMapping(&quot;/ollama/chat/v1&quot;)</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">ollamaChat</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String msg)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.ollamaChatClient.call(msg);<br>    &#125;<br> <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * http://localhost:8088/ollama/chat/v2?msg=人为什么要不断的追求卓越？</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@GetMapping(&quot;/ollama/chat/v2&quot;)</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">ollamaChatV2</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String msg)</span> &#123;<br>        <span class="hljs-type">Prompt</span> <span class="hljs-variable">prompt</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Prompt</span>(msg);<br>        <span class="hljs-type">ChatResponse</span> <span class="hljs-variable">chatResponse</span> <span class="hljs-operator">=</span> ollamaChatClient.call(prompt);<br>        <span class="hljs-keyword">return</span> chatResponse;<br>    &#125;<br> <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * http://localhost:8088/ollama/chat/v3?msg=你认为的文章如何？</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@GetMapping(&quot;/ollama/chat/v3&quot;)</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">ollamaChatV3</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String msg)</span> &#123;<br>        <span class="hljs-type">Prompt</span> <span class="hljs-variable">prompt</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Prompt</span>(<br>                msg,<br>                OllamaOptions.create()<br>                        .withModel(<span class="hljs-string">&quot;qwen:0.5b&quot;</span>)<br>                        .withTemperature(<span class="hljs-number">0.4F</span>));<br>        <span class="hljs-type">ChatResponse</span> <span class="hljs-variable">chatResponse</span> <span class="hljs-operator">=</span> ollamaChatClient.call(prompt);<br>        <span class="hljs-keyword">return</span> chatResponse.getResult().getOutput().getContent();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上是 Java
+客户端的简单样例，我们可以通过<code>OllamaChatClient</code>访问 Ollama
+接口，既可以使用默认大模型，也可以在参数指定模型名称！</p>
+<h3
+id="有多个gpu时如何指定使用单张gpu">有多个GPU时，如何指定使用单张GPU？</h3>
 <p>ollama默认会使用所有它可见的GPU，如果希望限制它只使用其中的某个GPU时，可以在环境变量中设置
 CUDA_VISIBLE_DEVICES，比如： export CUDA_VISIBLE_DEVICES=0</p>
-<h3 id="ollama是否支持rag">20 ollama是否支持RAG？</h3>
+<h3 id="ollama是否支持rag">ollama是否支持RAG？</h3>
 <p>ollama本身不支持RAG，但是可以结合langchain等工具来实现，比如：
 https://github.com/ollama/ollama/tree/main/examples/langchain-python-rag-websummary</p>
-<h3 id="补充ollama模型库中instructtext等tag是指什么模型">21
-补充：Ollama模型库中instruct，text等tag是指什么模型？</h3>
+<h3
+id="补充ollama模型库中instructtext等tag是指什么模型">补充：Ollama模型库中instruct，text等tag是指什么模型？</h3>
 <p>如下图所示的llama3模型有70b， 8b， instruct， text
 都分别对应着什么模型呢？</p>
 <figure>
@@ -532,8 +585,8 @@ src="data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAhEAAAD1CAYAAAD
 alt="img" />
 <figcaption aria-hidden="true">img</figcaption>
 </figure>
-<h3 id="补充open-webui-与现有服务端口冲突如何修改端口">22 补充：Open
-WebUI 与现有服务端口冲突，如何修改端口？</h3>
+<h3 id="补充open-webui-与现有服务端口冲突如何修改端口">补充：Open WebUI
+与现有服务端口冲突，如何修改端口？</h3>
 <ul>
 <li>如果是使用docker安装运行，可以在docker命令中修改：</li>
 </ul>
@@ -542,8 +595,8 @@ WebUI 与现有服务端口冲突，如何修改端口？</h3>
 <li>如果是通过代码安装，启动</li>
 </ul>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">cd ./backend<br>PORT=1234 start.sh #使用端口1234<br></code></pre></td></tr></table></figure>
-<h3 id="补充ollama支持中文名用户名或者目录吗">23
-补充：Ollama支持中文名用户名，或者目录吗？</h3>
+<h3
+id="补充ollama支持中文名用户名或者目录吗">补充：Ollama支持中文名用户名，或者目录吗？</h3>
 <p>从0.1.33版开始增加了对中文名目录的支持。
 https://github.com/ollama/ollama/issues/3367
 0.1.33之前的版本不支持。如果你使用的老版本，请检查：</p>
@@ -552,16 +605,16 @@ https://github.com/ollama/ollama/issues/3367
 <li>ollama的模型存放目录是否包含中文</li>
 </ul>
 <p>如果存在以上情况，可以修改ollama模型默认存放目录。（修改方式参考，问题6）</p>
-<h3 id="补充ollama使用一段时间后为什么会自动停止">24
-补充：Ollama使用一段时间后，为什么会自动停止？</h3>
+<h3
+id="补充ollama使用一段时间后为什么会自动停止">补充：Ollama使用一段时间后，为什么会自动停止？</h3>
 <p>很大的原因是由于资源不足，比如GPU显存不足等。</p>
 <ol type="1">
 <li>查看ollama的日志看看是否有记录</li>
 <li>尝试较小的模型，比如qwen 0.5B的模型看看是否出现同样的问题。</li>
 </ol>
 <h3
-id="补充windows上安装完后在终端执行提示-ollama-不是内部或外部命令">25
-补充：windows上安装完后，在终端执行提示 ollama 不是内部或外部命令</h3>
+id="补充windows上安装完后在终端执行提示-ollama-不是内部或外部命令">补充：windows上安装完后，在终端执行提示
+ollama 不是内部或外部命令</h3>
 <p>【根据群里小伙伴的讨论整理】</p>
 <ol type="1">
 <li>设置环境变量 PATH： win+r打开运行，输入“control
@@ -572,9 +625,8 @@ system”-高级系统设置-高级-环境变量-系统变量-编辑Path-新建-
 确认是否可以运行（如果出错，可以尝试以管理员身份）</li>
 </ol>
 <h3
-id="补充windows系统提示错误-errorcould-not-connect-to-ollama-app-is-it-running">26
-补充：Windows系统，提示错误 Error：Could not connect to ollama app， is
-it running</h3>
+id="补充windows系统提示错误-errorcould-not-connect-to-ollama-app-is-it-running">补充：Windows系统，提示错误
+Error：Could not connect to ollama app， is it running</h3>
 <p>运行 ollama run xxx 出现此错误，说明ollama没有正确启动。
 可以尝试：</p>
 <ol type="1">
