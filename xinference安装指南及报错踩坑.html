@@ -16,26 +16,26 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="从零开始学习大语言模型-Lyi 林亦是我比较喜欢的一个UP，视频讲述了他对深度学习基本范式的回顾和梳理。主要介绍了神经网络模型的结构和训练过程，以及当前流行的大语言模型——基于神经网络的技术。视频指出，构建一个能力强、学习效率高的模型是影响学习效果的关键，也是深度学习研究的核心问题。整个视频围绕着数据和模型展开，梳理了深度学习的核心概念和基本流程。">
+    <meta name="description" content="xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web ui管理界面，除了TEXT EMBEDDING LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。 正常安装流程 1.安装Chatchat库，实现">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【B站】从零开始学习大语言模型-Lyi">
-<meta property="og:url" content="https://linxkon.github.io/B%E7%AB%99_%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-Lyi.html">
+<meta property="og:title" content="xinference安装报错踩坑">
+<meta property="og:url" content="https://linxkon.github.io/xinference%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%E5%8F%8A%E6%8A%A5%E9%94%99%E8%B8%A9%E5%9D%91.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="从零开始学习大语言模型-Lyi 林亦是我比较喜欢的一个UP，视频讲述了他对深度学习基本范式的回顾和梳理。主要介绍了神经网络模型的结构和训练过程，以及当前流行的大语言模型——基于神经网络的技术。视频指出，构建一个能力强、学习效率高的模型是影响学习效果的关键，也是深度学习研究的核心问题。整个视频围绕着数据和模型展开，梳理了深度学习的核心概念和基本流程。">
+<meta property="og:description" content="xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web ui管理界面，除了TEXT EMBEDDING LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。 正常安装流程 1.安装Chatchat库，实现">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/B%E7%AB%99.png">
-<meta property="article:published_time" content="2024-02-17T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-28T14:03:53.522Z">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
+<meta property="article:published_time" content="2024-03-11T01:21:13.000Z">
+<meta property="article:modified_time" content="2024-08-16T11:28:26.138Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="深度学习">
-<meta property="article:tag" content="大模型">
-<meta property="article:tag" content="视频分享">
+<meta property="article:tag" content="环境配置">
+<meta property="article:tag" content="推理工具">
+<meta property="article:tag" content="部署">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/B%E7%AB%99.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
   
   
   
-  <title>【B站】从零开始学习大语言模型-Lyi - AI·你所爱</title>
+  <title>xinference安装报错踩坑 - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="【B站】从零开始学习大语言模型-Lyi"></span>
+            <span id="subtitle" data-typed-text="xinference安装报错踩坑"></span>
           
         </div>
 
@@ -241,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-17 20:21" pubdate>
-          2024年2月17日 晚上
+        <time datetime="2024-03-11 09:21" pubdate>
+          2024年3月11日 上午
         </time>
       </span>
     
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          678 字
+          293 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          6 分钟
+          3 分钟
         
       </span>
     
@@ -309,44 +309,56 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">【B站】从零开始学习大语言模型-Lyi</h1>
+            <h1 id="seo-header">xinference安装报错踩坑</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="从零开始学习大语言模型-lyi">从零开始学习大语言模型-Lyi</h1>
-<p>林亦是我比较喜欢的一个UP，视频讲述了他对深度学习基本范式的回顾和梳理。主要介绍了神经网络模型的结构和训练过程，以及当前流行的大语言模型——基于神经网络的技术。视频指出，构建一个能力强、学习效率高的模型是影响学习效果的关键，也是深度学习研究的核心问题。整个视频围绕着数据和模型展开，梳理了深度学习的核心概念和基本流程。</p>
-<span id="more"></span>
-<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=1750586968&amp;bvid=BV1v4421w7pU&amp;cid=1441154247&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
-</iframe>
-<h3
-id="机器学习的概念和分类着重讲解了监督学习和无监督学习以及模型的重要性">机器学习的概念和分类,着重讲解了监督学习和无监督学习,以及模型的重要性。</h3>
-<p>00:01机器学习概念与语言任务</p>
-<p>02:01监督学习与无监督学习</p>
-<p>04:00机器学习模型的构建和选择</p>
-<h3
-id="模型的概念以及神经网络模型的运作原理包括感知机单元和多层神经网络模型">模型的概念,以及神经网络模型的运作原理,包括感知机单元和多层神经网络模型。</h3>
-<p>04:26模型训练与神经网络结构</p>
-<p>06:40感知机的原理和激活函数</p>
-<p>07:45多层神经网络模型和信息归纳能力</p>
-<h3
-id="神经网络中的函数导数偏导数损失函数和梯度下降等概念以及如何用反向传播算法优化权重值">神经网络中的函数、导数、偏导数、损失函数和梯度下降等概念,以及如何用反向传播算法优化权重值。</h3>
-<p>08:15每个单元之间的连接是一个权重数值，这些数值可以通过反向传播算法进行优化。</p>
-<p>09:27训练神经网络的流程：训练程序会为每个输入变量随机分配一个权重值，然后通过前向传播和梯度下降算法不断优化权重值，直到损失函数最小化。</p>
-<p>11:08梯度下降算法：通过不断更新权重值，沿着梯度下降的方向最快达到最低损失函数值。</p>
-<h3
-id="如何使用链式法则解决复杂函数的导数计算问题以及模型训练中的收敛和超参数设置">如何使用链式法则解决复杂函数的导数计算问题,以及模型训练中的收敛和超参数设置。</h3>
-<p>12:22链式法则与模型更新</p>
-<p>15:26深度学习中的残差网络</p>
-<p>15:50梯度消失与跳过连接</p>
-<h3
-id="残差网络的作用和意义以及机器学习中泛化能力的评估和重要性">残差网络的作用和意义,以及机器学习中泛化能力的评估和重要性。</h3>
-<p>17:05模型遇到从未见过的数据时，能不能整明白。</p>
-<p>19:16大模型的转变：从小型专用模型到大型通用模型的转变。</p>
-<h3
-id="机器如何理解人类语言的基础知识并提到了接下来将进一步探讨这一话题">机器如何理解人类语言的基础知识,并提到了接下来将进一步探讨这一话题。</h3>
-<p>19:45机器理解人类语言的基础知识</p>
-<p>19:52视频结束及作者告别</p>
+                <p>xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web
+ui管理界面，除了TEXT EMBEDDING
+LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。</p>
+<h3 id="正常安装流程">正常安装流程</h3>
+<h4
+id="安装chatchat库实现模型后处理">1.安装Chatchat库，实现模型后处理。</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install &quot;langchain-chatchat[xinference]&quot; -U -i https://pypi.tuna.tsinghua.edu.cn/simple<br></code></pre></td></tr></table></figure>
+<h4
+id="安装xinference库实现模型推理">2.安装xinference库，实现模型推理。</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install &quot;xinference[all]&quot;<br></code></pre></td></tr></table></figure>
+<h4 id="启动xinference">3.启动xinference</h4>
+<p>在安装完相应的环境后，启动xinference以进行模型部署。</p>
+<p>通过命令行执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">xinference-local --host 0.0.0.0 --port 9997<br></code></pre></td></tr></table></figure>
+<p>来启动xinference，启动后访问：IP:9997 即可进入xinference主界面。</p>
+<h3 id="报错及解决方法">报错及解决方法</h3>
+<h4 id="问题1cython">问题1：cython</h4>
+<blockquote>
+<p>Python package installation error: missing Cython dependency</p>
+</blockquote>
+<p>解决：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install cython<br></code></pre></td></tr></table></figure>
+<h4 id="问题2pynini">问题2：pynini</h4>
+<blockquote>
+<p>执行命令后：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> <span class="hljs-string">&quot;xinference[all]&quot;</span><br></code></pre></td></tr></table></figure>
+<p>报错信息：ERROR: Failed to build installable wheels for some
+pyproject.toml based projects (pynini)</p>
+</blockquote>
+<p>解决：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">conda install -c conda-forge pynini=2.1.5<br></code></pre></td></tr></table></figure>
+<h4 id="问题3nameerror">问题3:NameError</h4>
+<blockquote>
+<p>NameError: Field name "schema" shadows a BaseModel attribute; use a
+different field name with "alias='schema'".</p>
+</blockquote>
+<p>解决：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install openai==1.39.0<br></code></pre></td></tr></table></figure>
+<h4 id="问题4runtimeerror">问题4：RuntimeError</h4>
+<blockquote>
+<p>RuntimeError: Cluster is not available after multiple attempts</p>
+</blockquote>
+<p>原因：xinference-local --host 0.0.0.0 --port
+9997中ip地址0.0.0.0无法使用，可能是windows的锅</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">xinference-local --host localhost --port 9997<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -365,7 +377,7 @@ id="机器如何理解人类语言的基础知识并提到了接下来将进一�
     
       <span class="category-chain">
         
-  <a href="/categories/B%E7%AB%99/" class="category-chain-item">B站</a>
+  <a href="/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="category-chain-item">环境配置</a>
   
   
 
@@ -380,11 +392,11 @@ id="机器如何理解人类语言的基础知识并提到了接下来将进一�
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+        <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="print-no-link">#环境配置</a>
       
-        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+        <a href="/tags/%E6%8E%A8%E7%90%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#推理工具</a>
       
-        <a href="/tags/%E8%A7%86%E9%A2%91%E5%88%86%E4%BA%AB/" class="print-no-link">#视频分享</a>
+        <a href="/tags/%E9%83%A8%E7%BD%B2/" class="print-no-link">#部署</a>
       
     </div>
   
@@ -396,8 +408,8 @@ id="机器如何理解人类语言的基础知识并提到了接下来将进一�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>【B站】从零开始学习大语言模型-Lyi</div>
-      <div>https://linxkon.github.io/B站_从零开始学习大语言模型-Lyi.html</div>
+      <div>xinference安装报错踩坑</div>
+      <div>https://linxkon.github.io/xinference安装指南及报错踩坑.html</div>
     </div>
     <div class="license-meta">
       
@@ -409,7 +421,7 @@ id="机器如何理解人类语言的基础知识并提到了接下来将进一�
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月17日</div>
+          <div>2024年3月11日</div>
         </div>
       
       
@@ -441,9 +453,9 @@ id="机器如何理解人类语言的基础知识并提到了接下来将进一�
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/xinference%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%E5%8F%8A%E6%8A%A5%E9%94%99%E8%B8%A9%E5%9D%91.html" title="xinference安装报错踩坑">
+                      <a href="/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%8E%E6%99%BA%E8%83%BD%E8%AE%A1%E7%AE%97%E7%9A%84%E5%8F%91%E5%B1%95-%E5%A5%BD%E6%96%87%E5%88%86%E4%BA%AB.html" title="院士讲人工智能与智能计算的发展">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">xinference安装报错踩坑</span>
+                        <span class="hidden-mobile">院士讲人工智能与智能计算的发展</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -451,8 +463,8 @@ id="机器如何理解人类语言的基础知识并提到了接下来将进一�
                   <article class="post-next col-6">
                     
                     
-                      <a href="/%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E4%B8%80%E4%B8%AA%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E5%9C%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E6%98%BE%E5%8D%A1%E4%B8%8A%E8%BF%90%E8%A1%8C%E5%91%A2%EF%BC%9F.html" title="如何知道一个大模型是否可以在自己的显卡上运行呢？">
-                        <span class="hidden-mobile">如何知道一个大模型是否可以在自己的显卡上运行呢？</span>
+                      <a href="/B%E7%AB%99_%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-Lyi.html" title="【B站】从零开始学习大语言模型-Lyi">
+                        <span class="hidden-mobile">【B站】从零开始学习大语言模型-Lyi</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -475,7 +487,7 @@ id="机器如何理解人类语言的基础知识并提到了接下来将进一�
         var options = Object.assign(
           {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'f2d1d209ede4bcbdcad307510c9e4ae8'
+            id: '1311c43b7f03163a1c81fb08f53ce6c9'
           }
         )
         var gitalk = new Gitalk(options);
