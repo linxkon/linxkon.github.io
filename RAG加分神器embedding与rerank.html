@@ -1,0 +1,926 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="RAG的效果好不好，最核心依赖两点：文本embedding语义提取的好不好，rerank的排序效果好不好（包含正确答案的文本是不是排在前面）！各自使用的环节如下： ​  1、文本embedding的提取：理论上讲，任何transformer架构的encoder部分都可用于生成token的embedding，然后采用合适的pooling方式把整个setence中所有token的embedding">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG加分神器:embedding与rerank">
+<meta property="og:url" content="https://linxkon.github.io/RAG%E5%8A%A0%E5%88%86%E7%A5%9E%E5%99%A8embedding%E4%B8%8Ererank.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="RAG的效果好不好，最核心依赖两点：文本embedding语义提取的好不好，rerank的排序效果好不好（包含正确答案的文本是不是排在前面）！各自使用的环节如下： ​  1、文本embedding的提取：理论上讲，任何transformer架构的encoder部分都可用于生成token的embedding，然后采用合适的pooling方式把整个setence中所有token的embedding">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E6%90%9C%E7%B4%A2.png">
+<meta property="article:published_time" content="2024-06-10T12:21:13.000Z">
+<meta property="article:modified_time" content="2024-08-21T12:26:46.298Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="大模型">
+<meta property="article:tag" content="原理">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/%E6%90%9C%E7%B4%A2.png">
+  
+  
+  
+  <title>RAG加分神器:embedding与rerank - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RAG加分神器:embedding与rerank"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-10 20:21" pubdate>
+          2024年6月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">RAG加分神器:embedding与rerank</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>RAG的效果好不好，最核心依赖两点：<strong>文本embedding语义提取的好不好，rerank的排序效果好不好（包含正确答案的文本是不是排在前面）</strong>！各自使用的环节如下：</p>
+<p>​ <img
+src="/images/RAG中的embedding与rerank/2052730-20240629105924854-837516240.png" srcset="/img/loading.gif" lazyload
+alt="img" /></p>
+<p>1、文本embedding的提取：理论上讲，任何transformer架构的encoder部分都可用于生成token的embedding，然后采用合适的pooling方式把整个setence中所有token的embedding融合成一个embedding。截止目前，哪个现成的LLM的encoder更适合提取整段句子的embedding了？</p>
+<p>　　　要想效果好，以下是必要条件：</p>
+<ul>
+<li>模型不能太小，否则对训练预料的“”消化、承载“”能力不够，无法精准理解语义；模型也不能太大，否则过于耗费计算资源，同时还需要大量训练预料，否则会欠拟合（模型参数大小和所需token数详见scaling
+law）！</li>
+<li>训练预料要足够，涵盖各行业、各领域；也要涵盖各种不同的类型、风格的文本(中英文、说明文、议论文、陈述文、小说、散文、诗歌)等</li>
+<li>最好能提供微调的接口，利于用户使用自己特定领域的数据</li>
+</ul>
+<p>　　截止目前，业界公认效果比较好的就是moka-ai/m3e了！以下是官方的介绍：</p>
+<ul>
+<li>Moka，此模型由 MokaAI 训练，开源和评测，训练脚本使用 <a
+target="_blank" rel="noopener" href="https://github.com/wangyuxinwhy/uniem/blob/main/scripts/train_m3e.py">uniem</a>
+，评测 BenchMark 使用 <a
+target="_blank" rel="noopener" href="https://github.com/wangyuxinwhy/uniem/tree/main/mteb-zh">MTEB-zh</a></li>
+<li>Massive，此模型通过千万级 (2200w+)
+的中文<strong>句对</strong>数据集进行训练</li>
+<li>Mixed，此模型支持中英双语的<strong>同质文本相似度计算，异质文本检索</strong>等功能，未来还会支持代码检索</li>
+</ul>
+<p>　　<strong>最核心的还是训练数据</strong>了，如下：</p>
+<ul>
+<li>中文训练集，M3E
+在大规模句对数据集上的训练，包含中文百科，金融，医疗，法律，新闻，学术等多个领域共计
+2200W 句对样本，数据集详见 <a
+target="_blank" rel="noopener" href="https://huggingface.co/moka-ai/m3e-base#M3E数据集">M3E
+数据集</a></li>
+<li>英文训练集，M3E 使用 MEDI 145W 英文三元组数据集进行训练，数据集详见
+<a
+target="_blank" rel="noopener" href="https://drive.google.com/file/d/1vZ5c2oJNonGOvXzppNg5mHz24O6jcc52/view">MEDI
+数据集</a>，此数据集由 <a
+target="_blank" rel="noopener" href="https://github.com/HKUNLP/instructor-embedding">instructor
+team</a> 提供</li>
+<li>指令数据集，M3E 使用了 300W + 的指令微调数据集，这使得 M3E
+对文本编码的时候可以遵从指令，这部分的工作主要被启发于 <a
+target="_blank" rel="noopener" href="https://github.com/HKUNLP/instructor-embedding">instructor-embedding</a>
+（这点很牛逼，<strong>同样的sentence，可以根据不同的instruct生成不同的embedding，充分理解语义，比普通的bert模型强多了</strong>）</li>
+</ul>
+<p>　　基础模型，还是基于bert架构：</p>
+<ul>
+<li>基础模型，M3E 使用 hfl 实验室的 <a
+target="_blank" rel="noopener" href="https://huggingface.co/hfl/chinese-roberta-wwm-ext">Roberta</a>
+系列模型进行训练，目前提供 small 、base和large
+三个版本；<strong>只要是embedding，就离不开bert架构！</strong></li>
+</ul>
+<p>　　最终的效果就是：ALL IN
+ONE，不仅支持<strong>同质句子相似度判断</strong>，还支持<strong>异质文本检索</strong>，只需要一个模型就可以覆盖全部的应用场景，各个指标对比如下：</p>
+<p>​ <img
+src="/images/RAG中的embedding与rerank/2052730-20240628225842866-1015035741.png" srcset="/img/loading.gif" lazyload
+alt="img" />　　</p>
+<p>　　看着还是很牛逼的！ M3E的配置文件
+1_Pooling/config.json，有pooling的方式和embedding的dimension：这里可以看出M3E默认采用的是每个token取均值的pooling方式！</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;word_embedding_dimension&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">768</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_cls_token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_mean_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_max_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_mean_sqrt_len_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>　　2、rerank： 经过第一步使用cosin余弦相似度从密集向量数据库 +
+keyword search（稀疏向量召回）初步召回top
+K相似度的文本，按理来说就可以让LLM根据用户的query +
+召回的context生成最终答案了，还要这个rerank干啥了？实际操作时，还是会发现一些问题：包含正确答案的文本在context中的排名可能并不靠前。比如query
+= “清华大学在哪座城市？”
+。正确答案肯定是“北京”啦！但实际召回的context中包含北京的文本不一定排在前面，可能在中间甚至后面，给最后一个LLM输入的context会很大，直接导致LLM需要处理很长的文本，推理效率低不说，还容易出错，核心问题还是在于：初步召回的context还是有进一步压缩提炼的空间！造成这种现象的原因是啥了？</p>
+<p>　　利用cosin求两个向量的相似度，本质是看两个向量的距离。<strong>比如“北京”、“上海”、“深圳”这些都是中国的一线大城市，这3个词的embedding的cosin会很近，所以使用cosin召回的时候也可能把“上海”、“深圳”这些不是正确答案的sentence召回，所以要用tf-idf这类稀疏向量补充召回部分向量，整个过程称为
+hybrid search。经过hybird
+search后，召回的context变多，给最后一步的LLM生成最终答案带来了麻烦，所以需要进一步从context中继续提炼，优中选优</strong>！比如初步召回20条，需要通过rerank选择更接近的3~5条，这个过程就是rerank！整个流程图示如下：</p>
+<figure>
+<img
+src="/images/RAG中的embedding与rerank/2052730-20240629173627392-1724851624.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>　确定要做rerank后，怎么做才能达到既定的目的？要想明白这个问题，还要回到最初的动机：<strong>cosin计算的是两个向量的距离，只考虑语义相似，不考虑字面符号是否一致；而稀疏检索tf-idf只考虑字面的符号，
+不考虑语义</strong>，怎么整合这两种retrieve的优势，摒弃其劣势了？这就需要用到传统NLP常见的手段了：classifier！</p>
+<p>​ <img
+src="/images/RAG中的embedding与rerank/2052730-20240629190955087-450259949.png" srcset="/img/loading.gif" lazyload
+alt="img" /></p>
+<p>　如上图右边所示：两个sentence先进入同一个bert，lm_head用一个二分类来判断这两个sentence是否匹配！右边这种classifier判断是否匹配比左边这种cosin判断是否相似更准确，原因又是啥了？两个sentence首尾拼接进入bert后：</p>
+<ul>
+<li>先要计算attention计算token之间的相似度，再进入FFN<strong>生成非线性特征</strong>，更利于lm_head的分类</li>
+<li>两个sentence的特征能<strong>两两组合交互生成新的维度特征</strong>，捕捉复杂的细节关系</li>
+<li>cosin相似度的计算是基于整个sentence的embedding，但这种embeeding<strong>涉及到pooling，这个过程会有一定的信息丢失，造成精度下降</strong></li>
+</ul>
+<p>　 上面两个角度是从特征维度考虑的，从模型维度看，还有以下优点：</p>
+<ul>
+<li>cosin是没有参数可调节的，但classifier可以<strong>通过调节参数，让模型的目标函数主动适配特定的任务和数据分布。具体到这里，可以让模型生成的答案主动适配query；可以简单理解为answer对query的1v1
+有针对性的VIP服务！</strong></li>
+</ul>
+<p>　　当然，既然classifier的准确性提高了，为啥不从一开始就用这种classifier来召回生成context了？还用cosin计算相似度干嘛了？这里就是计算量的问题了！<strong>cosin的计算量远比classifier小，并且可以事先离线计算embedding存入向量数据库，所以适合第一步从大量数据中初步召回数十条；classifier精准度高，但计算量大，适合从初步召回的数十条context中进一步精选出几条包含或最接正确答案的context</strong>；</p>
+<p>　　原理搞清楚了，接下来看代码：</p>
+<p>　　getitem方法要对query、pos、neg三个不同的答案按照一定的逻辑配对，后续的loss才知道是0还是1；</p>
+<figure>
+<img
+src="/images/RAG中的embedding与rerank/2052730-20240629230203323-1507745790.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>　看看吧：loss用的是常规的cross
+entropy；classifier也是常规的SequenceClassifierOutput，没啥特别的！</p>
+<figure>
+<img
+src="/images/RAG中的embedding与rerank/2052730-20240629230348085-1080851308.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>总结：</p>
+<p>1、RAG整个流程有3个地方涉及到LLM：<strong>文本embedding、rerank和根据context生成最终的答案</strong>
+2、moka官方的建议：</p>
+<ul>
+<li>使用场景主要是中文，少量英文的情况，建议使用 m3e 系列的模型</li>
+<li>多语言使用场景，并且不介意数据隐私的话，我建议使用 openai
+text-embedding-ada-002</li>
+<li>代码检索场景，推荐使用 openai text-embedding-ada-002</li>
+<li>文本检索场景，请使用具备文本检索能力的模型，只在 Sentence 2 Sentence
+上训练的文本嵌入模型，没有办法完成文本检索任务</li>
+</ul>
+<p>3、 FlagEmbedding也有 Embedding Model: <a
+target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/visual">Visualized-BGE</a>,
+<a
+target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/BGE_M3">BGE-M3</a>,
+<a
+target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/llm_embedder">LLM
+Embedder</a>, <a
+target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/baai_general_embedding">BGE
+Embedding</a>，感兴趣的小伙伴也可以尝试一下！</p>
+<figure>
+<img
+src="/images/RAG中的embedding与rerank/2052730-20240630171649397-1130484406.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>4、RAG整个流程中关键节点和涉及到的现成包列举如下：<strong>不同节点可以根据用户需求和实际情况选择，节点之间的选择可以排列组合</strong>！</p>
+<figure>
+<img
+src="/images/RAG中的embedding与rerank/2052730-20240701172423551-368104928.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>参考：</p>
+<p>1、https://huggingface.co/moka-ai/m3e-base
+https://github.com/wangyingdong/m3e-base</p>
+<p>2、https://github.com/coffeebean6/retrieval_augmented_generation</p>
+<p>3、https://blog.csdn.net/lovechris00/article/details/138378828</p>
+<p>4、https://github.com/wangyuxinwhy/uniem/blob/main/examples/finetune.ipynb</p>
+<p>5、https://www.bilibili.com/video/BV1h142197Fm/?spm_id_from=333.788.recommend_more_video.0&amp;vd_source=241a5bcb1c13e6828e519dd1f78f35b2
+https://techdiylife.github.io/blog/blog.html?category1=c02&amp;blogid=0047
+如何选择embedding模型</p>
+<p>6、https://huggingface.co/spaces/mteb/leaderboard Massive Text
+Embedding Benchmark (MTEB) Leaderboard</p>
+<figure>
+<img
+src="/images/RAG中的embedding与rerank/2052730-20240701090619852-2066428401.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>7、https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDIyMzI0Mw==&amp;action=getalbum&amp;album_id=3377833073308024836
+RAG实战</p>
+<p>8、https://www.pinecone.io/learn/series/rag/rerankers/
+https://www.bilibili.com/video/BV1r1421R77Y/?spm_id_from=333.788.recommend_more_video.2&amp;vd_source=241a5bcb1c13e6828e519dd1f78f35b2
+为什么要用rerank</p>
+<p>9、https://qanything.ai/docs/architecture embedding和rerank测评
+https://github.com/netease-youdao/BCEmbedding/blob/master/Docs/EvaluationSummary/embedding_eval_summary.md
+https://github.com/netease-youdao/BCEmbedding/blob/master/Docs/EvaluationSummary/reranker_eval_summary.md</p>
+<figure>
+<img
+src="/images/RAG中的embedding与rerank/2052730-20240702233033921-228329500.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/RAG/" class="category-chain-item">RAG</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+      
+        <a href="/tags/%E5%8E%9F%E7%90%86/" class="print-no-link">#原理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RAG加分神器:embedding与rerank</div>
+      <div>https://linxkon.github.io/RAG加分神器embedding与rerank.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年6月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%92%E8%A1%8C%E6%A6%9C.html" title="谁是最强大模型--权威大模型榜单整理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">谁是最强大模型--权威大模型榜单整理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/ollama%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97.html" title="ollama部署常见问题解答">
+                        <span class="hidden-mobile">ollama部署常见问题解答</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '4e63938e9a608abf74c32c2de43ba172'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>
