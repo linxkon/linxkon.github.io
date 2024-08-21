@@ -16,16 +16,16 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="RAG的效果好不好，最核心依赖两点：文本embedding语义提取的好不好，rerank的排序效果好不好（包含正确答案的文本是不是排在前面）！各自使用的环节如下： ​  1、文本embedding的提取：理论上讲，任何transformer架构的encoder部分都可用于生成token的embedding，然后采用合适的pooling方式把整个setence中所有token的embedding">
+    <meta name="description" content="基于 Retrieval Augmented Generation (RAG) 技术的效果取决于两个关键因素:  文本嵌入及语义提取的性能:  这个环节负责将输入文本转换为有意义的语义表示向量。 嵌入算法的准确性和鲁棒性直接影响后续的搜索和排序效果。  重排序模块的性能:  这个环节负责根据语义相似度对检索到的相关文本进行排序。 排序算法的效果直接决定了包含正确答案的文本是否">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RAG加分神器:embedding与rerank">
 <meta property="og:url" content="https://linxkon.github.io/RAG%E5%8A%A0%E5%88%86%E7%A5%9E%E5%99%A8embedding%E4%B8%8Ererank.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="RAG的效果好不好，最核心依赖两点：文本embedding语义提取的好不好，rerank的排序效果好不好（包含正确答案的文本是不是排在前面）！各自使用的环节如下： ​  1、文本embedding的提取：理论上讲，任何transformer架构的encoder部分都可用于生成token的embedding，然后采用合适的pooling方式把整个setence中所有token的embedding">
+<meta property="og:description" content="基于 Retrieval Augmented Generation (RAG) 技术的效果取决于两个关键因素:  文本嵌入及语义提取的性能:  这个环节负责将输入文本转换为有意义的语义表示向量。 嵌入算法的准确性和鲁棒性直接影响后续的搜索和排序效果。  重排序模块的性能:  这个环节负责根据语义相似度对检索到的相关文本进行排序。 排序算法的效果直接决定了包含正确答案的文本是否">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E6%90%9C%E7%B4%A2.png">
 <meta property="article:published_time" content="2024-06-10T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-08-21T12:26:46.298Z">
+<meta property="article:modified_time" content="2024-08-21T12:34:12.045Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="大模型">
 <meta property="article:tag" content="原理">
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.2k 字
+          2.4k 字
         
       </span>
     
@@ -263,7 +263,7 @@
         
         
         
-          19 分钟
+          20 分钟
         
       </span>
     
@@ -313,7 +313,23 @@
             
               <div class="markdown-body">
                 
-                <p>RAG的效果好不好，最核心依赖两点：<strong>文本embedding语义提取的好不好，rerank的排序效果好不好（包含正确答案的文本是不是排在前面）</strong>！各自使用的环节如下：</p>
+                <p>基于 Retrieval Augmented Generation (<strong>RAG</strong>)
+技术的效果取决于两个关键因素:</p>
+<ol type="1">
+<li>文本嵌入及语义提取的性能:
+<ul>
+<li>这个环节负责将输入文本转换为有意义的语义表示向量。</li>
+<li>嵌入算法的准确性和鲁棒性直接影响后续的搜索和排序效果。</li>
+</ul></li>
+<li>重排序模块的性能:
+<ul>
+<li>这个环节负责根据语义相似度对检索到的相关文本进行排序。</li>
+<li>排序算法的效果直接决定了包含正确答案的文本是否能够排在前列。</li>
+</ul></li>
+</ol>
+<p>总的来说, RAG
+模型的整体性能高低取决于上述两个关键环节的表现。只有当语义提取和重排序两者均达到较高水平,RAG
+模型才能发挥出应有的优势,为用户提供准确可靠的信息检索和生成服务。各自使用的环节如下：</p>
 <p>​ <img
 src="/images/RAG中的embedding与rerank/2052730-20240629105924854-837516240.png" srcset="/img/loading.gif" lazyload
 alt="img" /></p>
