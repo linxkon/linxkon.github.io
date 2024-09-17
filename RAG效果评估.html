@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/rag.png">
 <meta property="article:published_time" content="2024-09-15T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-09-17T13:47:40.387Z">
+<meta property="article:modified_time" content="2024-09-17T13:51:16.435Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="笔记整理">
 <meta property="article:tag" content="大模型应用">
@@ -331,8 +331,7 @@ RAG？怎么样才有说服力？用什么数据集来评估？为此，我们�
 LLM 定量评估”</strong>这两个角度来回答和阐述这些问题。</p>
 <h3 id="角度一评估指标"><strong>角度一：评估指标</strong></h3>
 <ol type="1">
-<li><h3 id="rag-三元组无需-ground-truth-也能做评估"><strong>RAG
-三元组——无需 ground-truth 也能做评估</strong></h3></li>
+<li><strong>RAG 三元组——无需 ground-truth 也能做评估</strong></li>
 </ol>
 <p>如果我们拿到一些知识文档，对于每个 query 提问，没有对应的
 ground-truth，可以评估这个 RAG 应用吗？</p>
@@ -974,5 +973,23 @@ LLM 的各类应用发展迅速，在评估 RAG
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
 </body>
 </html>
