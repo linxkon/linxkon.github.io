@@ -1,0 +1,978 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="随着 LLM(Large Language Model)的应用逐渐普及，人们对 RAG(Retrieval Augmented Generation)场景的关注也越来越多。然而，如何定量评估 RAG 应用的质量一直以来都是一个前沿课题。 很显然，简单的几个例子的对比，并不能准确地衡量出 RAG 应用的整体的回答的好坏，必须采用一些有说服力的指标，定量地、可复现地、来评估一个 RAG 应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG效果评估">
+<meta property="og:url" content="https://linxkon.github.io/RAG%E6%95%88%E6%9E%9C%E8%AF%84%E4%BC%B0.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="随着 LLM(Large Language Model)的应用逐渐普及，人们对 RAG(Retrieval Augmented Generation)场景的关注也越来越多。然而，如何定量评估 RAG 应用的质量一直以来都是一个前沿课题。 很显然，简单的几个例子的对比，并不能准确地衡量出 RAG 应用的整体的回答的好坏，必须采用一些有说服力的指标，定量地、可复现地、来评估一个 RAG 应">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/rag.png">
+<meta property="article:published_time" content="2024-09-15T12:21:13.000Z">
+<meta property="article:modified_time" content="2024-09-17T13:47:40.387Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记整理">
+<meta property="article:tag" content="大模型应用">
+<meta property="article:tag" content="方法框架">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/rag.png">
+  
+  
+  
+  <title>RAG效果评估 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RAG效果评估"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-15 20:21" pubdate>
+          2024年9月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">RAG效果评估</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>随着 LLM(Large Language Model)的应用逐渐普及，人们对 RAG(Retrieval
+Augmented Generation)场景的关注也越来越多。然而，如何定量评估 RAG
+应用的质量一直以来都是一个前沿课题。</p>
+<p>很显然，简单的几个例子的对比，并不能准确地衡量出 RAG
+应用的整体的回答的好坏，<strong>必须采用一些有说服力的指标，定量地、可复现地、来评估一个
+RAG
+应用</strong>。目前，业内已经形成一些主流的方法论，并出现了一些用于评估
+RAG 应用的专业工具或服务，用户可以用它们快速进行定量评估。</p>
+<p>今天我们就带大家来盘一盘<strong>自动化评估 RAG
+应用的常用方法论</strong>以及比较<strong>典型的评估工具对比</strong>。</p>
+<h2 id="方法论"><strong>01.</strong> <strong>方法论</strong></h2>
+<p>想要自动化定量评估 RAG
+应用，并不是一个容易的事。很有可能会遇到一些常见的问题，比如，用什么指标评估
+RAG？怎么样才有说服力？用什么数据集来评估？为此，我们将从<strong>“评估指标”“基于
+LLM 定量评估”</strong>这两个角度来回答和阐述这些问题。</p>
+<h3 id="角度一评估指标"><strong>角度一：评估指标</strong></h3>
+<ol type="1">
+<li><h3 id="rag-三元组无需-ground-truth-也能做评估"><strong>RAG
+三元组——无需 ground-truth 也能做评估</strong></h3></li>
+</ol>
+<p>如果我们拿到一些知识文档，对于每个 query 提问，没有对应的
+ground-truth，可以评估这个 RAG 应用吗？</p>
+<p>答案是可以，而且这种方法还挺常见。我们首先引用
+<strong>TruLens-Eval</strong>（https://www.trulens.org/trulens_eval/install/）
+里的一个概念，RAG 三元组(RAG Triad)来说明这个问题：</p>
+<figure>
+<img src="/images/rag评估/8455329a02d7eb715c157a9144a0ce16.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h4 id="a.rag-三元组">a.<strong><a
+target="_blank" rel="noopener" href="https://www.trulens.org/trulens_eval/core_concepts_rag_triad/">RAG
+三元组</a></strong></h4>
+<p>标准的 RAG 流程就是用户提出 Query 问题，RAG 应用去召回 Context，然后
+LLM 将 Context 组装，生成满足 Query 的 Response
+回答。那么在这里出现的三元组:—— Query、Context 和 Response 就是 RAG
+整个过程中最重要的三元组，它们之间两两相互牵制。我们可以通过<strong>检测三元组之间两两元素的相关度</strong>，来评估这个
+RAG 应用的效果：</p>
+<ul>
+<li><strong>Context Relevance:</strong> 衡量召回的 Context 能够支持
+Query 的程度。如果该得分低，反应出了召回了太多与Query
+问题无关的内容，这些错误的召回知识会对 LLM 的最终回答造成一定影响。</li>
+<li><strong>Groundedness:</strong> 衡量 LLM 的 Response 遵从召回的
+Context 的程度。如果该得分低，反应出了 LLM
+的回答不遵从召回的知识，那么回答出现幻觉的可能就越大。</li>
+<li><strong>Answer Relevance:</strong> 衡量最终的 Response 回答对 Query
+提问的相关度。如果该得分低，反应出了可能答不对题。</li>
+</ul>
+<p>以 Answer Relevance 为例:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-title class_">Question</span>: <span class="hljs-title class_">Where</span> is <span class="hljs-title class_">France</span> and what is it’s capital?<br><span class="hljs-title class_">Low</span> relevance <span class="hljs-attr">answer</span>: <span class="hljs-title class_">France</span> is <span class="hljs-keyword">in</span> western <span class="hljs-title class_">Europe</span>.<br><span class="hljs-title class_">High</span> relevance <span class="hljs-attr">answer</span>: <span class="hljs-title class_">France</span> is <span class="hljs-keyword">in</span> western <span class="hljs-title class_">Europe</span> and <span class="hljs-title class_">Paris</span> is its capital.<br></code></pre></td></tr></table></figure>
+<p>因此，对于一个 RAG 系统来说，最基本的就是三元组指标得分，它反映了 RAG
+效果的核心部分，整个过程中并不需要 ground-truth 的参与。</p>
+<p>当然，具体怎么衡量这三个得分，也有不同的方式。最常见的就是基于目前最好的
+LLM（如
+GPT-4)做为一个裁判，给输入的这一对元组打分，判断它们的相似度，具体的例子将在后面介绍。</p>
+<p>另外，三元指标其中的某个可能还有具体的一些细分，比如
+<strong>Ragas</strong>（https://docs.ragas.io/en/latest/concepts/metrics/context_recall.html）中就将
+Context Relevance 这一步又分为Context Precision、Context
+Relevancy、Context
+Recall。或者，一些工具中不一定是这三个名字，比如Groundedness
+在有的工具中叫作 Faithfulness。</p>
+<h4 id="b.-基于-ground-truth-的指标"><strong>b. 基于 Ground-truth
+的指标</strong></h4>
+<ul>
+<li><strong>Ground-truth 是回答</strong></li>
+</ul>
+<p>当一个数据集已经标注好了ground-truth 回答，那就可以直接比较 RAG
+应用的回答和 ground-truth
+之间的相关性，来端到端地进行衡量。这种方法很直观也很容易想到，比如 Ragas
+中相关的指标就有：Answer semantic similarity 和 Answer Correctness。</p>
+<p>以 Answer Correctness 为例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-title class_">Ground</span> <span class="hljs-attr">truth</span>: <span class="hljs-title class_">Einstein</span> was born <span class="hljs-keyword">in</span> <span class="hljs-number">1879</span> at <span class="hljs-title class_">Germany</span> .<br><span class="hljs-title class_">High</span> answer <span class="hljs-attr">correctness</span>: <span class="hljs-title class_">In</span> <span class="hljs-number">1879</span>, <span class="hljs-keyword">in</span> <span class="hljs-title class_">Germany</span>, <span class="hljs-title class_">Einstein</span> was born.<br><span class="hljs-title class_">Low</span> answer <span class="hljs-attr">correctness</span>: <span class="hljs-title class_">In</span> <span class="hljs-title class_">Spain</span>, <span class="hljs-title class_">Einstein</span> was born <span class="hljs-keyword">in</span> <span class="hljs-number">1879.</span><br></code></pre></td></tr></table></figure>
+<p>具体怎么衡量相似性或相关性，可以用直接向 GPT-4
+进行提示词工程打分，或用一些比较好的 embedding
+模型来进行相似性打分。</p>
+<ul>
+<li><strong>Ground-truth 是知识文档中的 chunks</strong></li>
+</ul>
+<p>常见的数据集中并没有回答的 ground-truth，而更多的情况是，数据集有
+query 提问，和对应的文档内容中的 ground-truth doc
+chunks。这种情况下需要衡量的就是上文 RAG 三元组指标中的 Context
+Relevance，也就是对比 ground-truth doc chunks 和召回的 contexts
+之间的相关性，这一步因为没有 LLM
+生成的情况出现，对比的是相对固定的文本，所以在实现上可以使用一些传统的指标，比如
+Exact Match (EM)、Rouge-L、F1 等。</p>
+<p>其实这种情况下，本质上就是衡量 RAG 应用的召回效果，如果 RAG
+应用只使用向量召回而没有用其它的召回方式，那这一步退化等效于衡量
+embedding 模型的效果。</p>
+<ul>
+<li><strong>生成评估数据集</strong></li>
+</ul>
+<p>如果我们手头上的知识文档没有 ground-truth，并且只想评估一下 RAG
+应用在这些文档上的效果，有办法可以实现吗？</p>
+<p>既然 LLM 可以生成一切，那让 LLM 根据知识文档，来生成 query 和
+ground-truth，这也是可行的。比如，在 ragas 的 <strong>Synthetic Test
+Data
+generation</strong>（https://docs.ragas.io/en/latest/concepts/testset_generation.html）
+和 llama-index 的
+<strong>QuestionGeneration</strong>（https://docs.llamaindex.ai/en/stable/examples/evaluation/QuestionGeneration.html）中都有一些集成好的方法，可以直接方便地使用。</p>
+<p>我们来看一下 Ragas 中根据知识文档生成的效果：</p>
+<figure>
+<img src="/images/rag评估/c1cef0ba57b8fd4680feafa13cae2a44.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>可以看到，上图生成了许多 query questions 和对应的 answers，包含对应的
+context 出处。为保证生成问题的多样性，还可以选择各种各样的
+question_type。这样，我们就可以方便地直接用这些生成的 question 和
+ground-truth，去定量评估一个 RAG 应用，无需去网上找各种各样的 baseline
+数据集。</p>
+<h4 id="c.-llm-回答本身的指标"><strong>c. LLM
+回答本身的指标</strong></h4>
+<p>这一类的指标就是单从 LLM
+的回答本身来看的，比如评估回答本身是否友好，是否有害，是否简洁等，它们参考来源的是
+LLM 本身的一些评估指标。</p>
+<p>比如 Langchain 的 <strong>Criteria
+Evaluation</strong>（https://python.langchain.com/docs/guides/evaluation/string/criteria_eval_chain），包括:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">conciseness, relevance, correctness, coherence, harmfulness, maliciousness, helpfulness, controversiality, misogyny, criminality, insensitivity<br></code></pre></td></tr></table></figure>
+<p>比如 Ragas 中的 <strong>Aspect
+Critique</strong>（https://docs.ragas.io/en/latest/concepts/metrics/critique.html）包含：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">harmfulness, maliciousness, coherence, correctness, conciseness<br></code></pre></td></tr></table></figure>
+<p>以 Conciseness 举例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-title class_">Question</span>: <span class="hljs-title class_">What</span><span class="hljs-string">&#x27;s 2+2?</span><br><span class="hljs-string">Low conciseness answer: What&#x27;</span>s <span class="hljs-number">2</span>+<span class="hljs-number">2</span>? <span class="hljs-title class_">That</span><span class="hljs-string">&#x27;s an elementary question. The answer you&#x27;</span>re looking <span class="hljs-keyword">for</span> is that two and two is four.<br><span class="hljs-title class_">High</span> conciseness <span class="hljs-attr">answer</span>: <span class="hljs-number">4</span><br></code></pre></td></tr></table></figure>
+<h3 id="角度二基于-llm-的定量评估"><strong>角度二：基于 LLM
+的定量评估</strong></h3>
+<p>上文提到的大部分指标，都需要输入一些文字，然后期望得到一个定量的得分。这在以往是不太容易实现的，有了
+GPT-4 后，其可行性就提高了。我们只需设计好
+prompt，将要打分的一些文字放入
+prompt，访问GPT-4，就可以得到一个想要的得分结果。</p>
+<p>举个例子，在
+<strong>LLM-as-a-judge</strong>（https://arxiv.org/abs/2306.05685）这篇论文中，提到的一个
+prompt 设计如下：</p>
+<figure>
+<img src="/images/rag评估/e9279b3af8cba2540669bb670ce8a898.png" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>可以看到，这段 prompt 设计的目的就是让 LLM 对一个 question 的 answer
+进行打分，要考虑多方面的因素，得分在 1 到 10 之间。</p>
+<p>那么，GPT-4，或者 LLM 本身做为一个裁判打分，它就不会有错吗？</p>
+<p>根据我们目前的观察，GPT-4
+这在方面做得已经很好了。人类都有可能打错分，GPT-4
+的表现和人类类似，误判的比例保持在很低就可以保证这种方法的有效性。因此，如何设计
+prompt 同样重要，这就要用到一些高级的 prompt 工程技巧，比如
+multi-shot，或 CoT(Chain-of-Thought)思维链技巧。在设计这些 prompt
+时，有时还要考虑 LLM 的一些偏见，比如 LLM 常见的位置偏见：当 prompt
+比较长时，LLM 容易注意到 prompt
+里前面的一些内容，而忽略一些中间位置的内容。</p>
+<p>好在这些 prompt 的设计已经被设计和集成在 RAG
+应用的评估工具中，我们的关注点可以放在其他地方，例如，大量访问 GPT-4
+这种 LLM 需要消耗大量的 API key，加下来期待有更便宜的 LLM 或本地
+LLM，能够达到“当好一个裁判”的水平。</p>
+<h2 id="各类评估工具"><strong>02.</strong>
+<strong>各类评估工具</strong></h2>
+<p>接下来我们来介绍一下目前比较常见、好用的 RAG
+评估工具的基本使用方法及其相应特点。</p>
+<h3 id="ragas"><strong>Ragas</strong></h3>
+<p>RAG评估时通常会会用到<strong>四种数据</strong>,分别是<strong>用户问题,检索召回的样本,大模型生成答案以及标准答案</strong></p>
+<p>该方法有<strong>两类四项评估指标</strong>：</p>
+<h4 id="评估检索质量"><strong>评估检索质量：</strong></h4>
+<p>context_relevancy（上下文相关性，检索回的上下文与原始问题之间的相关性，对其中的冗余信息进行惩罚）</p>
+<blockquote>
+<ol type="1">
+<li>利用LLM，从给定的context上下文信息中，提取出所有<strong>对标准答案直接相关或重要</strong>的句子，不改变句子内容。</li>
+<li><strong>计算有用的内容占全部内容条数的比例</strong></li>
+</ol>
+</blockquote>
+<p>context_recall（召回性，引入标准答案进行判断,重点关注标准答案中提及但检索结果未体现的部分）</p>
+<blockquote>
+<ol type="1">
+<li>利用LLM，将标准答案拆分为多个知识点 ,
+根据每个知识点,查看检索到的条目是否能够找到相应支撑。</li>
+<li><strong>计算能够找到支撑的知识点占总体知识点的比例</strong></li>
+</ol>
+</blockquote>
+<h4 id="评估生成质量"><strong>评估生成质量：</strong></h4>
+<p><strong>faithfulness（忠实性</strong>，为生成答案找支撑,惩罚多余的生成）</p>
+<blockquote>
+<ol type="1">
+<li>首先使用LLM来根据问题和<strong>生成答案</strong>提取一组语句S。这一步骤的目的是将较长的句子分解为更短、更集中的断言。</li>
+<li>针对生成的每个语句s，再次使用大模型或验证函数来判断这个语句是否能用上下文中的信息来支撑。</li>
+<li>最后根据<strong>有支撑内容</strong>的占比计算得分</li>
+</ol>
+</blockquote>
+<p><strong>answer_relevancy（答案的相关性</strong>,根据潜在问题计算向量相似度）</p>
+<blockquote>
+<ol type="1">
+<li>根据最终答案，利用大模型生成针对该问题的多个潜在的问题。</li>
+<li>针对生成的每个<strong>潜在问题</strong>，利用embedding模型
+来计算与原始问题的<strong>向量相似度</strong>（余弦距离）</li>
+<li>最终对所有的向量相似度<strong>取平均数</strong>。</li>
+</ol>
+</blockquote>
+<p><strong>Ragas</strong>（https://docs.ragas.io/en/latest/concepts/metrics/context_recall.html）通过简单的接口即可实现评估：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">from</span> ragas <span class="hljs-keyword">import</span> evaluate<br><span class="hljs-keyword">from</span> datasets <span class="hljs-keyword">import</span> <span class="hljs-title class_">Dataset</span><br><br># prepare your huggingface dataset <span class="hljs-keyword">in</span> the format<br># <span class="hljs-title class_">Dataset</span>(&#123;<br>#     <span class="hljs-attr">features</span>: [<span class="hljs-string">&#x27;question&#x27;</span>, <span class="hljs-string">&#x27;contexts&#x27;</span>, <span class="hljs-string">&#x27;answer&#x27;</span>, <span class="hljs-string">&#x27;ground_truths&#x27;</span>],<br>#     <span class="hljs-attr">num_rows</span>: <span class="hljs-number">25</span><br># &#125;)<br><br><span class="hljs-attr">dataset</span>: <span class="hljs-title class_">Dataset</span><br><br>results = evaluate(dataset)<br># &#123;<span class="hljs-string">&#x27;ragas_score&#x27;</span>: <span class="hljs-number">0.860</span>, <span class="hljs-string">&#x27;context_precision&#x27;</span>: <span class="hljs-number">0.817</span>,<br># <span class="hljs-string">&#x27;faithfulness&#x27;</span>: <span class="hljs-number">0.892</span>, <span class="hljs-string">&#x27;answer_relevancy&#x27;</span>: <span class="hljs-number">0.874</span>&#125;<br></code></pre></td></tr></table></figure>
+<p>只要把 RAG 过程中的<code>question</code>, <code>contexts</code>,
+<code>answer</code>, <code>ground_truths</code>，构建成一个 Dataset
+实例，即可一键启动测评，非常方便。</p>
+<p>Ragas指标种类丰富多样，对 RAG 应用的框架无要求，也可以通过
+<strong>langsmith</strong>（https://www.langchain.com/langsmith）来监控每次评估的过程，帮助分析每次评估的原因和观察
+API key 的消耗。</p>
+<h3 id="llama-index"><strong>Llama-Index</strong></h3>
+<p><strong>Llama-Index</strong>（https://docs.llamaindex.ai/en/stable/optimizing/evaluation/evaluation.html）很适合用来搭建
+RAG 应用，且它的生态比较丰富，目前也处在快速迭代发展中。Llama-Index
+也有一部分评估的功能，用户可以方便地对由 Llama-Index 本身搭建的 RAG
+应用进行评估：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">from</span> llama_index.<span class="hljs-property">evaluation</span> <span class="hljs-keyword">import</span> <span class="hljs-title class_">BatchEvalRunner</span><br><span class="hljs-keyword">from</span> llama_index.<span class="hljs-property">evaluation</span> <span class="hljs-keyword">import</span> (<br>    <span class="hljs-title class_">FaithfulnessEvaluator</span>,<br>    <span class="hljs-title class_">RelevancyEvaluator</span>,<br>)<br>service_context_gpt4 = ...<br>vector_index = ...<br>question_list = ...<br><br>faithfulness_gpt4 = <span class="hljs-title class_">FaithfulnessEvaluator</span>(service_context=service_context_gpt4)<br>relevancy_gpt4 = <span class="hljs-title class_">RelevancyEvaluator</span>(service_context=service_context_gpt4)<br><br>runner = <span class="hljs-title class_">BatchEvalRunner</span>(<br>    &#123;<span class="hljs-string">&quot;faithfulness&quot;</span>: faithfulness_gpt4, <span class="hljs-string">&quot;relevancy&quot;</span>: relevancy_gpt4&#125;,<br>    workers=<span class="hljs-number">8</span>,<br>)<br><br>eval_results = runner.evaluate_queries(<br>    vector_index.<span class="hljs-title function_">as_query_engine</span>(), queries=question_list<br>)<br></code></pre></td></tr></table></figure>
+<p>可以看到，在<code>runner.evaluate_queries()</code>中，需要传入一个<code>BaseQueryEngine</code>实例，也就是说，它比较适合评估
+Llama-Index 本身搭建的 RAG 应用。如果是其它架构搭建的 RAG
+应用，可能需要在工程上做一些转换。</p>
+<h3 id="trulens-eval"><strong>TruLens-Eval</strong></h3>
+<p><strong>Trulens-Eval</strong>（https://www.trulens.org/trulens_eval/install/）也是专门用于评估
+RAG 指标的工具，它对 LangChain 和 Llama-Index
+都有比较好的集成，可以方便地用于评估这两个框架搭建的 RAG
+应用。我们以评估 LangChain 的 RAG 应用为例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">from</span> trulens_eval <span class="hljs-keyword">import</span> <span class="hljs-title class_">TruChain</span>, <span class="hljs-title class_">Feedback</span>, <span class="hljs-title class_">Tru</span>，<span class="hljs-title class_">Select</span><br><span class="hljs-keyword">from</span> trulens_eval.<span class="hljs-property">feedback</span> <span class="hljs-keyword">import</span> <span class="hljs-title class_">Groundedness</span><br><span class="hljs-keyword">from</span> trulens_eval.<span class="hljs-property">feedback</span>.<span class="hljs-property">provider</span> <span class="hljs-keyword">import</span> <span class="hljs-title class_">OpenAI</span><br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>tru = <span class="hljs-title class_">Tru</span>()<br>rag_chain = ...<br><br># <span class="hljs-title class_">Initialize</span> provider <span class="hljs-keyword">class</span><br><span class="hljs-title class_">openai</span> = <span class="hljs-title class_">OpenAI</span>()<br><br>grounded = <span class="hljs-title class_">Groundedness</span>(groundedness_provider=<span class="hljs-title class_">OpenAI</span>())<br># <span class="hljs-title class_">Define</span> a groundedness feedback <span class="hljs-keyword">function</span><br>f_groundedness = (<br>    <span class="hljs-title class_">Feedback</span>(grounded.<span class="hljs-property">groundedness_measure_with_cot_reasons</span>)<br>    .<span class="hljs-title function_">on</span>(<span class="hljs-title class_">Select</span>.<span class="hljs-property">RecordCalls</span>.<span class="hljs-property">first</span>.<span class="hljs-property">invoke</span>.<span class="hljs-property">rets</span>.<span class="hljs-property">context</span>)<br>    .<span class="hljs-title function_">on_output</span>()<br>    .<span class="hljs-title function_">aggregate</span>(grounded.<span class="hljs-property">grounded_statements_aggregator</span>)<br>)<br><br># <span class="hljs-title class_">Question</span>/answer relevance between overall question and answer.<br>f_qa_relevance = <span class="hljs-title class_">Feedback</span>(openai.<span class="hljs-property">relevance</span>).<span class="hljs-title function_">on_input_output</span>()<br><br>tru_recorder = <span class="hljs-title class_">TruChain</span>(rag_chain,<br>    app_id=<span class="hljs-string">&#x27;Chain1_ChatApplication&#x27;</span>,<br>    feedbacks=[f_qa_relevance, f_groundedness])<br><br>tru.<span class="hljs-title function_">run_dashboard</span>()<br></code></pre></td></tr></table></figure>
+<p>当然，Trulens-Eval 也可以评估原生的 RAG
+应用。在代码上会相对复杂一些，需要使用 <code>instrument</code>在RAG
+应用代码中注册，具体可以参考<strong>官方文档</strong>（https://www.trulens.org/trulens_eval/install/）。此外，Trulens-Eval
+也可以在浏览器中启动页面进行可视化地监控，帮助分析每次评估的原因和观察
+API key 的消耗。</p>
+<h3 id="phoenix"><strong>Phoenix</strong></h3>
+<p><strong>Phoenix</strong>（https://docs.arize.com/phoenix/）有许多评估
+LLM 的功能，比如评估 Embedding 效果、评估 LLM 本身。在评估 RAG
+这个能力上，也留出接口，和生态对接，但目前看指标种类还不是很多。下面是用
+Phoenix 评估 Llama-Index 搭建的 RAG 应用例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> phoenix <span class="hljs-keyword">as</span> px<br><span class="hljs-keyword">from</span> llama_index <span class="hljs-keyword">import</span> set_global_handler<br><span class="hljs-keyword">from</span> phoenix.<span class="hljs-property">experimental</span>.<span class="hljs-property">evals</span> <span class="hljs-keyword">import</span> llm_classify, <span class="hljs-title class_">OpenAIModel</span>, <span class="hljs-variable constant_">RAG_RELEVANCY_PROMPT_TEMPLATE</span>, \<br>    <span class="hljs-variable constant_">RAG_RELEVANCY_PROMPT_RAILS_MAP</span><br><span class="hljs-keyword">from</span> phoenix.<span class="hljs-property">session</span>.<span class="hljs-property">evaluation</span> <span class="hljs-keyword">import</span> get_retrieved_documents<br><br>px.<span class="hljs-title function_">launch_app</span>()<br><span class="hljs-title function_">set_global_handler</span>(<span class="hljs-string">&quot;arize_phoenix&quot;</span>)<br><span class="hljs-title function_">print</span>(<span class="hljs-string">&quot;phoenix URL&quot;</span>, px.<span class="hljs-title function_">active_session</span>().<span class="hljs-property">url</span>)<br><br>query_engine = ...<br>question_list = ...<br><br><span class="hljs-keyword">for</span> question <span class="hljs-keyword">in</span> <span class="hljs-attr">question_list</span>:<br>    response_vector = query_engine.<span class="hljs-title function_">query</span>(question)<br><br>retrieved_documents = <span class="hljs-title function_">get_retrieved_documents</span>(px.<span class="hljs-title function_">active_session</span>())<br><br>retrieved_documents_relevance = <span class="hljs-title function_">llm_classify</span>(<br>    dataframe=retrieved_documents,<br>    model=<span class="hljs-title class_">OpenAIModel</span>(model_name=<span class="hljs-string">&quot;gpt-4-1106-preview&quot;</span>),<br>    template=<span class="hljs-variable constant_">RAG_RELEVANCY_PROMPT_TEMPLATE</span>,<br>    rails=<span class="hljs-title function_">list</span>(<span class="hljs-variable constant_">RAG_RELEVANCY_PROMPT_RAILS_MAP</span>.<span class="hljs-title function_">values</span>()),<br>    provide_explanation=<span class="hljs-title class_">True</span>,<br>)<br></code></pre></td></tr></table></figure>
+<p>当<code>px.launch_app()</code>启动后，在本地可以打开一个网页，可以观察
+RAG
+应用链路中的每一步的过程。最近评估的结果还是放在<code>retrieved_documents_relevance</code>这里面。</p>
+<h3 id="其它"><strong>其它</strong></h3>
+<p>除上面这几个工具之外，<strong>DeepEval</strong>（https://github.com/confident-ai/deepeval）、<strong>LangSmith</strong>（https://docs.smith.langchain.com/evaluation/evaluator-implementations）、<strong>OpenAI
+Evals</strong>（https://github.com/openai/evals）等工具都集成工评估 RAG
+应用的能力，在使用方法和原理上大同小异，感兴趣的朋友可以深入了解。</p>
+<h2 id="总结"><strong>03.</strong> <strong>总结</strong></h2>
+<p>本文主要复盘了当前比较主流的评估框架和方法论，并介绍了相关工具的使用。因为当前
+LLM 的各类应用发展迅速，在评估 RAG
+这个赛道上，各种方法和工具如雨后春笋一样不断涌现。</p>
+<p>虽然这些方法在大的框架上相似，但在具体实现方面，比如 prompt
+的设计，仍处于百花齐放的状态。目前，我们还无法确定会有哪些工具能成为最后的王者，仍需时间的检验。期待在大浪淘沙后，开发者都能够找到最适合自己的工具。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8/" class="category-chain-item">大模型应用</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8/" class="print-no-link">#大模型应用</a>
+      
+        <a href="/tags/%E6%96%B9%E6%B3%95%E6%A1%86%E6%9E%B6/" class="print-no-link">#方法框架</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RAG效果评估</div>
+      <div>https://linxkon.github.io/RAG效果评估.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.html" title="大型语言模型LLM训练流程详解">
+                        <span class="hidden-mobile">大型语言模型LLM训练流程详解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'bd64f7ea7d88a0eea2c97959109ae7a2'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
