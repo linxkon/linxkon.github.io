@@ -16,25 +16,25 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="整理了一下linux常用的一些命令">
+    <meta name="description" content="整理了一下Bash、linux中常用的操作命令">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux常用命令整理">
+<meta property="og:title" content="Linux|Bash常用命令整理">
 <meta property="og:url" content="https://linxkon.github.io/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%95%B4%E7%90%86.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="整理了一下linux常用的一些命令">
+<meta property="og:description" content="整理了一下Bash、linux中常用的操作命令">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/linux.png">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/bash.png">
 <meta property="article:published_time" content="2020-03-03T12:24:43.000Z">
-<meta property="article:modified_time" content="2024-07-19T02:03:25.035Z">
+<meta property="article:modified_time" content="2024-12-01T03:52:38.929Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="基础命令">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/linux.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/bash.png">
   
   
   
-  <title>Linux常用命令整理 - AI·你所爱</title>
+  <title>Linux|Bash常用命令整理 - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -229,7 +229,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Linux常用命令整理"></span>
+            <span id="subtitle" data-typed-text="Linux|Bash常用命令整理"></span>
           
         </div>
 
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          2.6k 字
         
       </span>
     
@@ -263,7 +263,7 @@
         
         
         
-          12 分钟
+          23 分钟
         
       </span>
     
@@ -308,14 +308,199 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Linux常用命令整理</h1>
+            <h1 id="seo-header">Linux|Bash常用命令整理</h1>
             
             
               <div class="markdown-body">
                 
-                <p>整理了一下linux常用的一些命令 <span id="more"></span> ## 基本格式</p>
+                <p>整理了一下Bash、linux中常用的操作命令 <span id="more"></span></p>
+<h2 id="一bash常用命令">一、Bash常用命令</h2>
+<p>Bash（Bourne Again Shell）是 Linux 和 macOS
+等操作系统中常用的命令行解释器。它功能强大且灵活，掌握一些使用技巧可以显著提高你的工作效率。以下是一些
+Bash 使用技巧：</p>
+<p><strong>基础技巧:</strong></p>
+<ul>
+<li><strong>Tab 键自动补全:</strong> 这是 Bash
+最常用的功能之一。输入命令或文件名的一部分后按下 Tab 键，Bash
+会尝试自动补全。如果存在多个匹配项，按两次 Tab
+键会显示所有可能的选项。</li>
+<li><strong>历史命令:</strong>
+<ul>
+<li>使用 <code>history</code> 命令查看之前执行过的命令。</li>
+<li>使用 <code>Ctrl + R</code> 搜索历史命令。</li>
+<li>使用 <code>!!</code> 执行上一条命令。</li>
+<li>使用 <code>!n</code> 执行历史中第 n 条命令 (n 为数字)。</li>
+<li>使用 <code>!string</code> 执行最近一条以 <code>string</code>
+开头的命令。</li>
+</ul></li>
+<li><strong>通配符:</strong>
+<ul>
+<li><code>*</code> 匹配任意数量的任意字符。</li>
+<li><code>?</code> 匹配单个任意字符。</li>
+<li><code>[characters]</code> 匹配括号中任意一个字符。</li>
+<li><code>[!characters]</code> 或 <code>[^characters]</code>
+匹配不在括号中的任意一个字符。</li>
+<li><code>&#123;string1,string2,...&#125;</code> 匹配括号中任意一个字符串。</li>
+<li>例如：<code>ls *.txt</code> 列出所有以 <code>.txt</code>
+结尾的文件，<code>rm file?.txt</code> 删除类似 <code>file1.txt</code> 或
+<code>fileA.txt</code> 的文件。</li>
+</ul></li>
+<li><strong>重定向:</strong>
+<ul>
+<li><code>&gt;</code> 将命令输出重定向到文件（覆盖原有内容）。</li>
+<li><code>&gt;&gt;</code> 将命令输出追加到文件。</li>
+<li><code>&lt;</code> 将文件内容作为命令输入。</li>
+<li><code>2&gt;</code> 将错误输出重定向到文件。</li>
+<li><code>&amp;&gt;</code> 将标准输出和错误输出都重定向到文件。</li>
+<li>例如：<code>ls &gt; filelist.txt</code> 将 <code>ls</code>
+命令的输出保存到 <code>filelist.txt</code> 文件中。</li>
+</ul></li>
+<li><strong>管道:</strong>
+<ul>
+<li><code>|</code> 将一个命令的输出作为另一个命令的输入。</li>
+<li>例如：<code>ls -l | grep "txt"</code> 列出包含 "txt"
+的文件详细信息。</li>
+</ul></li>
+<li><strong>Ctrl 快捷键:</strong>
+<ul>
+<li><code>Ctrl + C</code> 终止当前正在运行的命令。</li>
+<li><code>Ctrl + D</code> 发送 EOF (End-Of-File) 信号，通常用于退出当前
+shell 或程序。</li>
+<li><code>Ctrl + Z</code>
+暂停当前正在运行的命令，并将其放到后台。可以使用 <code>fg</code>
+命令恢复到前台，或者使用 <code>bg</code> 命令让其在后台继续运行。</li>
+<li><code>Ctrl + A</code> 将光标移动到行首。</li>
+<li><code>Ctrl + E</code> 将光标移动到行尾。</li>
+<li><code>Ctrl + K</code> 删除从光标位置到行尾的内容。</li>
+<li><code>Ctrl + U</code> 删除从光标位置到行首的内容。</li>
+<li><code>Ctrl + W</code> 删除光标前一个单词。</li>
+<li><code>Ctrl + Y</code> 粘贴使用
+<code>Ctrl + K</code>、<code>Ctrl + U</code> 或 <code>Ctrl + W</code>
+删除的内容。</li>
+<li><code>Ctrl + L</code> 清屏，类似于 <code>clear</code> 命令。</li>
+<li><code>Ctrl + S</code> 暂停屏幕输出 (XOFF)。</li>
+<li><code>Ctrl + Q</code> 恢复屏幕输出 (XON)。</li>
+</ul></li>
+<li><strong>引号的使用:</strong>
+<ul>
+<li><strong>双引号 (" ")</strong>: 允许变量扩展和命令替换。</li>
+<li><strong>单引号 (' ')</strong>:
+禁止变量扩展和命令替换，原样输出字符串。</li>
+<li><strong>反引号 (``) 或 $( )</strong>:
+用于命令替换，将命令的输出结果嵌入到当前命令中。</li>
+<li>例如：<code>echo "Today is $(date)"</code> 会输出当前日期，而
+<code>echo 'Today is $(date)'</code> 会原样输出
+<code>Today is $(date)</code>。</li>
+</ul></li>
+</ul>
+<p><strong>进阶技巧:</strong></p>
+<ul>
+<li><p><strong>变量:</strong></p>
+<ul>
+<li>定义变量：<code>variable_name=value</code>
+(注意等号两边不能有空格)。</li>
+<li>使用变量：<code>$variable_name</code> 或
+<code>$&#123;variable_name&#125;</code> (推荐后者，更清晰)。</li>
+<li>常见的环境变量：<code>HOME</code>, <code>USER</code>,
+<code>PATH</code>, <code>PWD</code> 等。</li>
+<li>例如：<code>name="John"</code> 定义一个名为 <code>name</code>
+的变量，<code>echo "Hello, $name"</code> 使用该变量。</li>
+</ul></li>
+<li><p><strong>条件判断:</strong></p>
+<ul>
+<li><p><code>if [ condition ]; then command; fi</code></p></li>
+<li><p><code>if [ condition ]; then command1; else command2; fi</code></p></li>
+<li><p><code>if [ condition1 ]; then command1; elif [ condition2 ]; then command2; else command3; fi</code></p></li>
+<li><p>常用的条件测试运算符：</p>
+<ul>
+<li><code>-eq</code> 等于</li>
+<li><code>-ne</code> 不等于</li>
+<li><code>-gt</code> 大于</li>
+<li><code>-lt</code> 小于</li>
+<li><code>-ge</code> 大于等于</li>
+<li><code>-le</code> 小于等于</li>
+<li><code>-z</code> 字符串为空</li>
+<li><code>-n</code> 字符串不为空</li>
+<li><code>-f</code> 文件存在且为普通文件</li>
+<li><code>-d</code> 目录存在</li>
+<li><code>-e</code> 文件或目录存在</li>
+<li><code>-r</code> 文件可读</li>
+<li><code>-w</code> 文件可写</li>
+<li><code>-x</code> 文件可执行</li>
+</ul></li>
+<li><p>逻辑运算符：</p>
+<ul>
+<li><code>-a</code> 逻辑与 (AND)</li>
+<li><code>-o</code> 逻辑或 (OR)</li>
+<li><code>!</code> 逻辑非 (NOT)</li>
+<li><code>&amp;&amp;</code> 逻辑与 (AND)</li>
+<li><code>||</code> 逻辑或 (OR)</li>
+</ul></li>
+<li><p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">if</span> [ -f myfile.txt ]; <span class="hljs-keyword">then</span><br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;File exists&quot;</span><br><span class="hljs-keyword">else</span><br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;File does not exist&quot;</span><br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p><strong>循环:</strong></p>
+<ul>
+<li><p><strong>for 循环:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> variable <span class="hljs-keyword">in</span> list; <span class="hljs-keyword">do</span><br>  <span class="hljs-built_in">command</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> file <span class="hljs-keyword">in</span> *.txt; <span class="hljs-keyword">do</span><br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Processing <span class="hljs-variable">$file</span>&quot;</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>while 循环:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">while</span> [ condition ]; <span class="hljs-keyword">do</span><br>  <span class="hljs-built_in">command</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">count=1<br><span class="hljs-keyword">while</span> [ <span class="hljs-variable">$count</span> -le 5 ]; <span class="hljs-keyword">do</span><br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Count: <span class="hljs-variable">$count</span>&quot;</span><br>  count=$((count + <span class="hljs-number">1</span>))<br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>until 循环:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">until</span> [ condition ]; <span class="hljs-keyword">do</span><br>  <span class="hljs-built_in">command</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p><strong>函数:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">function_name</span></span> () &#123;<br>  command1<br>  command2<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>调用函数：<code>function_name arguments</code> 例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">greet</span></span> () &#123;<br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello, <span class="hljs-variable">$1</span>!&quot;</span><br>&#125;<br><br>greet John<br></code></pre></td></tr></table></figure></li>
+<li><p><strong>命令替换:</strong>
+将命令的输出结果作为另一个命令的参数或变量。</p>
+<ul>
+<li>使用反引号 <code>command</code> 或 <code>$(command)</code></li>
+<li>例如：<code>files=$(ls)</code> 将 <code>ls</code>
+命令的输出结果赋值给 <code>files</code> 变量。</li>
+</ul></li>
+<li><p><strong>算术运算:</strong></p>
+<ul>
+<li>使用 <code>$((expression))</code> 进行算术运算。</li>
+<li>例如：<code>sum=$((1 + 2))</code> 将 1 加 2 的结果赋值给
+<code>sum</code> 变量。</li>
+</ul></li>
+<li><p><strong>数组:</strong></p>
+<ul>
+<li><p>定义数组：<code>array_name=(value1 value2 value3 ...)</code></p></li>
+<li><p>访问数组元素：<code>$&#123;array_name[index]&#125;</code></p></li>
+<li><p>获取数组长度：<code>$&#123;#array_name[@]&#125;</code></p></li>
+<li><p>遍历数组：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;array_name[@]&#125;</span>&quot;</span>; <span class="hljs-keyword">do</span><br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$element</span>&quot;</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p><strong>别名 (alias):</strong>
+为常用的命令或命令组合创建简短的别名。</p>
+<ul>
+<li>定义别名：<code>alias alias_name='command'</code></li>
+<li>例如：<code>alias la='ls -la'</code> 创建一个名为 <code>la</code>
+的别名，相当于执行 <code>ls -la</code>。</li>
+<li>取消别名：<code>unalias alias_name</code></li>
+</ul></li>
+<li><p><strong>进程管理:</strong></p>
+<ul>
+<li><code>&amp;</code> 在后台运行命令。</li>
+<li><code>jobs</code> 查看当前后台运行的进程。</li>
+<li><code>fg %job_number</code> 将后台进程调到前台。</li>
+<li><code>bg %job_number</code> 让后台暂停的进程继续运行。</li>
+<li><code>kill %job_number</code> 或 <code>kill pid</code>
+终止进程。</li>
+<li><code>ps aux</code> 或 <code>top</code> 查看系统进程信息。</li>
+<li><code>nohup command &amp;</code> 让命令在退出终端后继续运行。</li>
+</ul></li>
+</ul>
+<h2 id="二其他linux常用命令">二、其他Linux常用命令</h2>
+<h3 id="基本格式">基本格式</h3>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">格式</span><br>命令名 [-选项] [参数]		# 有些命令要选项和参数, 有些不需要. 这里的[]表示可选项. <br></code></pre></td></tr></table></figure>
-<h2 id="文件目录操作">文件目录操作</h2>
+<h3 id="文件目录操作">文件目录操作</h3>
 <h4 id="ls命令">2.ls命令</h4>
 <p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">ls</span>命令, 来源于: list(列表)  即: 查看指定目录下所有的子级(不包括子级的子级)</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">格式</span><br>ls [-a -l -h] [Linux的路径]<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">参数解释</span><br>-a		显示所有(包括隐藏的)	 all<br>-l		以行的形式展示详细信息 line<br>-h		以人性化的方式展示.   human<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">例如:</span> <br>ls			# 查看当前目录的子级, 不包括隐藏.<br>ls /		# 查看根目录(/)下的内容.<br>ls -a 		# 查看当前目录的子级, 包括隐藏.<br>ls -l		# 以行的方式, 查看当前目录的子级. 简写形式: ll<br>ls -h		# 以人性化的方式展示当前目录的内容, 但是: 无效果.<br>ls -lh		# 行的方式, 人性化展示当前目录下的内容. 简写形式:  ll -h<br>ls -al		# 以行的形式, 展示当前目录下所有子级(包括 隐藏)<br>ls -alh 	# 以行, 人性化的方式展示当前目录下所有子级(包括 隐藏)<br></code></pre></td></tr></table></figure></p>
 <h4 id="cd命令">3.cd命令</h4>
@@ -328,7 +513,7 @@
 <p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">来源于 make directory, 创建目录(文件夹)的.</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">格式</span><br>mkdir [-p] 文件夹路径		# -p表示parent, 即: 父目录不存在, 也会自动创建.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">简单理解, 假设: 目前只有 /root/aa 文件夹</span><br>mkdir /root/aa/bb/cc		# 报错, 因为不写-p, 只能创建单级文件夹.<br>mkdir -p /root/aa/bb/cc		# 不报错, 加上-p可以创建多级目录.<br></code></pre></td></tr></table></figure></p>
 <h4 id="文件相关">7.文件相关</h4>
 <p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">touch</span>		创建文件的.</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">格式</span><br>touch 文件路径1 文件路径2...		# 可以同时创建多个文件.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">cat</span>		查看文件内容的</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">格式</span><br>cat	文件路径			# 一次性查看文件所有内容, 如果内容较多, 会翻页, 只留最后一页.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">more		查看文件内容的, 可以分页查看.</span><br>more 文件路径			# 以分页的形式查看文件内容.<br><span class="hljs-meta prompt_">	# </span><span class="language-bash">空格	向下翻一页</span><br><span class="hljs-meta prompt_">	# </span><span class="language-bash">d		  down的意思, 向下翻半页</span><br><span class="hljs-meta prompt_">	# </span><span class="language-bash">enter	 向下翻一行</span><br><span class="hljs-meta prompt_">	# </span><span class="language-bash">b		  back, 向上翻一页.</span><br><span class="hljs-meta prompt_">	# </span><span class="language-bash">q	     quit, 表示退出.  也可以按下 ctrl + 字母C</span><br></code></pre></td></tr></table></figure></p>
-<h2 id="文件和文件夹相关命令">文件和文件夹相关命令</h2>
+<h3 id="文件和文件夹相关命令">文件和文件夹相关命令</h3>
 <h4 id="cp命令-来源于-copy单词-可以拷贝-文件-文件夹">8.cp命令, 来源于
 copy单词, 可以拷贝 文件, 文件夹</h4>
 <p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"> # </span><span class="language-bash">格式</span><br>cp [-r] 数据源 目的地		# -r表示recursive(递归), 即: 拷贝文件夹时, 要写. <br>cp -r /root/aa /root/test<br><br>[root@linxkon ~]# cd /root/<br>[root@linxkon ~]# ls<br>2.avi  3.jpg  4.mp3  aa  anaconda-ks.cfg  a.txt<br>[root@linxkon ~]# mkdir lk<br>[root@linxkon ~]# <br>[root@linxkon ~]# cp a.txt lk		# 拷贝<br>[root@linxkon ~]# ls<br>2.avi  3.jpg  4.mp3  aa  anaconda-ks.cfg  a.txt  lk<br>[root@linxkon ~]# ls lk/<br>a.txt<br>[root@linxkon ~]# <br>[root@linxkon ~]# cp 2.avi lk/abc.avi		# 拷贝, 并改名<br>[root@linxkon ~]# ls lk/<br>abc.avi  a.txt<br>[root@linxkon ~]# cp aa lk				# 报错, 拷贝文件夹必须夹-r, 递归拷贝.<br>cp: 略过目录&quot;aa&quot;<br>[root@linxkon ~]# cp -r aa lk				# 拷贝文件夹<br>[root@linxkon ~]# ls lk/<br>aa  abc.avi  a.txt<br></code></pre></td></tr></table></figure></p>
@@ -339,7 +524,7 @@ remove单词, 可以删除 文件, 文件夹</h4>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell">rm [-r -f] 要删除的文件或者文件夹路径		# -r:递归,  -f: force(强制)<br><br>[root@linxkon ~]# rm -rf lk		# 强制删除 lk文件夹, 且不询问<br>[root@linxkon ~]# ls<br>anaconda-ks.cfg  xyz<br>[root@linxkon ~]# touch 1.txt 2.txt 3.avi 4.avi 5.jpg<br>[root@linxkon ~]# ls<br>1.txt  2.txt  3.avi  4.avi  5.jpg  anaconda-ks.cfg  xyz<br>[root@linxkon ~]# rm -rf *.txt<br>[root@linxkon ~]# ls<br>3.avi  4.avi  5.jpg  anaconda-ks.cfg  xyz<br>[root@linxkon ~]# rm -rf *		# 清空当前文件夹<br>[root@linxkon ~]# ls<br>[root@linxkon ~]# rm -rf /*  ^C	# 慎用<br></code></pre></td></tr></table></figure>
 <h4 id="一个坐牢命令">11.一个坐牢命令</h4>
 <figure class="highlight shell"><figcaption><span>rm -rf</span><a href="/*">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">rm -rf /* #删除系统<br></code></pre></td></tr></table></figure>
-<h2 id="查找命令">查找命令</h2>
+<h3 id="查找命令">查找命令</h3>
 <p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment">### 12.which命令,  查找Linux可执行命令 的路径的.</span></span> <br>  which ls			# /usr/bin/ls<br>  which pwd			# /usr/bin/pwd<br>  <br>  which ifconfig		# /usr/sbin/ifconfig<br>  <br><span class="hljs-meta prompt_">  </span><br><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment">### 13.find命令, 根据文件名, 或者 文件大小查找指定文件.</span></span><br><span class="hljs-meta prompt_">  # </span><span class="language-bash">格式</span><br>  find 要被检索的目录路径 -name &#x27;要检索的文件名&#x27;<br>  <br>  find / -name &#x27;abc*&#x27;	# 查找Linux中, 以abc开头的内容.<br>  <br><span class="hljs-meta prompt_">  # </span><span class="language-bash">格式</span><br>  find 要被检索的目录路径 -size +100M		# 超过100MB,  -10K, 小于10KB<br>  <br>  find / -size +100M		# 查找Linux中, 文件大小超过100M的文件.<br></code></pre></td></tr></table></figure></p>
 <p>—————————————————华丽的分割线—————————————————
 <img src="/images/2024年5月10日genk.jpg" srcset="/img/loading.gif" lazyload title="毕加索" alt="dolor"></p>
@@ -369,7 +554,7 @@ remove单词, 可以删除 文件, 文件夹</h4>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Linux常用命令整理</div>
+      <div>Linux|Bash常用命令整理</div>
       <div>https://linxkon.github.io/linux常用命令整理.html</div>
     </div>
     <div class="license-meta">
