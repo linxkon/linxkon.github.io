@@ -16,26 +16,26 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="1.经验评估  推理显存估算：7B-float 是 28 GB，7B-BF16 是 14GB，7B-int8 是 7GB；其他版本以此类推即可。 训练的参数类型，只能是 float &#x2F; BF16 训练 所需显存 保守估算 是 同参数同类型llm 推理 的 4倍。  例子：7B-float 训练 显存：28 * 4 &#x3D; 112 GB      方法 bits 7B 1">
+    <meta name="description" content="程序配置 1234567891011121314151617181920212223242526272829303132333435&#x2F;&#x2F; 自动保存文件，延迟一定时间后保存&quot;files.autoSave&quot;: &quot;afterDelay&quot;, &#x2F;&#x2F; 自动猜测文件编码格式&quot;files.autoGuessEncoding&quot;: true, &#x2F;&#x2F; 在工作">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何知道一个大模型是否可以在自己的显卡上运行呢？">
-<meta property="og:url" content="https://linxkon.github.io/%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E4%B8%80%E4%B8%AA%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E5%9C%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E6%98%BE%E5%8D%A1%E4%B8%8A%E8%BF%90%E8%A1%8C%E5%91%A2%EF%BC%9F.html">
+<meta property="og:title" content="VSCODE配置优化(AI算法向)">
+<meta property="og:url" content="https://linxkon.github.io/vscode%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="1.经验评估  推理显存估算：7B-float 是 28 GB，7B-BF16 是 14GB，7B-int8 是 7GB；其他版本以此类推即可。 训练的参数类型，只能是 float &#x2F; BF16 训练 所需显存 保守估算 是 同参数同类型llm 推理 的 4倍。  例子：7B-float 训练 显存：28 * 4 &#x3D; 112 GB      方法 bits 7B 1">
+<meta property="og:description" content="程序配置 1234567891011121314151617181920212223242526272829303132333435&#x2F;&#x2F; 自动保存文件，延迟一定时间后保存&quot;files.autoSave&quot;: &quot;afterDelay&quot;, &#x2F;&#x2F; 自动猜测文件编码格式&quot;files.autoGuessEncoding&quot;: true, &#x2F;&#x2F; 在工作">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/nvida.png">
-<meta property="article:published_time" content="2023-11-25T12:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-24T06:48:37.610Z">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/vscode.png">
+<meta property="article:published_time" content="2023-12-11T02:21:13.000Z">
+<meta property="article:modified_time" content="2024-12-14T00:09:33.810Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="大模型">
-<meta property="article:tag" content="部署">
-<meta property="article:tag" content="模型训练">
+<meta property="article:tag" content="vscode">
+<meta property="article:tag" content="实用工具">
+<meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/nvida.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/vscode.png">
   
   
   
-  <title>如何知道一个大模型是否可以在自己的显卡上运行呢？ - AI·你所爱</title>
+  <title>VSCODE配置优化(AI算法向) - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="如何知道一个大模型是否可以在自己的显卡上运行呢？"></span>
+            <span id="subtitle" data-typed-text="VSCODE配置优化(AI算法向)"></span>
           
         </div>
 
@@ -241,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-25 20:21" pubdate>
-          2023年11月25日 晚上
+        <time datetime="2023-12-11 10:21" pubdate>
+          2023年12月11日 上午
         </time>
       </span>
     
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          245 字
+          447 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -309,95 +309,42 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">如何知道一个大模型是否可以在自己的显卡上运行呢？</h1>
+            <h1 id="seo-header">VSCODE配置优化(AI算法向)</h1>
             
             
               <div class="markdown-body">
                 
-                <h4 id="经验评估">1.经验评估</h4>
-<ul>
-<li>推理显存估算：7B-float 是 28 GB，7B-BF16 是 14GB，7B-int8 是
-7GB；其他版本以此类推即可。</li>
-<li>训练的参数类型，只能是 float / BF16</li>
-<li>训练 所需显存 保守估算 是 同参数同类型llm 推理 的 4倍。
-<ul>
-<li>例子：7B-float 训练 显存：28 * 4 = 112 GB</li>
-</ul></li>
-</ul>
-<table>
-<thead>
-<tr class="header">
-<th>方法</th>
-<th>bits</th>
-<th>7B</th>
-<th>13B</th>
-<th>30B</th>
-<th>65B</th>
-<th>8*7B</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>全参数微调</td>
-<td>16</td>
-<td>160GB</td>
-<td>320GB</td>
-<td>600GB</td>
-<td>1200GB</td>
-<td>900GB</td>
-</tr>
-<tr class="even">
-<td>Freeze</td>
-<td>16</td>
-<td>20GB</td>
-<td>40GB</td>
-<td>120GB</td>
-<td>240GB</td>
-<td>200GB</td>
-</tr>
-<tr class="odd">
-<td>LoRA</td>
-<td>16</td>
-<td>16GB</td>
-<td>32GB</td>
-<td>80GB</td>
-<td>160GB</td>
-<td>120GB</td>
-</tr>
-<tr class="even">
-<td>QLoRA</td>
-<td>8</td>
-<td>10GB</td>
-<td>16GB</td>
-<td>40GB</td>
-<td>80GB</td>
-<td>80GB</td>
-</tr>
-<tr class="odd">
-<td>QLoRA</td>
-<td>4</td>
-<td>6GB</td>
-<td>12GB</td>
-<td>24GB</td>
-<td>48GB</td>
-<td>32GB</td>
-</tr>
-</tbody>
-</table>
-<h4 id="精确评估">2.精确评估</h4>
-<h5 id="在线评估">2.1 在线评估</h5>
-<p>accelerate estimate-memory 是 huggingface 的 accelerate
-开发库中提供的一个工具。可网页在线访问</p>
-<p>https://huggingface.co/spaces/hf-accelerate/model-memory-usage选择相应模型进行评估</p>
-<h5 id="本地评估">2.2 本地评估</h5>
-<ul>
-<li>安装 accelerate, transformers</li>
-</ul>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pip install accelerate<br>pip install transformers<br></code></pre></td></tr></table></figure>
-<ul>
-<li>使用方法举例</li>
-</ul>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs text"># 基本使用方法<br>accelerate estimate-memory mistralai/Mistral-7B-v0.1<br><br># 只显示指定的数据类型<br>accelerate estimate-memory mistralai/Mistral-7B-v0.1 --dtypes float16<br><br># 指定开发库(针对本地模型，Hub上存储的模型不需要指定)<br>accelerate estimate-memory mistralai/Mistral-7B-v0.1 --dtypes float32 float16 --library_name transformers<br><br># 设置 trust_remote_code=True<br>accelerate estimate-memory Qwen/Qwen1.5-7B #正常<br>accelerate estimate-memory Qwen/Qwen-7B #报错<br>accelerate estimate-memory Qwen/Qwen-7B --trust_remote_code #可以运行<br><br># 其他模型<br>accelerate estimate-memory google/gemma-7b<br>accelerate estimate-memory baichuan-inc/Baichuan2-7B-Base --trust_remote_code<br></code></pre></td></tr></table></figure>
+                <h3 id="程序配置">程序配置</h3>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// 自动保存文件，延迟一定时间后保存</span><br><span class="hljs-attr">&quot;files.autoSave&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;afterDelay&quot;</span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 自动猜测文件编码格式</span><br><span class="hljs-attr">&quot;files.autoGuessEncoding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 在工作台列表中启用平滑滚动</span><br><span class="hljs-attr">&quot;workbench.list.smoothScrolling&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 启用光标平滑移动动画</span><br><span class="hljs-attr">&quot;editor.cursorSmoothCaretAnimation&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;on&quot;</span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 启用编辑器中的平滑滚动</span><br><span class="hljs-attr">&quot;editor.smoothScrolling&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 设置光标闪烁为平滑模式</span><br><span class="hljs-attr">&quot;editor.cursorBlinking&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;smooth&quot;</span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 启用通过鼠标滚轮放大/缩小编辑器文本</span><br><span class="hljs-attr">&quot;editor.mouseWheelZoom&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 粘贴时自动格式化代码</span><br><span class="hljs-attr">&quot;editor.formatOnPaste&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 输入时自动格式化代码</span><br><span class="hljs-attr">&quot;editor.formatOnType&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 保存文件时自动格式化代码</span><br><span class="hljs-attr">&quot;editor.formatOnSave&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 启用自动换行</span><br><span class="hljs-attr">&quot;editor.wordWrap&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;on&quot;</span><span class="hljs-punctuation">,</span><br> <br><span class="hljs-comment">// 显示括号对的指南线</span><br><span class="hljs-attr">&quot;editor.guides.bracketPairs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br></code></pre></td></tr></table></figure></p>
+<h3 id="插件推荐">插件推荐</h3>
+<h4 id="本地插件">本地插件</h4>
+<figure>
+<img src="/images/vscode配置/image-20241013113519490.png" srcset="/img/loading.gif" lazyload
+alt="image-20241013113519490" />
+<figcaption aria-hidden="true">image-20241013113519490</figcaption>
+</figure>
+<figure>
+<img src="/images/vscode配置/image-20241013114159272.png" srcset="/img/loading.gif" lazyload
+alt="image-20241013114159272" />
+<figcaption aria-hidden="true">image-20241013114159272</figcaption>
+</figure>
+<h4 id="远程插件">远程插件</h4>
+<figure>
+<img src="/images/vscode配置/image-20241013113620302.png" srcset="/img/loading.gif" lazyload
+alt="image-20241013113620302" />
+<figcaption aria-hidden="true">image-20241013113620302</figcaption>
+</figure>
+<h3 id="ssh配置">SSH配置</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#step 1 : 通过账号密码及地址ssh连接远程服务器</span><br>ssh -p 22 username@IP地址<br><br><span class="hljs-comment">#step 2 : 生成id_rsa本地公钥 </span><br>openssl genrsa -out private.key 2048<br><br><span class="hljs-comment">#step 3 : 通过git或wsl将公钥复制到远程服务器</span><br>ssh-copy-id ubuntu@100.82.226.69<br><br><span class="hljs-comment">#step 4 : 配置config文件方便调用</span><br>Host cyou<br>    HostName 100.82.226.69<br>    User ubuntu<br>    IdentityFile ~/.ssh/id_rsa<br><br><span class="hljs-comment">#step 5 :连接远程电脑</span><br>ssh cyou <br></code></pre></td></tr></table></figure>
+<h3 id="远程开发内网穿透">远程开发内网穿透</h3>
+<p><strong>服务端在ubuntu服务器安装frps</strong></p>
+<p>配置文件设置：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs text">[common]<br>#frp 服务端公网ip<br>server_addr = 你的公网ip<br>#服务端bind 端口<br>server_port = 5443<br><br>token = xxx<br><br>[RDP_home] #注意不要重名<br>type = tcp<br>local_ip = 127.0.0.1<br>#window 远程桌面端口<br>local_port = 3389<br>#远程端口<br>remote_port = 6001 #注意不同机器不同服务不要重复<br></code></pre></td></tr></table></figure>
+<p>启动命令：<code>frps</code></p>
+<p><strong>客户端在本地机器（受控设备）安装frpc</strong></p>
+<p>配置文件设置：</p>
+<p>启动命令（win端）：<code>frpc -c frpc.ini</code></p>
+<p>（请求控制的机器直接连接：服务端IP+客户端（受控）端口即可）</p>
 
                 
               </div>
@@ -416,7 +363,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="category-chain-item">大模型</a>
+  <a href="/categories/categories/" class="category-chain-item">categories</a>
   
   
 
@@ -431,11 +378,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+        <a href="/tags/vscode/" class="print-no-link">#vscode</a>
       
-        <a href="/tags/%E9%83%A8%E7%BD%B2/" class="print-no-link">#部署</a>
+        <a href="/tags/%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/" class="print-no-link">#实用工具</a>
       
-        <a href="/tags/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/" class="print-no-link">#模型训练</a>
+        <a href="/tags/%E6%95%99%E7%A8%8B/" class="print-no-link">#教程</a>
       
     </div>
   
@@ -447,8 +394,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>如何知道一个大模型是否可以在自己的显卡上运行呢？</div>
-      <div>https://linxkon.github.io/如何知道一个大模型是否可以在自己的显卡上运行呢？.html</div>
+      <div>VSCODE配置优化(AI算法向)</div>
+      <div>https://linxkon.github.io/vscode配置优化.html</div>
     </div>
     <div class="license-meta">
       
@@ -460,7 +407,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月25日</div>
+          <div>2023年12月11日</div>
         </div>
       
       
@@ -492,9 +439,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/vscode%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96.html" title="VSCODE配置优化(AI算法向)">
+                      <a href="/B%E7%AB%99_%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-Lyi.html" title="【B站】从零开始学习大语言模型-Lyi">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">VSCODE配置优化(AI算法向)</span>
+                        <span class="hidden-mobile">【B站】从零开始学习大语言模型-Lyi</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -502,8 +449,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE%E5%AE%9E%E8%B7%B5%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97.html" title="LLM 合成数据生成完整指南">
-                        <span class="hidden-mobile">LLM 合成数据生成完整指南</span>
+                      <a href="/%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E4%B8%80%E4%B8%AA%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E5%9C%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E6%98%BE%E5%8D%A1%E4%B8%8A%E8%BF%90%E8%A1%8C%E5%91%A2%EF%BC%9F.html" title="如何知道一个大模型是否可以在自己的显卡上运行呢？">
+                        <span class="hidden-mobile">如何知道一个大模型是否可以在自己的显卡上运行呢？</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -526,7 +473,7 @@
         var options = Object.assign(
           {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'f00d685cefbe9d7609f1b45e4db9655c'
+            id: 'f123e1439ef73adf3ddb1dfb822fd340'
           }
         )
         var gitalk = new Gitalk(options);
