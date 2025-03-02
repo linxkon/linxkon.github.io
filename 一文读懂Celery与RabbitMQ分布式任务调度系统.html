@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/celery.jpg">
 <meta property="article:published_time" content="2025-03-01T12:21:13.000Z">
-<meta property="article:modified_time" content="2025-03-02T04:10:38.619Z">
+<meta property="article:modified_time" content="2025-03-02T04:18:52.137Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="笔记整理">
 <meta property="article:tag" content="后端调度">
@@ -520,33 +520,29 @@ worker 进程，实现异步任务执行。</li>
 <p><strong>高吞吐、异步处理、消息可靠性</strong>，RabbitMQ
 是一个不错的选择。当场景需要
 <strong>超高吞吐（百万级QPS）</strong>，Kafka 会更适合。</p>
-<p># 四、安装Celery、RabbitMQ 先安装：pip install celery</p>
+<p># 四、安装Celery、RabbitMQ</p>
+<h3 id="第0步先安装celery">第0步：先安装celery</h3>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> celery<br></code></pre></td></tr></table></figure>
 <h3 id="第一步更新包列表">第一步：更新包列表</h3>
-<p>bashCopysudo apt-get update sudo apt-get upgrade</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> update<br>sudo apt-<span class="hljs-built_in">get</span> upgrade<br></code></pre></td></tr></table></figure>
 <h3 id="第二步安装erlang">第二步：安装Erlang</h3>
 <p>RabbitMQ是基于Erlang语言开发的，所以首先需要安装Erlang：
-添加Erlang仓库 sudo apt-get install software-properties-common
-apt-transport-https wget -O-
-https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo
-apt-key add - sudo add-apt-repository "deb
-https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs)
-contrib"</p>
+添加Erlang仓库</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs smali">sudo apt-get install software-properties-common apt-transport-https<br>wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key<span class="hljs-built_in"> add </span>-<br>sudo<span class="hljs-built_in"> add-apt-repository </span><span class="hljs-string">&quot;deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib&quot;</span><br></code></pre></td></tr></table></figure>
 <h4 id="更新包列表">更新包列表</h4>
-<p>sudo apt-get update</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>
 <h4 id="安装erlang">安装Erlang</h4>
-<p>sudo apt-get install erlang</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install erlang<br></code></pre></td></tr></table></figure>
 <h3 id="第三步安装rabbitmq">第三步：安装RabbitMQ</h3>
-<p>添加RabbitMQ仓库 wget -O-
-https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key
-add - sudo add-apt-repository "deb
-https://dl.bintray.com/rabbitmq/debian $(lsb_release -cs) main"</p>
+<p>添加RabbitMQ仓库 <figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs smali">wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key<span class="hljs-built_in"> add </span>-<br>sudo<span class="hljs-built_in"> add-apt-repository </span><span class="hljs-string">&quot;deb https://dl.bintray.com/rabbitmq/debian $(lsb_release -cs) main&quot;</span><br></code></pre></td></tr></table></figure></p>
 <h4 id="更新包列表-1">更新包列表</h4>
-<p>sudo apt-get update</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>
 <h4 id="安装rabbitmq">安装RabbitMQ</h4>
-<p>sudo apt-get install rabbitmq-server</p>
-<h3 id="第四步检查rabbitmq状态">第四步：检查rabbitMQ状态</h3>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> install rabbitmq-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
+<h3 id="第四步启动rabbitmq">第四步：启动rabbitMQ</h3>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-meta"># 启动服务</span><br>sudo systemctl start rabbitmq-<span class="hljs-keyword">server</span><br><br><span class="hljs-meta"># 设置开机自启</span><br>sudo systemctl enable rabbitmq-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
 <h4 id="查看队列状态">查看队列状态</h4>
-<p>sudo rabbitmqctl list_queues</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs axapta">sudo systemctl status rabbitmq-<span class="hljs-keyword">server</span><br>sudo rabbitmqctl list_queues<br></code></pre></td></tr></table></figure>
 <h1 id="五简单的rabbitmq测试脚本">五、简单的RabbitMQ测试脚本</h1>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># celeryconfig.py - Celery配置文件</span><br><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> timedelta<br><br><span class="hljs-comment"># 时区设置</span><br>timezone = <span class="hljs-string">&#x27;Asia/Shanghai&#x27;</span><br><br><span class="hljs-comment"># 任务序列化格式</span><br>task_serializer = <span class="hljs-string">&#x27;json&#x27;</span><br>accept_content = [<span class="hljs-string">&#x27;json&#x27;</span>]<br>result_serializer = <span class="hljs-string">&#x27;json&#x27;</span><br><br><span class="hljs-comment"># 定义周期性任务</span><br>beat_schedule = &#123;<br>    <span class="hljs-string">&#x27;add-every-30-seconds&#x27;</span>: &#123;<br>        <span class="hljs-string">&#x27;task&#x27;</span>: <span class="hljs-string">&#x27;tasks.add&#x27;</span>,<br>        <span class="hljs-string">&#x27;schedule&#x27;</span>: timedelta(seconds=<span class="hljs-number">30</span>),<br>        <span class="hljs-string">&#x27;args&#x27;</span>: (<span class="hljs-number">16</span>, <span class="hljs-number">16</span>),<br>    &#125;,<br>    <span class="hljs-string">&#x27;multiply-every-minute&#x27;</span>: &#123;<br>        <span class="hljs-string">&#x27;task&#x27;</span>: <span class="hljs-string">&#x27;tasks.multiply&#x27;</span>,<br>        <span class="hljs-string">&#x27;schedule&#x27;</span>: timedelta(minutes=<span class="hljs-number">1</span>),<br>        <span class="hljs-string">&#x27;args&#x27;</span>: (<span class="hljs-number">4</span>, <span class="hljs-number">5</span>),<br>    &#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs pyth"># tasks.py - 任务定义文件<br>from celery import Celery<br><br># 创建Celery实例，指定消息代理(RabbitMQ)和结果后端<br>app = Celery(&#x27;tasks&#x27;,<br>             broker=&#x27;amqp://guest:guest@localhost:5672//&#x27;,<br>             backend=&#x27;rpc://&#x27;)<br><br># 任务装饰器，将函数注册为Celery任务<br>@app.task<br>def add(x, y):<br>    return x + y<br><br>@app.task<br>def multiply(x, y):<br>    return x * y<br><br># 带有重试机制的任务示例<br>@app.task(bind=True, max_retries=3, default_retry_delay=5)<br>def fetch_data(self, url):<br>    try:<br>        # 这里应该是获取数据的实际代码<br>        # 为了示例，我们模拟一个成功的返回<br>        return f&quot;Data fetched from &#123;url&#125;&quot;<br>    except Exception as exc:<br>        # 发生错误时重试<br>        self.retry(exc=exc)<br><br># 周期性任务 - 在celery beat配置中定义<br># 需要在celeryconfig.py中配置<br></code></pre></td></tr></table></figure>
