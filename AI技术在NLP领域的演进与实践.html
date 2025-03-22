@@ -1,0 +1,1479 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="引言 在人工智能技术快速发展的今天,我们见证了一场前所未有的技术革命。从最初的机器学习算法到如今风靡全球的大语言模型(LLM),AI技术正在以惊人的速度重塑着我们的工作和生活方式。 本文将带领大家循序渐进地探索AI技术的演进历程和实践应用。分享分为两部分，第一部分主要是从机器学习的基础概念出发,解析其如何一步步发展成为今天强大的语言模型，并针对具体任务给出一个简单示例。第二部分我们将深入剖析L">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI技术在NLP领域的演进与实践">
+<meta property="og:url" content="https://linxkon.github.io/AI%E6%8A%80%E6%9C%AF%E5%9C%A8NLP%E9%A2%86%E5%9F%9F%E7%9A%84%E6%BC%94%E8%BF%9B%E4%B8%8E%E5%AE%9E%E8%B7%B5.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="引言 在人工智能技术快速发展的今天,我们见证了一场前所未有的技术革命。从最初的机器学习算法到如今风靡全球的大语言模型(LLM),AI技术正在以惊人的速度重塑着我们的工作和生活方式。 本文将带领大家循序渐进地探索AI技术的演进历程和实践应用。分享分为两部分，第一部分主要是从机器学习的基础概念出发,解析其如何一步步发展成为今天强大的语言模型，并针对具体任务给出一个简单示例。第二部分我们将深入剖析L">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/ai%E6%8A%80%E8%83%BD%E7%82%B9.png">
+<meta property="article:published_time" content="2025-03-10T10:21:13.000Z">
+<meta property="article:modified_time" content="2025-03-22T14:27:54.042Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="AI技术梳理">
+<meta property="article:tag" content="NLP技术">
+<meta property="article:tag" content="笔记整理">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/ai%E6%8A%80%E8%83%BD%E7%82%B9.png">
+  
+  
+  
+  <title>AI技术在NLP领域的演进与实践 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AI技术在NLP领域的演进与实践"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-10 18:21" pubdate>
+          2025年3月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          80 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AI技术在NLP领域的演进与实践</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="引言">引言</h2>
+<p>在人工智能技术快速发展的今天,我们见证了一场前所未有的技术革命。从最初的机器学习算法到如今风靡全球的大语言模型(LLM),AI技术正在以惊人的速度重塑着我们的工作和生活方式。</p>
+<p>本文将带领大家循序渐进地探索AI技术的演进历程和实践应用。分享分为两部分，第一部分主要是从机器学习的基础概念出发,解析其如何一步步发展成为今天强大的语言模型，并针对具体任务给出一个简单示例。第二部分我们将深入剖析LLM的工程化应用,特别是检索增强生成(RAG)以及Agent技术如何帮助我们构建更智能、更可靠的AI应用系统。</p>
+<h2 id="从机器学习到语言模型">从机器学习到语言模型</h2>
+<p>在进入主题之前，让我们先了解一下人工智能、机器学习与深度学习的关系</p>
+<p>人工智能
+(AI)：AI的概念最早可以追溯到20世纪50年代，由麦卡锡、香农等学者提出。它旨在让机器展现出类似人类的智能能力，包括感知、学习、推理、规划、语言理解与生成等。AI的核心目标是开发能够解决复杂问题并执行智能任务的系统。</p>
+<p>机器学习 (ML)：ML 是实现 AI
+的一种方法，它让机器通过数据自动学习模式并进行决策，而不是通过硬编码规则。</p>
+<p>深度学习（DL）是机器学习的子集,深度学习的一大特点是用神经网络的方式来解决算法建模问题。深度学习两个热门的方向是CV,现在热门的实践应用包括智能驾驶技术。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314961-29.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li><h3 id="机器学习算法">机器学习算法</h3>
+<p>机器学习可以看作是让机器从数据中学习规律，从而进行预测或决策。想象一下，我们想让机器学会区分苹果和橘子，或者预测明天的股票价格，这就是机器学习可以做的事情。</p>
+<h4 id="机器学习主要解决两个核心问题分类与回归">1.1
+机器学习主要解决两个核心问题:分类与回归</h4>
+<p>分类 (Classification):
+就像给东西贴标签。机器会学习如何把数据分到不同的类别里。例如情绪识别、图像识别等问题。</p>
+<p>常见传统机器学习算法: 逻辑回归 (Logistic Regression)、支持向量机
+(SVM)、集成学习 (<a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27689464">Ensemble
+Learning</a>)、K近邻 (KNN) 等。</p>
+<p>回归 (Regression):
+就像预测一个数值。机器会学习如何根据输入的数据，预测一个连续的输出值。例如房价预测、股票预测等问题。
+常见算法: 线性回归 (Linear Regression)、多项式回归 (Polynomial
+Regression) 等。</p>
+<p>1.2 机器学习的基础概念</p>
+<p>特征工程：指利用领域知识从原始数据中提取、构造或选择出对预测模型有用的特征的过程，它能够帮助模型更好地找到数据内在的规律，传统机器学习和深度学习的一大区别是ML更加依赖于特征工程。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314957-1.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>样本与标签：样本指用于训练机器学习模型的单个数据实例，它一般由若干“特征”组成。标签是与样本相对应的答案或目标值。</p>
+<p>训练集与测试集：训练集用于模型训练，测试集用于模型训练结果的评估；训练集还可以进一步划分出一部分数据作为验证集。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314957-2.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h4 id="机器学习算法示例-random-forest解决情绪识别问题">1.2
+机器学习算法示例-random forest解决情绪识别问题</h4>
+<p>机器学习算法种类繁多，思想迥异。接下来以集成学习中 Bagging
+方法的代表算法——随机森林（Random
+Forest）为例，展开说明。同时结合TF-IDF构建特征与随机森林建模的方式演示如何解决情绪识别问题。</p>
+<h5 id="bagging与random-forest">1.2.1 Bagging与Random Forest</h5>
+<p>Bagging是一种集成学习技术，它通过对原始数据集进行有放回的随机抽样（Bootstrap
+sampling）来构建多个训练集，然后在这些训练集上分别训练出多个基学习器（如决策树、神经网络等），最后将这些基学习器的预测结果通过某种策略（如投票、平均等）组合起来作为最终的预测结果。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314957-3.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p><em>Random Forest模型技术要点</em></p>
+<blockquote>
+<ol type="1">
+<li>用<em>N</em>来表示训练用例（样本）的个数，<em>M</em>表示特征数目。</li>
+<li>输入特征数目<em>m</em>，用于确定<a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/决策树/0?fromModule=lemma_inlink">决策树</a>上一个节点的决策结果；其中<em>m</em>应远小于<em>M</em>。</li>
+<li>从<em>N</em>个训练用例（样本）中以有放回抽样的方式，取样<em>N</em>次，形成一个<a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/训练集/0?fromModule=lemma_inlink">训练集</a>（即bootstrap取样），并用未抽到的用例（样本）作预测，评估其误差。</li>
+<li>对于每一个节点，随机选择<em>m</em>个特征，决策树上每个节点的决定都是基于这些特征确定的。根据这m个特征，采用信息增益法计算其最佳的分裂方式。</li>
+</ol>
+</blockquote>
+<h5 id="tf-idf方法构建特征工程">1.2.2 TF-IDF方法构建特征工程</h5>
+<p>词频-逆文档频率法（TF-IDF）是一种常用的文本特征提取方法，用于衡量单词在文档和整个语料库中的重要性。它的计算方法为：</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314957-4.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>其核心思想是</p>
+<ol type="1">
+<li>高 TF 值表示单词对当前类型文档具有较好的表征能力。</li>
+<li>高 IDF 值表示单词能更好地区分不同类型文档。</li>
+<li>通过TF-IDF，常用词被赋值为低权重，独特词被赋值为高权重。</li>
+</ol>
+<h5 id="代码演示">1.2.3 代码演示</h5>
+<p>示例代码已分享至github，点击下载使用：<a
+target="_blank" rel="noopener" href="https://github.com/linxkon/emotion_class_dialog">github.com</a></p>
+<p>路径：/A_random_forest/</p></li>
+</ol>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">dat<span class="hljs-built_in">a_process</span>.py<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>文本标签映射为数字</li>
+<li>使用jieba分词构建词样本数据</li>
+</ol>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">dat<span class="hljs-built_in">a_process</span>.py<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>词频-逆文档频率法（TF-idf）构建特征词向量</li>
+<li>使用sk-learn库中Random Forest构建分类模型</li>
+<li>模型的评估、保存</li>
+</ol>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">infer.<span class="hljs-keyword">py</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>模型推理调用</li>
+</ol>
+<h3 id="深度学习算法">2. 深度学习算法</h3>
+<p>传统的机器学习算法虽然对一些简单任务快捷有效，但是却非常不擅长处理一些复杂的建模问题，比如图像分类、语言生成等，这时候我们就需要更加强大的新算法——深度学习。</p>
+<p>深度学习使用神经网络建模，使模型具备了特征自动提取的能力，以及更加强大的学习表达能力。</p>
+<h4 id="神经网络">2.1 神经网络</h4>
+<figure>
+<img src="/images/AI宣讲会/1736749314957-5.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>神经元</p>
+<p>神经元是神经网络的基本计算单元，模拟生物神经元的工作方式。它接收输入信号，对其加权求和后，使用激活函数决定输出。</p>
+<p>权重 (Weights) 和偏置 (Biases)</p>
+<p>权重是神经网络中连接不同层之间的参数，反映输入特征的重要性。</p>
+<p>偏置允许模型在输入为零时也能输出非零值，增强模型的表达能力。</p>
+<p>神经网络架构</p>
+<p>神经网络由多个“神经元”组成，这些神经元按层（layers）排列。通常来讲可以分为以下</p>
+<p>输入层 (Input Layer): 接收数据，例如一张图片的所有像素值。</p>
+<p>隐藏层 (Hidden Layer):
+对输入数据进行处理和转换。可以有多个隐藏层，层数越多，模型越复杂。</p>
+<p>输出层 (Output Layer):
+输出结果，例如分类问题中每个类别的概率，或回归问题中的预测值。</p>
+<h4 id="神经网络的机制">2.2 神经网络的机制</h4>
+<figure>
+<img src="/images/AI宣讲会/1736749314957-6.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h5 id="神经网络的基础机制">2.2.1 神经网络的基础机制</h5>
+<p>神经网络模型通过以下两个步骤实现其对数据的学习建模能力</p>
+<p>Step1：【前向传播】+【损失函数】计算损失</p>
+<p>前向传播（Forward
+Propagation）：是神经网络中将输入数据转换为输出数据的过程。它通过将输入数据逐层传递通过网络的各个层，并在每一层应用激活函数来计算输出值。</p>
+<p>损失函数（Loss
+FN）：描述的是预测值ŷ与真实值y之间的差异，常用的损失计算方法有均方误差（缩写为MSE，用于回归问题）、交叉熵损失（softmax损失，用于分类问题）</p>
+<p>Step2：【反向传播】+【梯度下降】更新梯度值</p>
+<p>反向传播：从输出层开始，逐层计算每个神经元对损失函数的贡献，并根据链式法则计算每个权重的梯度。</p>
+<p>梯度下降：通过寻找梯度负方向的方式迭代调整模型参数，使损失函数逐渐减小，最终找到其最小值。</p>
+<blockquote>
+<p>梯度下降的原理</p>
+<p>梯度下降法是一种寻找使损失函数最小化的方法。从数学上的角度来看，梯度的方向是函数增长速度最快的方向，那么梯度的反方向就是函数减少最快的方向，梯度下降的过程如下图所示：</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314957-7.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>梯度下降公式：</p>
+<p><span
+class="math display">\[w_{ij}^{new}=w_{ij}^{old}\quad-\quad\eta\quad\frac{\partial
+E}{\partial w_{ij}}\]</span></p>
+<p>W_new为更新后的参数值，W_old为更新前的参数值，η是学习率，<span
+class="math display">\[\frac{\partial E}{\partial
+w_{ij}}\]</span>是损失函数对参数的梯度，即损失函数在参数处的导数。</p>
+</blockquote>
+<h5 id="从数据流向来理解梯度值的更新过程">2.2.2
+从数据流向来理解梯度值的更新过程</h5>
+<blockquote>
+<p>构建一个2-2-2结构的前馈神经网络（如下图）</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">示例代码：example<span class="hljs-string">\nerual_network_BP.py</span><br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-8.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+</blockquote>
+<blockquote>
+<p>输入层：</p>
+<ul>
+<li>包含两个节点 i1 和 i2，它们的输入值分别为 0.05 和 0.10。</li>
+</ul>
+<p>隐藏层：</p>
+<ul>
+<li>包含两个神经元 h1 和 h2。</li>
+</ul>
+<p>输出层：</p>
+<ul>
+<li>包含两个神经元 o1 和 o2，它们的输出值分别为 0.01 和 0.99。</li>
+</ul>
+<p>参数初始化值：如图红色数字</p>
+<p>共计2个输入节点,4个神经元,12个参数</p>
+<p>网络类型：线性层</p>
+<p>激活函数：sigmoid</p>
+<p>学习率：0.5</p>
+<p>目标：求解第一次梯度下降后w5的数值</p>
+</blockquote>
+<blockquote>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-9.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-10.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-11.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p><em>依此类推,可以得到W6,W7,W8的值,继而可进一步推算出其它参数的值,至此,我们完成了第一步的梯度更新</em></p>
+<p><em>以后便是重复以上步骤持续更新参数,直到到达指定步数或损失值</em></p>
+</blockquote>
+<h5 id="神经网络的其它机制">2.2.3 神经网络的其它机制</h5>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-12.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h4 id="深度学习算法示例-lstm解决情绪识别问题">2.3
+深度学习算法示例-LSTM解决情绪识别问题</h4>
+<p>通过基础神经元的组合以及隐藏层的设计，可以构建出多种神经网络架构，例如前文提到的前馈神经网络（FF）、循环神经网络（RNN）、长短期记忆网络（LSTM）等（如下图）。接下来，我们以LSTM为例进行详细讲解。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-13.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h5 id="lstm简介">2.3.1 LSTM简介</h5>
+<p>LSTM（Long Short-Term Memory）也称长短时记忆结构, 它是RNN的变体,
+与经典RNN相比能够有效捕捉长序列之间的语义关联,
+缓解梯度消失或爆炸现象。LSTM的核心结构可以分为四个部分去解析:</p>
+<blockquote>
+<p>1.细胞状态（CellState）：用于保存长期的状态信息，可以看作是贯穿整个序列的“记忆”。</p>
+<p>2.遗忘门（ForgetGate）：决定当前时间步的记忆细胞状态中哪些信息需要丢弃。遗忘门通过一个sigmoid函数来决定保留哪些信息，输出在0到1之间。</p>
+<p>3.输入门（InputGate）：决定哪些新的信息需要添加到记忆细胞中。输入门也由一个sigmoid函数控制，用来选择性地更新细胞状态。</p>
+<p>4.输出门（OutputGate）：控制从细胞状态中输出的信息，决定哪些部分将作为下一个隐藏状态输出。</p>
+<p>细胞状态更新：通过遗忘门和输入门的作用，更新当前细胞状态，形成新的细胞状态和隐藏状态。</p>
+</blockquote>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-14.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h5 id="代码演示-1">2.3.2 代码演示</h5>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">B_LSTM<span class="hljs-string">\lstm_model.py</span><br></code></pre></td></tr></table></figure>
+<p>使用torch库构建数据处理类</p>
+<ul>
+<li>三个基础方法</li>
+</ul>
+<p>构建模型架构：TextClassifier类</p>
+<ul>
+<li>一个继承</li>
+<li>两个方法</li>
+</ul>
+<p>模型训练和评估函数</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">B_LSTM<span class="hljs-string">\lstm_main.py</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>数据加载处理</li>
+<li>构建词表与标签映射</li>
+<li><em>创建数据集实例</em></li>
+<li><em>创建数据加载器</em></li>
+<li><em>初始化模型</em></li>
+<li><em>定义损失函数和优化器</em></li>
+<li><em>训练模型</em></li>
+<li>评估模型</li>
+</ul>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">B_LSTM<span class="hljs-string">\lstm_infer.py</span><br></code></pre></td></tr></table></figure>
+<p>模型加载与推理</p>
+<ol type="1">
+<li><h3
+id="transformers与预训练语言模型">Transformers与预训练语言模型</h3>
+<p>传统RNN在处理长序列任务时难以记住早期信息。虽然LSTM通过门控机制在一定程度上缓解了这个问题，但直到注意力机制和Transformer的出现才真正突破了这一限制。</p>
+<h4 id="注意力机制与-transfomers架构">3.1 注意力机制与
+transfomers架构</h4>
+<h5 id="注意力机制">3.1.1 注意力机制</h5>
+<p>基础概念：</p>
+<p>注意力机制 (Attention Mechanism)
+是一种模仿人类注意力认知机制的技术，它允许模型在处理信息时，集中关注于输入中最相关的部分，从而提高模型的性能。就像我们在阅读一篇文章时，会重点关注一些关键词句，忽略一些不重要的细节，注意力机制也让模型学会了这种
+"聚焦" 的能力。</p>
+<p>核心思想:为输入数据的每个部分分配一个权重，权重越高，表示该部分越重要，模型会更加关注它。这些权重是动态计算的，会根据不同的输入和任务目标而变化。</p>
+<p>注意力机制有很多种，比如硬注意力、软注意力、自注意力等，接下来以经典的自注意力为例进行讲解。</p>
+<p>自注意力机制(Self-Attention)：</p>
+<p>自注意力机制是实现序列的子元素间互相关注的一种机制。通过自注意力机制，每个位置的表示可以动态地关注序列中其他位置的信息，特别是那些与当前表示有较高相关性的部分。</p>
+<p>自注意力机制的核心概念:</p>
+<p>自注意力机制的核心概念有四个,分别是Q、K、V和评分函数,其中<code>Query(Q)、Key(K)和Value(V)</code>三个矩阵都是通过对输入进行线性变换得到的,评分函数常用缩放点积的方式实现,以下为具体的解释:</p>
+<blockquote>
+<p><code>查询矩阵（Query, Q）：</code></p>
+<p>查询矩阵包含了要从其他位置获取信息的请求。Query（查询）是一个特征向量，描述我们在序列中寻找什么，即我们可能想要注意什么。</p>
+<p><code>键矩阵（Key, K）：</code></p>
+<p>每个输入元素有一个键，它也是一个特征向量。该特征向量粗略地描述了该元素“提供”什么，或者它何时可能很重要。键的设计应该使得我们可以根据Query来识别我们想要关注的元素。</p>
+<p><code>值矩阵（Value, V）：</code></p>
+<p>每个输入元素，我们还有一个值向量。这个向量就是我们期望得到的平均向量。</p>
+<p><code>Score function：评分函数</code></p>
+<p>为了对想要关注的元素进行评分，我们需要指定一个评分函数f该函数将查询和键作为输入，并输出查询-键对的得分/注意力权重。它通常通过简单的相似性度量来实现，例如点积。</p>
+</blockquote>
+<p>自注意力通常以缩放点积的方式实现，其公式为:</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-15.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>下图直观地描述了自注意力如何作用在一系列单词上。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-16.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<blockquote>
+<p>输入单词序列（最下方的灰色框）：</p>
+<ul>
+<li>这是输入的一组词，表示为 "I am eating an
+apple"。每个词会被嵌入成一个向量（Embedding），用于后续计算。</li>
+</ul>
+<p>Keys, Values, Query：</p>
+<ul>
+<li>对每个输入词，我们生成三个向量：Key (橙色)、Value (蓝色)、Query
+(绿色)。这些向量由嵌入向量通过不同的线性变换得到，用于计算注意力权重和输出。</li>
+</ul>
+<p>α 权重：</p>
+<ul>
+<li>每个输入词的 Query 和所有词的 Key 进行点积（计算相似度），再通过
+Softmax 得到注意力权重（α）。</li>
+<li>这些权重反映了当前 Query 词与每个输入词的相关性。</li>
+</ul>
+<p>加权求和（Weighted Sum）：</p>
+<ul>
+<li>权重 α 作用于对应的 Value
+向量，计算加权求和，得到当前词的输出向量。</li>
+</ul>
+<p>输出特征：</p>
+<ul>
+<li>最终，输出特征是每个词加权后的向量，用于后续层的处理。</li>
+</ul>
+</blockquote>
+<p>多头自注意力机制</p>
+<p>多头注意力机制是对自注意力机制的扩展。它通过引入多个注意力头，允许模型从不同的表示子空间中获取信息，从而增强模型的表达能力。具体来说：</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-17.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ul>
+<li>将 Q、K、V 分成多个子空间，每个子空间独立计算注意力。</li>
+<li>最终将各头的输出拼接起来，经过线性变换得到结果。</li>
+<li>作用：捕捉不同语义关系，提高模型表达能力。</li>
+</ul>
+<p>理解了多头自注意力机制,便理解了transfomers架构的核心内容。</p>
+<h5 id="transfomers架构">3.1.2 transfomers架构</h5>
+<p>2017年,来自谷歌的Google Brain团队发布题为《Attention Is All You
+Need》的论文,该论文提出Transformer这一革命性架构,从此世界进入Scale
+Law主宰的大模型时代。</p>
+<p>Transformer最突出的贡献就是解决了传统RNN和LSTM等序列处理中的长距离依赖差、计算效率低、拓展性差三大核心问题，被广泛应用于自然语言处理（NLP）任务，例如机器翻译、文本摘要等，除此之外也被广泛应用于各种其它领域，包括计算机视觉、语音识别等。Transformer已经成为现代深度学习中的主流架构。</p>
+<p>Transformers的模型架构</p>
+<p>一个典型的 Transformer 模型主要由两部分组成：编码器（Encoder） 和
+解码器（Decoder）。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-18.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<blockquote>
+<ol type="1">
+<li>编码器（Encoder）：</li>
+</ol>
+<ul>
+<li>作用： 将输入序列（例如一个句子）编码成一个包含丰富语义信息的
+上下文向量（Context Vector）。</li>
+<li>结构： 通常由 N 个相同的编码器层堆叠而成（论文中
+N=6）。每个编码器层包含两个主要子层：
+<ul>
+<li>多头自注意力层（Multi-Head Self-Attention）： 这是 Transformer
+的核心。它允许模型关注输入序列中不同位置的单词，并计算它们之间的关系，从而捕捉上下文信息。</li>
+<li>前馈神经网络层（Feed-Forward Network）：
+对每个位置的单词表示进行非线性变换，进一步增强模型的表达能力。</li>
+</ul></li>
+<li>输入： 输入序列（例如单词序列）经过词嵌入（Word
+Embedding）和位置编码（Positional Encoding）后，输入到编码器中。</li>
+</ul>
+<ol start="2" type="1">
+<li>解码器（Decoder）：</li>
+</ol>
+<ul>
+<li>作用：
+根据编码器生成的上下文向量和已生成的输出序列，生成目标序列（例如翻译后的句子）。</li>
+<li>结构： 也由 N 个相同的解码器层堆叠而成（论文中
+N=6）。每个解码器层包含三个主要子层：
+<ul>
+<li>掩码多头自注意力层（Masked Multi-Head Self-Attention）：
+与编码器中的自注意力层类似，但会添加一个掩码（Mask），以防止解码器在生成当前单词时“偷看”到未来的单词，确保生成的序列是自回归的。</li>
+<li>多头自注意力层（Multi-Head Self-Attention）：
+允许解码器关注编码器输出的上下文向量，从而获取输入序列的信息。</li>
+<li>前馈神经网络层（Feed-Forward Network）：
+与编码器中的前馈神经网络层相同。</li>
+</ul></li>
+<li>输入：
+解码器的输入包括两部分：编码器输出的上下文向量和已生成的输出序列（经过词嵌入和位置编码）。</li>
+</ul>
+</blockquote>
+<h4 id="预训练语言模型">3.2 预训练语言模型</h4>
+<p>基于transformer架构的强大能力，使用大规模语料集训练“多用途”的预训练语言模型（PLM）成为热门趋势；而大语言模型（LLM），可以简单理解为参数量超过10亿的预训练语言模型。</p>
+<p>大语言模型相对于传统NLP模型的核心优势就是通过强大的泛化能力和上下文理解能力，统一了各类NLP任务的解决范式，甚至重塑了人类整合和获取知识的方式。</p>
+<p>下图介绍了Encoder Only | Decoder Only |
+Encoder+Decoder三种技术路线的模型的发展趋势，可以很明显看出越往后推出的模型，呈现出其性能越高，其参数量越大的规律，这就是我们常提到Scale
+Law。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-19.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>接下来我们以Encoder Only 的典型代表——Bert，Decoder
+Only的典型代表——GPT展开作详细讲解。</p>
+<h5 id="bert">3.2.1 Bert</h5>
+<p>BERT (Bidirectional Encoder Representations from Transformers) 是
+Google 于 2018 年提出的一种预训练语言模型，它是基于transformers
+Encoder部分的改良。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-20.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>Bert被广泛应用在文本分类、句子对识别、序列标注等任务。它凭借较小的资源占用和较高的稳定性，在NLP领域扮演着不可或缺的角色。</p>
+<p>Bert模型的架构</p>
+<p>BERT 的核心思想是利用双向 Transformer
+编码器进行无监督预训练，从而学习到丰富的上下文相关的词嵌入表示。宏观上BERT分三个主要模块。</p>
+<ul>
+<li>最底层黄色标记的Embedding模块。</li>
+<li>中间层蓝色标记的Transformer 的 encoder模块。</li>
+<li>最上层绿色标记的预微调模块。</li>
+</ul>
+<figure>
+<img src="/images/AI宣讲会/1736749314958-21.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ol>
+<p>如何训练BERT</p>
+<p>Bert训练使用了132GB的数据（33亿图书馆+百科词汇语料），由谷歌团队用16个TPU，4天时间训练完成。并同时应用了以下两个训练任务：</p>
+<blockquote>
+<ol type="1">
+<li>掩码语言模型 (Masked Language Model, MLM)： 随机掩盖 (mask)
+输入句子中的部分词（使用特殊标记 [MASK]
+替换），然后训练模型根据上下文预测这些被掩盖的词。这使得 BERT
+能够学习到双向的上下文表示。为了提高效率，BERT只预测被遮盖的单词，而不是重建整个输入。
+<ol type="1">
+<li>遮盖策略：
+<ul>
+<li>80% 的概率用 <code>[MASK]</code> 标记替换。</li>
+<li>10% 的概率用一个随机的单词替换。</li>
+<li>10% 的概率保持原单词不变。</li>
+<li>为什么要这样设计呢？如果100%都用[MASK]替换，模型就只学会了预测[MASK]，如果只替换不mask，模型直接复制就行，为了防止模型学到捷径，同时引入其他词带来的噪音，所以混合了这几种策略。</li>
+</ul></li>
+</ol></li>
+<li>下一句预测 (Next Sentence Prediction, NSP)：
+判断两个句子是否是连续的句子。输入是一对句子 A 和 B，模型需要预测 B
+是否是 A 的下一句。这个任务有助于 BERT 学习句子之间的关系。</li>
+</ol>
+</blockquote>
+<p>BERT模型参数</p>
+<p>BERT提供了简单和复杂两类模型，对应的超参数分别如下：</p>
+<ul>
+<li><p>BERT-base : L=12，H=768，A=12，参数总量110M；</p></li>
+<li><p>BERT-large: L=24，H=1024，A=16，参数总量340M；</p>
+<p>在上面的超参数中，L表示网络的层数（即Transformer
+blocks的数量），A表示Multi-Head
+Attention中self-Attention的数量。</p></li>
+</ul>
+<h5 id="gpt">3.2.2 GPT</h5>
+<p>2018 年 6 月， OpenAI 发布题为 "Improving Language Understanding by
+Generative Pre-Training"的论文，标志着 GPT 系列模型的开端。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314959-22.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>GPT采用的是Decoder
+only的架构，即transformers架构的右半部分。GPT的核心任务是NWP（Next word
+prediction），即通过自回归生成的方式，依次预测下一个词，直至生成完整的句子或段落。</p>
+<p>下图以“robot must obey
+orders”这句话为例，演示了如何通过倒三角掩码的方式构建自回归训练任务。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314959-23.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>GPT的训练流程</p>
+<blockquote>
+<ol type="1">
+<li>预训练 (Pre-training)
+<ol type="1">
+<li>目标:
+让模型学习通用的语言表示，捕捉语言的统计规律、语法结构、语义关系以及一些常识知识等。</li>
+<li>数据集:
+这个阶段使用的数据集非常庞大，通常包括互联网上的各种文本，例如网页、书籍、新闻文章、维基百科等等。例如，GPT-3.5
+的训练数据量达到了 45TB。</li>
+<li>训练方法: 在海量文本数据集上进行无监督学习 (Unsupervised
+Learning)，通常使用自回归语言模型 (Autoregressive Language Modeling)
+作为训练目标。需要数千个GPU进行数月的大规模分布式训练，95%的训练成本都用在这个阶段。</li>
+<li>结果:
+预训练阶段得到的模型具有很强的通用性，可以理解和生成各种类型的文本，但它还没有针对特定任务进行优化。</li>
+</ol></li>
+<li>微调 (Fine-tuning)
+<ol type="1">
+<li>目标:
+将预训练模型适配到具体的下游任务，例如问答、翻译、摘要生成等等。</li>
+<li>数据集:由承包商编写的理想助手响应（包括提示和响应对），数量在1万到10万对之间，质量较高。</li>
+<li>方法: 在特定任务的标注数据集上进行监督学习 (Supervised
+Learning)。需要1到100个GPU，训练时间为数天。</li>
+<li>过程:
+将预训练模型的参数作为初始值，并在标注数据集上进行进一步的训练。</li>
+<li>结果: 经过微调的模型在特定任务上的表现会得到显著提升。</li>
+</ol></li>
+<li>基于人类反馈的强化学习 (Reinforcement Learning from Human Feedback,
+RLHF)
+<ol type="1">
+<li>目标:
+进一步提升模型的生成质量，使其生成的内容更符合人类的偏好，例如更加有用、真实、无害。</li>
+<li>数据集：构建人类偏好数据集，由承包商编写的比较数据，数量在10万到100万之间，质量较高</li>
+<li>训练方法：从SFT模型初始化并使用奖励模型，需要1到100个GPU，训练时间为数天。</li>
+<li>这个阶段通常包含三个步骤：</li>
+</ol>
+<ul>
+<li>监督微调 (Supervised Fine-tuning, SFT):
+使用人工标注的数据进一步微调模型，例如让人类标注员编写高质量的回复。</li>
+<li>训练奖励模型 (Reward Model, RM):
+使用人工标注的偏好数据训练一个奖励模型。例如，对于同一个问题，人类标注员会对模型的多个回复进行排序，然后训练一个模型来预测人类的排序。</li>
+<li>使用强化学习 (例如 PPO 算法) 优化策略:
+使用奖励模型作为反馈信号，通过强化学习算法优化模型的策略，使其生成的内容获得更高的奖励。</li>
+</ul></li>
+</ol>
+<p>结果: 经过 RLHF
+训练的模型，其生成的内容通常更符合人类的期望，更加安全可靠。</p>
+</blockquote>
+<h4 id="预训练语言模型示例-基于bert微调解决情绪识别问题">3.3
+预训练语言模型示例-基于bert微调解决情绪识别问题</h4>
+<p><code>C_Bert\Bert_model.py</code></p>
+<p>使用torch库构建数据预处理类</p>
+<ul>
+<li>三个基础方法</li>
+</ul>
+<p>搭建模型架构：BertClassifier类</p>
+<ul>
+<li>一个继承</li>
+<li>两个方法</li>
+</ul>
+<p>模型训练和评估函数函数</p>
+<p><code>C_Bert\Bert_main.py</code></p>
+<ul>
+<li>数据加载处理</li>
+<li>构建词表与标签映射</li>
+<li><em>创建数据集实例</em></li>
+<li><em>创建数据加载器</em></li>
+<li><em>初始化模型</em></li>
+<li><em>定义损失函数和优化器</em></li>
+<li><em>训练模型</em></li>
+<li>评估模型</li>
+</ul>
+<p><code>C_Bert\Bert_infer.py</code></p>
+<p>模型加载与推理</p>
+<p>三类模型在情绪识别任务的特点总结</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>类型</th>
+<th>传统机器学习——Random Forest</th>
+<th>深度学习——LSTM</th>
+<th>预训练语言模型——BERT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>数据处理</td>
+<td>依赖特征工程（TF-IDF）</td>
+<td>自动从数据中提取特征</td>
+<td>自动从数据中提取特征</td>
+</tr>
+<tr class="even">
+<td>算法</td>
+<td>决策树</td>
+<td>神经网络</td>
+<td>Transforers</td>
+</tr>
+<tr class="odd">
+<td>数据</td>
+<td>数据量适中时效果良好</td>
+<td>需要大量数据才能表现出色</td>
+<td>微调时少量数据即可取得不错效果</td>
+</tr>
+<tr class="even">
+<td>算力</td>
+<td>对计算资源要求较低</td>
+<td>需要强大的硬件支持（GPU/TPU 等）</td>
+<td>需要强大的硬件支持（GPU/TPU 等）</td>
+</tr>
+<tr class="odd">
+<td>准确率</td>
+<td>75%</td>
+<td>84%</td>
+<td>91%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="大语言模型的工程化应用">大语言模型的工程化应用</h2>
+<h3 id="rag">1. RAG</h3>
+<p>RAG：检索增强生成（Retrieval Augmented Generation,
+RAG）。它将传统信息检索系统（例如数据库）的优势与生成式大语言模型 (LLM)
+的功能结合在一起。 数据搜索+大模型。</p>
+<h4 id="rag要解决的问题">1.1 RAG要解决的问题：</h4>
+<ul>
+<li>模型的知识量不足问题</li>
+<li>幻觉问题</li>
+<li>模型数据不能实时更新问题等等</li>
+</ul>
+<h4 id="rag一般实现流程">1.2 RAG一般实现流程：</h4>
+<ul>
+<li>创建数据库：
+会先将相关文档分块，为这些块生成嵌入向量，并存储到向量库中。</li>
+<li>输入： 用户输入。</li>
+<li>检索： 输入对话生成嵌入向量，通过向量相似查询，找到相关的文档。</li>
+<li>生成：
+将找到的相关文档与原始输入结合，然后传递给模型进行回应生成，最终形成系统对用户的回答。</li>
+</ul>
+<p>设计到的技术：</p>
+<p>embedding模型：文本转化成向量表示，语义越相似生成的向量越接近。（一种基于transformer的结构。）</p>
+<p>向量数据库：向量的相似度匹配。（索引优化。请求向量对比数据库中所有向量效率太低。）</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314959-24.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h4 id="简单rag实现">1.3 简单RAG实现</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs Python">texts =  [<br>    <span class="hljs-string">&quot;小明喜欢小红&quot;</span>,<br>    <span class="hljs-string">&quot;小红喜欢小王&quot;</span>,<br>    <span class="hljs-string">&quot;小王喜欢小宋&quot;</span>,<br>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">save_to_faiss</span>():<br>    vectors = embedding_api(texts)  <span class="hljs-comment"># 调用模型 【0.1,0.3.。。。】</span><br>    index = faiss.IndexFlatL2(<span class="hljs-number">1024</span>)  <span class="hljs-comment"># 使用 L2 距离（欧氏距离）</span><br>    <span class="hljs-comment"># 将向量添加到索引中</span><br>    index.add(vectors)<br>    <span class="hljs-keyword">return</span> index<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">search_faiss</span>(<span class="hljs-params">index, query</span>):<br>    query_vector = embedding_api([query])<br>    <span class="hljs-comment"># 使用向量进行搜索</span><br>    D, I = index.search(query_vector, k=<span class="hljs-number">3</span>)<br>    <span class="hljs-built_in">print</span>(D, I)<br>    <span class="hljs-keyword">return</span> texts[I[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]]<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    index = save_to_faiss()<br><br>    query = <span class="hljs-string">&quot;小明喜欢谁&quot;</span><br>    text = search_faiss(index, query)<br><br>    query = (text + <span class="hljs-string">&#x27;\n&#x27;</span><br>                  <span class="hljs-string">&quot;请根据以上内容回答：&quot;</span>+ query)<br>    <span class="hljs-built_in">print</span>(query)<br>    <span class="hljs-built_in">print</span>(llm_api([&#123;<span class="hljs-string">&quot;role&quot;</span>: <span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;content&quot;</span>: query&#125;]))<br></code></pre></td></tr></table></figure>
+<h4 id="高级rag">1.4 高级RAG</h4>
+<p>问题：</p>
+<ol type="1">
+<li>用户输入的表达和知识库的表达差异大。</li>
+<li>检索到的内容不完整。</li>
+<li>文档向量匹配不准确。</li>
+<li>检索到相关性低的文档。</li>
+<li>检索没有结合用户的对话历史。</li>
+<li>用户输入检索到无关的知识库。</li>
+<li>检索结果内容太多。</li>
+</ol>
+<figure>
+<img src="/images/AI宣讲会/1736749314959-25.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>对齐查询和文档（1）</p>
+<p>查询转换，利用LLMs生成多条类似的查询（新的查询更符合文档表达形式）。然后多条查询分别检索相关记录。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314959-26.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>上下文增强（2）</p>
+<p>一是通过在检索到的较小块周围添加句子来扩展上下文，</p>
+<p>为了更好地推理分析找到的上下文，我们会在检索到的关键句子前后各扩展k个句子，然后将这个扩展的上下文发送给LLM。</p>
+<p>二是递归地将文档分割成多个包含较小子块的大型父块。</p>
+<p>在检索过程中，我们会检索出k个叶子块。如果存在n个块都指向同一个更大的父块，那么我们就用这个父块来替换这些子块，并将其送入大语言模型（LLM）用于生成答案。</p>
+<p>混合搜索（3）</p>
+<p>结合了两种不同的搜索方法：一种是基于关键词的传统搜索方法，另一种是现代的语义或向量搜索。这两种方法被融合在一起，以产生一个综合的检索结果。</p>
+<p>假设性问题（3）</p>
+<p>让LLM为每个块生成一个假设性问题，并将这些问题以向量形式嵌入。针对假设的问题向量的索引进行查询搜索（用问题向量替换我们索引中的块向量），检索后将原始文本块作为上下文发送给LLM以获取答案。</p>
+<p>重新排名和过滤（4）</p>
+<p>得到了检索结果，接下来需要通过过滤、重新排名或进行一些转换来进一步优化这些结果。使用reranker模型或者llm</p>
+<p>对话历史（5）</p>
+<p>结合用户前几轮的对话历史进行检索。将当前的问题结合对话历史，利用LLM生成新的问题，使用新问题进行检索。</p>
+<p>查询路由（6）</p>
+<p>用户输入，LLM判断用户意图，将查询路由的相关的数据库。</p>
+<figure>
+<img src="/images/AI宣讲会/1736749314959-27.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>响应合成器（7）</p>
+<p>RAG最后一步 —— 基于检索的上下文和用户的查询来生成答案。</p>
+<ol type="1">
+<li>将检索到的上下文分块后逐次发送给大语言模型（LLM），以此迭代地精炼答案。</li>
+<li>总结检索到的上下文，使其适应输入提示。</li>
+<li>基于不同上下文块生成多个答案，然后将这些答案连接或总结起来。</li>
+</ol>
+<h3 id="agent">2. Agent</h3>
+<p>大模型Agent：一种构建于大型语言模型（LLM）之上的智能体，它具备环境感知能力、自主理解、决策制定及执行行动的能力。</p>
+<p>RAG：主要做大模型知识补充。</p>
+<p>Agent：一套智能系统。解决自主处理问题的方案。</p>
+<h4 id="react实现agent">2.1 ReAct实现Agent</h4>
+<p>ReAct一种提示词范式，推理过程包含thought-action-observation步骤。</p>
+<p>提示词：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Shell">通过交替进行 “思考（Thought）”“行动（Action）”“观察（Observation）” 步骤来解决一项问答任务。“思考（Thought）” 可以对当前状况进行推理，而 “行动（Action）” 可以有以下三种类型：<br>（1）search 搜索 [实体]，即在维基百科上精确搜索该实体，如果存在的话就返回第一段内容。如果不存在，将会返回一些相似的实体以供搜索。<br>（2）lookup 查找 [关键词]，即在当前文段中返回包含该关键词的下一个句子。<br>（3）finish 完成 [答案]，即返回答案并结束任务。<br>以下是一些示例。<br>问题：帕维尔・乌雷松（Pavel Urysohn）和列昂尼德・莱文（Leonid Levin）是否以相同类型的工作而闻名？<br>思考 1：我需要搜索帕维尔・乌雷松和列昂尼德・莱文，找到他们的工作类型，然后判断是否相同。<br>行动 1：搜索 [帕维尔・乌雷松]<br>观察 1：帕维尔・萨穆伊洛维奇・乌雷松（1898 年 2 月 3 日 - 1924 年 8 月 17 日）是一位苏联数学家，他以在维数论方面的贡献而闻名。<br>思考 2：帕维尔・乌雷松是一位数学家。接下来我需要搜索列昂尼德・莱文并找到他的工作类型。<br>行动 2：搜索 [列昂尼德・莱文]<br>观察 2：列昂尼德・阿纳托利耶维奇・莱文是一位苏裔美国数学家和计算机科学家。<br>思考 3：列昂尼德・莱文是一位数学家和计算机科学家。所以帕维尔・乌雷松和列昂尼德・莱文的工作类型相同。<br>行动 3：完成 [是]<br></code></pre></td></tr></table></figure>
+<p>核心代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">webthink</span>(<span class="hljs-params">idx=<span class="hljs-literal">None</span>, prompt=webthink_prompt, to_print=<span class="hljs-literal">True</span></span>):<br>    question = env.reset(idx=idx)<br>    <span class="hljs-keyword">if</span> to_print:<br>        <span class="hljs-built_in">print</span>(idx, question)<br>    prompt += question + <span class="hljs-string">&quot;\n&quot;</span><br>    n_calls, n_badcalls = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">8</span>):<br>        n_calls += <span class="hljs-number">1</span><br>        thought_action = llm(prompt + <span class="hljs-string">f&quot;Thought <span class="hljs-subst">&#123;i&#125;</span>:&quot;</span>, stop=[<span class="hljs-string">f&quot;\nObservation <span class="hljs-subst">&#123;i&#125;</span>:&quot;</span>])<br>        <span class="hljs-keyword">try</span>:<br>            thought, action = thought_action.strip().split(<span class="hljs-string">f&quot;\nAction <span class="hljs-subst">&#123;i&#125;</span>: &quot;</span>)<br>        <span class="hljs-keyword">except</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;ohh...&#x27;</span>, thought_action)<br>            n_badcalls += <span class="hljs-number">1</span><br>            n_calls += <span class="hljs-number">1</span><br>            thought = thought_action.strip().split(<span class="hljs-string">&#x27;\n&#x27;</span>)[<span class="hljs-number">0</span>]<br>            action = llm(prompt + <span class="hljs-string">f&quot;Thought <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;thought&#125;</span>\nAction <span class="hljs-subst">&#123;i&#125;</span>:&quot;</span>, stop=[<span class="hljs-string">f&quot;\n&quot;</span>]).strip()<br>        obs, r, done, info = step(env, action[<span class="hljs-number">0</span>].lower() + action[<span class="hljs-number">1</span>:])<br>        obs = obs.replace(<span class="hljs-string">&#x27;\\n&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)<br>        step_str = <span class="hljs-string">f&quot;Thought <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;thought&#125;</span>\nAction <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;action&#125;</span>\nObservation <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;obs&#125;</span>\n&quot;</span><br>        prompt += step_str<br>        <span class="hljs-keyword">if</span> to_print:<br>            <span class="hljs-built_in">print</span>(step_str)<br>        <span class="hljs-keyword">if</span> done:<br>            <span class="hljs-keyword">break</span><br>  <br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> done:<br>        obs, r, done, info = step(env, <span class="hljs-string">&quot;finish[]&quot;</span>)<br>    <span class="hljs-keyword">if</span> to_print:<br>        <span class="hljs-built_in">print</span>(info, <span class="hljs-string">&#x27;\n&#x27;</span>)<br>    info.update(&#123;<span class="hljs-string">&#x27;n_calls&#x27;</span>: n_calls, <span class="hljs-string">&#x27;n_badcalls&#x27;</span>: n_badcalls, <span class="hljs-string">&#x27;traj&#x27;</span>: prompt&#125;)<br>    <span class="hljs-keyword">return</span> r, info<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">step</span>(<span class="hljs-params">self, action</span>):<br>  reward = <span class="hljs-number">0</span><br>  done = <span class="hljs-literal">False</span><br>  action = action.strip()<br>  <span class="hljs-keyword">if</span> self.answer <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:  <span class="hljs-comment"># already finished</span><br>    done = <span class="hljs-literal">True</span><br>    <span class="hljs-keyword">return</span> self.obs, reward, done, self._get_info()<br>  <br>  <span class="hljs-keyword">if</span> action.startswith(<span class="hljs-string">&quot;search[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    entity = action[<span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;search[&quot;</span>):-<span class="hljs-number">1</span>]<br>    self.search_step(entity)<br>  <span class="hljs-keyword">elif</span> action.startswith(<span class="hljs-string">&quot;lookup[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    keyword = action[<span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;lookup[&quot;</span>):-<span class="hljs-number">1</span>]<br>    <span class="hljs-keyword">if</span> self.lookup_keyword != keyword:  <span class="hljs-comment"># reset lookup</span><br>      self.lookup_keyword = keyword<br>      self.lookup_list = self.construct_lookup_list(keyword)<br>      self.lookup_cnt = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">if</span> self.lookup_cnt &gt;= <span class="hljs-built_in">len</span>(self.lookup_list):<br>      self.obs = <span class="hljs-string">&quot;No more results.\n&quot;</span><br>    <span class="hljs-keyword">else</span>:<br>      self.obs = <span class="hljs-string">f&quot;(Result <span class="hljs-subst">&#123;self.lookup_cnt + <span class="hljs-number">1</span>&#125;</span> / <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(self.lookup_list)&#125;</span>) &quot;</span> + self.lookup_list[self.lookup_cnt]<br>      self.lookup_cnt += <span class="hljs-number">1</span><br>  <span class="hljs-keyword">elif</span> action.startswith(<span class="hljs-string">&quot;finish[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    answer = action[<span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;finish[&quot;</span>):-<span class="hljs-number">1</span>]<br>    self.answer = answer<br>    done = <span class="hljs-literal">True</span><br>    self.obs = <span class="hljs-string">f&quot;Episode finished, reward = <span class="hljs-subst">&#123;reward&#125;</span>\n&quot;</span><br>  <span class="hljs-keyword">elif</span> action.startswith(<span class="hljs-string">&quot;think[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    self.obs = <span class="hljs-string">&quot;Nice thought.&quot;</span><br>  <span class="hljs-keyword">else</span>:<br>    self.obs = <span class="hljs-string">&quot;Invalid action: &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(action)<br><br>  self.steps += <span class="hljs-number">1</span><br><br>  <span class="hljs-keyword">return</span> self.obs, reward, done, self._get_info()<br></code></pre></td></tr></table></figure>
+<h4 id="agent结构">2.2 Agent结构</h4>
+<figure>
+<img src="/images/AI宣讲会/1736749314959-28.png" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>规划（Planning）：</li>
+</ol>
+<p>定义：规划是Agent的思维模型，负责拆解复杂任务为可执行的子任务，并评估执行策略。</p>
+<p>实现方式：通过大模型提示工程（如ReAct、CoT推理模式）实现，使Agent能够精准拆解任务，分步解决。</p>
+<ol start="2" type="1">
+<li>记忆（Memory）：</li>
+</ol>
+<p>定义：记忆即信息存储与回忆，包括短期记忆和长期记忆。</p>
+<p>实现方式：短期记忆存储在会话上下文中，支持多轮对话；长期记忆可以通过RAG实现存储和查询。</p>
+<ol start="3" type="1">
+<li>工具（Tools）：</li>
+</ol>
+<p>定义：工具是Agent感知环境、执行决策的辅助手段，如API调用、插件扩展等。</p>
+<p>实现方式：通过接入外部工具（如API、插件）扩展Agent的能力，如ChatPDF解析文档、Midjourney文生图等。</p>
+<ol start="4" type="1">
+<li>行动（Action）：</li>
+</ol>
+<p>定义：行动是Agent将规划与记忆转化为具体输出的过程，包括与外部环境的互动或工具调用。</p>
+<p>实现方式：函数调用，模型做出规划并选择可使用的函数，给出函数调用的参数。</p>
+<p>Agent：P（感知）→ P（规划）→ A（行动）</p>
+<p>小节</p>
+<ul>
+<li>Agent很适合做一个智能npc。</li>
+<li>上面是单一的Agent，可以处理某类任务。</li>
+<li>更复杂的任务可以设计多Agent模式，将多个单一的Agent有机结合起来。</li>
+<li>还可以通过工作流实现Agent，通过预定义的代码路径对LLM和工具进行编排。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>回顾一下</p>
+<ul>
+<li>机器学习的概念和随机森林算法做情绪识别。</li>
+</ul>
+<p>问题：对数据特征的依赖程度很高，数据处理复杂。模型表现能力弱。等</p>
+<ul>
+<li>深度学习的神经网络原理和LSTM做情绪识别。</li>
+</ul>
+<p>问题：深度学习解决了很多问题，但是始终没有很好解决自然语言处理问题。</p>
+<ul>
+<li>transformer模型的结构，bert和gpt模型的训练和微调，bert微调做情绪识别。</li>
+</ul>
+<p>问题：大模型知识不足，不新，幻觉等问题</p>
+<ul>
+<li>RAG的实现流程和高级RAG的优化</li>
+</ul>
+<p>问题：不够智能</p>
+<ul>
+<li>Agent的ReAct版实现和基本结构</li>
+</ul>
+<p>问题：算力消耗大，延迟高</p>
+<p>AI应用</p>
+<p>AI不只是大语言模型LLM。除了生成文本，生成图片，生成视频的模型，huggingface有很多常用的各任务类型模型图像识别，语音识别，视频文本分类等等。</p>
+<p>大模型的应用技术总体分两种：微调 &amp;
+提示词工程（rag，agent）。一般不从零训练。特定的任务训练一个参数量小的网络模型，强化学习非常适合游戏方向的训练。</p>
+<p>游戏AI</p>
+<p>AI 对话，AI 内容生成，AI NPC，AI 游戏内容搜索，AI 策略决策 等等。</p>
+<p>有伙伴有什么想法可以一起研究一下。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/categories/" class="category-chain-item">categories</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI%E6%8A%80%E6%9C%AF%E6%A2%B3%E7%90%86/" class="print-no-link">#AI技术梳理</a>
+      
+        <a href="/tags/NLP%E6%8A%80%E6%9C%AF/" class="print-no-link">#NLP技术</a>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AI技术在NLP领域的演进与实践</div>
+      <div>https://linxkon.github.io/AI技术在NLP领域的演进与实践.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%9F%BA%E4%BA%8Epython%E7%9A%84MCP%E4%BD%BF%E7%94%A8%E7%AE%80%E5%8D%95%E6%95%99%E7%A8%8B.html" title="基于python的MCP使用简单教程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于python的MCP使用简单教程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82Celery%E4%B8%8ERabbitMQ%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F.html" title="一文读懂Celery与RabbitMQ分布式任务调度系统">
+                        <span class="hidden-mobile">一文读懂Celery与RabbitMQ分布式任务调度系统</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '2f9f6394fb9e93ba500424eed468d346'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>
