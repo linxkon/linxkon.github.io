@@ -16,26 +16,26 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="TensorFlow和PyTorch是两种流行的深度学习框架，它们各自具有独特的优缺点和优势领域。以下是对它们的比较：">
+    <meta name="description" content="人工智能 Agent 的浪潮正席卷而来，它承诺了一个能够自主理解、规划并执行复杂任务的未来。然而，从酷炫的 Demo 到稳定可靠的生产环境应用，中间隔着一道巨大的鸿沟。构建一个真正高效、稳定且经济的 Agent，其实是一场回归工程本质的实践。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Pytorch VS TensorFlow">
-<meta property="og:url" content="https://linxkon.github.io/TensorFlow%20VS%20Pytorch.html">
+<meta property="og:title" content="Agent实践经验总结">
+<meta property="og:url" content="https://linxkon.github.io/%E6%9E%84%E5%BB%BA%E7%94%9F%E4%BA%A7%E7%BA%A7%20AI%20Agent%20%E5%AE%9E%E6%88%98%E7%AD%96%E7%95%A5.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="TensorFlow和PyTorch是两种流行的深度学习框架，它们各自具有独特的优缺点和优势领域。以下是对它们的比较：">
+<meta property="og:description" content="人工智能 Agent 的浪潮正席卷而来，它承诺了一个能够自主理解、规划并执行复杂任务的未来。然而，从酷炫的 Demo 到稳定可靠的生产环境应用，中间隔着一道巨大的鸿沟。构建一个真正高效、稳定且经济的 Agent，其实是一场回归工程本质的实践。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://linxkon.github.io/images/index_pic/tensorflow.png">
-<meta property="article:published_time" content="2023-02-26T06:21:13.000Z">
-<meta property="article:modified_time" content="2024-05-24T06:50:00.663Z">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent.png">
+<meta property="article:published_time" content="2025-09-21T11:22:13.000Z">
+<meta property="article:modified_time" content="2025-09-21T13:02:34.438Z">
 <meta property="article:author" content="linxkon">
-<meta property="article:tag" content="笔记整理">
-<meta property="article:tag" content="深度学习">
-<meta property="article:tag" content="学习框架">
+<meta property="article:tag" content="llm">
+<meta property="article:tag" content="agent">
+<meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/tensorflow.png">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent.png">
   
   
   
-  <title>Pytorch VS TensorFlow - AI·你所爱</title>
+  <title>Agent实践经验总结 - AI·你所爱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Pytorch VS TensorFlow"></span>
+            <span id="subtitle" data-typed-text="Agent实践经验总结"></span>
           
         </div>
 
@@ -241,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-02-26 14:21" pubdate>
-          2023年2月26日 下午
+        <time datetime="2025-09-21 19:22" pubdate>
+          2025年9月21日 晚上
         </time>
       </span>
     
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          764 字
+          2.2k 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          7 分钟
+          19 分钟
         
       </span>
     
@@ -309,58 +309,181 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Pytorch VS TensorFlow</h1>
+            <h1 id="seo-header">Agent实践经验总结</h1>
             
             
               <div class="markdown-body">
                 
-                <p>TensorFlow和PyTorch是两种流行的深度学习框架，它们各自具有独特的优缺点和优势领域。以下是对它们的比较：
-<span id="more"></span></p>
-<h3 id="tensorflow">TensorFlow</h3>
-<h4 id="优点">优点</h4>
-<ol type="1">
-<li><strong>生态系统完善</strong>：TensorFlow提供了丰富的工具和库，如TensorFlow
-Extended (TFX)用于生产部署，TensorFlow
-Lite用于移动设备，TensorFlow.js用于JavaScript开发等。</li>
-<li><strong>高性能</strong>：通过TensorFlow
-Serving，可以实现高效的模型部署和推理。此外，TensorFlow有XLA（加速线性代数）编译器，可以进一步优化性能。</li>
-<li><strong>跨平台支持</strong>：TensorFlow可以在多种平台上运行，包括CPU、GPU、TPU，且支持分布式计算。</li>
-<li><strong>社区和企业支持</strong>：TensorFlow由Google开发并维护，拥有广泛的社区支持和大量的企业用户。</li>
-</ol>
-<h4 id="缺点">缺点</h4>
-<ol type="1">
-<li><strong>学习曲线陡峭</strong>：TensorFlow的API较为复杂，新手入门相对困难。</li>
-<li><strong>调试困难</strong>：虽然TensorFlow 2.x版本引入了Eager
-Execution模式，提升了可调试性，但总体上调试体验仍不如PyTorch。</li>
-</ol>
-<h3 id="优势领域">优势领域</h3>
+                <p>人工智能 Agent
+的浪潮正席卷而来，它承诺了一个能够自主理解、规划并执行复杂任务的未来。然而，从酷炫的
+Demo
+到稳定可靠的生产环境应用，中间隔着一道巨大的鸿沟。构建一个真正高效、稳定且经济的
+Agent，其实是一场回归工程本质的实践。</p>
+<span id="more"></span>
+<p>本文将剥离喧嚣，融合两大核心视角，为您提供一套从顶层设计到技术细节的
+Agent 构建指南。我们将首先探讨构建 Agent
+的四大基本支柱，然后深入剖析在实践中最为棘手的“长上下文（Long
+Context）”管理难题，并提供五大实战策略。</p>
+<h3 id="第一部分agent-设计的四大核心支柱">第一部分：Agent
+设计的四大核心支柱</h3>
+<p>在动手之前，我们需要明确四个基本原则。它们是 Agent
+系统能否落地的基石。</p>
+<h4 id="规划能力指令是蓝图而非愿望">1.
+规划能力：指令是蓝图，而非愿望</h4>
+<p>Agent 的规划能力，本质上高度依赖我们为其设计的指令（Prompt）。</p>
 <ul>
-<li><strong>生产环境</strong>：TensorFlow的工具链和生态系统使其非常适合于从研究到生产的全流程。</li>
-<li><strong>大规模分布式训练</strong>：TensorFlow在大规模分布式训练方面具有明显优势。</li>
-<li><strong>移动和嵌入式设备</strong>：TensorFlow
-Lite专门优化了在移动和嵌入式设备上的性能。</li>
+<li><p><strong>核心观点</strong>：不要高估当前 LLM
+的复杂推理与自主规划能力。切忌将一个复杂的任务作为一个整体直接抛给
+Agent。</p></li>
+<li><p><strong>错误做法</strong>：依赖 Agent “自主拆解”任务。</p></li>
+<li><p><strong>推荐做法</strong>：<strong>人工预先拆解</strong>复杂任务。通过结构化、分步骤的清晰指令，引导模型完成每一步，而不是让它去猜测该做什么。您的角色是“架构师”，为
+Agent 设计清晰的执行蓝图，而不是“许愿者”。</p></li>
 </ul>
-<h3 id="pytorch">PyTorch</h3>
-<h4 id="优点-1">优点</h4>
-<ol type="1">
-<li><strong>易用性</strong>：PyTorch的API设计直观且友好，非常适合研究和实验。动态图计算模式使得代码更加灵活和易于调试。</li>
-<li><strong>调试便捷</strong>：由于PyTorch使用动态图计算模式，开发者可以使用标准的Python调试工具来调试模型。</li>
-<li><strong>动态计算图</strong>：PyTorch的动态计算图机制使得开发者可以在运行时改变模型结构，非常适合于研究和实验。</li>
-<li><strong>社区支持</strong>：PyTorch由Facebook（现Meta）开发，得到广泛的学术界支持，许多研究论文和前沿技术都首先在PyTorch上实现。</li>
-</ol>
-<h4 id="缺点-1">缺点</h4>
-<ol type="1">
-<li><strong>生态系统相对较小</strong>：相比TensorFlow，PyTorch的工具链和扩展库较少，虽然近年来有显著改进。</li>
-<li><strong>生产部署工具较少</strong>：虽然PyTorch推出了TorchServe等部署工具，但整体上在生产部署方面的支持不如TensorFlow成熟。</li>
-</ol>
-<h3 id="优势领域-1">优势领域</h3>
+<blockquote>
+<p><strong>法则一：规划不是“交给模型”，而是“引导模型”。</strong></p>
+</blockquote>
+<h4 id="执行能力function-calling-是命脉">2. 执行能力：Function Calling
+是命脉</h4>
+<p>Agent
+的价值在于它能与外部世界交互，而这完全依赖于其调用工具（API）的能力，即
+Function Calling。</p>
 <ul>
-<li><strong>研究和实验</strong>：PyTorch因其灵活性和易用性，非常适合学术研究和快速原型开发。</li>
-<li><strong>调试和开发</strong>：由于其动态计算图机制，开发和调试深度学习模型更加便捷。</li>
-<li><strong>计算机视觉和自然语言处理</strong>：很多前沿的计算机视觉和自然语言处理研究和应用首先在PyTorch上实现。</li>
+<li><p><strong>核心观点</strong>：工具调用的<strong>准确性</strong>是
+Agent 的生命线。不同基座模型的此项能力差异巨大。</p></li>
+<li><p><strong>行动要点</strong>：在技术选型阶段，必须严格测试和评估备选模型的
+Function Calling 准确率。可以参考权威榜单，如 <a
+target="_blank" rel="noopener" href="https://gorilla.cs.berkeley.edu/leaderboard.html">Berkeley
+Function Calling Leaderboard (BFCL)</a>。</p></li>
+<li><p><strong>现实警示</strong>：即便是 GLM4.5
+这样的榜单中的顶级模型，其准确率也远非 100%（在 BFCL 上约为
+70.85%）。这意味着每 10 次调用就可能有 2-3
+次失败，这在许多生产场景中是不可接受的。</p></li>
 </ul>
-<h3 id="总结">总结</h3>
-<p>选择TensorFlow还是PyTorch主要取决于具体需求。如果你需要一个强大的生产环境，广泛的工具链支持，尤其是在大规模分布式训练和部署方面，TensorFlow可能是更好的选择。而如果你更关注研究、实验以及开发过程的灵活性和可调试性，PyTorch则可能更适合你。</p>
+<blockquote>
+<p><strong>法则二：工具调用不是“有就行”，而是“准才用”。</strong></p>
+</blockquote>
+<h4 id="架构哲学如非必要勿增实体">3. 架构哲学：如非必要，勿增实体</h4>
+<p>在技术圈，“酷”常常成为过度设计的诱因。多智能体（Multi-Agent）系统就是典型例子。在引入复杂性之前，请先冷静评估其必要性。</p>
+<p>让我们以一个常见的“客服自动退款”场景为例：</p>
+<ul>
+<li><p><strong>过度设计（多智能体方案）</strong>：</p>
+<ul>
+<li><p>Agent A：理解用户意图。</p></li>
+<li><p>Agent B：查询订单。</p></li>
+<li><p>Agent C：判断退款策略。</p></li>
+<li><p>Agent D：执行退款并回复。</p></li>
+<li><p><strong>结果</strong>：高延迟、高成本、调试复杂、高风险。</p></li>
+</ul></li>
+<li><p><strong>极简且高效的方案</strong>：</p>
+<ul>
+<li><p><strong>核心流程</strong>：<code>单轮 LLM 调用 + JSON Schema 强校验 + 后端工具调用 + 人工安全确认（针对高风险操作）</code></p></li>
+<li><p><strong>结果</strong>：成本低于 $0.002/次，延迟约 1.2
+秒，系统稳定、可扩展。</p></li>
+</ul></li>
+</ul>
+<p>在这个场景下，任务流程是固定的，不需要动态规划或自我反思。多智能体系统纯属过度设计。</p>
+<blockquote>
+<p><strong>法则三：复杂 ≠ 高级，简单 ≠
+低能。适配场景才是关键。</strong></p>
+</blockquote>
+<h4 id="记忆机制双轨制打造成长型大脑">4.
+记忆机制：双轨制打造“成长型”大脑</h4>
+<p>一个健壮的 Agent 需要记忆来维持上下文并不断成长。</p>
+<ul>
+<li><p><strong>短期记忆（上下文记忆）</strong>：通过在 Prompt
+中维护一个“状态记录”，如“已完成任务”、“目标”、“待办任务”，来确保任务执行的连贯性，避免“失忆”。</p></li>
+<li><p><strong>长期记忆（持久化记忆）</strong>：</p>
+<ul>
+<li><p><strong>事实性记忆</strong>：通过 <strong>RAG
+(检索增强生成)</strong> 实现，让 Agent
+能查询产品文档、历史数据等。</p></li>
+<li><p><strong>程序性记忆</strong>：通过 <strong>微调
+(Fine-tuning)</strong> 实现，将成熟的 Prompt
+模式固化为模型的“行为习惯”，或定制其独特的语言风格。</p></li>
+</ul></li>
+</ul>
+<p>短期记忆是 Agent
+执行任务的基础，而长期记忆则让它“越用越聪明”。这个“短期记忆”，即模型的上下文窗口，也正是我们面临的最大挑战之一。</p>
+<h3
+id="第二部分深度剖析驾驭长上下文的五大实战策略">第二部分：深度剖析——驾驭长上下文的五大实战策略</h3>
+<p>随着 Agent
+与用户交互轮次增多、工具调用结果堆积，上下文窗口会迅速膨胀，并引发一系列问题：关键信息被稀释、前后信息冲突、幻觉“中毒”、甚至因大量重复文本导致“行动瘫痪”。</p>
+<p>以下五种策略，能有效帮你驾驭长上下文，为你的 Agent
+“减负”和“聚焦”。</p>
+<h4 id="策略一卸载-offload">策略一：卸载 (Offload)</h4>
+<ul>
+<li><p><strong>核心思想</strong>：不要将工具返回的所有原始信息都塞进上下文。将它们“卸载”到外部存储（如文件、数据库），然后只将一个轻量级的“指针”（如摘要、文件名或ID）返回给模型。</p></li>
+<li><p><strong>类比</strong>：我们记住的是“某本书里讲过某个概念”，而不是记住整本书的内容。当需要时，我们再根据“指针”去翻书。</p></li>
+<li><p><strong>应用</strong>：将 Agent 的 TODO List
+存入文件并持续更新；让子 Agent
+将研究成果写入文档，而不是在对话中冗长地汇报。<strong>Agent
+Memory</strong> 本质上也是一种特殊的 Offload。</p></li>
+</ul>
+<h4 id="策略二检索-retrieve">策略二：检索 (Retrieve)</h4>
+<ul>
+<li><p><strong>核心思想</strong>：我们所熟知的
+RAG。通过精准检索，只将与当前任务最相关的信息动态地加载到上下文中，保证“喂”给模型的都是高质量信息。</p></li>
+<li><p><strong>实践路径</strong>：</p>
+<ol type="1">
+<li><p><strong>传统 RAG</strong>：从向量检索到混合搜索、图 RAG
+等，适用于知识库、文档问答。</p></li>
+<li><p><strong>代码/日志场景</strong>：返璞归真，通过 Agent 调用
+<code>grep</code>/<code>find</code> 等命令在文本索引（如
+<code>llms.txt</code>）中查找信息，效果有时出奇地好。</p></li>
+</ol></li>
+<li><p><strong>妙用</strong>：在 Agent 每完成一步后，重新
+<code>Retrieve</code> 一下它的 TODO
+List，这能起到“反复提醒、保持聚焦”的作用，避免它在长流程中“走神”。</p></li>
+</ul>
+<h4 id="策略三压缩-reduce">策略三：压缩 (Reduce)</h4>
+<ul>
+<li><p><strong>核心思想</strong>：通过各种手段主动裁剪和精炼上下文内容。</p></li>
+<li><p><strong>常见手法</strong>：</p>
+<ol type="1">
+<li><p><strong>预处理工具输出</strong>：将 HTML 搜索结果转为
+Markdown，或用另一个小模型先对内容进行总结。</p></li>
+<li><p><strong>总结历史对话</strong>：当上下文过长时，用 LLM
+对早期的对话历史进行总结。但这需要极高的总结质量，否则可能丢失关键信息或引入新的幻觉。</p></li>
+<li><p><strong>保留错误信息</strong>：一个有争议但实用的观点是，保留工具调用的失败日志和错误信息。这能让新一代的模型进行“自我纠正”，同时也对后续要讲的“缓存”策略更友好。</p></li>
+</ol></li>
+</ul>
+<h4 id="策略四隔离-isolate">策略四：隔离 (Isolate)</h4>
+<ul>
+<li><p><strong>核心思想</strong>：“分而治之”。如果一个任务的上下文压力过大，就将其拆分为多个子任务，分配给不同的子
+Agent。每个子 Agent 拥有自己独立、干净、聚焦的上下文。</p></li>
+<li><p><strong>适用场景</strong>：</p>
+<ul>
+<li><p>天然并行的“只读”类工作，如分头进行网页资料检索、代码库阅读。</p></li>
+<li><p>通过代码沙箱隔离执行环境。让 Agent
+生成代码在沙箱中运行，大量中间状态（如图表、数据文件）都保留在沙箱内，只将最终的关键结果返回给
+Agent。这极大地减轻了 LLM 的上下文负担。</p></li>
+</ul></li>
+</ul>
+<h4 id="策略五缓存-cache">策略五：缓存 (Cache)</h4>
+<ul>
+<li><p><strong>核心思想</strong>：这是一个关乎成本和性能的工程策略。LLM
+推理时，对已处理过的 Token（前缀）可以缓存其键值对（KV
+Cache），从而在后续生成时大大加快速度、降低成本。</p></li>
+<li><p><strong>行动原则</strong>：<strong>确保每次 LLM
+调用的上下文“前缀”尽可能保持一致。</strong></p></li>
+<li><p><strong>设计要点</strong>：</p>
+<ul>
+<li><p>将系统指令、工具定义等固定内容放在 Prompt 的最前面。</p></li>
+<li><p>将用户输入、历史消息等动态变化的内容放在末尾。</p></li>
+<li><p>谨慎使用修改或删除历史消息的操作，因为它会破坏缓存的连续性，导致缓存失效。</p></li>
+</ul></li>
+</ul>
+<h3 id="总结思考">总结思考：</h3>
+<p>构建一个强大的 AI
+Agent，其核心不是追求最复杂的架构或最“自主”的幻觉，而是回归到扎实的软件工程原则：</p>
+<ol type="1">
+<li><p><strong>清晰的规划</strong>：你来设计蓝图，Agent
+负责执行。</p></li>
+<li><p><strong>可靠的执行</strong>：严格测试工具调用的稳定性。</p></li>
+<li><p><strong>简洁的架构</strong>：从最简单的方案开始，只在必要时增加复杂性。</p></li>
+<li><p><strong>智慧的记忆</strong>：主动、精细地管理模型的上下文窗口。</p></li>
+</ol>
+<p>总之一句话，<strong>克制比炫技更重要，稳定比复杂更珍贵</strong>。</p>
 
                 
               </div>
@@ -379,7 +502,7 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
+  <a href="/categories/categories/" class="category-chain-item">categories</a>
   
   
 
@@ -394,11 +517,11 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
+        <a href="/tags/llm/" class="print-no-link">#llm</a>
       
-        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
       
-        <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" class="print-no-link">#学习框架</a>
+        <a href="/tags/%E6%80%BB%E7%BB%93/" class="print-no-link">#总结</a>
       
     </div>
   
@@ -410,8 +533,8 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Pytorch VS TensorFlow</div>
-      <div>https://linxkon.github.io/TensorFlow VS Pytorch.html</div>
+      <div>Agent实践经验总结</div>
+      <div>https://linxkon.github.io/构建生产级 AI Agent 实战策略.html</div>
     </div>
     <div class="license-meta">
       
@@ -423,7 +546,7 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年2月26日</div>
+          <div>2025年9月21日</div>
         </div>
       
       
@@ -455,18 +578,12 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%9B%BE%E4%B8%8E%E9%9D%99%E6%80%81%E5%9B%BE.html" title="深度学习框架中的动态图与静态图">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">深度学习框架中的动态图与静态图</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/NER%E4%B8%8E%E5%85%B3%E7%B3%BB%E6%8A%BD%E5%8F%96%E4%BB%BB%E5%8A%A1%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%A8%A1%E5%9E%8B.html" title="NER与关系抽取任务——关系三元组抽取问题中常用的模型">
-                        <span class="hidden-mobile">NER与关系抽取任务——关系三元组抽取问题中常用的模型</span>
+                      <a href="/RL%E6%95%B0%E6%8D%AE%E5%90%88%E6%88%90%E6%A1%86%E6%9E%B6--SyntheticDataRL.html" title="RL数据合成框架--Synthetic Data RL">
+                        <span class="hidden-mobile">RL数据合成框架--Synthetic Data RL</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -489,7 +606,7 @@ Lite专门优化了在移动和嵌入式设备上的性能。</li>
         var options = Object.assign(
           {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: '85a9fc52af9dc2a0ae5fc0e9d4ddb85c'
+            id: '4c5d0e06dc133b7dd117db966eeab260'
           }
         )
         var gitalk = new Gitalk(options);
