@@ -1,0 +1,868 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 9 章：学习和适应 学习和适应对于增强人工智能 Agent 的能力至关重要。这些过程使 Agent 能够超越预定义参数进行演化，通过经验和环境交互实现自主改进。通过学习和适应，Agent 可以有效应对新情况并优化其性能，而无需持续的人工干预。本章将深入探讨支撑 Agent 学习和适应的原理与机制。 全局视角 Agent 通过基于新经验和数据改变其思维、行动或知识来实现学习和适应。这使得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 09 学习与适应">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC09%E7%AB%A0-%E5%AD%A6%E4%B9%A0%E4%B8%8E%E9%80%82%E5%BA%94.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 9 章：学习和适应 学习和适应对于增强人工智能 Agent 的能力至关重要。这些过程使 Agent 能够超越预定义参数进行演化，通过经验和环境交互实现自主改进。通过学习和适应，Agent 可以有效应对新情况并优化其性能，而无需持续的人工干预。本章将深入探讨支撑 Agent 学习和适应的原理与机制。 全局视角 Agent 通过基于新经验和数据改变其思维、行动或知识来实现学习和适应。这使得">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:37:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.840Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 09 学习与适应 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 09 学习与适应"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:37" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 09 学习与适应</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-9-章学习和适应">第 9 章：学习和适应</h1>
+<p>学习和适应对于增强人工智能 Agent 的能力至关重要。这些过程使 Agent 能够超越预定义参数进行演化，通过经验和环境交互实现自主改进。通过学习和适应，Agent 可以有效应对新情况并优化其性能，而无需持续的人工干预。本章将深入探讨支撑 Agent 学习和适应的原理与机制。</p>
+<h2 id="全局视角">全局视角</h2>
+<p>Agent 通过基于新经验和数据改变其思维、行动或知识来实现学习和适应。这使得 Agent 能够从简单地遵循指令演化为随时间推移变得更加智能。</p>
+<ul>
+<li><strong>强化学习：</strong> Agent尝试行动并获得积极结果奖励/消极结果惩罚，在动态环境中学习最优行为。适用于控制机器人或游戏角色的 Agent。</li>
+<li><strong>监督学习：</strong> Agent从标注示例学习输入与期望输出的映射关系，支持决策制定和模式识别任务。适用于邮件分类或趋势预测的 Agent。</li>
+<li><strong>无监督学习：</strong> Agent在未标注数据中发现隐藏模式和关联，构建环境心理模型并获取洞察。适用于无特定指导的数据探索场景。</li>
+<li><strong>基于大语言模型（LLM）的少样本/零样本学习：</strong> 利用大语言模型的 Agent 通过少量示例或明确指令快速适应新任务，实现对新命令/情况的即时响应。</li>
+<li><strong>在线学习：</strong> Agent持续更新知识库以适应动态环境，对实时响应和持续优化至关重要。适用于处理连续数据流的 Agent。</li>
+<li><strong>基于记忆的学习：</strong> Agent回忆过往经验调整当前行动，增强上下文感知和决策能力。特别适合具备记忆召回能力的 Agent。</li>
+</ul>
+<p>Agent 基于学习结果改变策略、理解或目标来实现适应。这对于在不可预测、变化或新环境中的 Agent 至关重要。</p>
+<p><strong>近端策略优化（PPO）</strong> 是一种强化学习算法，用于在具有连续动作范围的环境中训练 Agent，例如控制机器人的关节或游戏中的角色。其主要目标是可靠且稳定地改进 Agent 的决策策略（即其策略）。</p>
+<p>PPO 的核心思想是对Agent策略进行小幅谨慎更新，避免可能导致性能崩溃的剧烈变化。其工作流程如下：</p>
+<ol type="1">
+<li><strong>收集数据：</strong> Agent 使用其当前策略与环境交互（例如，玩游戏）并收集一批经验数据（状态、动作、奖励）。</li>
+<li><strong>评估替代目标（Surrogate Goal）：</strong> PPO 计算策略更新对预期奖励的影响，使用特殊的"裁剪"目标函数而非单纯奖励最大化。</li>
+<li><strong>裁剪机制：</strong> 这是 PPO 稳定性的关键。它在当前策略周围创建一个"信任区域"或安全区，阻止算法进行与当前策略差异过大的更新。这种裁剪机制就像一个安全刹车，确保 Agent 不会采取巨大而有风险的步骤来破坏其学习成果。</li>
+</ol>
+<p>简而言之，PPO 在改进性能与保持接近已知有效策略之间取得平衡，这可以防止训练期间的灾难性故障并实现更稳定的学习过程。</p>
+<p><strong>直接偏好优化（DPO）</strong> 是一种专门为使大语言模型与人类偏好保持一致而设计的更新方法。它为此任务提供了比使用 PPO 更简单、更直接的替代方案。</p>
+<p>要理解 DPO，首先了解传统的基于 PPO 的对齐方法会有所帮助：</p>
+<ul>
+<li><strong>PPO 方法（两步过程）：</strong>
+<ol type="1">
+<li><strong>训练奖励模型：</strong> 首先收集人类反馈数据，人们在其中评级或比较不同的 LLM 响应（例如，"响应 A 比响应 B 更好"）。这些数据用于训练一个独立的 AI 模型，称为奖励模型，其任务是预测人类会给任何新响应打什么分数。</li>
+<li><strong>使用 PPO 微调：</strong> 接下来使用 PPO 微调 LLM。LLM 的目标是生成能够从奖励模型获得最高分的响应。奖励模型在训练过程中充当"评判员"。</li>
+</ol></li>
+</ul>
+<p>这个两步过程可能既复杂又不稳定。例如，LLM 可能会找到漏洞并学会"破解"奖励模型，为质量较差的响应获得高分。</p>
+<ul>
+<li><strong>DPO 方法（直接过程）：</strong> DPO 完全跳过了奖励模型。它不是将人类偏好转换为奖励分数然后优化该分数，而是直接使用偏好数据来更新 LLM 的策略。</li>
+<li>它通过利用直接将偏好数据与最优策略联系起来的数学关系来工作。本质上，它教导模型："增加生成类似<em>偏好</em>响应的概率，减少生成类似<em>不受欢迎</em>响应的概率。"</li>
+</ul>
+<p>本质上，DPO 通过直接在人类偏好数据上优化语言模型来简化对齐过程。这避免了训练和使用单独奖励模型的复杂性和潜在不稳定性，使对齐过程更加高效和稳健。</p>
+<h2 id="实际应用与用例">实际应用与用例</h2>
+<p>自适应 Agent 通过由经验数据驱动的迭代更新，在可变环境中表现出增强的性能。</p>
+<ul>
+<li><strong>个性化助手Agent：</strong> 分析用户行为模式优化交互协议，生成高度定制化响应。</li>
+<li><strong>交易机器人Agent：</strong> 基于实时市场数据动态调整模型参数，优化决策算法并平衡风险收益。</li>
+<li><strong>应用程序Agent：</strong> 根据用户行为动态修改界面功能，提升系统直观性和参与度。</li>
+<li><strong>机器人及自动驾驶Agent：</strong> 整合传感器数据和历史行动分析，实现各种环境下的安全高效操作。</li>
+<li><strong>欺诈检测Agent：</strong> 识别新型欺诈模式改进预测模型，增强异常检测能力并降低损失。</li>
+<li><strong>推荐Agent：</strong> 采用用户偏好学习算法，提供高度个性化的上下文相关推荐。</li>
+<li><strong>游戏AIAgent：</strong> 动态调整战略算法增加游戏复杂性和挑战性，提升玩家参与度。</li>
+<li><strong>知识库学习Agent：</strong> 利用检索增强生成（RAG）维护问题与解决方案的动态知识库（参见第14章），通过成功模式复用和陷阱规避有效适应新情况。</li>
+</ul>
+<h2 id="案例研究自我改进编码-agentsica">案例研究：自我改进编码 Agent（SICA）</h2>
+<p>自我改进编码 Agent（SICA）由 Maxime Robeyns、Laurence Aitchison 和 Martin Szummer 开发，代表了基于 Agent 的学习的重要进展，展示了 Agent 修改自身源代码的能力。这与传统方法形成鲜明对比，在传统方法中，一个 Agent 可能训练另一个 Agent；而 SICA 既是修改者又是被修改的实体，通过迭代方式改进其代码库，以提升在各种编码挑战中的性能。</p>
+<p>SICA 的自我改进通过迭代循环实现（见图1）。Agent 首先审查历史版本在基准测试的表现，选择加权评分（成功率/时间/计算成本）最高的版本。选定版本分析存档识别改进点，直接修改代码库后重新测试并记录结果。此循环机制使 Agent 无需传统训练即可持续进化。</p>
+<p><img src="../images/agent_images/chapter-9/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：SICA 的自我改进过程，基于其过去版本进行学习和适应</p>
+<p>SICA 经历了显著的自我改进，在代码编辑和导航方面取得了重要进展。最初，SICA 使用基本的文件覆盖方法进行代码更改。随后，它开发了能够进行更智能和上下文相关编辑的"智能编辑器"。这进一步演变为"差异增强智能编辑器"，结合差异进行有针对性的修改和基于模式的编辑，以及"快速覆盖工具"以减少处理需求。</p>
+<p>SICA 进一步实现了"最小差异输出优化"和"上下文敏感差异最小化"，使用抽象语法树（AST）解析来提高效率。此外，还添加了"智能编辑器输入规范化器"。在导航方面，SICA 独立创建了"AST 符号定位器"，使用代码的结构图（AST）来识别代码库中的定义。后来，开发了"混合符号定位器"，将快速搜索与 AST 检查相结合。这通过"混合符号定位器中的优化 AST 解析"进一步优化，专注于相关代码部分，提高搜索速度（见图 2）。</p>
+<p><img src="../images/agent_images/chapter-9/image2.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 2：跨迭代的性能表现。关键改进用其相应的工具或 Agent 修改进行标注。（由 Maxime Robeyns、Martin Szummer、Laurence Aitchison 提供）</p>
+<p>SICA 的架构包括用于基本文件操作、命令执行和算术计算的基础工具包。它包含结果提交机制和专门子 Agent（编码、问题解决和推理）的调用功能。这些子 Agent 负责分解复杂任务并管理 LLM 的上下文长度，特别是在扩展改进周期期间。</p>
+<p>异步监督者（另一个 LLM）监控 SICA 的行为，识别潜在问题，如循环或停滞。它与 SICA 进行通信，必要时可以介入以停止执行。监督者接收 SICA 行动的详细报告，包括调用图和消息及工具操作日志，以识别模式和低效率。</p>
+<p>SICA 的 LLM 在其上下文窗口（其短期内存）中以结构化方式组织信息，这对操作至关重要。此结构包括定义 Agent 目标的系统提示词、工具和子 Agent 文档以及系统指令。核心提示词包含问题陈述或指令、打开文件的内容和目录映射。助手消息记录 Agent 的逐步推理、工具和子 Agent 调用记录及结果以及监督者通信。这种组织方式促进了高效的信息流动，增强了 LLM 操作并减少了处理时间和成本。最初，文件更改记录为差异，仅显示修改内容并定期合并。</p>
+<p><strong>SICA：代码深度解析：</strong> 深入研究 SICA 的实现揭示了支撑其能力的几个关键设计选择。如前所述，该系统采用模块化架构构建，包含多个子 Agent，如编码 Agent、问题解决 Agent 和推理 Agent。这些子 Agent 由主 Agent 调用，类似于工具调用，用于分解复杂任务并有效管理上下文长度，特别是在这些扩展的元改进迭代期间。</p>
+<p>该项目正在积极开发中，旨在为LLM工具使用及Agent任务后训练提供强大框架，完整代码参见 <a target="_blank" rel="noopener" href="https://github.com/MaximeRobeyns/self_improving_coding_agent/">GitHub存储库</a>。</p>
+<p>出于安全考虑，该项目强烈强调 Docker 容器化，这意味着 Agent 在专用 Docker 容器内运行。这是一个关键措施，因为它提供了与主机的隔离，鉴于 Agent 执行 shell 命令的能力，这减轻了意外文件系统操作等风险。</p>
+<p>为确保透明度和控制，系统通过可视化事件总线上的事件和 Agent 调用图的交互式网页提供强大的可观察性。这提供了对 Agent 行动的全面洞察，允许用户检查单个事件、阅读监督者消息并折叠子 Agent 跟踪以获得更清晰的理解。</p>
+<p>就其核心智能而言，Agent 框架支持来自各种提供商的 LLM 集成，使用户能够尝试不同的模型以找到特定任务的最佳匹配。最后，一个关键组件是异步监督者，这是一个与主 Agent 并发运行的 LLM。此监督者定期评估 Agent 的行为是否存在病理性偏差或停滞，必要时可以通过发送通知甚至取消 Agent 的执行来介入。它接收系统状态的详细文本表示，包括调用图和 LLM 消息、工具调用和响应的事件流，这使它能够检测低效模式或重复工作。</p>
+<p>初始 SICA 实现中的一个显著挑战是提示基于 LLM 的 Agent 在每次元改进迭代期间独立提出新颖、创新、可行且引人入胜的修改。这一限制，特别是在培养 LLM Agent 的开放式学习和真正创造力方面，仍然是当前研究的关键领域。</p>
+<h2 id="alphaevolve-和-openevolve">AlphaEvolve 和 OpenEvolve</h2>
+<p><strong>AlphaEvolve</strong> 是 Google 开发的一个 AI Agent，旨在发现和优化算法。它利用 LLM 的组合，特别是 Gemini 模型（Flash 和 Pro）、自动化评估系统和进化算法框架。该系统旨在推进理论数学和实际计算应用。</p>
+<p>AlphaEvolve 采用 Gemini 模型的集合。Flash 用于生成广泛的初始算法提案，而 Pro 提供更深入的分析和改进。然后根据预定义标准自动评估和评分提出的算法。此评估提供用于迭代改进解决方案的反馈，从而产生优化和新颖的算法。</p>
+<p>在实际计算中，AlphaEvolve 已部署在 Google 的基础设施中。它在数据中心调度方面展示了改进，导致全球计算资源使用减少 0.7%。它还通过为即将推出的张量处理单元（TPU）的 Verilog 代码提出优化建议来促进硬件设计。此外，AlphaEvolve 加速了 AI 性能，包括 Gemini 架构核心内核的 23% 速度提升以及 FlashAttention 的低级 GPU 指令的最高 32.5% 优化。</p>
+<p>在基础研究领域，AlphaEvolve 为矩阵乘法新算法的发现做出了贡献，包括使用 48 次标量乘法的 4x4 复数值矩阵方法，超过了先前已知的解决方案。在更广泛的数学研究中，它在 75% 的情况下重新发现了超过 50 个开放问题的现有最先进解决方案，并在 20% 的情况下改进了现有解决方案，例子包括接吻数问题的进步。</p>
+<p><strong>OpenEvolve</strong> 是利用大语言模型（见图3）迭代优化代码的进化编码Agent。它通过编排代码生成-评估-选择流水线持续增强程序，支持全文件级演化（非限于单函数）。该Agent兼容多种编程语言和OpenAI API，支持多目标优化、灵活提示工程和分布式评估。</p>
+<p><img src="../images/agent_images/chapter-9/image3.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 3：OpenEvolve 内部架构由控制器管理。该控制器编排几个关键组件：程序采样器、程序数据库、评估器池和 LLM 集合。其主要功能是促进它们的学习和适应过程以提高代码质量。</p>
+<p>此代码片段使用 OpenEvolve 库对程序执行进化优化。它使用初始程序、评估文件和配置文件的路径初始化 OpenEvolve 系统。<code>evolve.run(iterations=1000)</code> 行启动进化过程，运行 1000 次迭代以找到程序的改进版本。最后，它打印在进化过程中找到的最佳程序的指标，格式化为四位小数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> openevolve <span class="hljs-keyword">import</span> OpenEvolve<br><br><span class="hljs-comment">## 初始化系统</span><br>evolve = OpenEvolve(<br>    initial_program_path=<span class="hljs-string">&quot;path/to/initial_program.py&quot;</span>,<br>    evaluation_file=<span class="hljs-string">&quot;path/to/evaluator.py&quot;</span>,<br>    config_path=<span class="hljs-string">&quot;path/to/config.yaml&quot;</span><br>)<br><br><span class="hljs-comment">## 运行进化</span><br>best_program = <span class="hljs-keyword">await</span> evolve.run(iterations=<span class="hljs-number">1000</span>)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;最佳程序指标：&quot;</span>)<br><span class="hljs-keyword">for</span> name, value <span class="hljs-keyword">in</span> best_program.metrics.items():<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  <span class="hljs-subst">&#123;name&#125;</span>: <span class="hljs-subst">&#123;value:<span class="hljs-number">.4</span>f&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="概览">概览</h2>
+<p><strong>是什么：</strong> AI Agent 通常在动态和不可预测的环境中运行，其中预编程逻辑是不够的。当面对初始设计期间未预料到的新情况时，它们的性能可能会下降。没有从经验中学习的能力，Agent 无法随时间优化其策略或个性化其交互。这种刚性限制了它们的有效性，并阻止它们在复杂的现实世界场景中实现真正的自主性。</p>
+<p><strong>为什么：</strong> 标准化解决方案是集成学习和适应机制，将静态 Agent 转变为动态的、演化的系统。这使 Agent 能够基于新数据和交互自主改进其知识和行为。Agent 系统可以使用各种方法，从强化学习到更高级的技术，如自我改进编码 Agent（SICA）中看到的自我修改。像 Google 的 AlphaEvolve 这样的高级系统利用 LLM 和进化算法来发现全新的、更高效的复杂问题解决方案。通过持续学习，Agent 可以掌握新任务、增强其性能并适应变化的条件，而无需持续的手动重新编程。</p>
+<p><strong>经验法则：</strong> 在构建必须在动态、不确定或演化环境中运行的 Agent 时使用此模式。它对于需要个性化、持续性能改进以及自主处理新情况的能力的应用至关重要。</p>
+<p><strong>视觉摘要</strong></p>
+<p><strong><img src="../images/agent_images/chapter-9/image4.png" srcset="/img/loading.gif" lazyload /></strong></p>
+<p>图 4：学习和适应模式</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>学习和适应是 Agent 通过经验改进行为并处理新情况的过程</li>
+<li>"适应"是学习导致的 Agent 行为/知识的可见变化</li>
+<li>自我改进编码 Agent（SICA）通过修改代码自我演进，产生智能编辑器、AST符号定位器等工具</li>
+<li>专用"子Agent"和"监督者"架构帮助管理系统复杂性</li>
+<li>智能设置LLM上下文窗口（系统提示/核心提示/助手消息）对运行效率至关重要</li>
+<li>本模式对动态/不确定/需个性化环境中的 Agent 必不可少</li>
+<li>构建学习型 Agent 需集成机器学习工具并管理数据流</li>
+<li>具备基础编码能力的 Agent 系统可自主改进基准任务性能</li>
+<li>AlphaEvolve利用大语言模型和进化框架自主发现优化算法，推动科研与工程应用</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>本章探讨了学习和适应在人工智能中的关键作用。AI Agent 通过持续的数据获取和经验来增强其性能。自我改进编码 Agent（SICA）通过代码修改自主改进其能力，很好地例证了这一点。</p>
+<p>我们已经回顾了 Agent AI 的基本组成部分，包括架构、应用、规划、多 Agent 协作、内存管理以及学习和适应。学习原理对于多 Agent 系统中的协调改进特别重要。为了实现这一点，调优数据必须准确反映完整的交互轨迹，捕获每个参与 Agent 的个体输入和输出。</p>
+<p>这些元素促成了重大进展，如 Google 的 AlphaEvolve。这个 AI 系统通过 LLM、自动化评估和进化方法独立发现和改进算法，推动科学研究和计算技术的进步。这些模式可以组合起来构建复杂的 AI 系统。像 AlphaEvolve 这样的发展表明，AI Agent 的自主算法发现和优化是可以实现的。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Sutton, R. S., &amp; Barto, A. G. (2018). <em>Reinforcement Learning: An Introduction</em>. MIT Press.</li>
+<li>Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <em>Deep Learning</em>. MIT Press.</li>
+<li>Mitchell, T. M. (1997). <em>Machine Learning</em>. McGraw-Hill.</li>
+<li>Proximal Policy Optimization Algorithms by John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. You can find it on arXiv: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1707.06347">https://arxiv.org/abs/1707.06347</a></li>
+<li>Robeyns, M., Aitchison, L., &amp; Szummer, M. (2025). <em>A Self-Improving Coding Agent</em>. arXiv:2504.15228v2. <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2504.15228">https://arxiv.org/pdf/2504.15228</a> <a target="_blank" rel="noopener" href="https://github.com/MaximeRobeyns/self_improving_coding_agent">https://github.com/MaximeRobeyns/self_improving_coding_agent</a></li>
+<li>AlphaEvolve blog, <a target="_blank" rel="noopener" href="https://deepmind.google/discover/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/">https://deepmind.google/discover/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/</a></li>
+<li>OpenEvolve, <a target="_blank" rel="noopener" href="https://github.com/codelion/openevolve">https://github.com/codelion/openevolve</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 09 学习与适应</div>
+      <div>https://linxkon.github.io/第09章-学习与适应.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC10%E7%AB%A0-%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE-MCP.html" title="Agent 设计模式 - 10 模型上下文协议-MCP">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 10 模型上下文协议-MCP</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC08%E7%AB%A0-%E8%AE%B0%E5%BF%86%E7%AE%A1%E7%90%86.html" title="Agent 设计模式 - 08 记忆管理">
+                        <span class="hidden-mobile">Agent 设计模式 - 08 记忆管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'abddc86955b813dbac633647ce228e6e'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

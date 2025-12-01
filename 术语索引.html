@@ -1,0 +1,1156 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="术语表 基本概念 提示词（Prompt）：提示词是用户提供给 AI 模型的输入，通常以问题、指令或陈述的形式出现，用于引发响应。提示词的质量和结构极大地影响模型的输出，使提示词工程成为有效使用 AI 的关键技能。 上下文窗口（Context Window）：上下文窗口是 AI 模型一次可以处理的最大 token 数量，包括输入和生成的输出。这个固定大小是一个关键限制，因为窗口外的信息会被忽略">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 术语索引">
+<meta property="og:url" content="https://linxkon.github.io/%E6%9C%AF%E8%AF%AD%E7%B4%A2%E5%BC%95.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="术语表 基本概念 提示词（Prompt）：提示词是用户提供给 AI 模型的输入，通常以问题、指令或陈述的形式出现，用于引发响应。提示词的质量和结构极大地影响模型的输出，使提示词工程成为有效使用 AI 的关键技能。 上下文窗口（Context Window）：上下文窗口是 AI 模型一次可以处理的最大 token 数量，包括输入和生成的输出。这个固定大小是一个关键限制，因为窗口外的信息会被忽略">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:28:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.835Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 术语索引 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 术语索引"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:28" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 术语索引</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="术语表">术语表</h1>
+<h2 id="基本概念">基本概念</h2>
+<h3 id="提示词prompt提示词是用户提供给-ai-模型的输入通常以问题指令或陈述的形式出现用于引发响应提示词的质量和结构极大地影响模型的输出使提示词工程成为有效使用-ai-的关键技能">提示词（Prompt）：提示词是用户提供给 AI 模型的输入，通常以问题、指令或陈述的形式出现，用于引发响应。提示词的质量和结构极大地影响模型的输出，使提示词工程成为有效使用 AI 的关键技能。</h3>
+<h3 id="上下文窗口context-window上下文窗口是-ai-模型一次可以处理的最大-token-数量包括输入和生成的输出这个固定大小是一个关键限制因为窗口外的信息会被忽略而更大的窗口可以实现更复杂的对话和文档分析">上下文窗口（Context Window）：上下文窗口是 AI 模型一次可以处理的最大 token 数量，包括输入和生成的输出。这个固定大小是一个关键限制，因为窗口外的信息会被忽略，而更大的窗口可以实现更复杂的对话和文档分析。</h3>
+<h3 id="上下文学习in-context-learning上下文学习是-ai-直接从提示词中提供的示例学习新任务的能力无需任何重新训练这个强大的功能允许单个通用模型即时适应无数特定任务">上下文学习（In-Context Learning）：上下文学习是 AI 直接从提示词中提供的示例学习新任务的能力，无需任何重新训练。这个强大的功能允许单个通用模型即时适应无数特定任务。</h3>
+<h3 id="零样本单样本和少样本提示zero-shot-one-shot-few-shot-prompting这些是提示技术其中向模型提供零个一个或几个任务示例来指导其响应提供更多示例通常有助于模型更好地理解用户意图并提高特定任务的准确性">零样本、单样本和少样本提示（Zero-Shot, One-Shot, &amp; Few-Shot Prompting）：这些是提示技术，其中向模型提供零个、一个或几个任务示例来指导其响应。提供更多示例通常有助于模型更好地理解用户意图，并提高特定任务的准确性。</h3>
+<h3 id="多模态性multimodality多模态性是-ai-理解和处理多种数据类型如文本图像和音频信息的能力这允许更多样化和类人的交互例如描述图像或回答口头问题">多模态性（Multimodality）：多模态性是 AI 理解和处理多种数据类型（如文本、图像和音频）信息的能力。这允许更多样化和类人的交互，例如描述图像或回答口头问题。</h3>
+<h3 id="基础化grounding基础化是将模型输出连接到可验证的真实世界信息源的过程以确保事实准确性并减少幻觉这通常通过-rag-等技术实现使-ai-系统更值得信赖">基础化（Grounding）：基础化是将模型输出连接到可验证的真实世界信息源的过程，以确保事实准确性并减少幻觉。这通常通过 RAG 等技术实现，使 AI 系统更值得信赖。</h3>
+<h2 id="核心-ai-模型架构">核心 AI 模型架构</h2>
+<h3 id="transformerstransformer-是大多数现代-llm-的基础神经网络架构其关键创新是自注意力机制可以高效处理长文本序列并捕获单词之间的复杂关系">Transformers：Transformer 是大多数现代 LLM 的基础神经网络架构。其关键创新是自注意力机制，可以高效处理长文本序列并捕获单词之间的复杂关系。</h3>
+<h3 id="循环神经网络recurrent-neural-network-rnn循环神经网络是-transformer-之前的基础架构rnn-按顺序处理信息使用循环来维护先前输入的记忆这使它们适合文本和语音处理等任务">循环神经网络（Recurrent Neural Network, RNN）：循环神经网络是 Transformer 之前的基础架构。RNN 按顺序处理信息，使用循环来维护先前输入的"记忆"，这使它们适合文本和语音处理等任务。</h3>
+<h3 id="专家混合mixture-of-experts-moe专家混合是一种高效的模型架构其中路由器网络动态选择一小部分专家网络来处理任何给定的输入这允许模型拥有大量参数同时保持可管理的计算成本">专家混合（Mixture of Experts, MoE）：专家混合是一种高效的模型架构，其中"路由器"网络动态选择一小部分"专家"网络来处理任何给定的输入。这允许模型拥有大量参数，同时保持可管理的计算成本。</h3>
+<h3 id="扩散模型diffusion-models扩散模型是擅长创建高质量图像的生成模型它们通过向数据添加随机噪声然后训练模型精确地逆转该过程来工作允许它们从随机起点生成新颖的数据">扩散模型（Diffusion Models）：扩散模型是擅长创建高质量图像的生成模型。它们通过向数据添加随机噪声，然后训练模型精确地逆转该过程来工作，允许它们从随机起点生成新颖的数据。</h3>
+<h3 id="mambamamba-是一种最新的-ai-架构使用选择性状态空间模型ssm以高效率处理序列特别是对于非常长的上下文其选择性机制允许它专注于相关信息同时过滤噪声使其成为-transformer-的潜在替代方案">Mamba：Mamba 是一种最新的 AI 架构，使用选择性状态空间模型（SSM）以高效率处理序列，特别是对于非常长的上下文。其选择性机制允许它专注于相关信息同时过滤噪声，使其成为 Transformer 的潜在替代方案。</h3>
+<h2 id="llm-开发生命周期">LLM 开发生命周期</h2>
+<h3 id="强大语言模型的开发遵循明确的顺序它始于预训练pre-training在大量通用互联网文本数据集上训练大规模基础模型以学习语言推理和世界知识接下来是微调fine-tuning这是一个专业化阶段在较小的特定任务数据集上进一步训练通用模型以使其能力适应特定目的最后阶段是对齐alignment调整专业化模型的行为以确保其输出有帮助无害且与人类价值观保持一致">强大语言模型的开发遵循明确的顺序。它始于预训练（Pre-training），在大量通用互联网文本数据集上训练大规模基础模型，以学习语言、推理和世界知识。接下来是微调（Fine-tuning），这是一个专业化阶段，在较小的特定任务数据集上进一步训练通用模型，以使其能力适应特定目的。最后阶段是对齐（Alignment），调整专业化模型的行为，以确保其输出有帮助、无害且与人类价值观保持一致。</h3>
+<h3 id="预训练技术预训练是模型从大量数据中学习通用知识的初始阶段这方面的顶级技术涉及模型学习的不同目标最常见的是因果语言建模clm其中模型预测句子中的下一个单词另一种是掩码语言建模mlm其中模型填充文本中故意隐藏的单词其他重要方法包括去噪目标其中模型学习将损坏的输入恢复到其原始状态对比学习其中它学习区分相似和不相似的数据片段以及下一句预测nsp其中它确定两个句子是否在逻辑上相互跟随">预训练技术：预训练是模型从大量数据中学习通用知识的初始阶段。这方面的顶级技术涉及模型学习的不同目标。最常见的是因果语言建模（CLM），其中模型预测句子中的下一个单词。另一种是掩码语言建模（MLM），其中模型填充文本中故意隐藏的单词。其他重要方法包括去噪目标，其中模型学习将损坏的输入恢复到其原始状态，对比学习，其中它学习区分相似和不相似的数据片段，以及下一句预测（NSP），其中它确定两个句子是否在逻辑上相互跟随。</h3>
+<h3 id="微调技术微调是使用较小的专业化数据集将通用预训练模型适应特定任务的过程最常见的方法是监督微调sft其中模型在标记的正确输入输出对示例上进行训练一个流行的变体是指令调优专注于训练模型更好地遵循用户命令为了使此过程更高效使用参数高效微调peft方法顶级技术包括-lora低秩适应仅更新少量参数以及其内存优化版本-qlora另一种技术检索增强生成rag通过在微调或推理阶段将模型连接到外部知识源来增强模型">微调技术：微调是使用较小的专业化数据集将通用预训练模型适应特定任务的过程。最常见的方法是监督微调（SFT），其中模型在标记的正确输入输出对示例上进行训练。一个流行的变体是指令调优，专注于训练模型更好地遵循用户命令。为了使此过程更高效，使用参数高效微调（PEFT）方法，顶级技术包括 LoRA（低秩适应），仅更新少量参数，以及其内存优化版本 QLoRA。另一种技术，检索增强生成（RAG），通过在微调或推理阶段将模型连接到外部知识源来增强模型。</h3>
+<h3 id="对齐和安全技术对齐是确保-ai-模型行为与人类价值观和期望保持一致的过程使其有帮助且无害最突出的技术是基于人类反馈的强化学习rlhf其中在人类偏好上训练的奖励模型指导-ai-的学习过程通常使用近端策略优化ppo等算法来保持稳定性已经出现了更简单的替代方案例如直接偏好优化dpo它绕过了对单独奖励模型的需求以及-kahneman-tversky-优化kto它进一步简化了数据收集为确保安全部署实施护栏作为最终安全层以实时过滤输出并阻止有害行为">对齐和安全技术：对齐是确保 AI 模型行为与人类价值观和期望保持一致的过程，使其有帮助且无害。最突出的技术是基于人类反馈的强化学习（RLHF），其中在人类偏好上训练的"奖励模型"指导 AI 的学习过程，通常使用近端策略优化（PPO）等算法来保持稳定性。已经出现了更简单的替代方案，例如直接偏好优化（DPO），它绕过了对单独奖励模型的需求，以及 Kahneman-Tversky 优化（KTO），它进一步简化了数据收集。为确保安全部署，实施护栏作为最终安全层，以实时过滤输出并阻止有害行为。</h3>
+<h2 id="增强-ai-agent-能力">增强 AI Agent 能力</h2>
+<h3 id="ai-agent-是能够感知其环境并采取自主行动以实现目标的系统它们的有效性通过强大的推理框架得到增强">AI Agent 是能够感知其环境并采取自主行动以实现目标的系统。它们的有效性通过强大的推理框架得到增强。</h3>
+<h3 id="思维链chain-of-thought-cot这种提示技术鼓励模型在给出最终答案之前逐步解释其推理这种大声思考的过程通常会在复杂推理任务上产生更准确的结果">思维链（Chain of Thought, CoT）：这种提示技术鼓励模型在给出最终答案之前逐步解释其推理。这种"大声思考"的过程通常会在复杂推理任务上产生更准确的结果。</h3>
+<h3 id="思维树tree-of-thoughts-tot思维树是一种高级推理框架其中-agent-同时探索多个推理路径就像树上的分支一样它允许-agent-自我评估不同的思路并选择最有希望的路径使其在复杂问题解决方面更有效">思维树（Tree of Thoughts, ToT）：思维树是一种高级推理框架，其中 Agent 同时探索多个推理路径，就像树上的分支一样。它允许 Agent 自我评估不同的思路并选择最有希望的路径，使其在复杂问题解决方面更有效。</h3>
+<h3 id="react推理与行动reason-and-actreact-是一个-agent-框架在循环中结合推理和行动agent-首先思考要做什么然后使用工具采取行动并使用结果观察来通知其下一个想法使其在解决复杂任务方面非常有效">ReAct（推理与行动，Reason and Act）：ReAct 是一个 Agent 框架，在循环中结合推理和行动。Agent 首先"思考"要做什么，然后使用工具采取"行动"，并使用结果观察来通知其下一个想法，使其在解决复杂任务方面非常有效。</h3>
+<h3 id="规划planning这是-agent-将高级目标分解为一系列较小的可管理的子任务的能力然后-agent-创建一个计划来按顺序执行这些步骤使其能够处理复杂的多步骤任务">规划（Planning）：这是 Agent 将高级目标分解为一系列较小的、可管理的子任务的能力。然后 Agent 创建一个计划来按顺序执行这些步骤，使其能够处理复杂的多步骤任务。</h3>
+<h3 id="深度研究deep-research深度研究是指-agent-通过迭代搜索信息综合发现和识别新问题来自主深入探索主题的能力这允许-agent-建立对主题的全面理解远超单个搜索查询">深度研究（Deep Research）：深度研究是指 Agent 通过迭代搜索信息、综合发现和识别新问题来自主深入探索主题的能力。这允许 Agent 建立对主题的全面理解，远超单个搜索查询。</h3>
+<h3 id="批评模型critique-model批评模型是一种专门的-ai-模型经过训练可以审查评估和提供关于另一个-ai-模型输出的反馈它充当自动批评者有助于识别错误改进推理并确保最终输出符合期望的质量标准">批评模型（Critique Model）：批评模型是一种专门的 AI 模型，经过训练可以审查、评估和提供关于另一个 AI 模型输出的反馈。它充当自动批评者，有助于识别错误、改进推理并确保最终输出符合期望的质量标准。</h3>
+<h2 id="术语索引">术语索引</h2>
+<p>此术语索引使用 Gemini Pro 2.5 生成。提示词和推理步骤包含在末尾，以展示 AI 辅助索引创建的效率优势并用于教育目的。</p>
+<p><strong>A</strong></p>
+<ul>
+<li>A/B 测试 - 第 3 章：并行化</li>
+<li>行动选择 - 第 20 章：优先级排序</li>
+<li>适应 - 第 9 章：学习与适应</li>
+<li>自适应任务分配 - 第 16 章：资源感知优化</li>
+<li>自适应工具使用与选择 - 第 16 章：资源感知优化</li>
+<li>Agent - 什么使 AI 系统成为 Agent？</li>
+<li>Agent-计算机接口（ACIs）- 附录 B</li>
+<li>Agent 驱动型经济 - 什么使 AI 系统成为 Agent？</li>
+<li>Agent 作为工具 - 第 7 章：多 Agent 协作</li>
+<li>Agent 卡片 - 第 15 章：Agent 间通信（A2A）</li>
+<li>Agent Development Kit（ADK）- 第 2 章：路由，第 3 章：并行化，第 4 章：反思，第 5 章：工具使用，第 7 章：多 Agent 协作，第 8 章：记忆管理，第 12 章：异常处理与恢复，第 13 章：人机协同，第 15 章：Agent 间通信（A2A），第 16 章：资源感知优化，第 19 章：评估与监控，附录 C</li>
+<li>Agent 发现 - 第 15 章：Agent 间通信（A2A）</li>
+<li>Agent 轨迹 - 第 19 章：评估与监控</li>
+<li>Agentic 设计模式 - 引言</li>
+<li>Agentic RAG - 第 14 章：知识检索（RAG）</li>
+<li>Agentic 系统 - 引言</li>
+<li>AI 联合科学家 - 第 21 章：探索与发现</li>
+<li>对齐 - 术语表</li>
+<li>AlphaEvolve - 第 9 章：学习与适应</li>
+<li>类比 - 附录 A</li>
+<li>异常检测 - 第 19 章：评估与监控</li>
+<li>Anthropic's Claude 4 系列 - 附录 B</li>
+<li>Anthropic's Computer Use - 附录 B</li>
+<li>API 交互 - 第 10 章：模型上下文协议（MCP）</li>
+<li>工件 - 第 15 章：Agent 间通信（A2A）</li>
+<li>异步轮询 - 第 15 章：Agent 间通信（A2A）</li>
+<li>审计日志 - 第 15 章：Agent 间通信（A2A）</li>
+<li>自动化指标 - 第 19 章：评估与监控</li>
+<li>自动提示工程（APE）- 附录 A</li>
+<li>自主性 - 引言</li>
+<li>A2A（Agent-to-Agent）- 第 15 章：Agent 间通信（A2A）</li>
+</ul>
+<p><strong>B</strong></p>
+<ul>
+<li>行为约束 - 第 18 章：护栏/安全模式</li>
+<li>浏览器使用 - 附录 B</li>
+</ul>
+<p><strong>C</strong></p>
+<ul>
+<li>回调 - 第 18 章：护栏/安全模式</li>
+<li>因果语言建模（CLM）- 术语表</li>
+<li>辩论链（CoD）- 第 17 章：推理技术</li>
+<li>思维链（CoT）- 第 17 章：推理技术，附录 A</li>
+<li>聊天机器人 - 第 8 章：记忆管理</li>
+<li>ChatMessageHistory - 第 8 章：记忆管理</li>
+<li>检查点与回滚 - 第 18 章：护栏/安全模式</li>
+<li>分块 - 第 14 章：知识检索（RAG）</li>
+<li>清晰性和具体性 - 附录 A</li>
+<li>客户端 Agent - 第 15 章：Agent 间通信（A2A）</li>
+<li>代码生成 - 第 1 章：提示链，第 4 章：反思</li>
+<li>代码提示 - 附录 A</li>
+<li>CoD（辩论链）- 第 17 章：推理技术</li>
+<li>CoT（思维链）- 第 17 章：推理技术，附录 A</li>
+<li>协作 - 第 7 章：多 Agent 协作</li>
+<li>合规性 - 第 19 章：评估与监控</li>
+<li>简洁性 - 附录 A</li>
+<li>内容生成 - 第 1 章：提示链，第 4 章：反思</li>
+<li>上下文工程 - 第 1 章：提示链</li>
+<li>上下文窗口 - 术语表</li>
+<li>上下文修剪与摘要 - 第 16 章：资源感知优化</li>
+<li>上下文提示 - 附录 A</li>
+<li>承包商模型 - 第 19 章：评估与监控</li>
+<li>ConversationBufferMemory - 第 8 章：记忆管理</li>
+<li>对话式 Agent - 第 1 章：提示链，第 4 章：反思</li>
+<li>成本敏感探索 - 第 16 章：资源感知优化</li>
+<li>CrewAI - 第 3 章：并行化，第 5 章：工具使用，第 6 章：规划，第 7 章：多 Agent 协作，第 18 章：护栏/安全模式，附录 C</li>
+<li>批评 Agent - 第 16 章：资源感知优化</li>
+<li>批评模型 - 术语表</li>
+<li>客户支持 - 第 13 章：人机协同</li>
+</ul>
+<p><strong>D</strong></p>
+<ul>
+<li>数据提取 - 第 1 章：提示链</li>
+<li>数据标注 - 第 13 章：人机协同</li>
+<li>数据库集成 - 第 10 章：模型上下文协议（MCP）</li>
+<li>DatabaseSessionService - 第 8 章：记忆管理</li>
+<li>辩论与共识 - 第 7 章：多 Agent 协作</li>
+<li>决策增强 - 第 13 章：人机协同</li>
+<li>分解 - 附录 A</li>
+<li>深度研究 - 第 6 章：规划，第 17 章：推理技术，术语表</li>
+<li>分隔符 - 附录 A</li>
+<li>去噪目标 - 术语表</li>
+<li>依赖关系 - 第 20 章：优先级排序</li>
+<li>扩散模型 - 术语表</li>
+<li>直接偏好优化（DPO）- 第 9 章：学习与适应</li>
+<li>可发现性 - 第 10 章：模型上下文协议（MCP）</li>
+<li>漂移检测 - 第 19 章：评估与监控</li>
+<li>动态模型切换 - 第 16 章：资源感知优化</li>
+<li>动态重新优先级排序 - 第 20 章：优先级排序</li>
+</ul>
+<p><strong>E</strong></p>
+<ul>
+<li>嵌入 - 第 14 章：知识检索（RAG）</li>
+<li>具身化 - 什么使 AI 系统成为 Agent？</li>
+<li>节能部署 - 第 16 章：资源感知优化</li>
+<li>情景记忆 - 第 8 章：记忆管理</li>
+<li>错误检测 - 第 12 章：异常处理与恢复</li>
+<li>错误处理 - 第 12 章：异常处理与恢复</li>
+<li>升级策略 - 第 13 章：人机协同</li>
+<li>评估 - 第 19 章：评估与监控</li>
+<li>异常处理 - 第 12 章：异常处理与恢复</li>
+<li>专家团队 - 第 7 章：多 Agent 协作</li>
+<li>探索与发现 - 第 21 章：探索与发现</li>
+<li>外部审核 API - 第 18 章：护栏/安全模式</li>
+</ul>
+<p><strong>F</strong></p>
+<ul>
+<li>因子化认知 - 附录 A</li>
+<li>FastMCP - 第 10 章：模型上下文协议（MCP）</li>
+<li>容错 - 第 18 章：护栏/安全模式</li>
+<li>少样本学习 - 第 9 章：学习与适应</li>
+<li>少样本提示 - 附录 A</li>
+<li>微调 - 术语表</li>
+<li>正式化合同 - 第 19 章：评估与监控</li>
+<li>函数调用 - 第 5 章：工具使用，附录 A</li>
+</ul>
+<p><strong>G</strong></p>
+<ul>
+<li>Gemini Live - 附录 B</li>
+<li>Gems - 附录 A</li>
+<li>生成媒体编排 - 第 10 章：模型上下文协议（MCP）</li>
+<li>目标设定 - 第 11 章：目标设定与监控</li>
+<li>GoD（辩论图）- 第 17 章：推理技术</li>
+<li>Google Agent Development Kit（ADK）- 第 2 章：路由，第 3 章：并行化，第 4 章：反思，第 5 章：工具使用，第 7 章：多 Agent 协作，第 8 章：内存管理，第 12 章：异常处理与恢复，第 13 章：人机协同，第 15 章：Agent 间通信（A2A），第 16 章：资源感知优化，第 19 章：评估与监控，附录 C</li>
+<li>Google 联合科学家 - 第 21 章：探索与发现</li>
+<li>Google DeepResearch - 第 6 章：规划</li>
+<li>Google Project Mariner - 附录 B</li>
+<li>优雅降级 - 第 12 章：异常处理与恢复，第 16 章：资源感知优化</li>
+<li>辩论图（GoD）- 第 17 章：推理技术</li>
+<li>基础化 - 术语表</li>
+<li>护栏 - 第 18 章：护栏/安全模式</li>
+</ul>
+<p><strong>H</strong></p>
+<ul>
+<li>Haystack - 附录 C</li>
+<li>层次化分解 - 第 19 章：评估与监控</li>
+<li>层次化结构 - 第 7 章：多 Agent 协作</li>
+<li>HITL（人机协同）- 第 13 章：人机协同</li>
+<li>人机协同（HITL）- 第 13 章：人机协同</li>
+<li>人在环路上 - 第 13 章：人机协同</li>
+<li>人类监督 - 第 13 章：人机协同，第 18 章：护栏/安全模式</li>
+</ul>
+<p><strong>I</strong></p>
+<ul>
+<li>上下文学习 - 术语表</li>
+<li>InMemoryMemoryService - 第 8 章：记忆管理</li>
+<li>InMemorySessionService - 第 8 章：记忆管理</li>
+<li>输入验证/清理 - 第 18 章：护栏/安全模式</li>
+<li>指令优先于约束 - 附录 A</li>
+<li>Agent 间通信（A2A）- 第 15 章：Agent 间通信（A2A）</li>
+<li>干预与纠正 - 第 13 章：人机协同</li>
+<li>IoT 设备控制 - 第 10 章：模型上下文协议（MCP）</li>
+<li>迭代提示/细化 - 附录 A</li>
+</ul>
+<p><strong>J</strong></p>
+<ul>
+<li>越狱 - 第 18 章：护栏/安全模式</li>
+</ul>
+<p><strong>K</strong></p>
+<ul>
+<li>Kahneman-Tversky 优化（KTO）- 术语表</li>
+<li>知识检索（RAG）- 第 14 章：知识检索（RAG）</li>
+</ul>
+<p><strong>L</strong></p>
+<ul>
+<li>LangChain - 第 1 章：提示链，第 2 章：路由，第 3 章：并行化，第 4 章：反思，第 5 章：工具使用，第 8 章：记忆管理，第 20 章：优先级排序，附录 C</li>
+<li>LangGraph - 第 1 章：提示链，第 2 章：路由，第 3 章：并行化，第 4 章：反思，第 5 章：工具使用，第 8 章：记忆管理，附录 C</li>
+<li>延迟监控 - 第 19 章：评估与监控</li>
+<li>学习资源分配策略 - 第 16 章：资源感知优化</li>
+<li>学习与适应 - 第 9 章：学习与适应</li>
+<li>LLM 作为裁判 - 第 19 章：评估与监控</li>
+<li>LlamaIndex - 附录 C</li>
+<li>LoRA（低秩适应）- 术语表</li>
+<li>低秩适应（LoRA）- 术语表</li>
+</ul>
+<p><strong>M</strong></p>
+<ul>
+<li>Mamba - 术语表</li>
+<li>掩码语言建模（MLM）- 术语表</li>
+<li>MASS（多 Agent 系统搜索）- 第 17 章：推理技术</li>
+<li>MCP（模型上下文协议）- 第 10 章：模型上下文协议（MCP）</li>
+<li>记忆管理 - 第 8 章：记忆管理</li>
+<li>基于内存的学习 - 第 9 章：学习与适应</li>
+<li>MetaGPT - 附录 C</li>
+<li>Microsoft AutoGen - 附录 C</li>
+<li>专家混合（MoE）- 术语表</li>
+<li>模型上下文协议（MCP）- 第 10 章：模型上下文协议（MCP）</li>
+<li>模块化 - 第 18 章：护栏/安全模式</li>
+<li>监控 - 第 11 章：目标设定与监控，第 19 章：评估与监控</li>
+<li>多 Agent 协作 - 第 7 章：多 Agent 协作</li>
+<li>多 Agent 系统搜索（MASS）- 第 17 章：推理技术</li>
+<li>多模态性 - 术语表</li>
+<li>多模态提示 - 附录 A</li>
+</ul>
+<p><strong>N</strong></p>
+<ul>
+<li>负面示例 - 附录 A</li>
+<li>下一句预测（NSP）- 术语表</li>
+</ul>
+<p><strong>O</strong></p>
+<ul>
+<li>可观察性 - 第 18 章：护栏/安全模式</li>
+<li>单样本提示 - 附录 A</li>
+<li>在线学习 - 第 9 章：学习与适应</li>
+<li>OpenAI Deep Research API - 第 6 章：规划</li>
+<li>OpenEvolve - 第 9 章：学习与适应</li>
+<li>OpenRouter - 第 16 章：资源感知优化</li>
+<li>输出过滤/后处理 - 第 18 章：护栏/安全模式</li>
+</ul>
+<p><strong>P</strong></p>
+<ul>
+<li>PAL（程序辅助语言模型）- 第 17 章：推理技术</li>
+<li>并行化 - 第 3 章：并行化</li>
+<li>并行化与分布式计算感知 - 第 16 章：资源感知优化</li>
+<li>参数高效微调（PEFT）- 术语表</li>
+<li>PEFT（参数高效微调）- 术语表</li>
+<li>性能跟踪 - 第 19 章：评估与监控</li>
+<li>角色模式 - 附录 A</li>
+<li>个性化 - 什么使 AI 系统成为 Agent？</li>
+<li>规划 - 第 6 章：规划，术语表</li>
+<li>优先级排序 - 第 20 章：优先级排序</li>
+<li>最小权限原则 - 第 18 章：护栏/安全模式</li>
+<li>主动资源预测 - 第 16 章：资源感知优化</li>
+<li>过程记忆 - 第 8 章：记忆管理</li>
+<li>程序辅助语言模型（PAL）- 第 17 章：推理技术</li>
+<li>Project Astra - 附录 B</li>
+<li>提示词 - 术语表</li>
+<li>提示链 - 第 1 章：提示链</li>
+<li>提示工程 - 附录 A</li>
+<li>近端策略优化（PPO）- 第 9 章：学习与适应</li>
+<li>推送通知 - 第 15 章：Agent 间通信（A2A）</li>
+</ul>
+<p><strong>Q</strong></p>
+<ul>
+<li>QLoRA - 术语表</li>
+<li>质量导向迭代执行 - 第 19 章：评估与监控</li>
+</ul>
+<p><strong>R</strong></p>
+<ul>
+<li>RAG（检索增强生成）- 第 8 章：内存管理，第 14 章：知识检索（RAG），附录 A</li>
+<li>ReAct（推理与行动）- 第 17 章：推理技术，附录 A，术语表</li>
+<li>推理 - 第 17 章：推理技术</li>
+<li>基于推理的信息提取 - 第 10 章：模型上下文协议（MCP）</li>
+<li>恢复 - 第 12 章：异常处理与恢复</li>
+<li>循环神经网络（RNN）- 术语表</li>
+<li>反思 - 第 4 章：反思</li>
+<li>强化学习 - 第 9 章：学习与适应</li>
+<li>基于人类反馈的强化学习（RLHF）- 术语表</li>
+<li>可验证奖励的强化学习（RLVR）- 第 17 章：推理技术</li>
+<li>远程 Agent - 第 15 章：Agent 间通信（A2A）</li>
+<li>请求/响应（轮询）- 第 15 章：Agent 间通信（A2A）</li>
+<li>资源感知优化 - 第 16 章：资源感知优化</li>
+<li>检索增强生成（RAG）- 第 8 章：内存管理，第 14 章：知识检索（RAG），附录 A</li>
+<li>RLHF（基于人类反馈的强化学习）- 术语表</li>
+<li>RLVR（可验证奖励的强化学习）- 第 17 章：推理技术</li>
+<li>RNN（循环神经网络）- 术语表</li>
+<li>角色提示 - 附录 A</li>
+<li>路由器 Agent - 第 16 章：资源感知优化</li>
+<li>路由 - 第 2 章：路由</li>
+</ul>
+<p><strong>S</strong></p>
+<ul>
+<li>安全 - 第 18 章：护栏/安全模式</li>
+<li>扩展推理法则 - 第 17 章：推理技术</li>
+<li>调度 - 第 20 章：优先级排序</li>
+<li>自一致性 - 附录 A</li>
+<li>自我纠正 - 第 4 章：反思，第 17 章：推理技术</li>
+<li>自我改进编码 Agent（SICA）- 第 9 章：学习与适应</li>
+<li>自我细化 - 第 17 章：推理技术</li>
+<li>Semantic Kernel - 附录 C</li>
+<li>语义记忆 - 第 8 章：记忆管理</li>
+<li>语义相似性 - 第 14 章：知识检索（RAG）</li>
+<li>关注点分离 - 第 18 章：护栏/安全模式</li>
+<li>顺序交接 - 第 7 章：多 Agent 协作</li>
+<li>服务器发送事件（SSE）- 第 15 章：Agent 间通信（A2A）</li>
+<li>会话 - 第 8 章：内存管理</li>
+<li>SICA（自我改进编码 Agent）- 第 9 章：学习与适应</li>
+<li>SMART 目标 - 第 11 章：目标设定与监控</li>
+<li>状态 - 第 8 章：内存管理</li>
+<li>状态回滚 - 第 12 章：异常处理与恢复</li>
+<li>后退提示 - 附录 A</li>
+<li>流式更新 - 第 15 章：Agent 间通信（A2A）</li>
+<li>结构化日志 - 第 18 章：护栏/安全模式</li>
+<li>结构化输出 - 第 1 章：提示链，附录 A</li>
+<li>SuperAGI - 附录 C</li>
+<li>监督微调（SFT）- 术语表</li>
+<li>监督学习 - 第 9 章：学习与适应</li>
+<li>系统提示 - 附录 A</li>
+</ul>
+<p><strong>T</strong></p>
+<ul>
+<li>任务评估 - 第 20 章：优先级排序</li>
+<li>文本相似性 - 第 14 章：知识检索（RAG）</li>
+<li>Token 使用 - 第 19 章：评估与监控</li>
+<li>工具使用 - 第 5 章：工具使用，附录 A</li>
+<li>工具使用限制 - 第 18 章：护栏/安全模式</li>
+<li>ToT（思维树）- 第 17 章：推理技术，附录 A，术语表</li>
+<li>Transformers - 术语表</li>
+<li>思维树（ToT）- 第 17 章：推理技术，附录 A，术语表</li>
+</ul>
+<p><strong>U</strong></p>
+<ul>
+<li>无监督学习 - 第 9 章：学习与适应</li>
+<li>用户角色 - 附录 A</li>
+</ul>
+<p><strong>V</strong></p>
+<ul>
+<li>验证 - 第 3 章：并行化</li>
+<li>向量搜索 - 第 14 章：知识检索（RAG）</li>
+<li>VertexAiRagMemoryService - 第 8 章：内存管理</li>
+<li>VertexAiSessionService - 第 8 章：内存管理</li>
+<li>Vibe 编码 - 附录 B</li>
+<li>视觉感知 - 附录 B</li>
+</ul>
+<p><strong>W</strong></p>
+<ul>
+<li>Webhooks - 第 15 章：Agent 间通信（A2A）</li>
+</ul>
+<p><strong>Z</strong></p>
+<ul>
+<li>零样本学习 - 第 9 章：学习与适应</li>
+<li>零样本提示 - 附录 A</li>
+</ul>
+<h2 id="提示词">提示词</h2>
+<p>以下是用于创建此术语索引的提示词。</p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;"><em>请阅读 https://docs.google.com/document/d/1rsaK53T3Lg5KoGwvf8ukOUvbELRtH-V0LnOIFDxBryE/edit?tab=t.0 及第一页中的所有相关文档。请提取各章节的所有标题并打印出来。然后处理所有独立章节的内容，创建一个用于出版的详细索引，包含单词或短语列表（"标题"）以及指向文档或文档集合中相关有用材料位置的指针（"定位符"）。我不需要示例索引，而是要求完整的索引，包含 100 个索引术语</em></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="gemini-2.5推理步骤">Gemini 2.5：推理步骤</h2>
+<p><strong>开始创建索引</strong></p>
+<p>我已启动索引创建流程，首先阅读了提供的 Google 文档。目前，我专注于理解用户需求：提取章节标题以构建详细索引。正在仔细审查文档内容，寻找能够标识章节分隔的清晰结构元素，期望能够识别出一致的格式模式或关键词来指导索引过程。</p>
+<p><strong>定义索引提取流程</strong></p>
+<p>现在已完全投入到此任务中。已将用户请求分解为可执行的步骤：初始阶段使用 Workspaces 访问主 Google 文档，接着解析文档以定位并检索相关文档（同样使用 Workspaces 工具），最后从所有文档中提取章节标题并创建全面索引。已规划完整的详细流程。</p>
+<p><strong>完善提取策略</strong></p>
+<p>用户指令明确：阅读 Google 文档及其相关文档，构建章节标题的详细索引。已制定多步骤计划：Workspaces 首先访问主文档，然后解析并检索相关文档，同样使用 Workspaces。当前专注于提取标题并使用所需术语构建详细索引，优先确保准确性以满足用户对综合索引的特定要求。</p>
+<p><strong>1. 确定用户意图</strong></p>
+<p>已明确用户需求：获取来自 Google 文档及相关文档的章节标题列表和综合索引。现在需要确定最有效的提取和索引方法，正在探索潜在的 API 功能来简化此任务，并评估处理不同文档结构的最佳策略。</p>
+<p><strong>3. 考虑工具使用</strong></p>
+<p>已使用正则表达式从主文档中提取了章节 URL。现在准备利用 Workspaces 检索各章节的实际内容。一旦获得各章节文本，将立即开始索引工作。</p>
+<p><strong>访问章节内容</strong></p>
+<p>已成功从主文档中识别出各章节 URL，现在可使用 Workspaces。下一步是从这些 URL 检索内容，以便生成索引。专注于效率优化，旨在快速处理这些信息。</p>
+<p><strong>获取章节内容</strong></p>
+<p>已成功从主文档中识别出章节 URL，准备使用 Workspaces。计划包括提取这些 URL、批量处理调用以提高效率，然后处理检索内容以创建所需索引。这确保捕获所有相关信息，为全面准确的结果奠定基础。</p>
+<p><strong>启动 URL 检索</strong></p>
+<p>现已成功从主文档中提取章节 URL。目前正在设置对 Workspaces 工具的调用，准备获取各章节内容。目标是获取索引所需的文本内容，进而促进创建包含至少 100 个术语的索引。</p>
+<p><strong>启动章节提取</strong></p>
+<p>已成功从主文档中识别并提取章节 URL（如上所列）。现在继续为每个 URL 使用 Workspaces 以获取章节内容。目标是获取索引所需的文本，进而促进创建包含至少 100 个术语的索引。已开始检索相关信息。</p>
+<p><strong>编排章节检索</strong></p>
+<p>已提取章节 URL 并发起对 Workspaces 的调用。目前正在检索各章节内容。为确保流程顺畅，正在进行批量调用处理以防止速率限制问题。这应能高效编译索引所需文本。</p>
+<p><strong>解码用户请求</strong></p>
+<p>已明确用户需求：两个主要交付成果——从 Google 文档提取的章节标题综合列表，以及包含至少一百个关键术语的详细索引。提取标题的过程相对直接，而策划索引则需要更细致的分析工作。</p>
+<p><strong>提取标题和索引</strong></p>
+<p>已成功识别用户需求：从提供文档中提取章节标题并编制综合索引。已获取 31 个 Google 文档的内容，包括主文档及其各章节。确认无需额外工具。计划包含两个步骤：首先从文档文件名中提取章节标题，其次精心处理文本内容，使用关键术语和章节定位符构建索引。</p>
+<p><strong>制定提取计划</strong></p>
+<p>已完善处理用户请求的方法。现制定精确计划：首先从 31 个已获取文档的文件名中编制章节标题，其次（更复杂的部分）精心分析内容以创建超过 100 个条目的综合、按字母顺序排列的索引。已最终确定提取和索引策略，现在可以开始执行。</p>
+<p><strong>制定提取策略</strong></p>
+<p>方法已明确定义：从 31 个已获取文档的文件名中编制章节标题，随后精心分析内容以构建按字母顺序组织、超过 100 个条目的索引。已最终确定提取和索引策略，现在可以开始实施。用户获取详细索引的目标——涵盖 Agentic 设计模式系列中各个章节和附录的内容——现已触手可及。将专注于提供全面响应，超越简单的示例索引。</p>
+<p><strong>定义方法</strong></p>
+<p>已明确用户需求：从文档文件名中提取章节标题，随后精心创建超过 100 个条目的索引，按字母顺序排列并注明章节位置。准备开始索引和提取过程。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 术语索引</div>
+      <div>https://linxkon.github.io/术语索引.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E6%9C%AF%E8%AF%AD%E8%A1%A8.html" title="Agent 设计模式 - 术语表">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 术语表</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%BC%95%E8%A8%80.html" title="Agent 设计模式 - 引言">
+                        <span class="hidden-mobile">Agent 设计模式 - 引言</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '121d26e07891d6e8472a4349d355ea7f'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

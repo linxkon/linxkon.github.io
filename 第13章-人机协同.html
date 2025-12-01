@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 13 章：人机协同 人机协同（Human-in-the-Loop，HITL）模式在 Agent 的开发和部署中扮演着关键战略角色。它巧妙地将人类认知的独特优势——如判断力、创造力和细致入微的理解——与 AI 的计算能力和效率相结合。这种战略整合不仅是可选方案，在许多情况下更是必要之举，尤其是在 AI 系统日益深入关键决策过程的当下。 HITL 的核心原则在于确保 AI 在道德边界内运行，遵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 13 人机协同">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC13%E7%AB%A0-%E4%BA%BA%E6%9C%BA%E5%8D%8F%E5%90%8C.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 13 章：人机协同 人机协同（Human-in-the-Loop，HITL）模式在 Agent 的开发和部署中扮演着关键战略角色。它巧妙地将人类认知的独特优势——如判断力、创造力和细致入微的理解——与 AI 的计算能力和效率相结合。这种战略整合不仅是可选方案，在许多情况下更是必要之举，尤其是在 AI 系统日益深入关键决策过程的当下。 HITL 的核心原则在于确保 AI 在道德边界内运行，遵">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:41:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.841Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 13 人机协同 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 13 人机协同"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:41" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 13 人机协同</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-13-章人机协同">第 13 章：人机协同</h1>
+<p>人机协同（Human-in-the-Loop，HITL）模式在 Agent 的开发和部署中扮演着关键战略角色。它巧妙地将人类认知的独特优势——如判断力、创造力和细致入微的理解——与 AI 的计算能力和效率相结合。这种战略整合不仅是可选方案，在许多情况下更是必要之举，尤其是在 AI 系统日益深入关键决策过程的当下。</p>
+<p>HITL 的核心原则在于确保 AI 在道德边界内运行，遵守安全规范，并以最高效率达成目标。在复杂度高、模糊性强或风险重大的领域中，AI 错误或误解可能带来严重后果，这些关注点显得尤为突出。在此类场景中，完全自主——即 AI 系统在无人工干预下独立运行——往往并非明智之选。HITL 正视这一现实，强调即使 AI 技术飞速发展，人类监督、战略输入和协作互动依然不可或缺。</p>
+<p>HITL 方法从根本上围绕人工智能与人类智能的协同理念展开。它并非将 AI 视为人类工作者的替代品，而是将其定位为增强和提升人类能力的工具。这种增强可呈现多种形式，从自动化常规任务到提供数据驱动的见解来辅助人类决策。最终目标是建立一个协作生态系统，让人类和 AI Agent 都能发挥各自优势，实现单方难以达成的成果。</p>
+<p>在实践中，HITL 可通过多种方式实施。常见做法是让人类担任验证者或审查者，检查 AI 输出以确保准确性并识别潜在错误。另一种实现方式是人类主动引导 AI 行为，实时提供反馈或进行纠正。在更复杂的设置中，人类可与 AI 作为合作伙伴，通过交互式对话或共享界面共同解决问题或制定决策。无论具体实施方式如何，HITL 模式都强调维护人类控制与监督的重要性，确保 AI 系统与人类道德、价值观、目标及社会期望保持一致。</p>
+<h2 id="人机协同模式概述">人机协同模式概述</h2>
+<p>人机协同（HITL）模式通过整合人工智能与人类输入来增强 Agent 能力。这种方法承认，最优的 AI 性能通常需要自动化处理与人类洞察的结合，特别是在高度复杂或涉及道德考量的场景中。HITL 的目标并非取代人类输入，而是通过确保关键判断和决策基于人类理解来增强人类能力。</p>
+<p>HITL 包含几个关键方面：<strong>人类监督</strong>涉及监控 AI Agent 的性能和输出（例如通过日志审查或实时仪表板），以确保遵循指南并防止不良结果。<strong>干预和纠正</strong>发生在 AI Agent 遇到错误或模糊场景并请求人工干预时；人类操作员可纠正错误、提供缺失数据或指导 Agent，这些信息也有助于未来 Agent 的改进。<strong>学习的人类反馈</strong>被收集并用于完善 AI 模型，在带有人类反馈的强化学习等方法中尤为突出，人类偏好直接影响 Agent 的学习轨迹。<strong>决策增强</strong>是指 AI Agent 向人类提供分析和建议，由人类做出最终决定，通过 AI 生成的见解而非完全自主来增强人类决策。<strong>人机协作</strong>是一种合作互动，人类和 AI Agent 贡献各自优势；常规数据处理可由 Agent 处理，而创造性问题解决或复杂谈判则由人类管理。最后，<strong>升级策略</strong>是建立的协议，规定 Agent 何时以及如何将任务升级给人类操作员，防止在超出 Agent 能力范围时出现错误。</p>
+<p>实施 HITL 模式使得在完全自主不可行或不被允许的敏感行业中使用 Agent 成为可能。它还通过反馈循环提供了持续改进的机制。例如在金融领域，大型企业贷款的最终批准需要人类贷款官员评估诸如领导层品格等定性因素。同样在法律领域，正义和问责制的核心原则要求人类法官保留对涉及复杂道德推理的关键决定（如量刑）的最终权威。</p>
+<h3 id="注意事项尽管-hitl-模式具有诸多优势但也存在重要注意事项其中最主要的是可扩展性不足虽然人类监督提供了高精度但操作员无法管理数百万个任务这造成了基本权衡通常需要采用混合方法结合自动化实现规模化和-hitl-实现准确性此外此模式的有效性在很大程度上依赖于人类操作员的专业知识例如虽然-ai-可以生成软件代码但只有熟练的开发人员才能准确识别细微错误并提供正确修复指导这种对专业知识的需求同样适用于使用-hitl-生成训练数据时人类标注员可能需要特殊培训才能学会如何以产生高质量数据的方式纠正-ai最后实施-hitl-会引发重大隐私问题因为敏感信息在暴露给人类操作员之前通常必须严格匿名化这增加了流程复杂性"><strong>注意事项</strong>：尽管 HITL 模式具有诸多优势，但也存在重要注意事项，其中最主要的是可扩展性不足。虽然人类监督提供了高精度，但操作员无法管理数百万个任务，这造成了基本权衡，通常需要采用混合方法，结合自动化实现规模化和 HITL 实现准确性。此外，此模式的有效性在很大程度上依赖于人类操作员的专业知识；例如虽然 AI 可以生成软件代码，但只有熟练的开发人员才能准确识别细微错误并提供正确修复指导。这种对专业知识的需求同样适用于使用 HITL 生成训练数据时，人类标注员可能需要特殊培训才能学会如何以产生高质量数据的方式纠正 AI。最后，实施 HITL 会引发重大隐私问题，因为敏感信息在暴露给人类操作员之前通常必须严格匿名化，这增加了流程复杂性。</h3>
+<h2 id="实际应用和用例">实际应用和用例</h2>
+<p>人机协同模式在广泛的行业和应用中至关重要，特别是在准确性、安全性、道德考量或细致入微的理解极为重要的领域。</p>
+<ul>
+<li><strong>内容审核</strong>：AI Agent 可快速过滤大量在线内容以查找违规内容（如仇恨言论、垃圾邮件）。然而，模糊案例或边界内容会升级给人类审核员进行审查和最终决定，确保细致入微的判断并遵循复杂政策。</li>
+<li><strong>自动驾驶</strong>：虽然自动驾驶汽车自主处理大多数驾驶任务，但它们被设计为在 AI 无法自信导航的复杂、不可预测或危险情况下（如极端天气、异常道路条件）将控制权交还给人类驾驶员。</li>
+<li><strong>金融欺诈检测</strong>：AI 系统可根据模式标记可疑交易。然而，高风险或模糊的警报通常会发送给人类分析师，他们进一步调查、联系客户，并对交易是否欺诈做出最终决定。</li>
+<li><strong>法律文件审查</strong>：AI 可快速扫描和分类数千份法律文件以识别相关条款或证据。然后，人类法律专业人员审查 AI 的发现以确保准确性、上下文和法律含义，特别是对于关键案例。</li>
+<li><strong>客户支持（复杂查询）</strong>：聊天机器人可能处理常规客户查询。如果用户问题过于复杂、情绪激动或需要 AI 无法提供的同理心，对话将无缝交接给人类支持 Agent。</li>
+<li><strong>数据标注和注释</strong>：AI 模型通常需要大量标注数据集进行训练。人类被纳入循环以准确标注图像、文本或音频，为 AI 学习提供基本事实。随着模型发展，这是一个持续过程。</li>
+<li><strong>生成 AI 完善</strong>：当 LLM 生成创意内容（如营销文案、设计理念）时，人类编辑或设计师审查和完善输出，确保其符合品牌指南、与目标受众产生共鸣并保持质量。</li>
+<li><strong>自主网络</strong>：AI 系统能够通过利用关键性能指标（KPI）和识别模式来分析警报并预测网络问题和流量异常。然而，关键决策——如处理高风险警报——经常升级给人类分析师。这些分析师进行进一步调查，并对网络更改的批准做出最终决定。</li>
+</ul>
+<p>此模式体现了 AI 实施的实用方法。它利用 AI 实现增强的可扩展性和效率，同时保持人类监督以确保质量、安全性和道德合规性。</p>
+<p>"人在循环外"（Human-on-the-loop）是此模式的一个变体，其中人类专家定义总体策略，然后 AI 处理即时操作以确保合规性。考虑以下两个例子：</p>
+<ul>
+<li><strong>自动金融交易系统</strong>：在此场景中，人类金融专家设定总体投资策略和规则。例如，人类可能将策略定义为："维持 70% 科技股和 30% 债券的投资组合，不要在任何单一公司投资超过 5%，并自动出售任何跌幅低于购买价格 10% 的股票。"然后，AI 实时监控股票市场，在满足这些预定义条件时立即执行交易。AI 根据人类操作员设定的较慢、更具战略性的策略处理即时的、高速的操作。</li>
+<li><strong>现代呼叫中心</strong>：在此设置中，人类经理为客户互动建立高级策略。例如，经理可能设置规则，如"任何提到'服务中断'的呼叫应立即转接给技术支持专家"，或"如果客户的语调表明高度沮丧，系统应提供直接连接到人工 Agent"。然后，AI 系统处理初始客户互动，实时倾听和解释他们的需求。它通过立即转接呼叫或提供升级来自主执行经理的策略，无需对每个单独案例进行人工干预。这使得 AI 可根据人类操作员提供的较慢、战略性指导管理大量即时操作。</li>
+</ul>
+<h2 id="实践代码示例">实践代码示例</h2>
+<p>为演示人机协同模式，ADK Agent 可识别需要人工审查的场景并启动升级过程。这允许在 Agent 的自主决策能力有限或需要复杂判断时进行人工干预。此功能并非孤立存在；其他流行框架也采用了类似能力。例如，LangChain 同样提供了实现此类交互的工具。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> Agent<br><span class="hljs-keyword">from</span> google.adk.tools.tool_context <span class="hljs-keyword">import</span> ToolContext<br><span class="hljs-keyword">from</span> google.adk.callbacks <span class="hljs-keyword">import</span> CallbackContext<br><span class="hljs-keyword">from</span> google.adk.models.llm <span class="hljs-keyword">import</span> LlmRequest<br><span class="hljs-keyword">from</span> google.genai <span class="hljs-keyword">import</span> types<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">Optional</span><br><br><span class="hljs-comment">## 工具占位符（如需请替换为实际实现）</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">troubleshoot_issue</span>(<span class="hljs-params">issue: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">dict</span>:<br>   <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-string">&quot;success&quot;</span>, <span class="hljs-string">&quot;report&quot;</span>: <span class="hljs-string">f&quot;Troubleshooting steps for <span class="hljs-subst">&#123;issue&#125;</span>.&quot;</span>&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">create_ticket</span>(<span class="hljs-params">issue_type: <span class="hljs-built_in">str</span>, details: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">dict</span>:<br>   <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-string">&quot;success&quot;</span>, <span class="hljs-string">&quot;ticket_id&quot;</span>: <span class="hljs-string">&quot;TICKET123&quot;</span>&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">escalate_to_human</span>(<span class="hljs-params">issue_type: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">dict</span>:<br>   <span class="hljs-comment"># 在真实系统中，这通常会转移到人工队列</span><br>   <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-string">&quot;success&quot;</span>, <span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">f&quot;Escalated <span class="hljs-subst">&#123;issue_type&#125;</span> to a human specialist.&quot;</span>&#125;<br><br>technical_support_agent = Agent(<br>   name=<span class="hljs-string">&quot;technical_support_specialist&quot;</span>,<br>   model=<span class="hljs-string">&quot;gemini-2.0-flash-exp&quot;</span>,<br>   instruction=<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">您是我们电子公司的技术支持专家。</span><br><span class="hljs-string"></span><br><span class="hljs-string">首先，检查用户在 state[&quot;customer_info&quot;][&quot;support_history&quot;] 中是否有支持历史记录。</span><br><span class="hljs-string">如果有，请在您的回复中引用此历史记录。</span><br><span class="hljs-string"></span><br><span class="hljs-string">对于技术问题：</span><br><span class="hljs-string">1. 使用 troubleshoot_issue 工具分析问题。</span><br><span class="hljs-string">2. 指导用户完成基本故障排除步骤。</span><br><span class="hljs-string">3. 如果问题持续存在，使用 create_ticket 记录问题。</span><br><span class="hljs-string"></span><br><span class="hljs-string">对于超出基本故障排除的复杂问题：</span><br><span class="hljs-string">1. 使用 escalate_to_human 转接给人类专家。</span><br><span class="hljs-string"></span><br><span class="hljs-string">保持专业但富有同理心的语气。承认技术问题可能引起的挫败感，同时提供明确的解决步骤。</span><br><span class="hljs-string">   &quot;&quot;&quot;</span>,<br>   tools=[troubleshoot_issue, create_ticket, escalate_to_human]<br>)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">personalization_callback</span>(<span class="hljs-params"></span><br><span class="hljs-params">   callback_context: CallbackContext, llm_request: LlmRequest</span><br><span class="hljs-params"></span>) -&gt; <span class="hljs-type">Optional</span>[LlmRequest]:<br>   <span class="hljs-string">&quot;&quot;&quot;将个性化信息添加到 LLM 请求中。&quot;&quot;&quot;</span><br>   <span class="hljs-comment"># 从状态获取客户信息</span><br>   customer_info = callback_context.state.get(<span class="hljs-string">&quot;customer_info&quot;</span>)<br>   <br>   <span class="hljs-keyword">if</span> customer_info:<br>       customer_name = customer_info.get(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;valued customer&quot;</span>)<br>       customer_tier = customer_info.get(<span class="hljs-string">&quot;tier&quot;</span>, <span class="hljs-string">&quot;standard&quot;</span>)<br>       recent_purchases = customer_info.get(<span class="hljs-string">&quot;recent_purchases&quot;</span>, [])<br>       <br>       personalization_note = (<br>           <span class="hljs-string">f&quot;\n重要的个性化信息：\n&quot;</span><br>           <span class="hljs-string">f&quot;客户姓名：<span class="hljs-subst">&#123;customer_name&#125;</span>\n&quot;</span><br>           <span class="hljs-string">f&quot;客户等级：<span class="hljs-subst">&#123;customer_tier&#125;</span>\n&quot;</span><br>       )<br>       <br>       <span class="hljs-keyword">if</span> recent_purchases:<br>           personalization_note += <span class="hljs-string">f&quot;最近购买：<span class="hljs-subst">&#123;<span class="hljs-string">&#x27;, &#x27;</span>.join(recent_purchases)&#125;</span>\n&quot;</span><br>       <br>       <span class="hljs-keyword">if</span> llm_request.contents:<br>           <span class="hljs-comment"># 在第一个内容之前添加为系统消息</span><br>           system_content = types.Content(<br>               role=<span class="hljs-string">&quot;system&quot;</span>, parts=[types.Part(text=personalization_note)]<br>           )<br>           llm_request.contents.insert(<span class="hljs-number">0</span>, system_content)<br>   <br>   <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>  <span class="hljs-comment"># 返回 None 以继续修改后的请求</span><br></code></pre></td></tr></table></figure>
+<p>此代码提供了使用 Google ADK 创建技术支持 Agent 的蓝图，围绕 HITL 框架设计。Agent 充当智能第一线支持，配置了特定指令，并配备了 troubleshoot_issue、create_ticket 和 escalate_to_human 等工具来管理完整的支持工作流。升级工具是 HITL 设计的核心部分，确保复杂或敏感案例传递给人类专家。</p>
+<p>此架构的一个关键特性是其深度个性化能力，通过专用回调函数实现。在联系 LLM 之前，此函数动态检索客户特定数据——如姓名、等级和购买历史——从 Agent 状态中。然后将此上下文作为系统消息注入提示词中，使 Agent 能够提供高度定制和知情的响应，引用用户历史记录。通过将结构化工作流与基本人类监督和动态个性化相结合，此代码展示了 ADK 如何促进开发复杂且强大的 AI 支持解决方案。</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么</strong>：AI 系统（包括高级 LLM）通常在需要细致入微判断、道德推理或对复杂模糊上下文深刻理解的任务中表现不佳。在高风险环境中部署完全自主的 AI 具有重大风险，因为错误可能导致严重的安全、财务或道德后果。这些系统缺乏人类固有的创造力和常识推理能力。因此，在关键决策过程中仅依赖自动化通常不明智，并可能损害系统的整体有效性和可信度。</p>
+<p><strong>为什么</strong>：人机协同（HITL）模式通过战略性地将人类监督整合到 AI 工作流中提供了标准化解决方案。这种 Agent 方法创建了共生伙伴关系，AI 处理计算繁重工作和数据处理，而人类提供关键验证、反馈和干预。通过这样做，HITL 确保 AI 行动与人类价值观和安全协议保持一致。这种协作框架不仅降低了完全自动化的风险，还通过从人类输入中持续学习来增强系统能力。最终，这带来了更强大、准确和道德的结果，这些结果是人类或 AI 单独无法实现的。</p>
+<p><strong>经验法则</strong>：在部署 AI 到错误会产生重大安全、道德或财务后果的领域时使用此模式，例如医疗保健、金融或自主系统。对于涉及 LLM 无法可靠处理的模糊性和细微差别的任务（如内容审核或复杂客户支持升级），它至关重要。当目标是使用高质量人类标注数据持续改进 AI 模型或完善生成 AI 输出以满足特定质量标准时，采用 HITL。</p>
+<p><strong>可视化摘要</strong>：</p>
+<p><img src="../images/agent_images/chapter-13/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：人机协同设计模式</p>
+<h2 id="关键要点">关键要点</h2>
+<p>关键要点包括：</p>
+<ul>
+<li>人机协同（HITL）将人类智能和判断整合到 AI 工作流中。</li>
+<li>它在复杂或高风险场景中对安全性、道德和有效性至关重要。</li>
+<li>关键方面包括人类监督、干预、学习反馈和决策增强。</li>
+<li>升级策略对于 Agent 知道何时交接给人类至关重要。</li>
+<li>HITL 允许负责任的 AI 部署和持续改进。</li>
+<li>人机协同的主要缺点是其固有的可扩展性不足，在准确性和数量之间造成权衡，以及对高技能领域专家进行有效干预的依赖性。</li>
+<li>其实施带来了操作挑战，包括需要培训人类操作员进行数据生成，以及通过匿名化敏感信息来解决隐私问题。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>本章探讨了至关重要的人机协同（HITL）模式，强调了其在创建强大、安全和道德的 AI 系统中的作用。我们讨论了如何将人类监督、干预和反馈整合到 Agent 工作流中可以显著增强其性能和可信度，特别是在复杂和敏感的领域中。实际应用展示了 HITL 的广泛实用性，从内容审核和医疗诊断到自动驾驶和客户支持。概念性代码示例提供了 ADK 如何通过升级机制促进这些人机交互的一瞥。随着 AI 能力不断进步，HITL 仍然是负责任的 AI 开发的基石，确保人类价值观和专业知识在智能系统设计中保持核心地位。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>A Survey of Human-in-the-loop for Machine Learning, Xingjiao Wu, Luwei Xiao, Yixuan Sun, Junhang Zhang, Tianlong Ma, Liang He, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.00941">https://arxiv.org/abs/2108.00941</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 13 人机协同</div>
+      <div>https://linxkon.github.io/第13章-人机协同.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC14%E7%AB%A0-%E7%9F%A5%E8%AF%86%E6%A3%80%E7%B4%A2-RAG.html" title="Agent 设计模式 - 14 知识检索-RAG">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 14 知识检索-RAG</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC12%E7%AB%A0-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%8E%E6%81%A2%E5%A4%8D.html" title="Agent 设计模式 - 12 异常处理与恢复">
+                        <span class="hidden-mobile">Agent 设计模式 - 12 异常处理与恢复</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '5fcde22c758cf2b611985c65163f07b5'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

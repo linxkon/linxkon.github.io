@@ -1,0 +1,812 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 12 章：异常处理和恢复 要使 AI Agent 在各种现实世界环境中可靠运行，它们必须能够管理不可预见的情况、错误和故障。正如人类能够适应意外障碍一样，智能 Agent 需要强大的系统来检测问题、启动恢复程序，或至少确保受控失败。这一基本需求构成了异常处理和恢复模式的基础。 此模式专注于开发异常耐用且有弹性的 Agent，使其能够保持不间断的功能和操作完整性，即使面临各种困难和异常情况。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 12 异常处理与恢复">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC12%E7%AB%A0-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%8E%E6%81%A2%E5%A4%8D.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 12 章：异常处理和恢复 要使 AI Agent 在各种现实世界环境中可靠运行，它们必须能够管理不可预见的情况、错误和故障。正如人类能够适应意外障碍一样，智能 Agent 需要强大的系统来检测问题、启动恢复程序，或至少确保受控失败。这一基本需求构成了异常处理和恢复模式的基础。 此模式专注于开发异常耐用且有弹性的 Agent，使其能够保持不间断的功能和操作完整性，即使面临各种困难和异常情况。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:40:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.841Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 12 异常处理与恢复 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 12 异常处理与恢复"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:40" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 12 异常处理与恢复</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-12-章异常处理和恢复">第 12 章：异常处理和恢复</h1>
+<p>要使 AI Agent 在各种现实世界环境中可靠运行，它们必须能够管理不可预见的情况、错误和故障。正如人类能够适应意外障碍一样，智能 Agent 需要强大的系统来检测问题、启动恢复程序，或至少确保受控失败。这一基本需求构成了异常处理和恢复模式的基础。</p>
+<p>此模式专注于开发异常耐用且有弹性的 Agent，使其能够保持不间断的功能和操作完整性，即使面临各种困难和异常情况。它强调主动准备和响应策略的重要性，以确保持续运行，即使在面临挑战时也是如此。这种适应性对于 Agent 在复杂和不可预测的环境中成功运作至关重要，最终提升其整体有效性和可信度。</p>
+<p>处理意外事件的能力确保这些 AI 系统不仅智能，而且稳定可靠，从而增强对其部署和性能的信心。集成全面的监控和诊断工具进一步强化了 Agent 快速识别和解决问题的能力，防止潜在中断并确保在不断变化的条件下更顺畅地运行。这些先进系统对于维护 AI 操作的完整性和效率至关重要，增强了其管理复杂性和不可预测性的能力。</p>
+<p>此模式有时可能与反思模式结合使用。例如，如果初始尝试失败并引发异常，反思过程可以分析失败原因，并使用改进的方法（如优化提示词）重新尝试任务，以解决错误。</p>
+<h2 id="异常处理和恢复模式概述">异常处理和恢复模式概述</h2>
+<p>异常处理和恢复模式解决了 AI Agent 管理操作失败的需求。此模式涉及预测潜在问题，例如工具错误或服务不可用，并制定相应的缓解策略。这些策略可能包括错误日志记录、重试机制、回退方案、优雅降级和通知机制。此外，该模式强调恢复机制，如状态回滚、诊断分析、自我纠正和问题升级，以将 Agent 恢复到稳定运行状态。实施此模式增强了 AI Agent 的可靠性和鲁棒性，使它们能够在不可预测的环境中有效运作。实际应用示例包括管理数据库错误的聊天机器人、处理金融错误的交易机器人以及解决设备故障的智能家居 Agent。该模式确保 Agent 在遇到复杂性和失败时能够继续有效运行。</p>
+<p><img src="../images/agent_images/chapter-12/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：AI Agent 异常处理和恢复的关键组件</p>
+<p><strong>错误检测</strong>：这涉及仔细识别出现的操作问题。这可能表现为无效或格式错误的工具输出、特定的 API 错误（如 404（未找到）或 500（内部服务器错误）代码）、来自服务或 API 的异常长响应时间，或偏离预期格式的不连贯和无意义响应。此外，可以实施其他 Agent 或专门监控系统的监控，以实现更主动的异常检测，使系统能够在潜在问题升级之前捕获它们。</p>
+<p><strong>错误处理</strong>：一旦检测到错误，就需要一个经过深思熟虑的响应计划。这包括在日志中仔细记录错误详细信息，以便后续调试和分析（日志记录）。重试操作或请求（有时使用略微调整的参数）可能是一种可行的策略，特别是对于瞬态错误（重试）。使用替代策略或方法（回退）可以确保维持某些功能。在无法立即完全恢复的情况下，Agent 可以维持部分功能以至少提供一些价值（优雅降级）。最后，向人类操作员或其他 Agent 发出警报可能对需要人工干预或协作的情况至关重要（通知）。</p>
+<p><strong>恢复</strong>：这个阶段是关于在错误后将 Agent 或系统恢复到稳定和可操作的状态。它可能涉及撤销最近的更改或事务以撤消错误的影响（状态回滚）。对错误原因进行彻底调查对于防止复发至关重要。通过自我纠正机制或重新规划过程调整 Agent 的计划、逻辑或参数可能需要避免将来出现相同的错误。在复杂或严重的情况下，将问题委托给人类操作员或更高级别的系统（升级）可能是最佳行动方案。</p>
+<p>实施这种强大的异常处理和恢复模式可以将 AI Agent 从脆弱和不可靠的系统转变为能够在具有挑战性和高度不可预测的环境中有效且有弹性运行的强大、可靠组件。这确保了 Agent 保持功能性、最小化停机时间，并在面临意外问题时提供无缝和可靠的体验。</p>
+<h2 id="实际应用和用例">实际应用和用例</h2>
+<p>异常处理和恢复对于在无法保证完美条件的现实场景中部署的任何 Agent 都至关重要。</p>
+<ul>
+<li><strong>客户服务聊天机器人</strong>：如果聊天机器人尝试访问客户数据库而数据库暂时停机，它不应该崩溃。相反，它应该检测 API 错误，通知用户临时问题，可能建议稍后再试，或将查询升级给人工 Agent。</li>
+<li><strong>自动金融交易</strong>：尝试执行交易的交易机器人可能会遇到"资金不足"错误或"市场关闭"错误。它需要通过记录错误、避免重复尝试相同的无效交易以及可能通知用户或调整策略来处理这些异常。</li>
+<li><strong>智能家居自动化</strong>：控制智能灯的 Agent 可能由于网络问题或设备故障而无法打开灯。它应该检测到这个失败，可能重试，如果仍然不成功，通知用户无法打开灯并建议手动干预。</li>
+<li><strong>数据处理 Agent</strong>：负责处理一批文档的 Agent 可能会遇到损坏的文件。它应该跳过损坏的文件，记录错误，继续处理其他文件，并在结束时报告跳过的文件，而不是停止整个过程。</li>
+<li><strong>网络爬虫 Agent</strong>：当网络爬虫 Agent 遇到验证码、网站结构更改或服务器错误（例如，404 未找到、503 服务不可用）时，它需要优雅地处理这些问题。这可能涉及暂停、使用代理或报告失败的特定 URL。</li>
+<li><strong>机器人和制造</strong>：执行装配任务的机器人手臂可能由于未对齐而无法拾取组件。它需要检测到这个失败（例如，通过传感器反馈），尝试重新调整，重试拾取，如果持续存在，则警告人类操作员或切换到不同的组件。</li>
+</ul>
+<p>简而言之，此模式对于构建不仅智能而且在面对现实世界复杂性时可靠、有弹性且用户友好的 Agent 至关重要。</p>
+<h2 id="实践代码示例adk">实践代码示例（ADK）</h2>
+<p>异常处理和恢复对于系统的鲁棒性和可靠性至关重要。例如，考虑 Agent 对失败的工具调用的响应。这种失败可能源于不正确的工具输入或工具所依赖的外部服务的问题。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> Agent, SequentialAgent<br><br><span class="hljs-comment">## Agent 1：尝试主要工具。它的重点狭窄而明确。</span><br>primary_handler = Agent(<br>   name=<span class="hljs-string">&quot;primary_handler&quot;</span>,<br>   model=<span class="hljs-string">&quot;gemini-2.0-flash-exp&quot;</span>,<br>   instruction=<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">您的工作是获取精确的位置信息。</span><br><span class="hljs-string">使用用户提供的地址调用 get_precise_location_info 工具。</span><br><span class="hljs-string">   &quot;&quot;&quot;</span>,<br>   tools=[get_precise_location_info]<br>)<br><br><span class="hljs-comment">## Agent 2：充当回退处理器，检查状态以决定其操作。</span><br>fallback_handler = Agent(<br>   name=<span class="hljs-string">&quot;fallback_handler&quot;</span>,<br>   model=<span class="hljs-string">&quot;gemini-2.0-flash-exp&quot;</span>,<br>   instruction=<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">通过查看 state[&quot;primary_location_failed&quot;] 来检查主要位置查找是否失败。</span><br><span class="hljs-string">- 如果为 True，从用户的原始查询中提取城市并使用 get_general_area_info 工具。</span><br><span class="hljs-string">- 如果为 False，什么也不做。</span><br><span class="hljs-string">   &quot;&quot;&quot;</span>,<br>   tools=[get_general_area_info]<br>)<br><br><span class="hljs-comment">## Agent 3：从状态中呈现最终结果。</span><br>response_agent = Agent(<br>   name=<span class="hljs-string">&quot;response_agent&quot;</span>,<br>   model=<span class="hljs-string">&quot;gemini-2.0-flash-exp&quot;</span>,<br>   instruction=<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">查看存储在 state[&quot;location_result&quot;] 中的位置信息。</span><br><span class="hljs-string">向用户清晰简洁地呈现此信息。</span><br><span class="hljs-string">如果 state[&quot;location_result&quot;] 不存在或为空，请道歉您无法检索位置。</span><br><span class="hljs-string">   &quot;&quot;&quot;</span>,<br>   tools=[]  <span class="hljs-comment"># 此 Agent 仅对最终状态进行推理。</span><br>)<br><br><span class="hljs-comment">## SequentialAgent 确保处理器按保证的顺序运行。</span><br>robust_location_agent = SequentialAgent(<br>   name=<span class="hljs-string">&quot;robust_location_agent&quot;</span>,<br>   sub_agents=[primary_handler, fallback_handler, response_agent]<br>)<br></code></pre></td></tr></table></figure>
+<p>此代码使用 ADK 的 SequentialAgent 和三个子 Agent 定义了一个强大的位置检索系统。primary_handler 是第一个 Agent，尝试使用 get_precise_location_info 工具获取精确的位置信息。fallback_handler 充当备份，通过检查状态变量来检查主要查找是否失败。如果主要查找失败，回退 Agent 从用户的查询中提取城市并使用 get_general_area_info 工具。response_agent 是序列中的最终 Agent。它查看存储在状态中的位置信息。此 Agent 旨在向用户呈现最终结果。如果没有找到位置信息，它会道歉。SequentialAgent 确保这三个 Agent 按预定义的顺序执行。这种结构允许采用分层方法进行位置信息检索。</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么</strong>：在现实世界环境中运行的 AI Agent 不可避免地会遇到不可预见的情况、错误和系统故障。这些中断可能从工具故障、网络问题到无效数据不等，威胁着 Agent 完成任务的能力。如果没有结构化的方法来管理这些问题，Agent 可能会变得脆弱、不可靠，并且在面对意外障碍时容易完全失败。这种不可靠性使得难以在一致性能至关重要的关键或复杂应用程序中部署它们。</p>
+<p><strong>为什么</strong>：异常处理和恢复模式为构建强大和有弹性的 AI Agent 提供了标准化的解决方案。它为它们配备了预测、管理和从操作失败中恢复的 Agent 能力。该模式涉及主动错误检测，例如监控工具输出和 API 响应，以及响应处理策略，如用于诊断的日志记录、重试瞬态故障或使用回退机制。对于更严重的问题，它定义了恢复协议，包括恢复到稳定状态、通过调整其计划进行自我纠正或将问题升级给人类操作员。这种系统方法确保 Agent 可以维持操作完整性，从失败中学习，并在不可预测的环境中可靠地运作。</p>
+<p><strong>经验法则</strong>：对于在动态的现实世界环境中部署的任何 AI Agent，当系统故障、工具错误、网络问题或不可预测的输入可能发生且操作可靠性是关键要求时，使用此模式。</p>
+<p><strong>可视化摘要</strong></p>
+<p><img src="../images/agent_images/chapter-12/image2.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 2：异常处理模式</p>
+<h2 id="关键要点">关键要点</h2>
+<p>需要记住的要点：</p>
+<ul>
+<li>异常处理和恢复对于构建强大和可靠的 Agent 至关重要。</li>
+<li>此模式涉及检测错误、优雅地处理错误以及实施恢复策略。</li>
+<li>错误检测可能涉及验证工具输出、检查 API 错误代码以及使用超时。</li>
+<li>处理策略包括日志记录、重试、回退、优雅降级和通知。</li>
+<li>恢复侧重于通过诊断、自我纠正或升级恢复稳定运行。</li>
+<li>此模式确保 Agent 即使在不可预测的现实世界环境中也能有效运行。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>本章探讨了异常处理和恢复模式，这对于开发强大和可靠的 AI Agent 至关重要。此模式解决了 AI Agent 如何识别和管理意外问题、实施适当的响应以及恢复到稳定的操作状态。本章讨论了此模式的各个方面，包括错误的检测、通过日志记录、重试和回退等机制处理这些错误，以及用于将 Agent 或系统恢复到正常功能的策略。异常处理和恢复模式的实际应用在多个领域中得到说明，展示了其在处理现实世界复杂性和潜在失败方面的相关性。这些应用展示了为 AI Agent 配备异常处理能力如何有助于它们在动态环境中的可靠性和适应性。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>McConnell, S. (2004). <em>Code Complete (2nd ed.)</em>. Microsoft Press.</li>
+<li>Shi, Y., Pei, H., Feng, L., Zhang, Y., &amp; Yao, D. (2024). <em>Towards Fault Tolerance in Multi-Agent Reinforcement Learning</em>. arXiv preprint arXiv:2412.00534.</li>
+<li>O'Neill, V. (2022). <em>Improving Fault Tolerance and Reliability of Heterogeneous Multi-Agent IoT Systems Using Intelligence Transfer</em>. Electronics, 11(17), 2724.</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 12 异常处理与恢复</div>
+      <div>https://linxkon.github.io/第12章-异常处理与恢复.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC13%E7%AB%A0-%E4%BA%BA%E6%9C%BA%E5%8D%8F%E5%90%8C.html" title="Agent 设计模式 - 13 人机协同">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 13 人机协同</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC11%E7%AB%A0-%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%AE%9A%E4%B8%8E%E7%9B%91%E6%8E%A7.html" title="Agent 设计模式 - 11 目标设定与监控">
+                        <span class="hidden-mobile">Agent 设计模式 - 11 目标设定与监控</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'abcd99042a6546c7e4b722f50f0076c3'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

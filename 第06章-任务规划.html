@@ -1,0 +1,824 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 6 章：规划 智能行为通常不仅仅涉及对即时输入做出反应。它需要远见、将复杂任务分解为更小的可管理步骤，以及制定实现期望结果的策略。这就是规划模式发挥作用的地方。规划的核心是 Agent 或 Agent 系统制定一系列行动以从初始状态向目标状态移动的能力。 规划模式概述 在 AI 背景下，可将规划 Agent 视为处理复杂目标的专家。当您要求&quot;组织团队外出活动&quot;时，您只需定义&quot;目标&quot;（内容">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 06 任务规划">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC06%E7%AB%A0-%E4%BB%BB%E5%8A%A1%E8%A7%84%E5%88%92.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 6 章：规划 智能行为通常不仅仅涉及对即时输入做出反应。它需要远见、将复杂任务分解为更小的可管理步骤，以及制定实现期望结果的策略。这就是规划模式发挥作用的地方。规划的核心是 Agent 或 Agent 系统制定一系列行动以从初始状态向目标状态移动的能力。 规划模式概述 在 AI 背景下，可将规划 Agent 视为处理复杂目标的专家。当您要求&quot;组织团队外出活动&quot;时，您只需定义&quot;目标&quot;（内容">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:34:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.838Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 06 任务规划 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 06 任务规划"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:34" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 06 任务规划</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-6-章规划">第 6 章：规划</h1>
+<p>智能行为通常不仅仅涉及对即时输入做出反应。它需要远见、将复杂任务分解为更小的可管理步骤，以及制定实现期望结果的策略。这就是规划模式发挥作用的地方。规划的核心是 Agent 或 Agent 系统制定一系列行动以从初始状态向目标状态移动的能力。</p>
+<h2 id="规划模式概述">规划模式概述</h2>
+<p>在 AI 背景下，可将规划 Agent 视为处理复杂目标的专家。当您要求"组织团队外出活动"时，您只需定义"目标"（内容及约束），而无需指定"方法"。Agent 的核心任务是自主规划实现目标的路径：先理解初始状态（如预算、参与人数、期望日期）和目标状态（成功预订活动），再设计连接两者的最优行动序列。计划并非预先设定，而是根据请求动态生成。</p>
+<p>此过程的核心在于适应性。初始计划仅是起点而非固定脚本，Agent 的真正价值在于整合新信息、规避障碍的能力。例如，当首选场地不可用或餐饮服务商满员时，高效 Agent 不会失败，而是记录新约束、重新评估选项，并制定新计划（如推荐替代场地或日期）。</p>
+<p>然而，认识到灵活性和可预测性之间的权衡至关重要。动态规划是一个特定的工具，而不是通用解决方案。当问题的解决方案已经被充分理解且可重复时，将 Agent 限制为预定的固定工作流更有效。这种方法限制 Agent 的自主性以减少不确定性和不可预测行为的风险，保证可靠和一致的结果。因此，使用规划 Agent 与简单任务执行 Agent 的决定取决于一个问题：是否需要发现"如何"，还是已经知道？</p>
+<h2 id="实际应用与用例">实际应用与用例</h2>
+<p>规划模式是自主系统中的核心计算过程，使 Agent 能够综合一系列行动以实现指定目标，特别是在动态或复杂环境中。这个过程将高级目标转换为由离散可执行步骤组成的结构化计划。</p>
+<p>在过程任务自动化等领域，规划用于编排复杂的工作流。例如，像新员工入职这样的业务流程可以分解为定向的子任务序列，例如创建系统帐户、分配培训模块和与不同部门协调。Agent 生成一个计划以逻辑顺序执行这些步骤，调用必要的工具或与各种系统交互以管理依赖关系。</p>
+<p>在机器人和自主导航中，规划对于状态空间遍历是基础性的。一个系统，无论是物理机器人还是虚拟实体，都必须生成路径或行动序列以从初始状态转换到目标状态。这涉及优化时间或能源消耗等指标，同时遵守环境约束，如避开障碍物或遵守交通规则。</p>
+<p>此模式对于结构化信息综合也至关重要。当被要求生成像研究报告这样的复杂输出时，Agent 可以制定一个包括信息收集、数据总结、内容结构化和迭代完善的不同阶段的计划。同样，在涉及多步问题解决的客户支持场景中，Agent 可以创建并遵循诊断、解决方案实施和升级的系统计划。</p>
+<p>从本质上讲，规划模式允许 Agent 从简单的反应性行动转向目标导向的行为。它提供了解决需要一系列相互依赖操作的问题所必需的逻辑框架。</p>
+<h2 id="实操代码crew-ai">实操代码（Crew AI）</h2>
+<p>以下部分将演示使用 Crew AI 框架实现规划模式。此模式涉及一个 Agent，它首先制定多步计划以解决复杂查询，然后顺序执行该计划。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> dotenv <span class="hljs-keyword">import</span> load_dotenv<br><span class="hljs-keyword">from</span> crewai <span class="hljs-keyword">import</span> Agent, Task, Crew, Process<br><span class="hljs-keyword">from</span> langchain_openai <span class="hljs-keyword">import</span> ChatOpenAI<br><br><span class="hljs-comment">## 从 .env 文件加载环境变量以确保安全</span><br>load_dotenv()<br><br><span class="hljs-comment">## 1. 为清晰起见，明确定义语言模型</span><br>llm = ChatOpenAI(model=<span class="hljs-string">&quot;gpt-4-turbo&quot;</span>)<br><br><span class="hljs-comment">## 2. 定义一个清晰且专注的 Agent</span><br>planner_writer_agent = Agent(<br>    role=<span class="hljs-string">&#x27;文章规划者和撰写者&#x27;</span>,<br>    goal=<span class="hljs-string">&#x27;规划然后撰写关于指定主题的简洁、引人入胜的摘要。&#x27;</span>,<br>    backstory=(<br>        <span class="hljs-string">&#x27;你是一位专业的技术作家和内容策略师。&#x27;</span><br>        <span class="hljs-string">&#x27;你的优势在于在写作之前创建清晰、可操作的计划，&#x27;</span><br>        <span class="hljs-string">&#x27;确保最终摘要既信息丰富又易于理解。&#x27;</span><br>    ),<br>    verbose=<span class="hljs-literal">True</span>,<br>    allow_delegation=<span class="hljs-literal">False</span>,<br>    llm=llm <span class="hljs-comment"># 将特定 LLM 分配给 Agent</span><br>)<br><br><span class="hljs-comment">## 3. 定义具有更结构化和具体的预期输出的任务</span><br>topic = <span class="hljs-string">&quot;强化学习在 AI 中的重要性&quot;</span><br>high_level_task = Task(<br>    description=(<br>        <span class="hljs-string">f&quot;1. 为主题&#x27;<span class="hljs-subst">&#123;topic&#125;</span>&#x27;的摘要创建要点计划。\n&quot;</span><br>        <span class="hljs-string">f&quot;2. 根据您的计划撰写摘要，保持在 200 字左右。&quot;</span><br>    ),<br>    expected_output=(<br>        <span class="hljs-string">&quot;包含两个不同部分的最终报告：\n\n&quot;</span><br>        <span class="hljs-string">&quot;### 计划\n&quot;</span><br>        <span class="hljs-string">&quot;- 概述摘要要点的项目符号列表。\n\n&quot;</span><br>        <span class="hljs-string">&quot;### 摘要\n&quot;</span><br>        <span class="hljs-string">&quot;- 主题的简洁且结构良好的摘要。&quot;</span><br>    ),<br>    agent=planner_writer_agent,<br>)<br><br><span class="hljs-comment">## 使用清晰的流程创建团队</span><br>crew = Crew(<br>    agents=[planner_writer_agent],<br>    tasks=[high_level_task],<br>    process=Process.sequential,<br>)<br><br><span class="hljs-comment">## 执行任务</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;## 运行规划和写作任务 ##&quot;</span>)<br>result = crew.kickoff()<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n\n---\n## 任务结果 ##\n---&quot;</span>)<br><span class="hljs-built_in">print</span>(result)<br></code></pre></td></tr></table></figure>
+<p>此代码使用 CrewAI 库创建一个 AI Agent，该 Agent 规划并撰写关于给定主题的摘要。它首先导入必要的库，包括 CrewAI 和 langchain_openai，并从 .env 文件加载环境变量。明确定义了一个 ChatOpenAI 语言模型供 Agent 使用。创建了一个名为 planner_writer_agent 的 Agent，具有特定的角色和目标：规划然后撰写简洁的摘要。Agent 的背景故事强调其在规划和技术写作方面的专业知识。定义了一个任务，明确描述首先创建计划，然后撰写关于"强化学习在 AI 中的重要性"主题的摘要，并为预期输出指定了特定格式。组建了一个包含 Agent 和任务的团队，设置为顺序处理它们。最后，调用 crew.kickoff() 方法执行定义的任务并打印结果。</p>
+<h2 id="google-deepresearch">Google DeepResearch</h2>
+<p>Google Gemini DeepResearch（见图 1）是基于 Agent 的自主信息检索与综合系统。通过多步 Agent 管道，它动态迭代查询 Google 搜索，系统探索复杂主题。该系统处理海量网络资源，评估数据相关性及知识缺口，执行后续搜索填补空缺，最终生成附原始来源引用的结构化多页摘要。</p>
+<p>该系统采用受管理的长时运行流程：先将用户提示分解为多点研究计划（见图 1）供审阅修改，实现研究轨迹的协作塑造。计划获批后，Agent 管道启动迭代搜索分析循环——不仅执行预设搜索，更根据收集信息动态优化查询，主动识别知识缺口、验证数据并解决差异。</p>
+<p><img src="../images/agent_images/chapter-6/image1.png" srcset="/img/loading.gif" lazyload /><br />
+图 1：Google Deep Research Agent 生成使用 Google 搜索作为工具的执行计划。</p>
+<p>关键的架构组件是系统异步管理此过程的能力。这种设计确保了调查（可能涉及分析数百个来源）对单点故障具有弹性，并允许用户脱离并在完成时收到通知。系统还可以集成用户提供的文档，将来自私有来源的信息与其基于网络的研究相结合。最终输出不仅仅是发现的串联列表，而是一个结构化的多页报告。在综合阶段，模型对收集的信息进行批判性评估，识别主要主题并将内容组织成具有逻辑部分的连贯叙述。该报告设计为交互式的，通常包括音频概述、图表和指向原始引用来源的链接等功能，允许用户验证和进一步探索。除了综合结果外，模型还明确返回它搜索和咨询的完整来源列表（见图 2）。这些作为引用呈现，提供完全的透明度和对主要信息的直接访问。整个过程将简单的查询转换为全面的、综合的知识体。</p>
+<p><img src="../images/agent_images/chapter-6/image2.png" srcset="/img/loading.gif" lazyload /><br />
+图 2：Deep Research 计划执行的示例，导致使用 Google 搜索作为工具搜索各种网络来源。</p>
+<p>通过减轻手动数据获取和综合所需的大量时间和资源投资，Gemini DeepResearch 为信息发现提供了更结构化和详尽的方法。该系统的价值在跨各个领域的复杂、多方面研究任务中尤为明显。</p>
+<p>例如，在竞争分析中，可以指示 Agent 系统地收集和整理关于市场趋势、竞争对手产品规格、来自各种在线来源的公众情绪和营销策略的数据。这个自动化过程取代了手动跟踪多个竞争对手的繁重任务，使分析师能够专注于更高层次的战略解释而不是数据收集（见图 3）。</p>
+<p><img src="../images/agent_images/chapter-6/image3.png" srcset="/img/loading.gif" lazyload /><br />
+图 3：Google Deep Research Agent 生成的最终输出，代表我们分析使用 Google 搜索作为工具获得的来源。</p>
+<p>同样，在学术探索中，该系统作为进行广泛文献综述的强大工具。它可以识别和总结基础论文，追踪概念在众多出版物中的发展，并绘制特定领域内新兴研究前沿的地图，从而加速学术探究的初始和最耗时的阶段。</p>
+<p>这种方法的效率源于迭代搜索和过滤周期的自动化，这是手动研究的核心瓶颈。通过系统处理比人类研究人员在可比时间框架内通常可行的更大量和更多样化的信息来源来实现全面性。这种更广泛的分析范围有助于减少选择偏差的潜力，并增加发现不太明显但可能至关重要的信息的可能性，从而导致对主题更稳健和充分支持的理解。</p>
+<h2 id="openai-deep-research-api">OpenAI Deep Research API</h2>
+<p>OpenAI DeepResearch API 是专为自动化复杂研究任务设计的工具。它采用先进 Agent 模型，能够独立推理、规划并综合现实世界信息。不同于简单问答模型，它接受高级查询后自主分解为子问题，利用内置工具执行网络搜索，最终生成带引用的结构化报告。该 API 提供全流程程序化访问，支持高质量综合模型（如 o3-deep-research-2025-06-26）和低延迟模型（如 o4-mini-deep-research-2025-06-26）。</p>
+<p>Deep Research API 很有用，因为它自动化了原本需要数小时的手动研究，提供适合为业务战略、投资决策或政策建议提供信息的专业级、数据驱动的报告。其主要好处包括：</p>
+<ul>
+<li><strong>结构化、引用的输出：</strong> 它产生组织良好的报告，带有链接到来源元数据的内联引用，确保声明可验证且有数据支持。</li>
+<li><strong>透明度：</strong> 与 ChatGPT 中的抽象过程不同，API 公开所有中间步骤，包括 Agent 的推理、它执行的特定网络搜索查询以及它运行的任何代码。这允许详细的调试、分析以及更深入地理解最终答案是如何构建的。</li>
+<li><strong>可扩展性：</strong> 它支持模型上下文协议（MCP），使开发人员能够将 Agent 连接到私有知识库和内部数据源，将公共网络研究与专有信息混合。</li>
+</ul>
+<p>要使用 API，您向 client.responses.create 端点发送请求，指定模型、输入提示词和 Agent 可以使用的工具。输入通常包括定义 Agent 角色和期望输出格式的 system_message，以及 user_query。您还必须包括 web_search_preview 工具，并可以选择添加其他工具，如 code_interpreter 或自定义 MCP 工具（见第 10 章）用于内部数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> openai <span class="hljs-keyword">import</span> OpenAI<br><br><span class="hljs-comment">## 使用您的 API 密钥初始化客户端</span><br>client = OpenAI(api_key=<span class="hljs-string">&quot;YOUR_OPENAI_API_KEY&quot;</span>)<br><br><span class="hljs-comment">## 定义 Agent 的角色和用户的研究问题</span><br>system_message = <span class="hljs-string">&quot;&quot;&quot;你是一名准备结构化、数据驱动报告的专业研究员。专注于数据丰富的见解，使用可靠的来源，并包括内联引用。&quot;&quot;&quot;</span><br><br>user_query = <span class="hljs-string">&quot;研究司美格鲁肽对全球医疗保健系统的经济影响。&quot;</span><br><br><span class="hljs-comment">## 创建 Deep Research API 调用</span><br>response = client.responses.create(<br>    model=<span class="hljs-string">&quot;o3-deep-research-2025-06-26&quot;</span>,<br>    <span class="hljs-built_in">input</span>=[<br>        &#123;<br>            <span class="hljs-string">&quot;role&quot;</span>: <span class="hljs-string">&quot;developer&quot;</span>,<br>            <span class="hljs-string">&quot;content&quot;</span>: [&#123;<span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;input_text&quot;</span>, <span class="hljs-string">&quot;text&quot;</span>: system_message&#125;]<br>        &#125;,<br>        &#123;<br>            <span class="hljs-string">&quot;role&quot;</span>: <span class="hljs-string">&quot;user&quot;</span>,<br>            <span class="hljs-string">&quot;content&quot;</span>: [&#123;<span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;input_text&quot;</span>, <span class="hljs-string">&quot;text&quot;</span>: user_query&#125;]<br>        &#125;<br>    ],<br>    reasoning=&#123;<span class="hljs-string">&quot;summary&quot;</span>: <span class="hljs-string">&quot;auto&quot;</span>&#125;,<br>    tools=[&#123;<span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;web_search_preview&quot;</span>&#125;]<br>)<br><br><span class="hljs-comment">## 从响应中访问并打印最终报告</span><br>final_report = response.output[-<span class="hljs-number">1</span>].content[<span class="hljs-number">0</span>].text<br><span class="hljs-built_in">print</span>(final_report)<br><br><span class="hljs-comment">## --- 访问内联引用和元数据 ---</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;--- 引用 ---&quot;</span>)<br>annotations = response.output[-<span class="hljs-number">1</span>].content[<span class="hljs-number">0</span>].annotations<br><br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> annotations:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;报告中未找到注释。&quot;</span>)<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">for</span> i, citation <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(annotations):<br>        <span class="hljs-comment"># 引用所指的文本范围</span><br>        cited_text = final_report[citation.start_index:citation.end_index]<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;引用 <span class="hljs-subst">&#123;i+<span class="hljs-number">1</span>&#125;</span>:&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  引用文本：<span class="hljs-subst">&#123;cited_text&#125;</span>&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  标题：<span class="hljs-subst">&#123;citation.title&#125;</span>&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  URL：<span class="hljs-subst">&#123;citation.url&#125;</span>&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  位置：字符 <span class="hljs-subst">&#123;citation.start_index&#125;</span>–<span class="hljs-subst">&#123;citation.end_index&#125;</span>&quot;</span>)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&quot;</span> + <span class="hljs-string">&quot;=&quot;</span>*<span class="hljs-number">50</span> + <span class="hljs-string">&quot;\n&quot;</span>)<br><br><span class="hljs-comment">## --- 检查中间步骤 ---</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;--- 中间步骤 ---&quot;</span>)<br><br><span class="hljs-comment">## 1. 推理步骤：模型生成的内部计划和摘要。</span><br><span class="hljs-keyword">try</span>:<br>    reasoning_step = <span class="hljs-built_in">next</span>(item <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> response.output <span class="hljs-keyword">if</span> item.<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;reasoning&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n[找到推理步骤]&quot;</span>)<br>    <span class="hljs-keyword">for</span> summary_part <span class="hljs-keyword">in</span> reasoning_step.summary:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  - <span class="hljs-subst">&#123;summary_part.text&#125;</span>&quot;</span>)<br><span class="hljs-keyword">except</span> StopIteration:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n未找到推理步骤。&quot;</span>)<br><br><span class="hljs-comment">## 2. 网络搜索调用：Agent 执行的确切搜索查询。</span><br><span class="hljs-keyword">try</span>:<br>    search_step = <span class="hljs-built_in">next</span>(item <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> response.output <span class="hljs-keyword">if</span> item.<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;web_search_call&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n[找到网络搜索调用]&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  执行的查询：&#x27;<span class="hljs-subst">&#123;search_step.action[<span class="hljs-string">&#x27;query&#x27;</span>]&#125;</span>&#x27;&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  状态：<span class="hljs-subst">&#123;search_step.status&#125;</span>&quot;</span>)<br><span class="hljs-keyword">except</span> StopIteration:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n未找到网络搜索步骤。&quot;</span>)<br><br><span class="hljs-comment">## 3. 代码执行：Agent 使用代码解释器运行的任何代码。</span><br><span class="hljs-keyword">try</span>:<br>    code_step = <span class="hljs-built_in">next</span>(item <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> response.output <span class="hljs-keyword">if</span> item.<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;code_interpreter_call&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n[找到代码执行步骤]&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;  代码输入：&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  ```python\n<span class="hljs-subst">&#123;code_step.<span class="hljs-built_in">input</span>&#125;</span>\n  ```&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;  代码输出：&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  <span class="hljs-subst">&#123;code_step.output&#125;</span>&quot;</span>)<br><span class="hljs-keyword">except</span> StopIteration:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n未找到代码执行步骤。&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>此代码片段利用 OpenAI API 执行"DeepResearch"任务。它首先使用您的 API 密钥初始化 OpenAI 客户端，这对于身份验证至关重要。然后，它将 AI Agent 的角色定义为专业研究员，并设置用户关于司美格鲁肽经济影响的研究问题。代码构造对 o3-deep-research-2025-06-26 模型的 API 调用，提供定义的系统消息和用户查询作为输入。它还请求推理的自动摘要并启用网络搜索功能。进行 API 调用后，它提取并打印最终生成的报告。</p>
+<p>随后，它尝试访问并显示报告注释中的内联引用和元数据，包括引用文本、标题、URL 和报告中的位置。最后，它检查并打印模型采取的中间步骤的详细信息，例如推理步骤、网络搜索调用（包括执行的查询）以及如果使用了代码解释器的任何代码执行步骤。</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么：</strong> 复杂问题通常无法单步解决，需前瞻性规划实现目标。缺乏结构化方法时，Agent 系统难以处理多步骤、多依赖的复杂请求，导致高级目标无法分解为可执行子任务，进而产生策略缺陷及错误结果。</p>
+<p><strong>为什么：</strong> 规划模式通过让 Agent 系统首先创建一个连贯的计划来解决目标提供了标准化解决方案。它涉及将高级目标分解为一系列更小的可操作步骤或子目标。这允许系统管理复杂的工作流、编排各种工具并以逻辑顺序处理依赖关系。LLM 特别适合这一点，因为它们可以基于其庞大的训练数据生成合理且有效的计划。这种结构化方法将简单的反应性 Agent 转变为战略执行者，可以主动朝着复杂目标工作，甚至在必要时调整其计划。</p>
+<p><strong>经验法则：</strong> 当用户的请求太复杂而无法通过单个操作或工具处理时使用此模式。它非常适合自动化多步流程，例如生成详细的研究报告、新员工入职或执行竞争分析。每当任务需要一系列相互依赖的操作以达到最终的综合结果时，应用规划模式。</p>
+<p><strong>视觉摘要</strong><br />
+<strong><img src="../images/agent_images/chapter-6/image4.png" srcset="/img/loading.gif" lazyload /></strong><br />
+图 4；规划设计模式</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>规划使 Agent 能够将复杂目标分解为可操作的顺序步骤。</li>
+<li>它对于处理多步任务、工作流自动化和导航复杂环境至关重要。</li>
+<li>LLM 可以通过基于任务描述生成逐步方法来执行规划。</li>
+<li>明确提示或设计任务以要求规划步骤会在 Agent 框架中鼓励这种行为。</li>
+<li>Google Deep Research 是一个代表我们分析使用 Google 搜索作为工具获得的来源的 Agent。它反思、规划并执行。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>总之，规划模式是将 Agent 系统从简单的反应性响应者提升为战略性、目标导向的执行者的基础组件。现代大型语言模型为此提供了核心能力，自主地将高级目标分解为连贯的可操作步骤。此模式从简单的顺序任务执行（如 CrewAI Agent 创建并遵循写作计划所演示的）扩展到更复杂和动态的系统。Google DeepResearch Agent 体现了这种高级应用，创建基于持续信息收集而适应和演化的迭代研究计划。最终，规划为复杂问题的人类意图和自动化执行之间提供了必要的桥梁。通过构建问题解决方法，此模式使 Agent 能够管理复杂的工作流并提供全面的综合结果。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Google DeepResearch (Gemini Feature): <a target="_blank" rel="noopener" href="http://gemini.google.com">gemini.google.com</a></li>
+<li>OpenAI ,Introducing deep research <a target="_blank" rel="noopener" href="https://openai.com/index/introducing-deep-research/">https://openai.com/index/introducing-deep-research/</a></li>
+<li>Perplexity, Introducing Perplexity Deep Research, <a target="_blank" rel="noopener" href="https://www.perplexity.ai/hub/blog/introducing-perplexity-deep-research">https://www.perplexity.ai/hub/blog/introducing-perplexity-deep-research</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 06 任务规划</div>
+      <div>https://linxkon.github.io/第06章-任务规划.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC07%E7%AB%A0-%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C.html" title="Agent 设计模式 - 07 多Agent协作">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 07 多Agent协作</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC05%E7%AB%A0-%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8.html" title="Agent 设计模式 - 05 工具调用">
+                        <span class="hidden-mobile">Agent 设计模式 - 05 工具调用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '104ba927f1ff3c78e4b46050c052bb8d'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

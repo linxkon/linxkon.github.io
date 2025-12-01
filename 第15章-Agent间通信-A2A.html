@@ -1,0 +1,854 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 15 章：Agent 间通信（A2A） 尽管单个 AI Agent 具备先进能力，但在处理复杂、多方面问题时仍然常常面临局限性。为了克服这一限制，Agent 间通信（A2A）使得不同 AI Agent（可能基于不同框架构建）能够进行有效协作。这种协作涉及无缝协调、任务委派和信息交换。 Google A2A 协议是一个旨在促进此类通用通信的开放标准。本章将探讨 A2A 的基本概念、实际应用以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 15 Agent间通信-A2A">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC15%E7%AB%A0-Agent%E9%97%B4%E9%80%9A%E4%BF%A1-A2A.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 15 章：Agent 间通信（A2A） 尽管单个 AI Agent 具备先进能力，但在处理复杂、多方面问题时仍然常常面临局限性。为了克服这一限制，Agent 间通信（A2A）使得不同 AI Agent（可能基于不同框架构建）能够进行有效协作。这种协作涉及无缝协调、任务委派和信息交换。 Google A2A 协议是一个旨在促进此类通用通信的开放标准。本章将探讨 A2A 的基本概念、实际应用以">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:43:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.842Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 15 Agent间通信-A2A - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 15 Agent间通信-A2A"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:43" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 15 Agent间通信-A2A</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-15-章agent-间通信a2a">第 15 章：Agent 间通信（A2A）</h1>
+<p>尽管单个 AI Agent 具备先进能力，但在处理复杂、多方面问题时仍然常常面临局限性。为了克服这一限制，Agent 间通信（A2A）使得不同 AI Agent（可能基于不同框架构建）能够进行有效协作。这种协作涉及无缝协调、任务委派和信息交换。</p>
+<p>Google A2A 协议是一个旨在促进此类通用通信的开放标准。本章将探讨 A2A 的基本概念、实际应用以及在 Google ADK 中的具体实现。</p>
+<h2 id="agent-间通信模式概述">Agent 间通信模式概述</h2>
+<p>Agent2Agent（A2A）协议是一个旨在实现不同 AI Agent 框架间通信与协作的开放标准。它确保了互操作性，允许使用 LangGraph、CrewAI 或 Google ADK 等技术开发的 AI Agent 能够协同工作，无论其来源或框架差异如何。</p>
+<p>A2A 获得了众多技术公司和服务提供商的支持，包括 Atlassian、Box、LangChain、MongoDB、Salesforce、SAP 和 ServiceNow。Microsoft 计划将 A2A 集成到 Azure AI Foundry 和 Copilot Studio，这展示了其对开放协议的承诺。此外，Auth0 和 SAP 正在将 A2A 支持集成到其平台和 Agent 中。</p>
+<p>作为开源协议，A2A 欢迎社区贡献，以促进其发展和广泛采用。</p>
+<h2 id="a2a-的核心概念">A2A 的核心概念</h2>
+<p>A2A 协议为 Agent 交互提供了结构化方法，建立在若干核心概念之上。深入理解这些概念对于任何开发或集成 A2A 兼容系统的开发者都至关重要。A2A 的基础支柱包括核心参与者、Agent 卡片、Agent 发现、通信和任务、交互机制及安全性，所有这些都将详细讨论。</p>
+<p><strong>核心参与者</strong>：A2A 涉及三个主要实体：</p>
+<ul>
+<li>用户：发起对 Agent 协助的请求。</li>
+<li>A2A 客户端（客户端 Agent）：代表用户请求操作或信息的应用程序或 AI Agent。</li>
+<li>A2A 服务器（远程 Agent）：提供 HTTP 端点处理客户端请求并返回结果的 AI Agent 或系统。远程 Agent 作为"不透明"系统运行，意味着客户端无需了解其内部操作细节。</li>
+</ul>
+<p><strong>Agent 卡片</strong>：Agent 的数字身份由其 Agent 卡片定义，通常是 JSON 文件。此文件包含用于客户端交互和自动发现的关键信息，包括 Agent 身份、端点 URL 和版本。它还详细说明支持的功能（如流式传输或推送通知）、特定技能、默认输入/输出模式以及身份验证要求。以下是 WeatherBot 的 Agent 卡片示例。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;WeatherBot&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Provides accurate weather forecasts and historical data.&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;url&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;http://weather-service.example.com/a2a&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1.0.0&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;capabilities&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;streaming&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;pushNotifications&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;stateTransitionHistory&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;authentication&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;schemes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;apiKey&quot;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultInputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-string">&quot;text&quot;</span><br>  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultOutputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-string">&quot;text&quot;</span><br>  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;skills&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;get_current_weather&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Get Current Weather&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Retrieve real-time weather for any location.&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;inputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;text&quot;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;outputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;text&quot;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;examples&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;What&#x27;s the weather in Paris?&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-string">&quot;Current conditions in Tokyo&quot;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;weather&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-string">&quot;current&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-string">&quot;real-time&quot;</span><br>      <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;get_forecast&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Get Forecast&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Get 5-day weather predictions.&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;inputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;text&quot;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;outputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;text&quot;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;examples&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;5-day forecast for New York&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-string">&quot;Will it rain in London this weekend?&quot;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-string">&quot;weather&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-string">&quot;forecast&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-string">&quot;prediction&quot;</span><br>      <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p><strong>Agent 发现</strong>：Agent 发现机制允许客户端找到描述可用 A2A 服务器能力的 Agent 卡片。此过程存在几种策略：</p>
+<ul>
+<li>知名 URI：Agent 在标准化路径（如 /.well-known/agent.json）托管其 Agent 卡片。此方法为公共或特定领域使用提供广泛、通常自动化的可访问性。</li>
+<li>策展注册表：这些注册表提供集中目录，其中发布 Agent 卡片，可根据特定标准查询。这非常适合需要集中管理和访问控制的企业环境。</li>
+<li>直接配置：Agent 卡片信息被嵌入或私下共享。此方法适用于紧密耦合或私有系统，其中动态发现并不重要。</li>
+</ul>
+<p>无论选择何种方法，保护 Agent 卡片端点都很重要。这可通过访问控制、双向 TLS（mTLS）或网络限制实现，特别是当卡片包含敏感（虽非秘密）信息时。</p>
+<p><strong>通信和任务</strong>：在 A2A 框架中，通信围绕异步任务结构化，这些任务代表长时间运行进程的基本工作单元。每个任务被分配唯一标识符，并通过一系列状态（如已提交、工作中或已完成）移动，此设计支持复杂操作中的并行处理。Agent 间通信通过消息进行。</p>
+<p>此通信包含属性（描述消息的键值元数据，如其优先级或创建时间）以及一个或多个部分（承载传递的实际内容，如纯文本、文件或结构化 JSON 数据）。Agent 在任务期间生成的有形输出称为工件。与消息类似，工件也由一个或多个部分组成，并可在结果可用时逐步流式传输。A2A 框架内所有通信都通过 HTTP(S) 进行，使用 JSON-RPC 2.0 协议作为有效载荷。为在多次交互中保持连续性，使用服务器生成的 contextId 来分组相关任务并保留上下文。</p>
+<p><strong>交互机制</strong>：A2A 提供多种交互方法以适应各种 AI 应用需求，每种方法都有独特机制：</p>
+<ul>
+<li>同步请求/响应：用于快速、即时操作。在此模型中，客户端发送请求并主动等待服务器处理并在单个同步交换中返回完整响应。</li>
+<li>异步轮询：适用于需要更长时间处理的任务。客户端发送请求，服务器立即以"工作中"状态和任务 ID 确认。然后客户端可自由执行其他操作，并可通过发送新请求定期轮询服务器检查任务状态，直至标记为"已完成"或"失败"。</li>
+<li>流式更新（服务器发送事件 - SSE）：适用于接收实时、增量结果。此方法建立从服务器到客户端的持久单向连接。它允许远程 Agent 持续推送更新（如状态更改或部分结果），而无需客户端发出多个请求。</li>
+<li>推送通知（Webhook）：专为非常长时间运行或资源密集型任务设计，其中维护恒定连接或频繁轮询效率低下。客户端可注册 webhook URL，当任务状态发生重大变化（如完成时），服务器将向该 URL 发送异步通知（"推送"）。</li>
+</ul>
+<p>Agent 卡片指定 Agent 是否支持流式传输或推送通知功能。此外，A2A 是模态无关的，意味着它不仅可以为文本促进这些交互模式，还可为音频和视频等其他数据类型促进，从而实现丰富的多模态 AI 应用。流式传输和推送通知功能均在 Agent 卡片中指定。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs json">## 同步请求示例<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sendTask&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;task-001&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;sessionId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;session-001&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;parts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;text&quot;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;What is the exchange rate from USD to EUR?&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;acceptedOutputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;text/plain&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;historyLength&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>同步请求使用 sendTask 方法，其中客户端请求并期望对其查询的单个完整答案。相比之下，流式请求使用 sendTaskSubscribe 方法建立持久连接，允许 Agent 随时间发送多个增量更新或部分结果。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs json">## 流式请求示例<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sendTaskSubscribe&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;task-002&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;sessionId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;session-001&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;parts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;text&quot;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;What&#x27;s the exchange rate for JPY to GBP today?&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;acceptedOutputModes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;text/plain&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;historyLength&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p><strong>安全性</strong>：Agent 间通信（A2A）是系统架构的关键组成部分，能够在 Agent 间实现安全、无缝的数据交换。它通过多个内置机制确保系统的稳健性和完整性。</p>
+<ul>
+<li><strong>双向传输层安全（TLS）</strong>：建立加密和认证连接，防止未经授权访问和数据拦截，确保通信安全。</li>
+<li><strong>全面审计日志</strong>：所有 Agent 间通信均被详细记录，明确信息流、涉及的 Agent 和操作。此审计轨迹对问责、故障排除和安全分析至关重要。</li>
+<li><strong>Agent 卡片声明</strong>：身份验证要求在 Agent 卡片中明确声明，这是概述 Agent 身份、能力和安全策略的配置工件。这集中并简化了身份验证管理。</li>
+<li><strong>凭据处理</strong>：Agent 通常使用安全凭据（如 OAuth 2.0 令牌或 API 密钥）进行身份验证，通过 HTTP 头传递。此方法防止凭据在 URL 或消息正文中暴露，增强整体安全性。</li>
+</ul>
+<h2 id="a2a-与-mcp">A2A 与 MCP</h2>
+<p>A2A 是补充 Anthropic 模型上下文协议（MCP）的协议（见图 1）。MCP 专注于为 Agent 构建上下文及其与外部数据和工具的交互，而 A2A 则促进 Agent 间的协调和通信，实现任务委派与协作。</p>
+<p><img src="../images/agent_images/chapter-15/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：A2A 和 MCP 协议比较</p>
+<p>A2A 旨在提高效率、降低集成成本，并促进复杂多 Agent AI 系统开发中的创新和互操作性。因此，深入理解 A2A 的核心组件和操作方法对于有效设计、实施和应用协作式、互操作的 AI Agent 系统至关重要。</p>
+<h2 id="实际应用和用例">实际应用和用例</h2>
+<p>Agent 间通信对于跨不同领域构建复杂 AI 解决方案不可或缺，实现了模块化、可扩展性和增强智能。</p>
+<ul>
+<li><strong>多框架协作</strong>：A2A 的主要用例是使独立 AI Agent 能够通信协作，无论其底层框架（如 ADK、LangChain、CrewAI）如何。这对构建复杂多 Agent 系统至关重要，不同 Agent 专门处理问题的不同方面。</li>
+<li><strong>自动化工作流编排</strong>：在企业环境中，A2A 可通过使 Agent 委派和协调任务来促进复杂工作流。例如，一个 Agent 可能处理初始数据收集，然后委派给另一个 Agent 进行分析，最后委派给第三个 Agent 生成报告，所有通信均通过 A2A 协议进行。</li>
+<li><strong>动态信息检索</strong>：Agent 可以通过通信来检索和交换实时信息。主 Agent 可能从专门的"数据获取 Agent"请求实时市场数据，后者然后使用外部 API 收集信息并发送回来。</li>
+</ul>
+<h2 id="实践代码示例">实践代码示例</h2>
+<p>让我们检查 A2A 协议的实际应用。位于 <a target="_blank" rel="noopener" href="https://github.com/google-a2a/a2a-samples/tree/main/samples">https://github.com/google-a2a/a2a-samples/tree/main/samples</a> 的存储库提供 Java、Go 和 Python 示例，说明各种 Agent 框架（如 LangGraph、CrewAI、Azure AI Foundry 和 AG2）如何使用 A2A 通信。此存储库中所有代码均在 Apache 2.0 许可证下发布。为进一步说明 A2A 核心概念，我们将审查代码摘录，重点是基于 ADK 的 Agent 和 Google 身份验证工具设置 A2A 服务器。查看 <a target="_blank" rel="noopener" href="https://github.com/google-a2a/a2a-samples/blob/main/samples/python/agents/birthday_planner_adk/calendar_agent/adk_agent.py">https://github.com/google-a2a/a2a-samples/blob/main/samples/python/agents/birthday_planner_adk/calendar_agent/adk_agent.py</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> datetime<br><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> LlmAgent  <span class="hljs-comment"># type: ignore[<span class="hljs-keyword">import</span>-untyped]</span><br><span class="hljs-keyword">from</span> google.adk.tools.google_api_tool <span class="hljs-keyword">import</span> CalendarToolset  <span class="hljs-comment"># type: ignore[<span class="hljs-keyword">import</span>-untyped]</span><br><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">create_agent</span>(<span class="hljs-params">client_id, client_secret</span>) -&gt; LlmAgent:<br>    <span class="hljs-string">&quot;&quot;&quot;构造 ADK agent。&quot;&quot;&quot;</span><br>    toolset = CalendarToolset(client_id=client_id, client_secret=client_secret)<br>    <span class="hljs-keyword">return</span> LlmAgent(<br>        model=<span class="hljs-string">&#x27;gemini-2.0-flash-001&#x27;</span>,<br>        name=<span class="hljs-string">&#x27;calendar_agent&#x27;</span>,<br>        description=<span class="hljs-string">&quot;An agent that can help manage a user&#x27;s calendar&quot;</span>,<br>        instruction=<span class="hljs-string">f&quot;&quot;&quot;</span><br><span class="hljs-string">您是一个可以帮助管理用户日历的Agent。用户将请求有关其日历状态的信息或对其日历进行更改。</span><br><span class="hljs-string">使用提供的工具与日历API交互。如果未指定，假定用户所需的日历是&quot;primary&quot;日历。</span><br><span class="hljs-string">使用日历API工具时，请使用格式正确的RFC3339时间戳。今天是 <span class="hljs-subst">&#123;datetime.datetime.now()&#125;</span>。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span>,<br>        tools=<span class="hljs-keyword">await</span> toolset.get_tools(),<br>    )<br></code></pre></td></tr></table></figure>
+<p>此 Python 代码定义异步函数 <code>create_agent</code>，用于构造 ADK LlmAgent。它首先使用提供的客户端凭据初始化 <code>CalendarToolset</code> 以访问 Google Calendar API。随后创建 <code>LlmAgent</code> 实例，配置指定 Gemini 模型、描述性名称和管理用户日历的指令。Agent 配备来自 <code>CalendarToolset</code> 的日历工具，使其能与 Calendar API 交互并响应有关日历状态或修改的用户查询。Agent 指令动态合并当前日期以提供时间上下文。为说明如何构造 Agent，让我们检查 GitHub 上 A2A 示例中 calendar_agent 的关键部分。</p>
+<p>以下代码显示 Agent 如何使用其特定指令和工具定义。请注意，仅显示解释此功能所需代码；您可在此处访问完整文件：<a target="_blank" rel="noopener" href="https://github.com/a2aproject/a2a-samples/blob/main/samples/python/agents/birthday_planner_adk/calendar_agent/__main__.py">https://github.com/a2aproject/a2a-samples/blob/main/samples/python/agents/birthday_planner_adk/calendar_agent/__main__.py</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>(<span class="hljs-params">host: <span class="hljs-built_in">str</span>, port: <span class="hljs-built_in">int</span></span>):<br>    <span class="hljs-comment"># 验证是否设置了 API 密钥。</span><br>    <span class="hljs-comment"># 如果使用 Vertex AI API，则不需要。</span><br>    <span class="hljs-keyword">if</span> os.getenv(<span class="hljs-string">&#x27;GOOGLE_GENAI_USE_VERTEXAI&#x27;</span>) != <span class="hljs-string">&#x27;TRUE&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> os.getenv(<br>        <span class="hljs-string">&#x27;GOOGLE_API_KEY&#x27;</span><br>    ):<br>        <span class="hljs-keyword">raise</span> ValueError(<br>            <span class="hljs-string">&#x27;GOOGLE_API_KEY environment variable not set and &#x27;</span><br>            <span class="hljs-string">&#x27;GOOGLE_GENAI_USE_VERTEXAI is not TRUE.&#x27;</span><br>        )<br><br>    skill = AgentSkill(<br>        <span class="hljs-built_in">id</span>=<span class="hljs-string">&#x27;check_availability&#x27;</span>,<br>        name=<span class="hljs-string">&#x27;Check Availability&#x27;</span>,<br>        description=<span class="hljs-string">&quot;Checks a user&#x27;s availability for a time using their Google Calendar&quot;</span>,<br>        tags=[<span class="hljs-string">&#x27;calendar&#x27;</span>],<br>        examples=[<span class="hljs-string">&#x27;Am I free from 10am to 11am tomorrow?&#x27;</span>],<br>    )<br><br>    agent_card = AgentCard(<br>        name=<span class="hljs-string">&#x27;Calendar Agent&#x27;</span>,<br>        description=<span class="hljs-string">&quot;An agent that can manage a user&#x27;s calendar&quot;</span>,<br>        url=<span class="hljs-string">f&#x27;http://<span class="hljs-subst">&#123;host&#125;</span>:<span class="hljs-subst">&#123;port&#125;</span>/&#x27;</span>,<br>        version=<span class="hljs-string">&#x27;1.0.0&#x27;</span>,<br>        defaultInputModes=[<span class="hljs-string">&#x27;text&#x27;</span>],<br>        defaultOutputModes=[<span class="hljs-string">&#x27;text&#x27;</span>],<br>        capabilities=AgentCapabilities(streaming=<span class="hljs-literal">True</span>),<br>        skills=[skill],<br>    )<br><br>    adk_agent = asyncio.run(create_agent(<br>        client_id=os.getenv(<span class="hljs-string">&#x27;GOOGLE_CLIENT_ID&#x27;</span>),<br>        client_secret=os.getenv(<span class="hljs-string">&#x27;GOOGLE_CLIENT_SECRET&#x27;</span>),<br>    ))<br><br>    runner = Runner(<br>        app_name=agent_card.name,<br>        agent=adk_agent,<br>        artifact_service=InMemoryArtifactService(),<br>        session_service=InMemorySessionService(),<br>        memory_service=InMemoryMemoryService(),<br>    )<br><br>    agent_executor = ADKAgentExecutor(runner, agent_card)<br><br>    <span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_auth</span>(<span class="hljs-params">request: Request</span>) -&gt; PlainTextResponse:<br>        <span class="hljs-keyword">await</span> agent_executor.on_auth_callback(<br>            <span class="hljs-built_in">str</span>(request.query_params.get(<span class="hljs-string">&#x27;state&#x27;</span>)), <span class="hljs-built_in">str</span>(request.url)<br>        )<br>        <span class="hljs-keyword">return</span> PlainTextResponse(<span class="hljs-string">&#x27;Authentication successful.&#x27;</span>)<br><br>    request_handler = DefaultRequestHandler(<br>        agent_executor=agent_executor, task_store=InMemoryTaskStore()<br>    )<br><br>    a2a_app = A2AStarletteApplication(<br>        agent_card=agent_card, http_handler=request_handler<br>    )<br><br>    routes = a2a_app.routes()<br>    routes.append(<br>        Route(<br>            path=<span class="hljs-string">&#x27;/authenticate&#x27;</span>,<br>            methods=[<span class="hljs-string">&#x27;GET&#x27;</span>],<br>            endpoint=handle_auth,<br>        )<br>    )<br><br>    app = Starlette(routes=routes)<br>    uvicorn.run(app, host=host, port=port)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+<p>此 Python 代码演示了设置符合 A2A 的"日历 Agent"，用于通过 Google Calendar 检查用户可用性。它涉及验证 API 密钥或 Vertex AI 配置以用于身份验证目的。Agent 能力（包括"check_availability"技能）在 AgentCard 中定义，该卡片还指定 Agent 网络地址。随后创建 ADK agent，配置内存服务以管理工件、会话和内存。然后代码初始化 Starlette Web 应用程序，合并身份验证回调和 A2A 协议处理程序，并使用 Uvicorn 执行它以通过 HTTP 公开 Agent。</p>
+<p>这些示例说明了构建符合 A2A 的 Agent 的过程，从定义其能力到将其作为 Web 服务运行。通过利用 Agent 卡片和 ADK，开发人员可创建能与 Google Calendar 等工具集成的互操作 AI Agent。此实用方法展示了 A2A 在建立多 Agent 生态系统中的应用。</p>
+<p>建议通过 <a target="_blank" rel="noopener" href="https://www.trickle.so/blog/how-to-build-google-a2a-project">https://www.trickle.so/blog/how-to-build-google-a2a-project</a> 上的代码演示进一步探索 A2A。此链接提供的资源包括 Python 和 JavaScript 中的示例 A2A 客户端和服务器、多 Agent Web 应用程序、命令行界面以及各种 Agent 框架的示例实现。</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么：</strong>：单个 AI Agent（特别是基于不同框架构建的 Agent）在处理复杂、多方面问题时通常会遇到困难。主要挑战是缺乏允许它们有效通信协作的通用语言或协议。这种隔离阻止了创建复杂系统，其中多个专门 Agent 可以结合独特技能解决更大的任务。如果没有标准化方法，集成这些不同的 Agent 既昂贵又耗时，并阻碍了更强大、更具凝聚力的 AI 解决方案的开发。</p>
+<p><strong>为什么</strong>：Agent 间通信（A2A）协议为此问题提供了开放、标准化的解决方案。它是基于 HTTP 的协议，能够实现互操作性，允许不同 AI Agent 无缝协调、委派任务和共享信息，无论其底层技术如何。核心组件是 Agent 卡片，这是描述 Agent 能力、技能和通信端点的数字身份文件，促进了发现和交互。A2A 定义了各种交互机制，包括同步和异步通信，以支持不同的用例。通过为 Agent 协作创建通用标准，A2A 促进了构建复杂、多 Agent Agentic 系统的模块化和可扩展生态系统。</p>
+<p><strong>经验法则</strong>：当您需要协调两个或多个 AI Agent 间协作时使用此模式，特别是如果它们使用不同框架（如 Google ADK、LangGraph、CrewAI）构建。它非常适合构建复杂、模块化应用程序，其中专门 Agent 处理工作流的特定部分，例如将数据分析委派给一个 Agent，将报告生成委派给另一个 Agent。当 Agent 需要动态发现和使用其他 Agent 能力完成任务时，此模式也必不可少。</p>
+<p><strong>视觉摘要</strong></p>
+<p><strong><img src="../images/agent_images/chapter-15/image2.png" srcset="/img/loading.gif" lazyload /></strong></p>
+<p>图 2：A2A Agent 间通信模式</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>Google A2A 协议是一个开放、基于 HTTP 的标准，促进使用不同框架构建的 AI Agent 间的通信协作。</li>
+<li>AgentCard 作为 Agent 的数字标识符，允许其他 Agent 自动发现和理解其能力。</li>
+<li>A2A 提供同步请求-响应交互（使用 <code>tasks/send</code>）和流式更新（使用 <code>tasks/sendSubscribe</code>）以适应不同的通信需求。</li>
+<li>该协议支持多轮对话，包括 <code>input-required</code> 状态，允许 Agent 请求额外信息并在交互期间维护上下文。</li>
+<li>A2A 鼓励模块化架构，其中专门 Agent 可在不同端口上独立运行，实现系统的可扩展性和分布式部署。</li>
+<li>Trickle AI 等工具有助于可视化和跟踪 A2A 通信，帮助开发人员监控、调试和优化多 Agent 系统。</li>
+<li>虽然 A2A 是用于管理不同 Agent 间任务和工作流的高级协议，但模型上下文协议（MCP）为 LLM 提供与外部资源交互的标准化接口。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>Agent 间通信（A2A）协议建立了一个重要的开放标准，以克服单个 AI Agent 的固有隔离。通过提供通用的基于 HTTP 的框架，它确保了在不同平台上构建的 Agent 间的无缝协作和互操作性，例如 Google ADK、LangGraph 或 CrewAI。核心组件是 Agent 卡片，它作为数字身份，清楚定义了 Agent 的能力并使其他 Agent 能够动态发现。协议的灵活性支持各种交互模式，包括同步请求、异步轮询和实时流式传输，满足广泛的应用需求。</p>
+<p>这使得能够创建模块化和可扩展的架构，其中专门 Agent 可以组合以编排复杂的自动化工作流。安全性是基本方面，具有内置机制（如 mTLS 和明确身份验证要求）来保护通信。虽然补充了 MCP 等其他标准，但 A2A 的独特焦点是 Agent 间的高级协调和任务委派。主要技术公司的强大支持以及实际实现的可用性突显了其日益增长的重要性。该协议为开发人员构建更复杂、分布式和智能的多 Agent 系统铺平了道路。最终，A2A 是促进创新和互操作的协作 AI 生态系统的基础支柱。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Chen, B. (2025, April 22). <em>How to Build Your First Google A2A Project: A Step-by-Step Tutorial</em>. Trickle.so Blog. <a target="_blank" rel="noopener" href="https://www.trickle.so/blog/how-to-build-google-a2a-project">https://www.trickle.so/blog/how-to-build-google-a2a-project</a></li>
+<li>Google A2A GitHub Repository. <a target="_blank" rel="noopener" href="https://github.com/google-a2a/A2A">https://github.com/google-a2a/A2A</a></li>
+<li>Google Agent Development Kit (ADK) <a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/">https://google.github.io/adk-docs/</a></li>
+<li>Getting Started with Agent-to-Agent (A2A) Protocol: <a target="_blank" rel="noopener" href="https://codelabs.developers.google.com/intro-a2a-purchasing-concierge#0">https://codelabs.developers.google.com/intro-a2a-purchasing-concierge#0</a></li>
+<li>Google AgentDiscovery - <a target="_blank" rel="noopener" href="https://a2a-protocol.org/latest/">https://a2a-protocol.org/latest/</a></li>
+<li>Communication between different AI frameworks such as LangGraph, CrewAI, and Google ADK <a target="_blank" rel="noopener" href="https://www.trickle.so/blog/how-to-build-google-a2a-project#setting-up-your-a2a-development-environment">https://www.trickle.so/blog/how-to-build-google-a2a-project</a></li>
+<li>Designing Collaborative Multi-Agent Systems with the A2A Protocol <a target="_blank" rel="noopener" href="https://www.oreilly.com/radar/designing-collaborative-multi-agent-systems-with-the-a2a-protocol/">https://www.oreilly.com/radar/designing-collaborative-multi-agent-systems-with-the-a2a-protocol/</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 15 Agent间通信-A2A</div>
+      <div>https://linxkon.github.io/第15章-Agent间通信-A2A.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC16%E7%AB%A0-%E8%B5%84%E6%BA%90%E6%84%9F%E7%9F%A5%E4%BC%98%E5%8C%96.html" title="Agent 设计模式 - 16 资源感知优化">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 16 资源感知优化</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC14%E7%AB%A0-%E7%9F%A5%E8%AF%86%E6%A3%80%E7%B4%A2-RAG.html" title="Agent 设计模式 - 14 知识检索-RAG">
+                        <span class="hidden-mobile">Agent 设计模式 - 14 知识检索-RAG</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '9ed065d4fbe7a4e3f2b3f0818867ff99'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

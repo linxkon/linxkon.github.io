@@ -1,0 +1,860 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 21 章：探索和发现 本章探讨了使智能 Agent 能够主动寻求新信息、发现新可能性并识别其操作环境中未知因素的模式。探索和发现不同于被动行为或在预定义解决方案空间内的优化。相反，它们侧重于 Agent 主动进入陌生领域、尝试新方法并生成新知识或理解。这种模式对于在开放式、复杂或快速演变的领域中运行的 Agent 至关重要，在这些领域中，静态知识或预编程的解决方案是不够的。它强调 Agent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 21 探索与发现">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC21%E7%AB%A0-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%8F%91%E7%8E%B0.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 21 章：探索和发现 本章探讨了使智能 Agent 能够主动寻求新信息、发现新可能性并识别其操作环境中未知因素的模式。探索和发现不同于被动行为或在预定义解决方案空间内的优化。相反，它们侧重于 Agent 主动进入陌生领域、尝试新方法并生成新知识或理解。这种模式对于在开放式、复杂或快速演变的领域中运行的 Agent 至关重要，在这些领域中，静态知识或预编程的解决方案是不够的。它强调 Agent">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:49:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.845Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 21 探索与发现 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 21 探索与发现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:49" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          49 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 21 探索与发现</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-21-章探索和发现">第 21 章：探索和发现</h1>
+<p>本章探讨了使智能 Agent 能够主动寻求新信息、发现新可能性并识别其操作环境中未知因素的模式。探索和发现不同于被动行为或在预定义解决方案空间内的优化。相反，它们侧重于 Agent 主动进入陌生领域、尝试新方法并生成新知识或理解。这种模式对于在开放式、复杂或快速演变的领域中运行的 Agent 至关重要，在这些领域中，静态知识或预编程的解决方案是不够的。它强调 Agent 扩展其理解和能力的能力。</p>
+<h2 id="实际应用和用例">实际应用和用例</h2>
+<p>AI Agent 具有智能优先级排序和探索的能力，这导致了跨各个领域的广泛应用。通过自主评估和排序潜在行动，这些 Agent 可以导航复杂环境、发现隐藏的洞察并推动创新。这种优先探索的能力使它们能够优化流程、发现新知识并生成内容。</p>
+<p>示例：</p>
+<ul>
+<li><strong>科学研究自动化</strong>：Agent 设计和运行实验、分析结果并制定新假设，以发现新材料、候选药物或科学原理。</li>
+<li><strong>游戏玩法和策略生成</strong>：Agent 探索游戏状态，发现新兴策略或识别游戏环境中的漏洞（例如 AlphaGo）。</li>
+<li><strong>市场研究和趋势发现</strong>：Agent 扫描非结构化数据（社交媒体、新闻、报告）以识别趋势、消费者行为或市场机会。</li>
+<li><strong>安全漏洞发现</strong>：Agent 探测系统或代码库以查找安全漏洞或攻击向量。</li>
+<li><strong>创意内容生成</strong>：Agent 探索风格、主题或数据的组合，以生成艺术作品、音乐作品或文学作品。</li>
+<li><strong>个性化教育和培训</strong>：AI 导师根据学生的进度、学习风格和需要改进的领域来优先处理学习路径和内容交付。</li>
+</ul>
+<p>Google Co-Scientist</p>
+<p>AI 协同科学家是由 Google Research 开发的 AI 系统，被设计为计算科学合作者。它在假设生成、提案改进和实验设计等研究方面协助人类科学家。该系统基于 Gemini LLM 运行。</p>
+<p>AI 协同科学家的开发旨在解决科学研究中的挑战。这些挑战包括处理大量信息、生成可测试的假设以及管理实验规划。AI 协同科学家通过执行涉及大规模信息处理和综合的任务来支持研究人员，可能揭示数据中的关系。其目标是通过处理早期阶段研究中计算密集型方面来增强人类认知过程。</p>
+<p><strong>系统架构和方法论：</strong> AI 协同科学家的架构基于多 Agent 框架，结构化以模拟协作和迭代过程。这种设计集成了专门的 AI Agent，每个 Agent 在为研究目标做出贡献方面都有特定的角色。一个主管 Agent 管理和协调这些单独 Agent 在异步任务执行框架内的活动，该框架允许计算资源的灵活扩展。</p>
+<p>核心 Agent 及其功能包括（见图 1）：</p>
+<ul>
+<li><strong>生成 Agent</strong>：通过文献探索和模拟科学辩论来生成初始假设，从而启动流程。</li>
+<li><strong>反思 Agent</strong>：作为同行评审员，批判性地评估生成假设的正确性、新颖性和质量。</li>
+<li><strong>排名 Agent</strong>：采用基于 Elo 的锦标赛，通过模拟科学辩论来比较、排名和优先处理假设。</li>
+<li><strong>进化 Agent</strong>：通过简化概念、综合想法和探索非常规推理，不断完善排名靠前的假设。</li>
+<li><strong>接近度 Agent</strong>：计算接近度图以聚类相似想法并协助探索假设景观。</li>
+<li><strong>元审查 Agent</strong>：综合所有审查和辩论的见解，以识别共同模式并提供反馈，使系统能够持续改进。</li>
+</ul>
+<p>该系统的运营基础依赖于 Gemini，它提供语言理解、推理和生成能力。该系统包含"测试时计算扩展"，这是一种分配增加的计算资源以迭代推理和增强输出的机制。该系统处理和综合来自不同来源的信息，包括学术文献、基于网络的数据和数据库。</p>
+<p><img src="../images/agent_images/chapter-21/image1.png" srcset="/img/loading.gif" lazyload />图 1：（由作者提供）AI 协同科学家：从构思到验证</p>
+<p>该系统遵循反映科学方法的迭代"生成、辩论和进化"方法。在从人类科学家那里接收科学问题的输入后，系统参与假设生成、评估和改进的自我改进循环。假设经过系统评估，包括 Agent 之间的内部评估和基于锦标赛的排名机制。</p>
+<p><strong>验证和结果：</strong> AI 协同科学家的效用已在几项验证研究中得到证明，特别是在生物医学领域，通过自动化基准、专家评审和端到端湿实验室实验来评估其性能。</p>
+<p><strong>自动化和专家评估：</strong> 在具有挑战性的 GPQA 基准上，该系统的内部 Elo 评级被证明与其结果的准确性一致，在困难的"钻石集"上实现了 78.4% 的 top-1 准确率。对超过 200 个研究目标的分析表明，扩展测试时计算可持续提高假设的质量，通过 Elo 评级来衡量。在精心策划的 15 个挑战性问题集上，AI 协同科学家的表现优于其他最先进的 AI 模型和人类专家提供的"最佳猜测"解决方案。在小规模评估中，生物医学专家将协同科学家的输出评为比其他基线模型更新颖、更有影响力。该系统针对药物再利用的提案（格式化为 NIH 特定目标页面）也被六位专家肿瘤学家小组评判为高质量。</p>
+<p><strong>端到端实验验证：</strong></p>
+<p>药物再利用：对于急性髓系白血病（AML），该系统提出了新的候选药物。其中一些，如 KIRA6，是完全新颖的建议，之前没有在 AML 中使用的临床前证据。随后的体外实验证实，KIRA6 和其他建议的药物在多个 AML 细胞系中以临床相关浓度抑制肿瘤细胞活力。</p>
+<p>新靶点发现：该系统识别了肝纤维化的新表观遗传靶点。使用人类肝脏类器官的实验室实验验证了这些发现，表明针对建议的表观遗传修饰剂的药物具有显著的抗纤维化活性。其中一种已识别的药物已被 FDA 批准用于另一种疾病，为再利用提供了机会。</p>
+<p>抗微生物耐药性：AI 协同科学家独立重现了未发表的实验发现。它被要求解释为什么某些移动遗传元件（cf-PICIs）在许多细�菌种中被发现。在两天内，该系统排名最高的假设是 cf-PICIs 与不同的噬菌体尾部相互作用以扩展其宿主范围。这反映了一个独立研究小组在十多年的研究后达到的新颖的、经实验验证的发现。</p>
+<p><strong>增强和局限性：</strong> AI 协同科学家背后的设计理念强调增强而不是完全自动化人类研究。研究人员通过自然语言与系统交互并指导系统，提供反馈、贡献自己的想法，并在"科学家在环"的协作范式中指导 AI 的探索过程。然而，该系统有一些局限性。其知识受到对开放获取文献的依赖的限制，可能会遗漏付费墙后的关键先前工作。它对负面实验结果的访问也有限，这些结果很少发表，但对经验丰富的科学家至关重要。此外，该系统继承了底层 LLM 的局限性，包括事实不准确或"幻觉"的潜力。</p>
+<p><strong>安全性：</strong> 安全性是一个关键考虑因素，系统包含多个保障措施。所有研究目标在输入时都会进行安全审查，生成的假设也会被检查，以防止系统被用于不安全或不道德的研究。使用 1,200 个对抗性研究目标进行的初步安全评估发现，该系统可以稳健地拒绝危险输入。为确保负责任的开发，该系统正通过可信测试者计划向更多科学家提供，以收集实际反馈。</p>
+<h2 id="实践代码示例">实践代码示例</h2>
+<p>让我们看一个探索和发现中 Agentic AI 的具体示例：Agent Laboratory，这是 Samuel Schmidgall 在 MIT 许可下开发的项目。</p>
+<p>"Agent Laboratory"是一个自主研究工作流框架，旨在增强而不是取代人类科学努力。该系统利用专门的 LLM 来自动化科学研究过程的各个阶段，从而使人类研究人员能够将更多认知资源用于概念化和批判性分析。</p>
+<p>该框架集成了"AgentRxiv"，这是一个用于自主研究 Agent 的去中心化存储库。AgentRxiv 促进研究输出的存储、检索和开发。</p>
+<p>Agent Laboratory 通过不同的阶段指导研究过程：</p>
+<ol type="1">
+<li><strong>文献综述</strong>：在这个初始阶段，专门的 LLM 驱动的 Agent 负责自主收集和批判性分析相关学术文献。这涉及利用 arXiv 等外部数据库来识别、综合和分类相关研究，有效地为后续阶段建立全面的知识库。</li>
+<li><strong>实验</strong>：此阶段包括实验设计的协作制定、数据准备、实验执行和结果分析。Agent 利用集成工具（如用于代码生成和执行的 Python，以及用于模型访问的 Hugging Face）来进行自动化实验。该系统设计用于迭代改进，Agent 可以根据实时结果调整和优化实验程序。</li>
+<li><strong>报告撰写</strong>：在最后阶段，系统自动生成全面的研究报告。这涉及将实验阶段的发现与文献综述的见解相结合，根据学术惯例构建文档，并集成外部工具（如用于专业格式化和图形生成的 LaTeX）。</li>
+<li><strong>知识共享</strong>：AgentRxiv 是一个平台，使自主研究 Agent 能够共享、访问和协作推进科学发现。它允许 Agent 在先前发现的基础上构建，促进累积的研究进展。</li>
+</ol>
+<p>Agent Laboratory 的模块化架构确保了计算灵活性。其目标是通过自动化任务来提高研究生产力，同时保持人类研究人员的参与。</p>
+<p><strong>代码分析：</strong> 虽然全面的代码分析超出了本书的范围，但我想为您提供一些关键见解，并鼓励您自己深入研究代码。</p>
+<p><strong>判断：</strong> 为了模拟人类评估过程，系统采用三方 Agentic 判断机制来评估输出。这涉及部署三个不同的自主 Agent，每个 Agent 配置为从特定角度评估产出，从而共同模仿人类判断的细致和多方面性质。这种方法允许更稳健和全面的评估，超越单一指标以捕获更丰富的定性评估。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ReviewersAgent</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, model=<span class="hljs-string">&quot;gpt-4o-mini&quot;</span>, notes=<span class="hljs-literal">None</span>, openai_api_key=<span class="hljs-literal">None</span></span>):<br>        <span class="hljs-keyword">if</span> notes <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>            self.notes = []<br>        <span class="hljs-keyword">else</span>:<br>            self.notes = notes<br>        self.model = model<br>        self.openai_api_key = openai_api_key<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">inference</span>(<span class="hljs-params">self, plan, report</span>):<br>        reviewer_1 = <span class="hljs-string">&quot;你是一个严格但公平的审稿人，期望能够为研究主题带来见解的良好实验。&quot;</span><br>        review_1 = get_score(outlined_plan=plan, latex=report, reward_model_llm=self.model, reviewer_type=reviewer_1, openai_api_key=self.openai_api_key)<br>        reviewer_2 = <span class="hljs-string">&quot;你是一个严格、挑剔但公平的审稿人，正在寻找一个在该领域具有影响力的想法。&quot;</span><br>        review_2 = get_score(outlined_plan=plan, latex=report, reward_model_llm=self.model, reviewer_type=reviewer_2, openai_api_key=self.openai_api_key)<br>        reviewer_3 = <span class="hljs-string">&quot;你是一个严格但公平、思想开放的审稿人，正在寻找以前未曾提出过的新颖想法。&quot;</span><br>        review_3 = get_score(outlined_plan=plan, latex=report, reward_model_llm=self.model, reviewer_type=reviewer_3, openai_api_key=self.openai_api_key)<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;审稿人 #1:\n<span class="hljs-subst">&#123;review_1&#125;</span>, \n审稿人 #2:\n<span class="hljs-subst">&#123;review_2&#125;</span>, \n审稿人 #3:\n<span class="hljs-subst">&#123;review_3&#125;</span>&quot;</span><br></code></pre></td></tr></table></figure>
+<p>判断 Agent 的设计采用了特定的提示词，该提示词密切模拟了人类审稿人通常采用的认知框架和评估标准。此提示词指导 Agent 通过类似于人类专家的方式分析输出，考虑相关性、连贯性、事实准确性和整体质量等因素。通过精心设计这些提示词以反映人类审查协议，该系统旨在实现接近人类判断力的评估复杂性水平。</p>
+<table>
+
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>def get_score(outlined_plan, latex, reward_model_llm, reviewer_type=None, attempts=3, openai_api_key=None):    e = str()    for _attempt in range(attempts):        try:                       template_instructions = """            按以下格式响应：            思考：            &lt;思考&gt;            审查 JSON：            ```json            &lt;JSON&gt;            ```            在 &lt;思考&gt; 中，首先简要讨论您对评估的直觉和推理。            详细说明您的高层次论点、必要的选择和审查的预期结果。            不要在这里做出泛泛的评论，而是针对您当前的论文具体说明。            将此视为审查的笔记阶段。            在 &lt;JSON&gt; 中，以 JSON 格式提供审查，字段按以下顺序排列：            - "Summary"：论文内容及其贡献的摘要。            - "Strengths"：论文的优点列表。            - "Weaknesses"：论文的缺点列表。            - "Originality"：从 1 到 4 的评级（低、中、高、非常高）。            - "Quality"：从 1 到 4 的评级（低、中、高、非常高）。            - "Clarity"：从 1 到 4 的评级（低、中、高、非常高）。            - "Significance"：从 1 到 4 的评级（低、中、高、非常高）。            - "Questions"：论文作者需要回答的一组澄清性问题。            - "Limitations"：工作的一组局限性和潜在的负面社会影响。            - "Ethical Concerns"：一个布尔值，指示是否存在道德问题。            - "Soundness"：从 1 到 4 的评级（差、一般、好、优秀）。            - "Presentation"：从 1 到 4 的评级（差、一般、好、优秀）。            - "Contribution"：从 1 到 4 的评级（差、一般、好、优秀）。            - "Overall"：从 1 到 10 的评级（非常强烈拒绝到获奖质量）。            - "Confidence"：从 1 到 5 的评级（低、中、高、非常高、绝对）。            - "Decision"：必须是以下之一的决定：Accept、Reject。            对于 "Decision" 字段，不要使用 Weak Accept、Borderline Accept、Borderline Reject 或 Strong Reject。              相反，只使用 Accept 或 Reject。            此 JSON 将被自动解析，因此请确保格式精确。            """</code></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p>在这个多 Agent 系统中，研究过程围绕专门角色构建，反映了典型的学术层次结构，以简化工作流程并优化输出。</p>
+<p><strong>教授 Agent：</strong> 教授 Agent 充当主要研究主管，负责建立研究议程、定义研究问题并将任务委托给其他 Agent。该 Agent 设定战略方向并确保与项目目标保持一致。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ProfessorAgent</span>(<span class="hljs-title class_ inherited__">BaseAgent</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, model=<span class="hljs-string">&quot;gpt4omini&quot;</span>, notes=<span class="hljs-literal">None</span>, max_steps=<span class="hljs-number">100</span>, openai_api_key=<span class="hljs-literal">None</span></span>):<br>        <span class="hljs-built_in">super</span>().__init__(model, notes, max_steps, openai_api_key)<br>        self.phases = [<span class="hljs-string">&quot;report writing&quot;</span>]<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_readme</span>(<span class="hljs-params">self</span>):<br>        sys_prompt = <span class="hljs-string">f&quot;&quot;&quot;您是 <span class="hljs-subst">&#123;self.role_description()&#125;</span> \n 这是撰写的论文 \n<span class="hljs-subst">&#123;self.report&#125;</span>。任务说明：您的目标是整合提供给您的所有知识、代码、报告和笔记，并为 github 存储库生成 readme.md。&quot;&quot;&quot;</span><br>        history_str = <span class="hljs-string">&quot;\n&quot;</span>.join([_[<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> self.history])<br>        prompt = (<br>            <span class="hljs-string">f&quot;&quot;&quot;历史记录：<span class="hljs-subst">&#123;history_str&#125;</span>\n<span class="hljs-subst">&#123;<span class="hljs-string">&#x27;~&#x27;</span> * <span class="hljs-number">10</span>&#125;</span>\n&quot;&quot;&quot;</span><br>            <span class="hljs-string">f&quot;请在下面以 markdown 格式生成 readme：\n&quot;</span>)<br>        model_resp = query_model(model_str=self.model, system_prompt=sys_prompt, prompt=prompt, openai_api_key=self.openai_api_key)<br>        <span class="hljs-keyword">return</span> model_resp.replace(<span class="hljs-string">&quot;```markdown&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p><strong>博士后 Agent：</strong> 博士后 Agent 的角色是执行研究。这包括进行文献综述、设计和实施实验以及生成研究输出（如论文）。重要的是，博士后 Agent 具有编写和执行代码的能力，使实验协议和数据分析的实际实施成为可能。该 Agent 是研究成果的主要生产者。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PostdocAgent</span>(<span class="hljs-title class_ inherited__">BaseAgent</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, model=<span class="hljs-string">&quot;gpt4omini&quot;</span>, notes=<span class="hljs-literal">None</span>, max_steps=<span class="hljs-number">100</span>, openai_api_key=<span class="hljs-literal">None</span></span>):<br>        <span class="hljs-built_in">super</span>().__init__(model, notes, max_steps, openai_api_key)<br>        self.phases = [<span class="hljs-string">&quot;plan formulation&quot;</span>, <span class="hljs-string">&quot;results interpretation&quot;</span>]<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">context</span>(<span class="hljs-params">self, phase</span>):<br>        sr_str = <span class="hljs-built_in">str</span>()<br>        <span class="hljs-keyword">if</span> self.second_round:<br>            sr_str = (<br>                <span class="hljs-string">f&quot;以下是先前实验的结果\n&quot;</span>,<br>                <span class="hljs-string">f&quot;先前的实验代码：<span class="hljs-subst">&#123;self.prev_results_code&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;先前的结果：<span class="hljs-subst">&#123;self.prev_exp_results&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;先前对结果的解释：<span class="hljs-subst">&#123;self.prev_interpretation&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;先前的报告：<span class="hljs-subst">&#123;self.prev_report&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;<span class="hljs-subst">&#123;self.reviewer_response&#125;</span>\n\n\n&quot;</span><br>            )<br>        <span class="hljs-keyword">if</span> phase == <span class="hljs-string">&quot;plan formulation&quot;</span>:<br>            <span class="hljs-keyword">return</span> (<br>                sr_str,<br>                <span class="hljs-string">f&quot;当前文献综述：<span class="hljs-subst">&#123;self.lit_review_sum&#125;</span>&quot;</span>,<br>            )<br>        <span class="hljs-keyword">elif</span> phase == <span class="hljs-string">&quot;results interpretation&quot;</span>:<br>            <span class="hljs-keyword">return</span> (<br>                sr_str,<br>                <span class="hljs-string">f&quot;当前文献综述：<span class="hljs-subst">&#123;self.lit_review_sum&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;当前计划：<span class="hljs-subst">&#123;self.plan&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;当前数据集代码：<span class="hljs-subst">&#123;self.dataset_code&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;当前实验代码：<span class="hljs-subst">&#123;self.results_code&#125;</span>\n&quot;</span><br>                <span class="hljs-string">f&quot;当前结果：<span class="hljs-subst">&#123;self.exp_results&#125;</span>&quot;</span><br>            )<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+<p><strong>审稿人 Agent：</strong> 审稿人 Agent 对博士后 Agent 的研究输出进行批判性评估，评估论文和实验结果的质量、有效性和科学严谨性。这个评估阶段模拟学术环境中的同行评审过程，以确保在最终确定之前研究输出的高标准。</p>
+<p><strong>机器学习工程 Agent：</strong> 机器学习工程 Agent 充当机器学习工程师，与博士生进行对话式协作以开发代码。他们的核心功能是为数据预处理生成简单的代码，整合从提供的文献综述和实验协议中得出的见解。这确保数据被适当格式化并为指定的实验做好准备。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;您是一位机器学习工程师，由一位博士生指导，他将帮助您编写代码，您可以通过对话与他们互动。\n&quot;</span><br><span class="hljs-string">&quot;您的目标是生成为提供的实验准备数据的代码。您应该追求简单的代码来准备数据，而不是复杂的代码。您应该整合提供的文献综述和计划，并为此实验准备数据的代码。\n&quot;</span><br></code></pre></td></tr></table></figure>
+<p><strong>软件工程 Agent：</strong> 软件工程 Agent 指导机器学习工程 Agent。他们的主要目的是协助机器学习工程 Agent 为特定实验创建简单的数据准备代码。软件工程 Agent 整合提供的文献综述和实验计划，确保生成的代码简单明了，并与研究目标直接相关。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;您是一位软件工程师，正在指导一位机器学习工程师，机器学习工程师将编写代码，您可以通过对话与他们互动。\n&quot;</span><br><span class="hljs-string">&quot;您的目标是帮助机器学习工程师生成为提供的实验准备数据的代码。您应该追求非常简单的代码来准备数据，而不是复杂的代码。您应该整合提供的文献综述和计划，并为此实验准备数据的代码。\n&quot;</span><br></code></pre></td></tr></table></figure>
+<p>总之，"Agent Laboratory"代表了自主科学研究的复杂框架。它旨在通过自动化关键研究阶段和促进 AI 驱动的知识生成来增强人类研究能力。该系统旨在通过管理日常任务来提高研究效率，同时保持人类监督。</p>
+<h2 id="概览">概览</h2>
+<p><strong>定义（What）：</strong> AI Agent 通常在预定义的知识范围内运行，限制了它们处理新情况或开放式问题的能力。在复杂和动态的环境中，这种静态的、预编程的信息不足以实现真正的创新或发现。根本挑战是使 Agent 能够超越简单的优化，主动寻求新信息并识别"未知的未知因素"。这需要从纯粹的被动行为转变为扩展系统自身理解和能力的主动 Agentic 探索。</p>
+<p><strong>原因（Why）：</strong> 标准化的解决方案是构建专门用于自主探索和发现的 Agentic AI 系统。这些系统通常利用多 Agent 框架，其中专门的 LLM 协作以模拟科学方法等过程。例如，可以为不同的 Agent 分配生成假设、批判性审查它们以及发展最有前途的概念的任务。这种结构化的协作方法允许系统智能地导航庞大的信息景观、设计和执行实验并生成真正的新知识。通过自动化探索的劳动密集型方面，这些系统增强了人类智力并显著加速了发现的步伐。</p>
+<p><strong>经验法则（Rule of thumb）：</strong> 当在开放式、复杂或快速演变的领域中运行时，使用探索和发现模式，在这些领域中解决方案空间没有完全定义。它非常适合需要生成新假设、策略或见解的任务，例如科学研究、市场分析和创意内容生成。当目标是发现"未知的未知因素"而不仅仅是优化已知过程时，此模式至关重要。</p>
+<p><strong>视觉总结</strong></p>
+<p><strong><img src="../images/agent_images/chapter-21/image2.png" srcset="/img/loading.gif" lazyload /></strong></p>
+<p>图 2：探索和发现设计模式</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>AI 中的探索和发现使 Agent 能够主动追求新信息和可能性，这对于导航复杂和不断演变的环境至关重要。</li>
+<li>Google Co-Scientist 等系统展示了 Agent 如何自主生成假设和设计实验，补充人类科学研究。</li>
+<li>多 Agent 框架（例如 Agent Laboratory 的专门角色）通过自动化文献综述、实验和报告撰写来改进研究。</li>
+<li>最终，这些 Agent 旨在通过管理计算密集型任务来增强人类创造力和问题解决能力，从而加速创新和发现。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>总之，探索和发现模式是真正 Agentic 系统的本质，定义了其超越被动指令跟随来主动探索其环境的能力。这种与生俱来的 Agentic 驱动力使 AI 能够在复杂领域中自主运行，不仅执行任务，而且独立设定子目标以发现新信息。这种高级 Agentic 行为通过多 Agent 框架最有力地实现，其中每个 Agent 在更大的协作过程中体现特定的主动角色。例如，Google Co-scientist 的高度 Agentic 系统具有自主生成、辩论和发展科学假设的 Agent。</p>
+<p>像 Agent Laboratory 这样的框架通过创建模仿人类研究团队的 Agentic 层次结构进一步构建这一点，使系统能够自我管理整个发现生命周期。该模式的核心在于编排新兴的 Agentic 行为，允许系统以最少的人工干预来追求长期的、开放式的目标。这提升了人机合作关系，将 AI 定位为真正的 Agentic 协作者，处理探索性任务的自主执行。通过将这种主动发现工作委托给 Agentic 系统，人类智力得到显著增强，创新得以加速。开发这种强大的 Agentic 能力也需要对安全性和道德监督做出强有力的承诺。最终，这种模式提供了创建真正 Agentic AI 的蓝图，将计算工具转变为追求知识的独立的、目标寻求的伙伴。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Exploration-Exploitation Dilemma<strong>：</strong> 强化学习和不确定性下决策的一个基本问题。<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Exploration%E2%80%93exploitation_dilemma">https://en.wikipedia.org/wiki/Exploration%E2%80%93exploitation_dilemma</a><br />
+</li>
+<li>Google Co-Scientist: <a target="_blank" rel="noopener" href="https://research.google/blog/accelerating-scientific-breakthroughs-with-an-ai-co-scientist/">https://research.google/blog/accelerating-scientific-breakthroughs-with-an-ai-co-scientist/</a><br />
+</li>
+<li>Agent Laboratory: Using LLM Agents as Research Assistants <a target="_blank" rel="noopener" href="https://github.com/SamuelSchmidgall/AgentLaboratory">https://github.com/SamuelSchmidgall/AgentLaboratory</a><br />
+</li>
+<li>AgentRxiv: Towards Collaborative Autonomous Research: <a target="_blank" rel="noopener" href="https://agentrxiv.github.io/">https://agentrxiv.github.io/</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 21 探索与发现</div>
+      <div>https://linxkon.github.io/第21章-探索与发现.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%BB%93%E8%AE%BA.html" title="Agent 设计模式 - 结论">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 结论</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC20%E7%AB%A0-%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86.html" title="Agent 设计模式 - 20 优先级管理">
+                        <span class="hidden-mobile">Agent 设计模式 - 20 优先级管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '3ef10061c7164a5b3accf70903056c54'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

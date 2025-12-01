@@ -1,0 +1,915 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 10 章：模型上下文协议 (MCP) 要使 LLM 作为 Agent 有效运作，其能力必须超越多模态生成。与外部环境交互不可或缺，包括访问实时数据、使用外部软件以及执行特定操作任务。模型上下文协议（MCP）通过提供标准化接口使 LLM 能与外部资源交互，是实现一致性和可预测性集成的关键机制。 MCP 模式概述 想象一个通用适配器，允许任何 LLM 连接到任何外部系统、数据库或工具，无需为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 10 模型上下文协议-MCP">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC10%E7%AB%A0-%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE-MCP.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 10 章：模型上下文协议 (MCP) 要使 LLM 作为 Agent 有效运作，其能力必须超越多模态生成。与外部环境交互不可或缺，包括访问实时数据、使用外部软件以及执行特定操作任务。模型上下文协议（MCP）通过提供标准化接口使 LLM 能与外部资源交互，是实现一致性和可预测性集成的关键机制。 MCP 模式概述 想象一个通用适配器，允许任何 LLM 连接到任何外部系统、数据库或工具，无需为">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:38:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.840Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 10 模型上下文协议-MCP - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 10 模型上下文协议-MCP"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:38" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          54 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 10 模型上下文协议-MCP</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-10-章模型上下文协议-mcp">第 10 章：模型上下文协议 (MCP)</h1>
+<p>要使 LLM 作为 Agent 有效运作，其能力必须超越多模态生成。与外部环境交互不可或缺，包括访问实时数据、使用外部软件以及执行特定操作任务。模型上下文协议（MCP）通过提供标准化接口使 LLM 能与外部资源交互，是实现一致性和可预测性集成的关键机制。</p>
+<h2 id="mcp-模式概述">MCP 模式概述</h2>
+<p>想象一个通用适配器，允许任何 LLM 连接到任何外部系统、数据库或工具，无需为每个连接进行自定义集成。这本质上就是模型上下文协议（MCP）的功能。它作为开放标准，旨在标准化 Gemini、OpenAI 的 GPT 模型、Mixtral 和 Claude 等 LLM 与外部应用程序、数据源和工具的通信方式。可将其视为通用连接机制，简化 LLM 获取上下文、执行操作以及与各类系统交互的方式。</p>
+<p>MCP 基于客户端-服务器架构运行。它定义了不同元素——数据（称为资源）、交互模板（本质是提示）和可操作函数（称为工具）——如何由 MCP 服务器公开。这些元素随后由 MCP 客户端使用，客户端可以是 LLM 宿主应用程序或 AI Agent 本身。这种标准化方法显著降低了将 LLM 集成到多样化操作环境中的复杂性。</p>
+<p>然而，MCP 是"Agent 接口"的契约，其有效性很大程度上取决于其所公开底层 API 的设计。存在开发人员仅简单包装现有遗留 API 而不进行修改的风险，这对 Agent 可能并非最优。例如，若票务系统 API 仅允许逐个检索完整票务详情，被要求总结高优先级票务的 Agent 在处理大量数据时将变得缓慢且不准确。为真正有效，底层 API 应通过过滤和排序等确定性特性进行改进，以帮助非确定性 Agent 高效工作。这凸显了 Agent 无法神奇替代确定性工作流；它们通常需要更强确定性支持才能成功。</p>
+<p>此外，MCP 可包装输入或输出对 Agent 仍非固有可理解的 API。仅当 API 数据格式对 Agent 友好时才有用，而 MCP 本身无法保证此点。例如，为返回 PDF 文件的文档存储创建 MCP 服务器基本无用，若使用该服务的 Agent 无法解析 PDF 内容。更好方法是首先创建返回文档文本版本（如 Markdown）的 API，使 Agent 能实际阅读和处理。这表明开发人员必须考虑的不只是连接，还有数据交换的性质，以确保真正兼容性。</p>
+<h2 id="mcp-与工具函数调用">MCP 与工具函数调用</h2>
+<p>模型上下文协议（MCP）和工具函数调用是使 LLM 能与外部能力（含工具）交互并执行操作的不同机制。虽然两者都服务于扩展 LLM 超越文本生成的能力，但它们在方法和抽象级别上存在差异。</p>
+<p>工具函数调用可视为 LLM 对特定预定义工具或函数的直接请求。请注意，在此上下文中我们交替使用"工具"和"函数"二词。这种交互采用一对一通信模型，LLM 根据其对需要外部操作用户意图的理解格式化请求。应用程序代码执行此请求并将结果返回 LLM。此过程通常为专有，且在不同 LLM 提供商间存在差异。</p>
+<p>相比之下，模型上下文协议（MCP）作为 LLM 发现、通信和使用外部能力的标准化接口运行。它作为开放协议促进与各种工具和系统交互，旨在建立任何兼容工具可被任何兼容 LLM 访问的生态系统。这促进了不同系统和实现间的互操作性、可组合性和可重用性。通过采用联合模型，我们显著提升互操作性并释放现有资产价值。此策略允许我们通过简单包装符合 MCP 接口将分散和遗留服务引入现代生态系统。这些服务继续独立运行，但现可组合到新应用程序和工作流中，其协作由 LLM 协调。这促进了敏捷性和可重用性，而无需对基础系统进行昂贵重写。</p>
+<p>以下是 MCP 与工具函数调用的基本区别：</p>
+<table>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>工具函数调用</th>
+<th>模型上下文协议（MCP）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>标准化</strong></td>
+<td>专有和供应商特定。格式和实现在不同 LLM 提供商间各异</td>
+<td>开放标准化协议，促进不同 LLM 和工具间互操作性</td>
+</tr>
+<tr class="even">
+<td><strong>范围</strong></td>
+<td>LLM 请求执行特定预定义函数的直接机制</td>
+<td>更广泛框架，定义 LLM 和外部工具如何相互发现和通信</td>
+</tr>
+<tr class="odd">
+<td><strong>架构</strong></td>
+<td>LLM 与应用程序工具处理逻辑间的一对一交互</td>
+<td>客户端-服务器架构，LLM 驱动应用程序（客户端）可连接并使用各种 MCP 服务器（工具）</td>
+</tr>
+<tr class="even">
+<td><strong>发现</strong></td>
+<td>LLM 被明确告知特定对话上下文中哪些工具可用</td>
+<td>支持动态发现可用工具。MCP 客户端可查询服务器以查看其提供能力</td>
+</tr>
+<tr class="odd">
+<td><strong>可重用性</strong></td>
+<td>工具集成通常与所用特定应用程序和 LLM 紧密耦合</td>
+<td>促进开发可重用独立"MCP 服务器"，可被任何兼容应用程序访问</td>
+</tr>
+</tbody>
+</table>
+<p>可将工具函数调用想象为给 AI 一组特定定制工具，如特定扳手和螺丝刀。这对具有固定任务集的车间高效。另一方面，MCP（模型上下文协议）如同创建通用标准化电源插座系统。它本身不提供工具，但允许任何制造商任何兼容工具插入工作，从而实现动态不断扩展的车间。</p>
+<p>简而言之，函数调用提供对少数特定函数的直接访问，而 MCP 是标准化通信框架，让 LLM 发现和使用广泛外部资源。对简单应用程序，特定工具足够；对需要适应的复杂互联 AI 系统，像 MCP 的通用标准必不可少。</p>
+<h2 id="mcp-的其他考虑因素">MCP 的其他考虑因素</h2>
+<p>虽然 MCP 提供了强大框架，但全面评估需考虑影响其适用性的几个关键方面。让我们详细探讨某些方面：</p>
+<ul>
+<li><strong>工具 vs. 资源 vs. 提示</strong>：理解这些组件的特定角色很重要。资源是静态数据（如 PDF 文件、数据库记录）。工具是执行操作的可执行函数（如发送电子邮件、查询 API）。提示是指导 LLM 如何与资源或工具交互的模板，确保交互结构化和有效</li>
+<li><strong>可发现性</strong>：MCP 的关键优势是 MCP 客户端可动态查询服务器了解其提供的工具和资源。这种"即时"发现机制对需要适应新能力而无需重新部署的 Agent 非常强大</li>
+<li><strong>安全性</strong>：通过任何协议公开工具和数据都需要强大安全措施。MCP 实现必须包含身份验证和授权，以控制哪些客户端可访问哪些服务器及允许执行哪些特定操作</li>
+<li><strong>实现</strong>：虽然 MCP 是开放标准，但其实现可能复杂。然而提供商正开始简化此过程。例如 Anthropic 或 FastMCP 等模型提供商提供 SDK，抽象大部分样板代码，使开发人员更易创建和连接 MCP 客户端和服务器</li>
+<li><strong>错误处理</strong>：全面错误处理策略至关重要。协议必须定义如何将错误（如工具执行失败、服务器不可用、无效请求）传达回 LLM，使其能理解失败并可能尝试替代方法</li>
+<li><strong>本地 vs. 远程服务器</strong>：MCP 服务器可部署在与 Agent 相同机器本地，或远程部署在不同服务器。本地服务器可能因速度和敏感数据安全性被选择，而远程服务器架构允许组织内共享可扩展访问公共工具</li>
+<li><strong>按需 vs. 批处理</strong>：MCP 可支持按需交互式会话和大规模批处理。选择取决于应用程序，从需要立即工具访问的实时对话 Agent 到批量处理记录的数据分析管道</li>
+<li><strong>传输机制</strong>：协议还定义通信的底层传输层。对本地交互，使用基于 STDIO（标准输入/输出）的 JSON-RPC 实现高效进程间通信。对远程连接，利用 Web 友好协议如可流式 HTTP 和服务器发送事件（SSE）实现持久高效客户端-服务器通信</li>
+</ul>
+<p>模型上下文协议使用客户端-服务器模型标准化信息流。理解组件交互是 MCP 高级 Agent 行为关键：</p>
+<ol type="1">
+<li><strong>大型语言模型（LLM）</strong>：核心智能。处理用户请求，制定计划，决定何时需要访问外部信息或执行操作</li>
+<li><strong>MCP 客户端</strong>：围绕 LLM 的应用程序或包装器。充当中介，将 LLM 意图转换为符合 MCP 标准的正式请求。负责发现、连接和与 MCP 服务器通信</li>
+<li><strong>MCP 服务器</strong>：通往外部世界的网关。向任何授权 MCP 客户端公开一组工具、资源和提示。每个服务器通常负责特定领域，如连接公司内部数据库、电子邮件服务或公共 API</li>
+<li><strong>可选的第三方（3P）服务</strong>：代表 MCP 服务器管理和公开的实际外部工具、应用程序或数据源。是执行请求操作的最终端点，如查询专有数据库、与 SaaS 平台交互或调用公共天气 API</li>
+</ol>
+<p>交互流程如下：</p>
+<ol type="1">
+<li><strong>发现</strong>：MCP 客户端代表 LLM 查询 MCP 服务器询问其提供能力。服务器响应清单列出可用工具（如 send_email）、资源（如 customer_database）和提示</li>
+<li><strong>请求制定</strong>：LLM 确定需要使用发现的工具之一。例如决定发送电子邮件。制定请求指定要使用的工具（send_email）和必要参数（收件人、主题、正文）</li>
+<li><strong>客户端通信</strong>：MCP 客户端获取 LLM 制定的请求，将其作为标准化调用发送到适当 MCP 服务器</li>
+<li><strong>服务器执行</strong>：MCP 服务器接收请求。对客户端进行身份验证，验证请求，然后通过与底层软件交互执行指定操作（如调用电子邮件 API 的 send() 函数）</li>
+<li><strong>响应和上下文更新</strong>：执行后，MCP 服务器将标准化响应发送回 MCP 客户端。此响应指示操作是否成功，包括任何相关输出（如已发送电子邮件的确认 ID）。然后客户端将此结果传递回 LLM，更新其上下文并使其能继续任务的下一步</li>
+</ol>
+<h2 id="实际应用和用例">实际应用和用例</h2>
+<p>MCP 显著扩展了 AI/LLM 能力，使其更加多功能强大。以下是九个关键用例：</p>
+<ul>
+<li><strong>数据库集成</strong>：MCP 允许 LLM 和 Agent 无缝访问数据库中结构化数据并与之交互。例如使用数据库 MCP 工具箱，Agent 可查询 Google BigQuery 数据集检索实时信息、生成报告或更新记录，所有由自然语言命令驱动</li>
+<li><strong>生成媒体编排</strong>：MCP 使 Agent 能与高级生成媒体服务集成。通过生成媒体服务的 MCP 工具，Agent 可编排涉及 Google Imagen 图像生成、Google Veo 视频创建、Google Chirp 3 HD 逼真语音或 Google Lyria 音乐创作的工作流，允许在 AI 应用程序中进行动态内容创建</li>
+<li><strong>外部 API 交互</strong>：MCP 为 LLM 提供调用任何外部 API 并接收响应的标准化方式。这意味着 Agent 可获取实时天气数据、拉取股票价格、发送电子邮件或与 CRM 系统交互，将其能力扩展到核心语言模型之外</li>
+<li><strong>基于推理的信息提取</strong>：利用 LLM 强大推理能力，MCP 促进有效的依赖查询信息提取，超越传统搜索和检索系统。Agent 可分析文本并提取精确回答用户复杂问题的特定条款、数字或陈述，而非传统搜索工具返回整个文档</li>
+<li><strong>自定义工具开发</strong>：开发人员可构建自定义工具并通过 MCP 服务器公开（如使用 FastMCP）。这允许以标准化易于使用格式向 LLM 和其他 Agent 提供专门内部函数或专有系统，而无需直接修改 LLM</li>
+<li><strong>标准化的 LLM 到应用程序通信</strong>：MCP 确保 LLM 与它们交互的应用程序间有一致通信层。这减少了集成开销，促进不同 LLM 提供商和宿主应用程序间互操作性，并简化复杂 Agent 系统开发</li>
+<li><strong>复杂工作流编排</strong>：通过组合各种 MCP 公开工具和数据源，Agent 可编排高度复杂多步骤工作流。例如 Agent 可从数据库检索客户数据，生成个性化营销图像，起草定制电子邮件，然后发送，所有通过与不同 MCP 服务交互完成</li>
+<li><strong>物联网设备控制</strong>：MCP 可促进 LLM 与物联网（IoT）设备交互。Agent 可使用 MCP 向智能家居电器、工业传感器或机器人发送命令，实现自然语言控制和物理系统自动化</li>
+<li><strong>金融服务自动化</strong>：在金融服务中，MCP 可使 LLM 与各种金融数据源、交易平台或合规系统交互。Agent 可能分析市场数据、执行交易、生成个性化财务建议或自动化监管报告，同时保持安全和标准化通信</li>
+</ul>
+<p>简而言之，模型上下文协议（MCP）使 Agent 能从数据库、API 和 Web 资源访问实时信息。还允许 Agent 执行如发送电子邮件、更新记录、控制设备以及通过集成处理多源数据执行复杂任务等操作。此外，MCP 支持 AI 应用程序的媒体生成工具</p>
+<h2 id="使用-adk-的实践代码示例">使用 ADK 的实践代码示例</h2>
+<p>本节概述了如何连接到提供文件系统操作的本地 MCP 服务器，使 ADK Agent 能够与本地文件系统交互。</p>
+<h2 id="使用-mcptoolset-的-agent-设置">使用 MCPToolset 的 Agent 设置</h2>
+<p>要配置 Agent 进行文件系统交互，必须创建一个 <code>agent.py</code> 文件（例如，在 <code>./adk_agent_samples/mcp_agent/agent.py</code>）。<code>MCPToolset</code> 在 <code>LlmAgent</code> 对象的 <code>tools</code> 列表中实例化。至关重要的是，必须将 <code>args</code> 列表中的 <code>"/path/to/your/folder"</code> 替换为本地系统上 MCP 服务器可以访问的目录的绝对路径。此目录将是 Agent 执行的文件系统操作的根目录。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> LlmAgent<br><span class="hljs-keyword">from</span> google.adk.tools.mcp_tool.mcp_toolset <span class="hljs-keyword">import</span> MCPToolset, StdioServerParameters<br><br><span class="hljs-comment">## 创建一个可靠的绝对路径，指向名为 &#x27;mcp_managed_files&#x27; 的文件夹</span><br><span class="hljs-comment">## 该文件夹位于此 Agent 脚本所在的同一目录中。</span><br><span class="hljs-comment">## 这确保了 Agent 开箱即用地进行演示。</span><br><span class="hljs-comment">## 对于生产环境，您需要将此路径指向一个更持久和安全的位置。</span><br>TARGET_FOLDER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), <span class="hljs-string">&quot;mcp_managed_files&quot;</span>)<br><br><span class="hljs-comment">## 在 Agent 需要之前确保目标目录存在。</span><br>os.makedirs(TARGET_FOLDER_PATH, exist_ok=<span class="hljs-literal">True</span>)<br><br>root_agent = LlmAgent(<br>    model=<span class="hljs-string">&#x27;gemini-2.0-flash&#x27;</span>,<br>    name=<span class="hljs-string">&#x27;filesystem_assistant_agent&#x27;</span>,<br>    instruction=(<br>        <span class="hljs-string">&#x27;Help the user manage their files. You can list files, read files, and write files. &#x27;</span><br>        <span class="hljs-string">f&#x27;You are operating in the following directory: <span class="hljs-subst">&#123;TARGET_FOLDER_PATH&#125;</span>&#x27;</span><br>    ),<br>    tools=[<br>        MCPToolset(<br>            connection_params=StdioServerParameters(<br>                command=<span class="hljs-string">&#x27;npx&#x27;</span>,<br>                args=[<br>                    <span class="hljs-string">&quot;-y&quot;</span>,  <span class="hljs-comment"># npx 的参数，用于自动确认安装</span><br>                    <span class="hljs-string">&quot;@modelcontextprotocol/server-filesystem&quot;</span>,<br>                    <span class="hljs-comment"># 这必须是文件夹的绝对路径。</span><br>                    TARGET_FOLDER_PATH,<br>                ],<br>            ),<br>            <span class="hljs-comment"># 可选：您可以过滤从 MCP 服务器公开的工具。</span><br>            <span class="hljs-comment"># 例如，仅允许读取：</span><br>            <span class="hljs-comment"># tool_filter=[&#x27;list_directory&#x27;, &#x27;read_file&#x27;]</span><br>        )<br>    ],<br>)<br></code></pre></td></tr></table></figure>
+<p><code>npx</code>（Node Package Execute）与 npm（Node Package Manager）版本 5.2.0 及更高版本捆绑在一起，是一个实用程序，可以直接从 npm 注册表执行 Node.js 包。这消除了全局安装的需要。本质上，<code>npx</code> 作为 npm 包运行器，它通常用于运行许多社区 MCP 服务器，这些服务器作为 Node.js 包分发。</p>
+<p>创建 <strong>init</strong>.py 文件是必要的，以确保 agent.py 文件被识别为 Agent 开发工具包（ADK）的可发现 Python 包的一部分。此文件应与 <a target="_blank" rel="noopener" href="http://agent.py">agent.py</a> 位于同一目录中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## ./adk_agent_samples/mcp_agent/__init__.py</span><br><span class="hljs-keyword">from</span> . <span class="hljs-keyword">import</span> agent<br></code></pre></td></tr></table></figure>
+<p>当然，还可以使用其他受支持的命令。例如，可以按如下方式连接到 python3：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">connection_params = StdioConnectionParams(<br>    server_params=&#123;<br>        <span class="hljs-string">&quot;command&quot;</span>: <span class="hljs-string">&quot;python3&quot;</span>,<br>        <span class="hljs-string">&quot;args&quot;</span>: [<span class="hljs-string">&quot;./agent/mcp_server.py&quot;</span>],<br>        <span class="hljs-string">&quot;env&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;SERVICE_ACCOUNT_PATH&quot;</span>: SERVICE_ACCOUNT_PATH,<br>            <span class="hljs-string">&quot;DRIVE_FOLDER_ID&quot;</span>: DRIVE_FOLDER_ID<br>        &#125;<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+<p>在 Python 的上下文中，UVX 是指一个命令行工具，它利用 uv 在临时的、隔离的 Python 环境中执行命令。本质上，它允许您运行 Python 工具和包，而无需全局安装或在项目环境中安装它们。您可以通过 MCP 服务器运行它。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">connection_params = StdioConnectionParams(<br>    server_params=&#123;<br>        <span class="hljs-string">&quot;command&quot;</span>: <span class="hljs-string">&quot;uvx&quot;</span>,<br>        <span class="hljs-string">&quot;args&quot;</span>: [<span class="hljs-string">&quot;mcp-google-sheets@latest&quot;</span>],<br>        <span class="hljs-string">&quot;env&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;SERVICE_ACCOUNT_PATH&quot;</span>: SERVICE_ACCOUNT_PATH,<br>            <span class="hljs-string">&quot;DRIVE_FOLDER_ID&quot;</span>: DRIVE_FOLDER_ID<br>        &#125;<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+<p>创建 MCP 服务器后，下一步是连接到它。</p>
+<h2 id="使用-adk-web-连接-mcp-服务器">使用 ADK Web 连接 MCP 服务器</h2>
+<p>首先，执行 'adk web'。在终端中导航到 mcp_agent 的父目录（例如，adk_agent_samples）并运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ./adk_agent_samples <span class="hljs-comment"># 或您的等效父目录</span><br>adk web<br></code></pre></td></tr></table></figure>
+<p>ADK Web UI 在浏览器中加载后，从 Agent 菜单中选择 <code>filesystem_assistant_agent</code>。接下来，尝试以下提示：</p>
+<ul>
+<li>"Show me the contents of this folder."</li>
+<li>"Read the <code>sample.txt</code> file."（假设 <code>sample.txt</code> 位于 <code>TARGET_FOLDER_PATH</code>。）</li>
+<li>"What's in <code>another_file.md</code>?"</li>
+</ul>
+<h2 id="使用-fastmcp-创建-mcp-服务器">使用 FastMCP 创建 MCP 服务器</h2>
+<p>FastMCP 是一个高级 Python 框架，旨在简化 MCP 服务器的开发。它提供了一个抽象层，简化了协议复杂性，允许开发人员专注于核心逻辑。</p>
+<p>该库使用简单的 Python 装饰器能够快速定义工具、资源和提示词。一个显著的优势是其自动模式生成，它智能地解释 Python 函数签名、类型提示和文档字符串，以构建必要的 AI 模型接口规范。这种自动化最大限度地减少了手动配置并减少了人为错误。</p>
+<p>除了基本的工具创建之外，FastMCP 还促进了高级架构模式，如服务器组合和代理。这使得能够模块化开发复杂的、多组件系统，并将现有服务无缝集成到 AI 可访问的框架中。此外，FastMCP 包括针对高效、分布式和可扩展的 AI 驱动应用程序的优化。</p>
+<h2 id="使用-fastmcp-设置服务器">使用 FastMCP 设置服务器</h2>
+<p>为了说明，考虑服务器提供的基本"greet"工具。一旦激活，ADK Agent 和其他 MCP 客户端可以使用 HTTP 与此工具交互。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## fastmcp_server.py</span><br><span class="hljs-comment">## 此脚本演示如何使用 FastMCP 创建一个简单的 MCP 服务器。</span><br><span class="hljs-comment">## 它公开一个生成问候语的单一工具。</span><br><br><span class="hljs-comment">## 1. 确保您已安装 FastMCP：</span><br><span class="hljs-comment">## pip install fastmcp</span><br><br><span class="hljs-keyword">from</span> fastmcp <span class="hljs-keyword">import</span> FastMCP, Client<br><br><span class="hljs-comment">## 初始化 FastMCP 服务器。</span><br>mcp_server = FastMCP()<br><br><span class="hljs-comment">## 定义一个简单的工具函数。</span><br><span class="hljs-comment">## `@mcp_server.tool` 装饰器将此 Python 函数注册为 MCP 工具。</span><br><span class="hljs-comment">## 文档字符串成为 LLM 的工具描述。</span><br><span class="hljs-meta">@mcp_server.tool</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">greet</span>(<span class="hljs-params">name: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    生成个性化的问候语。</span><br><span class="hljs-string"></span><br><span class="hljs-string">    参数：</span><br><span class="hljs-string">        name: 要问候的人的名字。</span><br><span class="hljs-string"></span><br><span class="hljs-string">    返回：</span><br><span class="hljs-string">        问候语字符串。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;Hello, <span class="hljs-subst">&#123;name&#125;</span>! Nice to meet you.&quot;</span><br><br><span class="hljs-comment">## 或者如果您想从脚本运行它：</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    mcp_server.run(<br>        transport=<span class="hljs-string">&quot;http&quot;</span>,<br>        host=<span class="hljs-string">&quot;127.0.0.1&quot;</span>,<br>        port=<span class="hljs-number">8000</span><br>    )<br></code></pre></td></tr></table></figure>
+<p>这个 Python 脚本定义了一个名为 greet 的单一函数，它接受一个人的名字并返回个性化的问候语。此函数上方的 <span class="citation" data-cites="tool">@tool</span>() 装饰器自动将其注册为 AI 或其他程序可以使用的工具。函数的文档字符串和类型提示被 FastMCP 用来告诉 Agent 工具的工作原理、需要什么输入以及它将返回什么。</p>
+<p>当脚本执行时，它启动 FastMCP 服务器，该服务器在 localhost:8000 上监听请求。这使得 greet 函数作为网络服务可用。然后可以将 Agent 配置为连接到此服务器，并使用 greet 工具生成问候语，作为更大任务的一部分。服务器持续运行，直到手动停止。</p>
+<h2 id="使用-adk-agent-消费-fastmcp-服务器">使用 ADK Agent 消费 FastMCP 服务器</h2>
+<p>可以将 ADK Agent 设置为 MCP 客户端，以使用正在运行的 FastMCP 服务器。这需要使用 FastMCP 服务器的网络地址配置 HttpServerParameters，通常是 http://localhost:8000。</p>
+<p>可以包含 tool_filter 参数以限制 Agent 对服务器提供的特定工具的使用，例如 'greet'。当提示"Greet John Doe"等请求时，Agent 的嵌入式 LLM 识别通过 MCP 可用的 'greet' 工具，使用参数"John Doe"调用它，并返回服务器的响应。此过程演示了通过 MCP 公开的用户定义工具与 ADK Agent 的集成。</p>
+<p>要建立此配置，需要一个 Agent 文件（例如，位于 ./adk_agent_samples/fastmcp_client_agent/ 的 agent.py）。此文件将实例化一个 ADK Agent，并使用 HttpServerParameters 与正在运行的 FastMCP 服务器建立连接。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## ./adk_agent_samples/fastmcp_client_agent/agent.py</span><br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> LlmAgent<br><span class="hljs-keyword">from</span> google.adk.tools.mcp_tool.mcp_toolset <span class="hljs-keyword">import</span> MCPToolset, HttpServerParameters<br><br><span class="hljs-comment">## 定义 FastMCP 服务器的地址。</span><br><span class="hljs-comment">## 确保您的 fastmcp_server.py（之前定义的）正在此端口上运行。</span><br>FASTMCP_SERVER_URL = <span class="hljs-string">&quot;http://localhost:8000&quot;</span><br><br>root_agent = LlmAgent(<br>    model=<span class="hljs-string">&#x27;gemini-2.0-flash&#x27;</span>,  <span class="hljs-comment"># 或您首选的模型</span><br>    name=<span class="hljs-string">&#x27;fastmcp_greeter_agent&#x27;</span>,<br>    instruction=<span class="hljs-string">&#x27;You are a friendly assistant that can greet people by their name. Use the &quot;greet&quot; tool.&#x27;</span>,<br>    tools=[<br>        MCPToolset(<br>            connection_params=HttpServerParameters(<br>                url=FASTMCP_SERVER_URL,<br>            ),<br>            <span class="hljs-comment"># 可选：过滤从 MCP 服务器公开的工具</span><br>            <span class="hljs-comment"># 对于此示例，我们只期望 &#x27;greet&#x27;</span><br>            tool_filter=[<span class="hljs-string">&#x27;greet&#x27;</span>]<br>        )<br>    ],<br>)<br></code></pre></td></tr></table></figure>
+<p>该脚本定义了一个名为 fastmcp_greeter_agent 的 Agent，它使用 Gemini 语言模型。它被赋予特定的指令，作为一个友好的助手，其目的是问候人们。至关重要的是，该代码为此 Agent 配备了执行其任务的工具。它配置了一个 MCPToolset 来连接到在 localhost:8000 上运行的独立服务器，该服务器应该是前面示例中的 FastMCP 服务器。Agent 被明确授予访问该服务器上托管的 greet 工具的权限。本质上，此代码设置了系统的客户端，创建了一个智能 Agent，它理解其目标是问候人们，并确切地知道使用哪个外部工具来完成它。</p>
+<p>在 fastmcp_client_agent 目录中创建 <strong>init</strong>.py 文件是必要的。这确保了 Agent 被识别为 ADK 的可发现 Python 包。</p>
+<p>首先，打开一个新终端并运行 <code>python fastmcp_server.py</code> 来启动 FastMCP 服务器。接下来，在终端中转到 <code>fastmcp_client_agent</code> 的父目录（例如，<code>adk_agent_samples</code>）并执行 <code>adk web</code>。一旦 ADK Web UI 在浏览器中加载，从 Agent 菜单中选择 <code>fastmcp_greeter_agent</code>。然后可以通过输入"Greet John Doe"等提示来测试它。Agent 将使用 FastMCP 服务器上的 <code>greet</code> 工具创建响应。</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么</strong>：要作为有效 Agent 运作，LLM 必须超越简单文本生成。它们需要与外部环境交互能力以访问当前数据并使用外部软件。若无标准化通信方法，LLM 与外部工具或数据源间每次集成都成为定制复杂不可重用工作。这种临时方法阻碍可扩展性，并使构建复杂互联 AI 系统变得困难低效</p>
+<p><strong>为什么</strong>：模型上下文协议（MCP）通过充当 LLM 和外部系统间通用接口提供标准化解决方案。它建立开放标准化协议，定义如何发现和使用外部能力。基于客户端-服务器模型运行，MCP 允许服务器向任何兼容客户端公开工具、数据资源和交互式提示。LLM 驱动应用程序充当这些客户端，以可预测方式动态发现和与可用资源交互。这种标准化方法促进了可互操作和可重用组件生态系统，显著简化复杂 Agent 工作流开发</p>
+<p><strong>经验法则</strong>：在构建需要与各种不断发展的外部工具、数据源和 API 交互的复杂可扩展或企业级 Agent 系统时，使用模型上下文协议（MCP）。当不同 LLM 和工具间互操作性是优先考虑事项时，以及当 Agent 需要能够动态发现新能力而无需重新部署时，它是理想选择。对具有固定有限数量预定义函数的简单应用程序，直接工具函数调用可能足够</p>
+<p><strong>可视化摘要</strong></p>
+<p><img src="../images/agent_images/chapter-10/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：模型上下文协议</p>
+<h2 id="关键要点">关键要点</h2>
+<p>以下是本章核心要点：</p>
+<ul>
+<li>模型上下文协议（MCP）是开放标准，促进 LLM 与外部应用程序、数据源和工具间标准化通信</li>
+<li>它采用客户端-服务器架构，定义公开和使用资源、提示和工具的方法</li>
+<li>Agent 开发工具包（ADK）支持使用现有 MCP 服务器以及通过 MCP 服务器公开 ADK 工具</li>
+<li>FastMCP 简化了 MCP 服务器开发和管理，特别用于公开在 Python 中实现的工具</li>
+<li>生成媒体服务的 MCP 工具允许 Agent 与 Google Cloud 的生成媒体能力（Imagen、Veo、Chirp 3 HD、Lyria）集成</li>
+<li>MCP 使 LLM 和 Agent 能与现实世界系统交互，访问动态信息，并执行超越文本生成的操作</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>模型上下文协议（MCP）是开放标准，促进大型语言模型（LLM）与外部系统间通信。它采用客户端-服务器架构，使 LLM 能通过标准化工具访问资源、使用提示和执行操作。MCP 允许 LLM 与数据库交互、管理生成媒体工作流、控制物联网设备以及自动化金融服务。实际示例演示了设置 Agent 与 MCP 服务器通信的方法，包括文件系统服务器和使用 FastMCP 构建的服务器，说明了其与 Agent 开发工具包（ADK）的集成。MCP 是开发超越基本语言能力的交互式 AI Agent 的关键组件</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Model Context Protocol (MCP) Documentation. (Latest). <em>Model Context Protocol (MCP)</em>. <a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/mcp/">https://google.github.io/adk-docs/mcp/</a></li>
+<li>FastMCP Documentation. FastMCP. <a target="_blank" rel="noopener" href="https://github.com/jlowin/fastmcp">https://github.com/jlowin/fastmcp</a></li>
+<li>MCP Tools for Genmedia Services. <em>MCP Tools for Genmedia Services</em>. <a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/mcp/#mcp-servers-for-google-cloud-genmedia">https://google.github.io/adk-docs/mcp/#mcp-servers-for-google-cloud-genmedia</a></li>
+<li>MCP Toolbox for Databases Documentation. (Latest). <em>MCP Toolbox for Databases</em>. <a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/mcp/databases/">https://google.github.io/adk-docs/mcp/databases/</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 10 模型上下文协议-MCP</div>
+      <div>https://linxkon.github.io/第10章-模型上下文协议-MCP.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC11%E7%AB%A0-%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%AE%9A%E4%B8%8E%E7%9B%91%E6%8E%A7.html" title="Agent 设计模式 - 11 目标设定与监控">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 11 目标设定与监控</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC09%E7%AB%A0-%E5%AD%A6%E4%B9%A0%E4%B8%8E%E9%80%82%E5%BA%94.html" title="Agent 设计模式 - 09 学习与适应">
+                        <span class="hidden-mobile">Agent 设计模式 - 09 学习与适应</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'ed1f0bba3a833f467fbca19f7affd65f'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

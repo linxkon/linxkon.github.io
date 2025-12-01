@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 20 章：优先级排序 在复杂、动态的环境中，Agent 常常面临大量潜在行动、相互冲突的目标以及有限的资源。如果没有明确的流程来确定后续行动，Agent 可能会遇到效率低下、操作延迟或无法实现关键目标的问题。优先级排序模式通过使 Agent 能够根据重要性、紧迫性、依赖关系和既定标准来评估和排序任务、目标或行动，从而解决这一挑战。这确保了 Agent 将精力集中在最关键的任务上，从而提高有效">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 20 优先级管理">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC20%E7%AB%A0-%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 20 章：优先级排序 在复杂、动态的环境中，Agent 常常面临大量潜在行动、相互冲突的目标以及有限的资源。如果没有明确的流程来确定后续行动，Agent 可能会遇到效率低下、操作延迟或无法实现关键目标的问题。优先级排序模式通过使 Agent 能够根据重要性、紧迫性、依赖关系和既定标准来评估和排序任务、目标或行动，从而解决这一挑战。这确保了 Agent 将精力集中在最关键的任务上，从而提高有效">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:48:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.845Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 20 优先级管理 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 20 优先级管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:48" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 20 优先级管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-20-章优先级排序">第 20 章：优先级排序</h1>
+<p>在复杂、动态的环境中，Agent 常常面临大量潜在行动、相互冲突的目标以及有限的资源。如果没有明确的流程来确定后续行动，Agent 可能会遇到效率低下、操作延迟或无法实现关键目标的问题。优先级排序模式通过使 Agent 能够根据重要性、紧迫性、依赖关系和既定标准来评估和排序任务、目标或行动，从而解决这一挑战。这确保了 Agent 将精力集中在最关键的任务上，从而提高有效性和目标一致性。</p>
+<h2 id="优先级排序模式概述">优先级排序模式概述</h2>
+<p>Agent 使用优先级排序来有效管理任务、目标和子目标，指导后续行动。这个过程有助于在处理多个需求时做出明智决策，优先处理重要或紧急的活动，而不是次要的活动。这在资源受限、时间有限以及目标可能冲突的实际场景中尤为重要。</p>
+<p>Agent 优先级排序的基本方面通常涉及几个要素。首先，<strong>标准定义</strong>建立用于任务评估的规则或指标。这些可能包括紧急性（任务的时间敏感性）、重要性（对主要目标的影响）、依赖关系（该任务是否是其他任务的前提条件）、资源可用性（必要工具或信息的就绪状态）、成本/收益分析（努力与预期结果的对比），以及个性化 Agent 的用户偏好。其次，<strong>任务评估</strong>涉及根据这些定义的标准评估每个潜在任务，利用从简单规则到 LLM 复杂评分或推理的各种方法。第三，<strong>调度或选择逻辑</strong>是指基于评估结果选择最优下一步行动或任务序列的算法，可能利用队列或高级规划组件。最后，<strong>动态重新优先级排序</strong>允许 Agent 随着情况变化修改优先级，例如新关键事件的出现或截止日期的临近，确保 Agent 的适应性和响应能力。</p>
+<p>优先级排序可以在各个层面进行：选择总体目标（高层次目标优先级排序）、在计划内排序步骤（子任务优先级排序）或从可用选项中选择下一个即时行动（行动选择）。有效的优先级排序使 Agent 能够展现更智能、更高效、更稳健的行为，特别是在复杂的多目标环境中。这反映了人类团队的组织方式，其中管理者通过考虑所有成员的输入来优先处理任务。</p>
+<h2 id="实际应用和用例">实际应用和用例</h2>
+<p>在各种实际应用中，AI Agent 展示了优先级排序的复杂运用，以做出及时有效的决策。</p>
+<ul>
+<li><strong>自动化客户支持</strong>：Agent 优先处理紧急请求，如系统停机报告，而不是日常事务，如密码重置。他们还可能优先处理高价值客户。</li>
+<li><strong>云计算</strong>：AI 通过优先将资源分配给高峰需求期间的关键应用程序来管理和调度资源，同时将不太紧急的批处理作业推迟到非高峰时段以优化成本。</li>
+<li><strong>自动驾驶系统</strong>：持续优先处理行动以确保安全和效率。例如，为避免碰撞而刹车优先于保持车道纪律或优化燃油效率。</li>
+<li><strong>金融交易</strong>：交易机器人通过分析市场条件、风险承受能力、利润率和实时新闻等因素来优先处理交易，实现高优先级交易的快速执行。</li>
+<li><strong>项目管理</strong>：AI Agent 根据截止日期、依赖关系、团队可用性和战略重要性来优先处理项目板上的任务。</li>
+<li><strong>网络安全</strong>：监控网络流量的 Agent 通过评估威胁严重性、潜在影响和资产关键性来优先处理警报，确保对最危险威胁的即时响应。</li>
+<li><strong>个人助理 AI</strong>：利用优先级排序来管理日常生活，根据用户定义的重要性、即将到来的截止日期和当前上下文来组织日历事件、提醒和通知。</li>
+</ul>
+<p>这些示例共同说明了优先级排序能力对于增强 AI Agent 在各种情况下的性能和决策能力是多么基础。</p>
+<h2 id="实践代码示例">实践代码示例</h2>
+<p>以下演示了使用 LangChain 开发项目管理 AI Agent。该 Agent 促进任务的创建、优先级排序和分配给团队成员，说明了 LLM 与定制工具在自动化项目管理中的应用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> asyncio<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">List</span>, <span class="hljs-type">Optional</span>, <span class="hljs-type">Dict</span>, <span class="hljs-type">Type</span><br><span class="hljs-keyword">from</span> dotenv <span class="hljs-keyword">import</span> load_dotenv<br><span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, Field<br><span class="hljs-keyword">from</span> langchain_core.prompts <span class="hljs-keyword">import</span> ChatPromptTemplate<br><span class="hljs-keyword">from</span> langchain_core.tools <span class="hljs-keyword">import</span> Tool<br><span class="hljs-keyword">from</span> langchain_openai <span class="hljs-keyword">import</span> ChatOpenAI<br><span class="hljs-keyword">from</span> langchain.agents <span class="hljs-keyword">import</span> AgentExecutor, create_react_agent<br><span class="hljs-keyword">from</span> langchain.memory <span class="hljs-keyword">import</span> ConversationBufferMemory<br><br><span class="hljs-comment">## --- 0. 配置和设置 ---</span><br><span class="hljs-comment">## 从 .env 文件加载 OPENAI_API_KEY。</span><br>load_dotenv()<br><br><span class="hljs-comment">## ChatOpenAI 客户端自动从环境中获取 API 密钥。</span><br>llm = ChatOpenAI(temperature=<span class="hljs-number">0.5</span>, model=<span class="hljs-string">&quot;gpt-4o-mini&quot;</span>)<br><br><span class="hljs-comment">## --- 1. 任务管理系统 ---</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Task</span>(<span class="hljs-title class_ inherited__">BaseModel</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;表示系统中的单个任务。&quot;&quot;&quot;</span><br>    <span class="hljs-built_in">id</span>: <span class="hljs-built_in">str</span><br>    description: <span class="hljs-built_in">str</span><br>    priority: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-literal">None</span>  <span class="hljs-comment"># P0, P1, P2</span><br>    assigned_to: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-literal">None</span> <span class="hljs-comment"># 工作人员的名字</span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SuperSimpleTaskManager</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;一个高效且稳健的内存任务管理器。&quot;&quot;&quot;</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-comment"># 使用字典实现 O(1) 查找、更新和删除。</span><br>        self.tasks: <span class="hljs-type">Dict</span>[<span class="hljs-built_in">str</span>, Task] = &#123;&#125;<br>        self.next_task_id = <span class="hljs-number">1</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">create_task</span>(<span class="hljs-params">self, description: <span class="hljs-built_in">str</span></span>) -&gt; Task:<br>        <span class="hljs-string">&quot;&quot;&quot;创建并存储一个新任务。&quot;&quot;&quot;</span><br>        task_id = <span class="hljs-string">f&quot;TASK-<span class="hljs-subst">&#123;self.next_task_id:03d&#125;</span>&quot;</span><br>        new_task = Task(<span class="hljs-built_in">id</span>=task_id, description=description)<br>        self.tasks[task_id] = new_task<br>        self.next_task_id += <span class="hljs-number">1</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;DEBUG: 任务已创建 - <span class="hljs-subst">&#123;task_id&#125;</span>: <span class="hljs-subst">&#123;description&#125;</span>&quot;</span>)<br>        <span class="hljs-keyword">return</span> new_task<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">update_task</span>(<span class="hljs-params">self, task_id: <span class="hljs-built_in">str</span>, **kwargs</span>) -&gt; <span class="hljs-type">Optional</span>[Task]:<br>        <span class="hljs-string">&quot;&quot;&quot;使用 Pydantic 的 model_copy 安全地更新任务。&quot;&quot;&quot;</span><br>        task = self.tasks.get(task_id)<br>        <span class="hljs-keyword">if</span> task:<br>            <span class="hljs-comment"># 使用 model_copy 进行类型安全的更新。</span><br>            update_data = &#123;k: v <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">in</span> kwargs.items() <span class="hljs-keyword">if</span> v <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>&#125;<br>            updated_task = task.model_copy(update=update_data)<br>            self.tasks[task_id] = updated_task<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;DEBUG: 任务 <span class="hljs-subst">&#123;task_id&#125;</span> 已更新为 <span class="hljs-subst">&#123;update_data&#125;</span>&quot;</span>)<br>            <span class="hljs-keyword">return</span> updated_task<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;DEBUG: 未找到任务 <span class="hljs-subst">&#123;task_id&#125;</span> 进行更新。&quot;</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">list_all_tasks</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">str</span>:<br>        <span class="hljs-string">&quot;&quot;&quot;列出系统中当前的所有任务。&quot;&quot;&quot;</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> self.tasks:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;系统中没有任务。&quot;</span><br><br>        task_strings = []<br>        <span class="hljs-keyword">for</span> task <span class="hljs-keyword">in</span> self.tasks.values():<br>            task_strings.append(<br>                <span class="hljs-string">f&quot;ID: <span class="hljs-subst">&#123;task.<span class="hljs-built_in">id</span>&#125;</span>, 描述: &#x27;<span class="hljs-subst">&#123;task.description&#125;</span>&#x27;, &quot;</span><br>                <span class="hljs-string">f&quot;优先级: <span class="hljs-subst">&#123;task.priority <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;N/A&#x27;</span>&#125;</span>, &quot;</span><br>                <span class="hljs-string">f&quot;分配给: <span class="hljs-subst">&#123;task.assigned_to <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;N/A&#x27;</span>&#125;</span>&quot;</span><br>            )<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;当前任务:\n&quot;</span> + <span class="hljs-string">&quot;\n&quot;</span>.join(task_strings)<br><br>task_manager = SuperSimpleTaskManager()<br><br><span class="hljs-comment">## --- 2. 项目管理 Agent 的工具 ---</span><br><span class="hljs-comment">## 使用 Pydantic 模型作为工具参数以获得更好的验证和清晰度。</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">CreateTaskArgs</span>(<span class="hljs-title class_ inherited__">BaseModel</span>):<br>    description: <span class="hljs-built_in">str</span> = Field(description=<span class="hljs-string">&quot;任务的详细描述。&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">PriorityArgs</span>(<span class="hljs-title class_ inherited__">BaseModel</span>):<br>    task_id: <span class="hljs-built_in">str</span> = Field(description=<span class="hljs-string">&quot;要更新的任务 ID，例如 &#x27;TASK-001&#x27;。&quot;</span>)<br>    priority: <span class="hljs-built_in">str</span> = Field(description=<span class="hljs-string">&quot;要设置的优先级。必须是以下之一：&#x27;P0&#x27;、&#x27;P1&#x27;、&#x27;P2&#x27;。&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AssignWorkerArgs</span>(<span class="hljs-title class_ inherited__">BaseModel</span>):<br>    task_id: <span class="hljs-built_in">str</span> = Field(description=<span class="hljs-string">&quot;要更新的任务 ID，例如 &#x27;TASK-001&#x27;。&quot;</span>)<br>    worker_name: <span class="hljs-built_in">str</span> = Field(description=<span class="hljs-string">&quot;要分配任务的工作人员的名字。&quot;</span>)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">create_new_task_tool</span>(<span class="hljs-params">description: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;使用给定的描述创建一个新的项目任务。&quot;&quot;&quot;</span><br>    task = task_manager.create_task(description)<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;已创建任务 <span class="hljs-subst">&#123;task.<span class="hljs-built_in">id</span>&#125;</span>: &#x27;<span class="hljs-subst">&#123;task.description&#125;</span>&#x27;。&quot;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">assign_priority_to_task_tool</span>(<span class="hljs-params">task_id: <span class="hljs-built_in">str</span>, priority: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;为给定的任务 ID 分配优先级（P0、P1、P2）。&quot;&quot;&quot;</span><br>    <span class="hljs-keyword">if</span> priority <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;P0&quot;</span>, <span class="hljs-string">&quot;P1&quot;</span>, <span class="hljs-string">&quot;P2&quot;</span>]:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;优先级无效。必须是 P0、P1 或 P2。&quot;</span><br>    task = task_manager.update_task(task_id, priority=priority)<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;已为任务 <span class="hljs-subst">&#123;task.<span class="hljs-built_in">id</span>&#125;</span> 分配优先级 <span class="hljs-subst">&#123;priority&#125;</span>。&quot;</span> <span class="hljs-keyword">if</span> task <span class="hljs-keyword">else</span> <span class="hljs-string">f&quot;未找到任务 <span class="hljs-subst">&#123;task_id&#125;</span>。&quot;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">assign_task_to_worker_tool</span>(<span class="hljs-params">task_id: <span class="hljs-built_in">str</span>, worker_name: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;将任务分配给特定的工作人员。&quot;&quot;&quot;</span><br>    task = task_manager.update_task(task_id, assigned_to=worker_name)<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;已将任务 <span class="hljs-subst">&#123;task.<span class="hljs-built_in">id</span>&#125;</span> 分配给 <span class="hljs-subst">&#123;worker_name&#125;</span>。&quot;</span> <span class="hljs-keyword">if</span> task <span class="hljs-keyword">else</span> <span class="hljs-string">f&quot;未找到任务 <span class="hljs-subst">&#123;task_id&#125;</span>。&quot;</span><br><br><span class="hljs-comment">## PM Agent 可以使用的所有工具</span><br>pm_tools = [<br>    Tool(<br>        name=<span class="hljs-string">&quot;create_new_task&quot;</span>,<br>        func=create_new_task_tool,<br>        description=<span class="hljs-string">&quot;首先使用此工具创建一个新任务并获取其 ID。&quot;</span>,<br>        args_schema=CreateTaskArgs<br>    ),<br>    Tool(<br>        name=<span class="hljs-string">&quot;assign_priority_to_task&quot;</span>,<br>        func=assign_priority_to_task_tool,<br>        description=<span class="hljs-string">&quot;使用此工具在创建任务后为其分配优先级。&quot;</span>,<br>        args_schema=PriorityArgs<br>    ),<br>    Tool(<br>        name=<span class="hljs-string">&quot;assign_task_to_worker&quot;</span>,<br>        func=assign_task_to_worker_tool,<br>        description=<span class="hljs-string">&quot;使用此工具在创建任务后将其分配给特定的工作人员。&quot;</span>,<br>        args_schema=AssignWorkerArgs<br>    ),<br>    Tool(<br>        name=<span class="hljs-string">&quot;list_all_tasks&quot;</span>,<br>        func=task_manager.list_all_tasks,<br>        description=<span class="hljs-string">&quot;使用此工具列出所有当前任务及其状态。&quot;</span><br>    ),<br>]<br><br><span class="hljs-comment">## --- 3. 项目管理 Agent 定义 ---</span><br>pm_prompt_template = ChatPromptTemplate.from_messages([<br>    (<span class="hljs-string">&quot;system&quot;</span>, <span class="hljs-string">&quot;&quot;&quot;你是一个专注的项目管理 LLM Agent。你的目标是高效地管理项目任务。</span><br><span class="hljs-string">       当你收到新的任务请求时，遵循以下步骤：</span><br><span class="hljs-string">    1.  首先，使用 `create_new_task` 工具创建具有给定描述的任务。你必须首先执行此操作以获取 `task_id`。</span><br><span class="hljs-string">    2.  接下来，分析用户的请求以查看是否提到了优先级或受让人。</span><br><span class="hljs-string">        - 如果提到优先级（例如，&quot;紧急&quot;、&quot;ASAP&quot;、&quot;关键&quot;），将其映射到 P0。使用 `assign_priority_to_task`。</span><br><span class="hljs-string">        - 如果提到工作人员，使用 `assign_task_to_worker`。</span><br><span class="hljs-string">    3.  如果缺少任何信息（优先级、受让人），你必须做出合理的默认分配（例如，分配 P1 优先级并分配给 &#x27;Worker A&#x27;）。</span><br><span class="hljs-string">    4.  一旦任务完全处理完毕，使用 `list_all_tasks` 显示最终状态。</span><br><span class="hljs-string">       可用的工作人员：&#x27;Worker A&#x27;、&#x27;Worker B&#x27;、&#x27;Review Team&#x27;</span><br><span class="hljs-string">    优先级级别：P0（最高）、P1（中等）、P2（最低）</span><br><span class="hljs-string">    &quot;&quot;&quot;</span>),<br>    (<span class="hljs-string">&quot;placeholder&quot;</span>, <span class="hljs-string">&quot;&#123;chat_history&#125;&quot;</span>),<br>    (<span class="hljs-string">&quot;human&quot;</span>, <span class="hljs-string">&quot;&#123;input&#125;&quot;</span>),<br>    (<span class="hljs-string">&quot;placeholder&quot;</span>, <span class="hljs-string">&quot;&#123;agent_scratchpad&#125;&quot;</span>)<br>])<br><br><span class="hljs-comment">## 创建 Agent 执行器</span><br>pm_agent = create_react_agent(llm, pm_tools, pm_prompt_template)<br>pm_agent_executor = AgentExecutor(<br>    agent=pm_agent,<br>    tools=pm_tools,<br>    verbose=<span class="hljs-literal">True</span>,<br>    handle_parsing_errors=<span class="hljs-literal">True</span>,<br>    memory=ConversationBufferMemory(memory_key=<span class="hljs-string">&quot;chat_history&quot;</span>, return_messages=<span class="hljs-literal">True</span>)<br>)<br><br><span class="hljs-comment">## --- 4. 简单交互流程 ---</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">run_simulation</span>():<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;--- 项目管理模拟 ---&quot;</span>)<br>    <span class="hljs-comment"># 场景 1：处理新的紧急功能请求</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n[用户请求] 我需要尽快实现一个新的登录系统。它应该分配给 Worker B。&quot;</span>)<br>    <span class="hljs-keyword">await</span> pm_agent_executor.ainvoke(&#123;<span class="hljs-string">&quot;input&quot;</span>: <span class="hljs-string">&quot;创建一个实现新登录系统的任务。这很紧急，应该分配给 Worker B。&quot;</span>&#125;)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&quot;</span> + <span class="hljs-string">&quot;-&quot;</span>*<span class="hljs-number">60</span> + <span class="hljs-string">&quot;\n&quot;</span>)<br><br>    <span class="hljs-comment"># 场景 2：处理细节较少的不太紧急的内容更新</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;[用户请求] 我们需要审查营销网站内容。&quot;</span>)<br>    <span class="hljs-keyword">await</span> pm_agent_executor.ainvoke(&#123;<span class="hljs-string">&quot;input&quot;</span>: <span class="hljs-string">&quot;管理一个新任务：审查营销网站内容。&quot;</span>&#125;)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- 模拟完成 ---&quot;</span>)<br><br><span class="hljs-comment">## 运行模拟</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    asyncio.run(run_simulation())<br></code></pre></td></tr></table></figure>
+<p>此代码使用 Python 和 LangChain 实现了一个简单的任务管理系统，旨在模拟由 LLM 驱动的项目管理 Agent。</p>
+<p>该系统采用 <a href="chapters/第20章-优先级管理.md:46"><code>SuperSimpleTaskManager</code></a> 类在内存中高效管理任务，利用字典结构实现快速数据检索。每个任务由 <a href="chapters/第20章-优先级管理.md:43"><code>Task</code></a> Pydantic 模型表示，该模型包含唯一标识符、描述性文本、可选的优先级级别（P0、P1、P2）和可选的受让人指定等属性。内存使用量根据任务类型、工作人员数量和其他因素而变化。任务管理器提供用于任务创建、任务修改和检索所有任务的方法。</p>
+<p>Agent 通过一组定义的工具与任务管理器交互。这些工具促进新任务的创建、向任务分配优先级、将任务分配给人员以及列出所有任务。每个工具都被封装以与 <a href="chapters/第20章-优先级管理.md:46"><code>SuperSimpleTaskManager</code></a> 的实例交互。Pydantic 模型用于描述工具所需的参数，从而确保数据验证。</p>
+<p><a href="chapters/第20章-优先级管理.md:104"><code>AgentExecutor</code></a> 配置了语言模型、工具集和对话内存组件以保持上下文连续性。定义了特定的 <a href="chapters/第20章-优先级管理.md:92"><code>ChatPromptTemplate</code></a> 来指导 Agent 在项目管理角色中的行为。提示词指示 Agent 首先创建任务，随后根据指定分配优先级和人员，并以全面的任务列表结束。在缺少信息的情况下，提示词中规定了默认分配，例如 P1 优先级和 'Worker A'。</p>
+<p>代码包含一个异步性质的模拟函数（<a href="chapters/第20章-优先级管理.md:112"><code>run_simulation</code></a>）来演示 Agent 的操作能力。模拟执行两个不同的场景：管理具有指定人员的紧急任务，以及管理具有最少输入的不太紧急的任务。由于在 <a href="chapters/第20章-优先级管理.md:104"><code>AgentExecutor</code></a> 中激活了 <code>verbose=True</code>，Agent 的行动和逻辑过程会输出到控制台。</p>
+<h2 id="概览">概览</h2>
+<p><strong>定义（What）：</strong> 在复杂环境中运行的 AI Agent 面临大量潜在行动、相互冲突的目标和有限的资源。如果没有明确的方法来确定下一步行动，这些 Agent 将面临效率低下和效果不佳的风险。这可能导致严重的操作延迟或完全无法完成主要目标。核心挑战是管理这一压倒性数量的选择，以确保 Agent 有目的性和逻辑性地行动。</p>
+<p><strong>原因（Why）：</strong> 优先级排序模式通过使 Agent 能够对任务和目标进行排序，为这个问题提供了标准化的解决方案。这是通过建立明确的标准（如紧急性、重要性、依赖关系和资源成本）来实现的。然后 Agent 根据这些标准评估每个潜在行动，以确定最关键和最及时的行动方案。这种 Agentic 能力允许系统动态适应不断变化的环境并有效管理受限资源。通过专注于最高优先级的项目，Agent 的行为变得更加智能、稳健，并与其战略目标保持一致。</p>
+<p><strong>经验法则（Rule of thumb）：</strong> 当 Agentic 系统必须在资源约束下自主管理多个（通常是相互冲突的）任务或目标，以在动态环境中有效运行时，使用优先级排序模式。</p>
+<p><strong>视觉总结：</strong></p>
+<p><strong><img src="../images/agent_images/chapter-20/image1.png" srcset="/img/loading.gif" lazyload /></strong></p>
+<p>图 1：优先级排序设计模式</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>优先级排序使 AI Agent 能够在复杂的多方面环境中有效运作。</li>
+<li>Agent 利用既定标准（如紧急性、重要性和依赖关系）来评估和排序任务。</li>
+<li>动态重新优先级排序允许 Agent 根据实时变化调整其操作焦点。</li>
+<li>优先级排序发生在各个层面，包括总体战略目标和即时战术决策。</li>
+<li>有效的优先级排序可提高 AI Agent 的效率和操作稳健性。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>总之，优先级排序模式是有效 Agentic AI 的基石，使系统能够有目的性和智能地应对动态环境的复杂性。它允许 Agent 自主评估大量相互冲突的任务和目标，对在哪里集中其有限资源做出合理的决策。这种 Agentic 能力超越了简单的任务执行，使系统能够充当主动的战略决策者。通过权衡紧急性、重要性和依赖关系等标准，Agent 展示了复杂的、类似人类的推理过程。</p>
+<p>这种 Agentic 行为的关键特征是动态重新优先级排序，它赋予 Agent 在条件变化时实时调整其焦点的自主权。如代码示例所示，Agent 解释模糊的请求，自主选择和使用适当的工具，并逻辑地排列其行动以实现其目标。这种自我管理工作流程的能力是真正的 Agentic 系统与简单的自动化脚本的区别所在。最终，掌握优先级排序对于创建能够在任何复杂的实际场景中有效可靠地运行的稳健和智能 Agent 至关重要。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Examining the Security of Artificial Intelligence in Project Management: A Case Study of AI-driven Project Scheduling and Resource Allocation in Information Systems Projects ; <a target="_blank" rel="noopener" href="https://www.irejournals.com/paper-details/1706160">https://www.irejournals.com/paper-details/1706160</a><br />
+</li>
+<li>AI-Driven Decision Support Systems in Agile Software Project Management: Enhancing Risk Mitigation and Resource Allocation; <a target="_blank" rel="noopener" href="https://www.mdpi.com/2079-8954/13/3/208">https://www.mdpi.com/2079-8954/13/3/208</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 20 优先级管理</div>
+      <div>https://linxkon.github.io/第20章-优先级管理.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC21%E7%AB%A0-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%8F%91%E7%8E%B0.html" title="Agent 设计模式 - 21 探索与发现">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 21 探索与发现</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC19%E7%AB%A0-%E8%AF%84%E4%BC%B0%E4%B8%8E%E7%9B%91%E6%8E%A7.html" title="Agent 设计模式 - 19 评估与监控">
+                        <span class="hidden-mobile">Agent 设计模式 - 19 评估与监控</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'cde9159be6fc80f8378f5e31dc6544dd'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

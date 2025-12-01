@@ -1,0 +1,824 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 11 章：目标设定和监控 要使 AI Agent 真正有效且有目的性，它们不仅需要处理信息或使用工具的能力，还需要明确的方向感和判断自身是否真正成功的方法。这就是目标设定和监控模式发挥作用的地方。该模式的核心是为 Agent 提供具体的工作目标，并为其配备跟踪进度和确定这些目标是否已实现的手段。 目标设定和监控模式概述 设想规划一次旅行。你不会自发地出现在目的地。你需要决定想去哪里（目标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 11 目标设定与监控">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC11%E7%AB%A0-%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%AE%9A%E4%B8%8E%E7%9B%91%E6%8E%A7.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 11 章：目标设定和监控 要使 AI Agent 真正有效且有目的性，它们不仅需要处理信息或使用工具的能力，还需要明确的方向感和判断自身是否真正成功的方法。这就是目标设定和监控模式发挥作用的地方。该模式的核心是为 Agent 提供具体的工作目标，并为其配备跟踪进度和确定这些目标是否已实现的手段。 目标设定和监控模式概述 设想规划一次旅行。你不会自发地出现在目的地。你需要决定想去哪里（目标">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:39:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.840Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 11 目标设定与监控 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 11 目标设定与监控"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:39" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 11 目标设定与监控</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-11-章目标设定和监控">第 11 章：目标设定和监控</h1>
+<p>要使 AI Agent 真正有效且有目的性，它们不仅需要处理信息或使用工具的能力，还需要明确的方向感和判断自身是否真正成功的方法。这就是目标设定和监控模式发挥作用的地方。该模式的核心是为 Agent 提供具体的工作目标，并为其配备跟踪进度和确定这些目标是否已实现的手段。</p>
+<h2 id="目标设定和监控模式概述">目标设定和监控模式概述</h2>
+<p>设想规划一次旅行。你不会自发地出现在目的地。你需要决定想去哪里（目标状态），弄清楚从哪里开始（初始状态），考虑可用选项（交通工具、路线、预算），然后制定一系列步骤：订票、打包行李、前往机场/车站、登机/上车、抵达、找住宿等。这个逐步的过程，通常考虑依赖关系和约束条件，从根本上就是我们在 Agent 系统中所说的规划。</p>
+<p>在 AI Agent 的上下文中，规划通常涉及 Agent 接受高级目标，并自主或半自主地生成一系列中间步骤或子目标。这些步骤可以按顺序执行，或以更复杂的流程执行，可能涉及其他模式，如工具使用、路由或多 Agent 协作。规划机制可能涉及复杂的搜索算法、逻辑推理，或越来越多地利用大型语言模型（LLM）的能力，根据其训练数据和对任务的理解生成合理且有效的计划。</p>
+<p>良好的规划能力使 Agent 能够处理非简单的单步查询问题。它使 Agent 能够处理多方面的请求，通过重新规划适应不断变化的情况，并编排复杂的工作流。这是支撑许多高级 Agent 行为的基础模式，将简单的反应系统转变为能够主动朝着定义目标工作的系统。</p>
+<h2 id="实际应用和用例">实际应用和用例</h2>
+<p>目标设定和监控模式对于构建能够在复杂的现实场景中自主可靠运行的 Agent 至关重要。以下是一些实际应用：</p>
+<ul>
+<li><strong>客户支持自动化</strong>：Agent 的目标可能是"解决客户的账单查询"。它监控对话，检查数据库条目，并使用工具调整账单。通过确认账单更改并收到客户的积极反馈来监控成功。如果问题未解决，它会升级处理。</li>
+<li><strong>个性化学习系统</strong>：学习 Agent 可能有"提高学生对代数的理解"的目标。它监控学生在练习中的进度，调整教学材料，并跟踪准确性和完成时间等性能指标，如果学生遇到困难则调整其方法。</li>
+<li><strong>项目管理助手</strong>：可以为 Agent 分配"确保项目里程碑 X 在 Y 日期前完成"的任务。它监控任务状态、团队沟通和资源可用性，如果目标面临风险则标记延迟并建议纠正措施。</li>
+<li><strong>自动交易机器人</strong>：交易 Agent 的目标可能是"在保持风险承受范围内最大化投资组合收益"。它持续监控市场数据、当前投资组合价值和风险指标，在条件符合其目标时执行交易，并在突破风险阈值时调整策略。</li>
+<li><strong>机器人和自动驾驶车辆</strong>：自动驾驶车辆的主要目标是"安全地将乘客从 A 点运送到 B 点"。它不断监控其环境（其他车辆、行人、交通信号）、自身状态（速度、燃料）以及沿规划路线的进度，调整其驾驶行为以安全高效地实现目标。</li>
+<li><strong>内容审核</strong>：Agent 的目标可能是"识别并从平台 X 中删除有害内容"。它监控传入的内容，应用分类模型，并跟踪误报/漏报等指标，调整其过滤标准或将模糊案例升级给人工审查员。</li>
+</ul>
+<p>此模式对于需要可靠运行、实现特定成果并适应动态条件的 Agent 至关重要，为智能自我管理提供了必要的框架。</p>
+<h2 id="实践代码示例">实践代码示例</h2>
+<p>为了说明目标设定和监控模式，我们有一个使用 LangChain 和 OpenAI API 的示例。这个 Python 脚本概述了一个旨在生成和完善 Python 代码的自主 AI Agent。其核心功能是为指定的问题生成解决方案，确保符合用户定义的质量基准。</p>
+<p>它采用"目标设定和监控"模式，不仅仅生成一次代码，而是进入创建、自我评估和改进的迭代循环。Agent 的成功通过其自己的 AI 驱动的判断来衡量，判断生成的代码是否成功满足初始目标。最终输出是一个经过打磨、注释完善且可以立即使用的 Python 文件，代表了这个完善过程的成果。</p>
+<p><strong>依赖项</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install langchain_openai openai python-dotenv<br><span class="hljs-comment">## .env 文件中需要有 OPENAI_API_KEY</span><br></code></pre></td></tr></table></figure>
+<p>你可以通过将此脚本想象为分配给项目的自主 AI 程序员来最好地理解它（见图 1）。该过程从你向 AI 提供详细的项目简报开始，这是它需要解决的特定编码问题。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## MIT License</span><br><span class="hljs-comment">## Copyright (c) 2025 Mahtab Syed</span><br><span class="hljs-comment">## https://www.linkedin.com/in/mahtabsyed/</span><br><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">实践代码示例 - 迭代 2</span><br><span class="hljs-string">为了说明目标设定和监控模式，我们有一个使用 LangChain 和 OpenAI API 的示例：</span><br><span class="hljs-string"></span><br><span class="hljs-string">目标：构建一个 AI Agent，可以根据指定的目标为指定的用例编写代码：</span><br><span class="hljs-string">- 接受编码问题（用例）作为代码输入或可以作为输入。</span><br><span class="hljs-string">- 接受目标列表（例如，&quot;简单&quot;、&quot;经过测试&quot;、&quot;处理边缘情况&quot;）作为代码输入或可以作为输入。</span><br><span class="hljs-string">- 使用 LLM（如 GPT-4o）生成和完善 Python 代码，直到满足目标。（我使用最多 5 次迭代，这也可以基于设定的目标）</span><br><span class="hljs-string">- 要检查我们是否达到了目标，我要求 LLM 判断这一点并仅回答 True 或 False，这使得更容易停止迭代。</span><br><span class="hljs-string">- 将最终代码保存在 .py 文件中，使用清晰的文件名和头部注释。</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> pathlib <span class="hljs-keyword">import</span> Path<br><span class="hljs-keyword">from</span> langchain_openai <span class="hljs-keyword">import</span> ChatOpenAI<br><span class="hljs-keyword">from</span> dotenv <span class="hljs-keyword">import</span> load_dotenv, find_dotenv<br><br><span class="hljs-comment">## 🔐 加载环境变量</span><br>_ = load_dotenv(find_dotenv())<br>OPENAI_API_KEY = os.getenv(<span class="hljs-string">&quot;OPENAI_API_KEY&quot;</span>)<br><br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> OPENAI_API_KEY:<br>   <span class="hljs-keyword">raise</span> EnvironmentError(<span class="hljs-string">&quot;❌ 请设置 OPENAI_API_KEY 环境变量。&quot;</span>)<br><br><span class="hljs-comment">## ✅ 初始化 OpenAI 模型</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;📡 初始化 OpenAI LLM (gpt-4o)...&quot;</span>)<br>llm = ChatOpenAI(<br>   model=<span class="hljs-string">&quot;gpt-4o&quot;</span>,  <span class="hljs-comment"># 如果你无法访问 gpt-4o，请使用其他 OpenAI LLM</span><br>   temperature=<span class="hljs-number">0.3</span>,<br>   openai_api_key=OPENAI_API_KEY,<br>)<br><br><span class="hljs-comment">## --- 实用函数 ---</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_prompt</span>(<span class="hljs-params"></span><br><span class="hljs-params">   use_case: <span class="hljs-built_in">str</span>, goals: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>], previous_code: <span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;&quot;</span>, feedback: <span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;&quot;</span></span><br><span class="hljs-params"></span>) -&gt; <span class="hljs-built_in">str</span>:<br>   <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;📝 构建代码生成提示词...&quot;</span>)<br>   base_prompt = <span class="hljs-string">f&quot;&quot;&quot;</span><br><span class="hljs-string">你是一个 AI 编码 Agent。你的工作是根据以下用例编写 Python 代码：</span><br><span class="hljs-string"></span><br><span class="hljs-string">用例：<span class="hljs-subst">&#123;use_case&#125;</span></span><br><span class="hljs-string"></span><br><span class="hljs-string">你的目标是：</span><br><span class="hljs-string"><span class="hljs-subst">&#123;<span class="hljs-built_in">chr</span>(<span class="hljs-number">10</span>).join(<span class="hljs-string">f&quot;- <span class="hljs-subst">&#123;g.strip()&#125;</span>&quot;</span> <span class="hljs-keyword">for</span> g <span class="hljs-keyword">in</span> goals)&#125;</span></span><br><span class="hljs-string">&quot;&quot;&quot;</span><br>   <span class="hljs-keyword">if</span> previous_code:<br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;🔄 将之前的代码添加到提示词中以进行完善。&quot;</span>)<br>       base_prompt += <span class="hljs-string">f&quot;\n之前生成的代码：\n<span class="hljs-subst">&#123;previous_code&#125;</span>&quot;</span><br>   <br>   <span class="hljs-keyword">if</span> feedback:<br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;📋 包含反馈以进行修订。&quot;</span>)<br>       base_prompt += <span class="hljs-string">f&quot;\n对之前版本的反馈：\n<span class="hljs-subst">&#123;feedback&#125;</span>\n&quot;</span><br>   <br>   base_prompt += <span class="hljs-string">&quot;\n请仅返回修订后的 Python 代码。不要在代码之外包含注释或解释。&quot;</span><br>   <span class="hljs-keyword">return</span> base_prompt<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_code_feedback</span>(<span class="hljs-params">code: <span class="hljs-built_in">str</span>, goals: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>]</span>) -&gt; <span class="hljs-built_in">str</span>:<br>   <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;🔍 根据目标评估代码...&quot;</span>)<br>   feedback_prompt = <span class="hljs-string">f&quot;&quot;&quot;</span><br><span class="hljs-string">你是一个 Python 代码审查员。下面显示了一个代码片段。</span><br><span class="hljs-string"></span><br><span class="hljs-string">基于以下目标：</span><br><span class="hljs-string"><span class="hljs-subst">&#123;<span class="hljs-built_in">chr</span>(<span class="hljs-number">10</span>).join(<span class="hljs-string">f&quot;- <span class="hljs-subst">&#123;g.strip()&#125;</span>&quot;</span> <span class="hljs-keyword">for</span> g <span class="hljs-keyword">in</span> goals)&#125;</span></span><br><span class="hljs-string"></span><br><span class="hljs-string">请对此代码进行批评并确定是否满足目标。提及是否需要改进清晰度、简单性、正确性、边缘情况处理或测试覆盖率。</span><br><span class="hljs-string"></span><br><span class="hljs-string">代码：</span><br><span class="hljs-string"><span class="hljs-subst">&#123;code&#125;</span></span><br><span class="hljs-string">&quot;&quot;&quot;</span><br>   <span class="hljs-keyword">return</span> llm.invoke(feedback_prompt)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">goals_met</span>(<span class="hljs-params">feedback_text: <span class="hljs-built_in">str</span>, goals: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>]</span>) -&gt; <span class="hljs-built_in">bool</span>:<br>   <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">   使用 LLM 根据反馈文本评估目标是否已达成。</span><br><span class="hljs-string">   返回 True 或 False（从 LLM 输出中解析）。</span><br><span class="hljs-string">   &quot;&quot;&quot;</span><br>   review_prompt = <span class="hljs-string">f&quot;&quot;&quot;</span><br><span class="hljs-string">你是一个 AI 审查员。这些是目标：</span><br><span class="hljs-string"><span class="hljs-subst">&#123;<span class="hljs-built_in">chr</span>(<span class="hljs-number">10</span>).join(<span class="hljs-string">f&quot;- <span class="hljs-subst">&#123;g.strip()&#125;</span>&quot;</span> <span class="hljs-keyword">for</span> g <span class="hljs-keyword">in</span> goals)&#125;</span></span><br><span class="hljs-string"></span><br><span class="hljs-string">这是关于代码的反馈：</span><br><span class="hljs-string">\&quot;\&quot;\&quot;</span><br><span class="hljs-string"><span class="hljs-subst">&#123;feedback_text&#125;</span></span><br><span class="hljs-string">\&quot;\&quot;\&quot;</span><br><span class="hljs-string"></span><br><span class="hljs-string">根据上述反馈，目标是否已达成？仅用一个词回答：True 或 False。</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br>   response = llm.invoke(review_prompt).content.strip().lower()<br>   <span class="hljs-keyword">return</span> response == <span class="hljs-string">&quot;true&quot;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">clean_code_block</span>(<span class="hljs-params">code: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>   lines = code.strip().splitlines()<br>   <span class="hljs-keyword">if</span> lines <span class="hljs-keyword">and</span> lines[<span class="hljs-number">0</span>].strip().startswith(<span class="hljs-string">&quot;```&quot;</span>):<br>       lines = lines[<span class="hljs-number">1</span>:]<br>   <span class="hljs-keyword">if</span> lines <span class="hljs-keyword">and</span> lines[-<span class="hljs-number">1</span>].strip() == <span class="hljs-string">&quot;```&quot;</span>:<br>       lines = lines[:-<span class="hljs-number">1</span>]<br>   <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;\n&quot;</span>.join(lines).strip()<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add_comment_header</span>(<span class="hljs-params">code: <span class="hljs-built_in">str</span>, use_case: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>   comment = <span class="hljs-string">f&quot;# 此 Python 程序实现以下用例：\n# <span class="hljs-subst">&#123;use_case.strip()&#125;</span>\n&quot;</span><br>   <span class="hljs-keyword">return</span> comment + <span class="hljs-string">&quot;\n&quot;</span> + code<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">to_snake_case</span>(<span class="hljs-params">text: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>   text = re.sub(<span class="hljs-string">r&quot;[^a-zA-Z0-9 ]&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, text)<br>   <span class="hljs-keyword">return</span> re.sub(<span class="hljs-string">r&quot;\s+&quot;</span>, <span class="hljs-string">&quot;_&quot;</span>, text.strip().lower())<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">save_code_to_file</span>(<span class="hljs-params">code: <span class="hljs-built_in">str</span>, use_case: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>   <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;💾 保存最终代码到文件...&quot;</span>)<br>   summary_prompt = (<br>       <span class="hljs-string">f&quot;将以下用例总结为一个小写单词或短语，&quot;</span><br>       <span class="hljs-string">f&quot;不超过 10 个字符，适合作为 Python 文件名：\n\n<span class="hljs-subst">&#123;use_case&#125;</span>&quot;</span><br>   )<br>   raw_summary = llm.invoke(summary_prompt).content.strip()<br>   short_name = re.sub(<span class="hljs-string">r&quot;[^a-zA-Z0-9_]&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, raw_summary.replace(<span class="hljs-string">&quot; &quot;</span>, <span class="hljs-string">&quot;_&quot;</span>).lower())[:<span class="hljs-number">10</span>]<br>   random_suffix = <span class="hljs-built_in">str</span>(random.randint(<span class="hljs-number">1000</span>, <span class="hljs-number">9999</span>))<br>   filename = <span class="hljs-string">f&quot;<span class="hljs-subst">&#123;short_name&#125;</span>_<span class="hljs-subst">&#123;random_suffix&#125;</span>.py&quot;</span><br>   filepath = Path.cwd() / filename<br>   <br>   <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(filepath, <span class="hljs-string">&quot;w&quot;</span>) <span class="hljs-keyword">as</span> f:<br>       f.write(code)<br>   <br>   <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;✅ 代码保存到：<span class="hljs-subst">&#123;filepath&#125;</span>&quot;</span>)<br>   <span class="hljs-keyword">return</span> <span class="hljs-built_in">str</span>(filepath)<br><br><span class="hljs-comment">## --- 主 Agent 函数 ---</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">run_code_agent</span>(<span class="hljs-params">use_case: <span class="hljs-built_in">str</span>, goals_input: <span class="hljs-built_in">str</span>, max_iterations: <span class="hljs-built_in">int</span> = <span class="hljs-number">5</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>   goals = [g.strip() <span class="hljs-keyword">for</span> g <span class="hljs-keyword">in</span> goals_input.split(<span class="hljs-string">&quot;,&quot;</span>)]<br>   <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\n🎯 用例：<span class="hljs-subst">&#123;use_case&#125;</span>&quot;</span>)<br>   <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;🎯 目标：&quot;</span>)<br>   <span class="hljs-keyword">for</span> g <span class="hljs-keyword">in</span> goals:<br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  - <span class="hljs-subst">&#123;g&#125;</span>&quot;</span>)<br>   <br>   previous_code = <span class="hljs-string">&quot;&quot;</span><br>   feedback = <span class="hljs-string">&quot;&quot;</span><br>   <br>   <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(max_iterations):<br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\n=== 🔁 迭代 <span class="hljs-subst">&#123;i + <span class="hljs-number">1</span>&#125;</span> / <span class="hljs-subst">&#123;max_iterations&#125;</span> ===&quot;</span>)<br>       <br>       prompt = generate_prompt(use_case, goals, previous_code, <br>                               feedback <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(feedback, <span class="hljs-built_in">str</span>) <span class="hljs-keyword">else</span> feedback.content)<br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;🚧 生成代码...&quot;</span>)<br>       code_response = llm.invoke(prompt)<br>       raw_code = code_response.content.strip()<br>       code = clean_code_block(raw_code)<br>       <br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n🧾 生成的代码：\n&quot;</span> + <span class="hljs-string">&quot;-&quot;</span> * <span class="hljs-number">50</span> + <span class="hljs-string">f&quot;\n<span class="hljs-subst">&#123;code&#125;</span>\n&quot;</span> + <span class="hljs-string">&quot;-&quot;</span> * <span class="hljs-number">50</span>)<br>       <br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n📤 提交代码进行反馈审查...&quot;</span>)<br>       feedback = get_code_feedback(code, goals)<br>       feedback_text = feedback.content.strip()<br>       <br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n📥 收到反馈：\n&quot;</span> + <span class="hljs-string">&quot;-&quot;</span> * <span class="hljs-number">50</span> + <span class="hljs-string">f&quot;\n<span class="hljs-subst">&#123;feedback_text&#125;</span>\n&quot;</span> + <span class="hljs-string">&quot;-&quot;</span> * <span class="hljs-number">50</span>)<br>       <br>       <span class="hljs-keyword">if</span> goals_met(feedback_text, goals):<br>           <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;✅ LLM 确认目标已达成。停止迭代。&quot;</span>)<br>           <span class="hljs-keyword">break</span><br>       <br>       <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;🛠️ 目标尚未完全达成。准备下一次迭代...&quot;</span>)<br>       previous_code = code<br>   <br>   final_code = add_comment_header(code, use_case)<br>   <span class="hljs-keyword">return</span> save_code_to_file(final_code, use_case)<br><br><span class="hljs-comment">## --- CLI 测试运行 ---</span><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>   <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n🧠 欢迎使用 AI 代码生成 Agent&quot;</span>)<br>   <br>   <span class="hljs-comment"># 示例 1</span><br>   use_case_input = <span class="hljs-string">&quot;编写代码查找给定正整数的 BinaryGap&quot;</span><br>   goals_input = <span class="hljs-string">&quot;代码简单易懂，功能正确，处理全面的边缘情况，仅接受正整数输入，打印结果并附带几个示例&quot;</span><br>   run_code_agent(use_case_input, goals_input)<br>   <br>   <span class="hljs-comment"># 示例 2</span><br>   <span class="hljs-comment"># use_case_input = &quot;编写代码计算当前目录及其所有嵌套子目录中的文件数量，并打印总数&quot;</span><br>   <span class="hljs-comment"># goals_input = (</span><br>   <span class="hljs-comment">#     &quot;代码简单易懂，功能正确，处理全面的边缘情况，忽略性能建议，忽略关于使用 unittest 或 pytest 等测试套件的建议&quot;</span><br>   <span class="hljs-comment"># )</span><br>   <span class="hljs-comment"># run_code_agent(use_case_input, goals_input)</span><br>   <br>   <span class="hljs-comment"># 示例 3</span><br>   <span class="hljs-comment"># use_case_input = &quot;编写代码，接受 word doc 或 docx 文件的命令行输入，打开它并计算其中的单词数和字符数并全部打印&quot;</span><br>   <span class="hljs-comment"># goals_input = &quot;代码简单易懂，功能正确，处理边缘情况&quot;</span><br>   <span class="hljs-comment"># run_code_agent(use_case_input, goals_input)</span><br></code></pre></td></tr></table></figure>
+<p>除了这个简报，你还提供了一个严格的质量检查清单，它代表了最终代码必须满足的目标——诸如"解决方案必须简单"、"它必须在功能上正确"或"它需要处理意外的边缘情况"等标准。</p>
+<p><img src="../images/agent_images/chapter-11/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：目标设定和监控示例</p>
+<p>有了这个任务，AI 程序员开始工作并产生其第一个代码草稿。然而，它没有立即提交这个初始版本，而是暂停执行一个关键步骤：严格的自我审查。它仔细地将自己的创作与你提供的质量检查清单上的每一项进行比较，充当自己的质量保证检查员。在这次检查之后，它对自己的进度做出一个简单、无偏见的判断："True"如果工作满足所有标准，或"False"如果它不足。</p>
+<p>如果判断是"False"，AI 不会放弃。它进入深思熟虑的修订阶段，使用自我批评的见解来确定弱点并智能地重写代码。这个起草、自我审查和完善的循环继续进行，每次迭代都旨在更接近目标。这个过程重复进行，直到 AI 最终通过满足每个要求而达到"True"状态，或直到它达到预定义的尝试次数限制，就像开发人员在截止日期前工作一样。一旦代码通过了这次最终检查，脚本就会打包打磨好的解决方案，添加有用的注释并将其保存到一个干净的新 Python 文件中，准备使用。</p>
+<p><strong>注意事项和考虑因素</strong>：重要的是要注意，这是一个示例性的说明，而不是生产就绪的代码。对于实际应用，必须考虑几个因素。LLM 可能无法完全理解目标的预期含义，并可能错误地评估其性能为成功。即使目标被很好地理解，模型也可能产生幻觉。当同一个 LLM 既负责编写代码又负责判断其质量时，它可能更难发现自己走向错误的方向。</p>
+<p>最终，LLM 不会魔法般地产生完美的代码；你仍然需要运行和测试生成的代码。此外，简单示例中的"监控"是基础的，并造成了进程可能永远运行的潜在风险。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text">充当一位对产生清晰、正确和简单代码有着深刻承诺的专家代码审查员。你的核心使命是通过确保每个建议都基于现实和最佳实践来消除代码&quot;幻觉&quot;。当我向你提供代码片段时，我希望你：<br><br>-- 识别和纠正错误：指出任何逻辑缺陷、错误或潜在的运行时错误。<br>-- 简化和重构：建议使代码更易读、高效和可维护的更改，而不牺牲正确性。<br>-- 提供清晰的解释：对于每个建议的更改，解释为什么它是改进，引用清晰代码、性能或安全性的原则。<br>-- 提供更正后的代码：显示建议更改的&quot;之前&quot;和&quot;之后&quot;，以便改进清晰可见。<br><br>你的反馈应该是直接的、建设性的，并始终旨在提高代码质量。<br></code></pre></td></tr></table></figure>
+<p>更健壮的方法涉及通过为 Agent 团队分配特定角色来分离这些关注点。例如，我使用 Gemini 构建了一个个人 AI Agent 团队，其中每个都有特定的角色：</p>
+<ul>
+<li><strong>同伴程序员</strong>：帮助编写和头脑风暴代码。</li>
+<li><strong>代码审查员</strong>：捕获错误并建议改进。</li>
+<li><strong>文档编写员</strong>：生成清晰简洁的文档。</li>
+<li><strong>测试编写员</strong>：创建全面的单元测试。</li>
+<li><strong>提示词优化器</strong>：优化与 AI 的交互。</li>
+</ul>
+<p>在这个多 Agent 系统中，作为独立实体的代码审查员与程序员 Agent 分开，具有与示例中的判断者类似的提示词，这显著提高了客观评估。这种结构自然导致更好的实践，因为测试编写员 Agent 可以满足为同伴程序员产生的代码编写单元测试的需求。</p>
+<p>我留给感兴趣的读者添加这些更复杂的控制并使代码更接近生产就绪的任务。</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么</strong>：AI Agent 通常缺乏明确的方向，阻碍了它们超越简单反应性任务的有目的行动。如果没有定义的目标，它们无法独立处理复杂的多步骤问题或编排复杂的工作流。此外，它们缺乏固有的机制来确定其行动是否导致成功的结果。这限制了它们的自主性，并阻止它们在仅执行任务不足的动态现实世界场景中真正有效。</p>
+<p><strong>为什么</strong>：目标设定和监控模式通过将目的感和自我评估嵌入 Agent 系统来提供标准化的解决方案。它涉及明确定义 Agent 要实现的清晰、可衡量的目标。同时，它建立了一个监控机制，持续跟踪 Agent 的进度和其环境的状态与这些目标的对比。这创建了一个关键的反馈循环，使 Agent 能够评估其性能，纠正其路线，并在偏离成功之路时调整其计划。通过实施此模式，开发人员可以将简单的反应 Agent 转变为能够自主和可靠运行的主动的、以目标为导向的系统。</p>
+<p><strong>经验法则</strong>：当 AI Agent 必须自主执行多步骤任务、适应动态条件并在没有持续人工干预的情况下可靠地实现特定的高级目标时，使用此模式。</p>
+<p><strong>可视化摘要</strong>：</p>
+<p><img src="../images/agent_images/chapter-11/image2.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 2：目标设计模式</p>
+<h2 id="关键要点">关键要点</h2>
+<p>关键要点包括：</p>
+<ul>
+<li>目标设定和监控为 Agent 配备目的和跟踪进度的机制。</li>
+<li>目标应该是具体的、可衡量的、可实现的、相关的和有时限的（SMART）。</li>
+<li>清楚地定义指标和成功标准对于有效监控至关重要。</li>
+<li>监控涉及观察 Agent 的行动、环境状态和工具输出。</li>
+<li>来自监控的反馈循环允许 Agent 调整、修订计划或升级问题。</li>
+<li>在 Google 的 ADK 中，目标通常通过 Agent 指令传达，监控通过状态管理和工具交互完成。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>本章重点介绍了目标设定和监控的关键范式。我们强调了这个概念如何将 AI Agent 从仅仅是反应系统转变为主动的、以目标为驱动的实体。文本强调了定义清晰、可衡量的目标以及建立严格的监控程序来跟踪进度的重要性。实际应用展示了这个范式如何支持在各个领域（包括客户服务和机器人）的可靠自主运行。一个概念性的编码示例说明了这些原则在结构化框架内的实现，使用 Agent 指令和状态管理来指导和评估 Agent 对其指定目标的实现。最终，为 Agent 配备制定和监督目标的能力是构建真正智能和负责任的 AI 系统的基本步骤。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>SMART Goals Framework. <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/SMART_criteria">https://en.wikipedia.org/wiki/SMART_criteria</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 11 目标设定与监控</div>
+      <div>https://linxkon.github.io/第11章-目标设定与监控.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC12%E7%AB%A0-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%8E%E6%81%A2%E5%A4%8D.html" title="Agent 设计模式 - 12 异常处理与恢复">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 12 异常处理与恢复</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC10%E7%AB%A0-%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE-MCP.html" title="Agent 设计模式 - 10 模型上下文协议-MCP">
+                        <span class="hidden-mobile">Agent 设计模式 - 10 模型上下文协议-MCP</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '26ee620ed98d74d0c326d1d404142083'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

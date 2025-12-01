@@ -1,0 +1,817 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="附录 B - AI Agentic 交互：从图形界面到现实世界环境 AI Agent 正日益通过数字界面和物理环境的交互来执行复杂任务。它们在这些多样化环境中感知、处理和行动的能力，正在从根本上重塑自动化、人机交互和智能系统的格局。本附录深入探讨 Agent 如何与计算机及其环境交互，并重点介绍相关技术进展与代表性项目。 交互：Agent 与计算机 AI 从对话伙伴向主动式任务导向型 Age">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 附录B AI-Agent交互-从GUI到真实世界">
+<meta property="og:url" content="https://linxkon.github.io/%E9%99%84%E5%BD%95B-AI-Agent%E4%BA%A4%E4%BA%92-%E4%BB%8EGUI%E5%88%B0%E7%9C%9F%E5%AE%9E%E4%B8%96%E7%95%8C.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="附录 B - AI Agentic 交互：从图形界面到现实世界环境 AI Agent 正日益通过数字界面和物理环境的交互来执行复杂任务。它们在这些多样化环境中感知、处理和行动的能力，正在从根本上重塑自动化、人机交互和智能系统的格局。本附录深入探讨 Agent 如何与计算机及其环境交互，并重点介绍相关技术进展与代表性项目。 交互：Agent 与计算机 AI 从对话伙伴向主动式任务导向型 Age">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:52:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.846Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 附录B AI-Agent交互-从GUI到真实世界 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 附录B AI-Agent交互-从GUI到真实世界"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:52" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 附录B AI-Agent交互-从GUI到真实世界</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="附录-b---ai-agentic-交互从图形界面到现实世界环境">附录 B - AI Agentic 交互：从图形界面到现实世界环境</h1>
+<p>AI Agent 正日益通过数字界面和物理环境的交互来执行复杂任务。它们在这些多样化环境中感知、处理和行动的能力，正在从根本上重塑自动化、人机交互和智能系统的格局。本附录深入探讨 Agent 如何与计算机及其环境交互，并重点介绍相关技术进展与代表性项目。</p>
+<h2 id="交互agent-与计算机">交互：Agent 与计算机</h2>
+<p>AI 从对话伙伴向主动式任务导向型 Agent 的演进，正由 Agent-计算机界面（ACI）技术驱动。这些界面使 AI 能够直接与计算机的图形用户界面（GUI）交互，使其能像人类一样感知并操作图标、按钮等视觉元素。这种新范式超越了依赖 API 和系统调用的传统自动化方法——后者往往受限于僵化的、依赖开发人员编写的脚本。通过利用软件的视觉"前门"，AI 现能以更灵活、更强大的方式自动化复杂数字任务，该过程涉及以下关键阶段：</p>
+<ul>
+<li><strong>视觉感知</strong>：Agent 首先捕获屏幕的视觉呈现，本质上相当于截屏操作。</li>
+<li><strong>GUI 元素识别</strong>：随后分析该图像以区分各类 GUI 元素。它必须学会将屏幕"解读"为具有交互组件的结构化布局，而非单纯的像素集合，能够辨别可点击的"提交"按钮与静态横幅广告，或区分可编辑文本框与普通标签。</li>
+<li><strong>上下文理解</strong>：ACI 模块作为视觉数据与 Agent 核心智能（通常为大型语言模型 LLM）间的桥梁，在任务背景下解析这些元素。它能理解放大镜图标通常代表"搜索"，或一组单选按钮表示选项。此模块对增强 LLM 推理能力至关重要，使其能基于视觉证据制定行动计划。</li>
+<li><strong>动态执行与响应</strong>：Agent 随后通过程序化控制鼠标和键盘执行计划——包括点击、输入、滚动和拖拽。关键在于，它必须持续监控屏幕以获取视觉反馈，动态响应界面变化、加载状态、弹窗通知或错误信息，从而成功驾驭多步骤工作流。</li>
+</ul>
+<p>该技术已超越理论范畴。多家领先 AI 实验室已开发出功能性 Agent，充分展示了 GUI 交互的强大潜力：</p>
+<p><strong>ChatGPT Operator（OpenAI）</strong>：作为数字协作伙伴的愿景，ChatGPT Operator 旨在直接从桌面端自动化跨多种应用的任务。它能理解屏幕元素，从而执行诸如将电子表格数据导入客户关系管理（CRM）系统、在航空公司和酒店网站间规划复杂行程，或填写详尽在线表单等操作，无需为每个服务配置专用 API 访问。这使其成为通用性工具，旨在通过接管重复性数字任务提升个人与企业效率。</p>
+<p><strong>Google Project Mariner</strong>：作为研究原型，Project Mariner 以 Agent 身份在 Chrome 浏览器内运行（见图 1）。其核心目标是理解用户意图并自主执行基于网络的任务。例如，用户可指令其在特定预算和区域内寻找三套出租公寓；Mariner 便会导航至房产网站，应用筛选条件，浏览房源列表，并将相关信息提取至文档中。该项目体现了 Google 对构建真正实用且具"代理性"网络体验的探索——让浏览器主动为用户服务。</p>
+<p><img src="../images/appendix-b/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：Agent 与网络浏览器的交互示意图</p>
+<p><strong>Anthropic 的计算机使用功能</strong>：该特性使 Anthropic 的 AI 模型 Claude 能够成为计算机桌面环境的直接操作用户。通过截屏感知界面并以程序化方式控制鼠标键盘，Claude 可编排跨多个独立应用的工作流。用户可要求其分析 PDF 报告中的数据，打开电子表格程序进行相关计算，生成图表，并将图表插入邮件草稿——这一系列任务以往需要持续的人工介入。</p>
+<p><strong>Browser Use</strong>：这是一个提供程序化浏览器自动化高级 API 的开源库。它使 AI Agent 能通过访问和控制文档对象模型（DOM）与网页交互。该 API 将浏览器控制协议的复杂底层指令抽象为更简洁直观的函数集。这使得 Agent 能执行复杂操作序列，包括从嵌套元素提取数据、提交表单以及跨页面自动导航。因此，该库助力将非结构化网络数据转化为 AI Agent 可系统处理并用于分析或决策的结构化格式。</p>
+<h2 id="交互agent-与环境">交互：Agent 与环境</h2>
+<p>超越计算机屏幕的局限，AI Agent 正越来越多地被设计用于与复杂、动态的环境交互，这些环境往往模拟现实世界。这要求 Agent 具备精密的感知、推理和执行能力。</p>
+<p>Google 的 <strong>Project Astra</strong> 是推动 Agent 与环境交互边界的一个典范。Astra 致力于打造一个在日常生活中实用的通用 AI Agent，它利用多模态输入（视觉、听觉、语音）和输出来理解世界并进行上下文交互。该项目聚焦于快速理解、推理与响应，使 Agent 能通过摄像头和麦克风"看见"和"听见"周遭环境，并在提供实时协助的同时进行自然对话。Astra 的愿景是打造一个能无缝帮助用户完成从寻找失物到调试代码等各种任务的 Agent，其核心在于理解所观察的环境。这超越了简单的语音指令，实现了对用户即时物理情境的真正具身化理解。</p>
+<p>Google 的 <strong>Gemini Live</strong> 将标准 AI 交互转化为流畅且动态的对话体验。用户可与 AI 交谈，并以极低延迟收到自然语音回复，甚至能在语句中途打断或切换话题，AI 会立即适应。交互界面不限于语音，用户还可通过手机摄像头、屏幕共享或文件上传融入视觉信息，进行更具情境感知的讨论。更高级版本甚至能感知用户语调，并智能滤除无关背景噪音以提升对话理解。这些能力共同创造了丰富的交互场景，例如仅需将摄像头对准某物即可获得该任务的实时指导。</p>
+<p>OpenAI 的 <strong>GPT-4o 模型</strong> 是专为"全向"交互设计的另一选择，意指其能跨语音、视觉和文本进行推理。该模型以接近人类响应速度的低延迟处理这些输入，从而实现实时对话。例如，用户可向 AI 展示实时视频流并询问画面内容，或用于语言翻译。OpenAI 为开发者提供了"实时 API"，用于构建需要低延迟、语音到语音交互的应用。</p>
+<p>OpenAI 的 <strong>ChatGPT Agent</strong> 代表了相较于前代产品的重大架构升级，集成了新功能框架。其设计包含多项核心功能模式：自主浏览实时互联网以提取实时数据的能力、动态生成并执行计算代码以完成数据分析等任务的能力，以及直接与第三方软件应用交互的功能。这些能力的融合使 Agent 能从单一用户指令出发，编排并完成复杂、有序的工作流。因此，它能自主管理整个流程，例如执行市场分析并生成对应演示文稿，或规划物流安排并执行必要交易。在发布同时，OpenAI 主动应对了此类系统固有的新兴安全问题。随附的"系统卡"文件阐明了具备在线操作能力的 AI 可能带来的潜在风险，承认了新的滥用途径。为降低这些风险，Agent 架构内置了工程化保障措施，如要求特定操作类别需获得用户明确授权，并部署了强健的内容过滤机制。公司现正通过反馈驱动的迭代流程，邀请初期用户群体共同完善这些安全协议。</p>
+<p><strong>Seeing AI</strong> 是 Microsoft 推出的一款免费移动应用，它通过实时描述周围环境，为盲人或视力障碍人士赋能。该应用借助设备摄像头运用人工智能技术，识别并描述各类元素，包括物体、文字乃至人物。其核心功能涵盖文档阅读、货币识别、条形码产品辨识以及场景和颜色描述。通过增强对视觉信息的可及性，Seeing AI 最终提升了视障用户的独立生活能力。</p>
+<p><strong>Anthropic 的 Claude 4 系列</strong>：Anthropic 的 Claude 4 是另一款具备高级推理与分析能力的替代选择。尽管其传统强项在于文本处理，但 Claude 4 也包含了强大的视觉功能，能处理来自图像、图表和文档的信息。该模型适用于处理复杂的多步骤任务并提供详尽分析。虽然其实时对话特性并非主要焦点（相较于其他模型），但其底层智能专为构建高能力 AI Agent 而设计。</p>
+<h2 id="vibe-编码使用-ai-的直观开发范式">Vibe 编码：使用 AI 的直观开发范式</h2>
+<p>除了与 GUI 和物理环境的直接交互外，开发人员使用 AI 构建软件的方式也涌现出新范式："vibe 编码"。这种方法摒弃了精确的、逐步的指令，转而依赖开发者与 AI 编码助手之间更直观、对话式和迭代的协作。开发者提供高层次目标、期望的"氛围"或大致方向，AI 则生成与之匹配的代码。</p>
+<p>该过程具有以下特征：</p>
+<ul>
+<li><strong>对话式提示</strong>：开发者不再编写详细规格说明，而是用自然语言表达，如"为新应用创建一个简洁现代风格的登录页面"，或"重构此函数使其更符合 Pythonic 风格并提升可读性"。AI 会解读"现代"或"Pythonic"的"氛围"内涵，生成相应代码。</li>
+<li><strong>迭代精炼</strong>：AI 的初始输出通常只是起点。开发者随后以自然语言提供反馈，如"这个开头不错，但能把按钮改成蓝色吗？"或"为那段代码添加错误处理机制。"如此往复，直至代码符合预期。</li>
+<li><strong>创意伙伴关系</strong>：在 vibe 编码中，AI 扮演创意伙伴角色，提出开发者可能未曾考虑的创意和解决方案。这能加速开发进程并催生更具创新性的成果。</li>
+<li><strong>聚焦"目标"而非"方法"</strong>：开发者专注于期望成果（"目标"），将实现细节（"方法"）交由 AI 处理。这使得快速原型设计和多方案探索成为可能，避免陷入样板代码的繁琐。</li>
+<li><strong>可选记忆库</strong>：为在长对话中保持上下文连贯，开发者可使用"记忆库"存储关键信息、偏好或约束条件。例如，开发者可将特定编码风格或项目需求集保存至 AI 记忆库，确保后续代码生成与既定"氛围"保持一致，无需重复指令。</li>
+</ul>
+<p>随着 GPT-4、Claude 和 Gemini 等强大 AI 模型集成至开发环境，Vibe 编码日益流行。这些工具不仅是代码自动补全器；它们正积极参与软件开发的创意过程，使其更易用、更高效。这种新型工作方式正在改变软件工程的性质，强调创造力与高阶思维，而非对语法和 API 的死记硬背。</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>AI Agent 正从简单自动化演进为通过图形用户界面视觉控制软件，操作方式类人化。</li>
+<li>下一前沿是现实世界交互，如 Google Astra 等项目利用摄像头和麦克风感知、聆听并理解物理环境。</li>
+<li>领先科技公司正融合这些数字与物理能力，打造跨域无缝运行的通用 AI 助手。</li>
+<li>这一转变催生了新型主动式、情境感知型 AI 伙伴，能协助用户处理日常生活中的大量任务。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>Agent 正经历重大转型，从基础自动化迈向与数字及物理环境的复杂交互。借助视觉感知操作图形用户界面，这些 Agent 现已能像人类一样操控软件，绕过了对传统 API 的依赖。主要技术实验室正引领这一领域，其开发的 Agent 能在用户桌面直接自动化复杂的多应用工作流。与此同时，下一前沿已扩展至物理世界，如 Google Project Astra 等项目利用摄像头和麦克风与周边环境进行情境化互动。这些先进系统旨在实现媲美人类交互的多模态实时理解。</p>
+<p>终极愿景是融合这些数字与物理能力，创建跨用户所有环境无缝运作的通用 AI 助手。这一演进也通过"vibe 编码"重塑了软件创作本身，形成开发者与 AI 间更直观、对话式的伙伴关系。该新方法优先考虑高层次目标与创意意图，让开发者聚焦于期望成果而非实现细节。通过将 AI 视为创意合作伙伴，这一转变加速了开发进程并激发了创新。最终，这些进步正为主动式、情境感知型 AI 伙伴的新时代铺平道路，使其能够协助我们应对日常生活中的大量任务。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Open AI Operator, <a target="_blank" rel="noopener" href="https://openai.com/index/introducing-operator/">https://openai.com/index/introducing-operator/</a></li>
+<li>Open AI ChatGPT Agent: <a target="_blank" rel="noopener" href="https://openai.com/index/introducing-chatgpt-agent/">https://openai.com/index/introducing-chatgpt-agent/</a></li>
+<li>Browser Use: <a target="_blank" rel="noopener" href="https://docs.browser-use.com/introduction">https://docs.browser-use.com/introduction</a></li>
+<li>Project Mariner, <a target="_blank" rel="noopener" href="https://deepmind.google/models/project-mariner/">https://deepmind.google/models/project-mariner/</a></li>
+<li>Anthropic Computer use: <a target="_blank" rel="noopener" href="https://docs.anthropic.com/en/docs/build-with-claude/computer-use">https://docs.anthropic.com/en/docs/build-with-claude/computer-use</a></li>
+<li>Project Astra, <a target="_blank" rel="noopener" href="https://deepmind.google/models/project-astra/">https://deepmind.google/models/project-astra/</a></li>
+<li>Gemini Live, <a target="_blank" rel="noopener" href="https://gemini.google/overview/gemini-live/?hl=en">https://gemini.google/overview/gemini-live/?hl=en</a></li>
+<li>OpenAI's GPT-4, <a target="_blank" rel="noopener" href="https://openai.com/index/gpt-4-research/">https://openai.com/index/gpt-4-research/</a></li>
+<li>Claude 4, <a target="_blank" rel="noopener" href="https://www.anthropic.com/news/claude-4">https://www.anthropic.com/news/claude-4</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 附录B AI-Agent交互-从GUI到真实世界</div>
+      <div>https://linxkon.github.io/附录B-AI-Agent交互-从GUI到真实世界.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E9%99%84%E5%BD%95C-Agent%E6%A1%86%E6%9E%B6%E6%A6%82%E8%A7%88.html" title="Agent 设计模式 - 附录C Agent框架概览">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 附录C Agent框架概览</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E9%99%84%E5%BD%95A-%E9%AB%98%E7%BA%A7%E6%8F%90%E7%A4%BA%E6%8A%80%E6%9C%AF.html" title="Agent 设计模式 - 附录A 高级提示技术">
+                        <span class="hidden-mobile">Agent 设计模式 - 附录A 高级提示技术</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '278332fb61d37dde990721db9b3a1d3b'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

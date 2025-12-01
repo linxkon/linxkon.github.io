@@ -1,0 +1,894 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 5 章：工具使用（函数调用） 工具使用模式概述 截至目前，我们探讨的 Agent 模式主要聚焦于语言模型间的交互编排及 Agent 内部工作流的信息管理（链式、路由、并行化、反思）。然而，要让 Agent 真正发挥价值并与现实世界或外部系统互动，它们需要具备工具使用能力。 工具使用模式通常通过函数调用机制实现，使 Agent 能连接外部 API、数据库、服务，甚至执行代码。该机制让位于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 05 工具调用">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC05%E7%AB%A0-%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 5 章：工具使用（函数调用） 工具使用模式概述 截至目前，我们探讨的 Agent 模式主要聚焦于语言模型间的交互编排及 Agent 内部工作流的信息管理（链式、路由、并行化、反思）。然而，要让 Agent 真正发挥价值并与现实世界或外部系统互动，它们需要具备工具使用能力。 工具使用模式通常通过函数调用机制实现，使 Agent 能连接外部 API、数据库、服务，甚至执行代码。该机制让位于">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:33:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.838Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 05 工具调用 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 05 工具调用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:33" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          61 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 05 工具调用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-5-章工具使用函数调用">第 5 章：工具使用（函数调用）</h1>
+<h2 id="工具使用模式概述">工具使用模式概述</h2>
+<p>截至目前，我们探讨的 Agent 模式主要聚焦于语言模型间的交互编排及 Agent 内部工作流的信息管理（链式、路由、并行化、反思）。然而，要让 Agent 真正发挥价值并与现实世界或外部系统互动，它们需要具备工具使用能力。</p>
+<p>工具使用模式通常通过函数调用机制实现，使 Agent 能连接外部 API、数据库、服务，甚至执行代码。该机制让位于 Agent 核心的大语言模型（LLM）能基于用户请求或任务状态，决策何时以及如何调用特定外部函数。</p>
+<p>该过程通常包括：</p>
+<ol type="1">
+<li><strong>工具定义：</strong> 外部函数或能力被定义并描述给 LLM。此描述包括函数的目的、名称以及它接受的参数及其类型和描述。</li>
+<li><strong>LLM 决策：</strong> LLM 接收用户的请求和可用的工具定义。基于其对请求和工具的理解，LLM 决定是否需要调用一个或多个工具来满足请求。</li>
+<li><strong>函数调用生成：</strong> 如果 LLM 决定使用工具，它会生成一个结构化输出（通常是 JSON 对象），指定要调用的工具名称和要传递给它的参数（参数），这些参数从用户的请求中提取。</li>
+<li><strong>工具执行：</strong> Agent 框架或编排层拦截此结构化输出。它识别请求的工具并使用提供的参数执行实际的外部函数。</li>
+<li><strong>观察/结果：</strong> 工具执行的输出或结果返回给 Agent。</li>
+<li><strong>LLM 处理（可选但常见）：</strong> LLM 接收工具的输出作为上下文，并使用它向用户制定最终响应或决定工作流中的下一步（可能涉及调用另一个工具、反思或提供最终答案）。</li>
+</ol>
+<p>此模式是基础性的，因为它打破了 LLM 训练数据的限制，允许它访问最新信息、执行它内部无法完成的计算、与用户特定数据交互或触发现实世界的行动。函数调用是连接 LLM 推理能力与可用的大量外部功能之间差距的技术机制。</p>
+<p>虽然"函数调用"精确描述了调用预定义代码函数的过程，但采用更广泛的"工具调用"概念更具实践价值。这一概念承认 Agent 的能力远超简单函数执行范畴——"工具"既可以是传统函数，也可以是复杂的 API 端点、数据库查询请求，甚至是向其他专业 Agent 发送的指令。这种视角帮助我们构建更复杂的系统，例如主 Agent 可将数据分析任务委托给专用"分析师 Agent"，或通过 API 查询外部知识库。以"工具调用"的思维方式，能更全面把握 Agent 作为跨数字资源和智能实体生态系统的编排者潜力。</p>
+<p>像 LangChain、LangGraph 和 Google Agent Developer Kit (ADK) 这样的框架为定义工具并将它们集成到 Agent 工作流中提供了强大的支持，通常利用现代 LLM（如 Gemini 或 OpenAI 系列中的那些）的原生函数调用能力。在这些框架的"画布"上，您定义工具，然后配置 Agent（通常是 LLM Agent）以意识到并能够使用这些工具。</p>
+<p>工具使用是构建强大、交互式且具环境感知能力 Agent 的基础模式。</p>
+<h2 id="实际应用与用例">实际应用与用例</h2>
+<p>工具使用模式几乎适用于 Agent 需要超越生成文本来执行操作或检索特定动态信息的任何场景：</p>
+<ol type="1">
+<li>从外部源检索信息：<br />
+访问 LLM 训练数据中不存在的实时数据或信息。</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 天气 Agent。
+<ul>
+<li><strong>工具：</strong> 接受位置并返回当前天气状况的天气 API。</li>
+<li><strong>Agent 流程：</strong> 用户问"伦敦的天气如何？"，LLM 识别需要天气工具，用"伦敦"调用工具，工具返回数据，LLM 将数据格式化为用户友好的响应。</li>
+</ul></li>
+</ul>
+<ol start="2" type="1">
+<li>与数据库和 API 交互：<br />
+对结构化数据执行查询、更新或其他操作。</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 电子商务 Agent。
+<ul>
+<li><strong>工具：</strong> API 调用以检查产品库存、获取订单状态或处理付款。</li>
+<li><strong>Agent 流程：</strong> 用户问"产品 X 有库存吗？"，LLM 调用库存 API，工具返回库存数量，LLM 告诉用户库存状态。</li>
+</ul></li>
+</ul>
+<ol start="3" type="1">
+<li>执行计算和数据分析：<br />
+使用外部计算器、数据分析库或统计工具。</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 金融 Agent。
+<ul>
+<li><strong>工具：</strong> 计算器函数、股票市场数据 API、电子表格工具。</li>
+<li><strong>Agent 流程：</strong> 用户问"AAPL 的当前价格是多少，如果我以 150 美元购买 100 股，计算潜在利润？"，LLM 调用股票 API，获取当前价格，然后调用计算器工具，获取结果，格式化响应。</li>
+</ul></li>
+</ul>
+<ol start="4" type="1">
+<li>发送通信：<br />
+发送电子邮件、消息或对外部通信服务进行 API 调用。</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 个人助理 Agent。
+<ul>
+<li><strong>工具：</strong> 电子邮件发送 API。</li>
+<li><strong>Agent 流程：</strong> 用户说"给 John 发一封关于明天会议的电子邮件。"，LLM 使用从请求中提取的收件人、主题和正文调用电子邮件工具。</li>
+</ul></li>
+</ul>
+<ol start="5" type="1">
+<li>执行代码：<br />
+在安全环境中运行代码片段以执行特定任务。</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 编码助手 Agent。
+<ul>
+<li><strong>工具：</strong> 代码解释器。</li>
+<li><strong>Agent 流程：</strong> 用户提供 Python 代码片段并问"这段代码做什么？"，LLM 使用解释器工具运行代码并分析其输出。</li>
+</ul></li>
+</ul>
+<ol start="6" type="1">
+<li>控制其他系统或设备：<br />
+与智能家居设备、物联网平台或其他连接系统交互。</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 智能家居 Agent。
+<ul>
+<li><strong>工具：</strong> 控制智能灯的 API。</li>
+<li><strong>Agent 流程：</strong> 用户说"关闭客厅的灯。"LLM 使用命令和目标设备调用智能家居工具。</li>
+</ul></li>
+</ul>
+<p>工具使用将语言模型从文本生成器转变为能够在数字或物理世界中感知、推理和行动的 Agent（见图 1）</p>
+<p><img src="../images/agent_images/chapter-5/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：Agent 使用工具的一些示例</p>
+<h2 id="实操代码示例langchain">实操代码示例（LangChain）</h2>
+<p>在 LangChain 框架中实现工具使用需分两步：首先定义工具（通常通过封装 Python 函数或其他可执行组件），随后将工具与语言模型绑定。这使得模型能在需要调用外部函数时，生成结构化的工具使用请求。</p>
+<p>以下实现将通过定义一个简单的函数来模拟信息检索工具，以此演示此原理。随后，将构建并配置一个 Agent 以利用此工具响应用户输入。执行此示例需要安装核心 LangChain 库和特定于模型的提供程序包。此外，使用所选语言模型服务的适当身份验证（通常通过在本地环境中配置的 API 密钥）是必要的先决条件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os, getpass<br><span class="hljs-keyword">import</span> asyncio<br><span class="hljs-keyword">import</span> nest_asyncio<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">List</span><br><span class="hljs-keyword">from</span> dotenv <span class="hljs-keyword">import</span> load_dotenv<br><span class="hljs-keyword">import</span> logging<br><br><span class="hljs-keyword">from</span> langchain_google_genai <span class="hljs-keyword">import</span> ChatGoogleGenerativeAI<br><span class="hljs-keyword">from</span> langchain_core.prompts <span class="hljs-keyword">import</span> ChatPromptTemplate<br><span class="hljs-keyword">from</span> langchain_core.tools <span class="hljs-keyword">import</span> tool <span class="hljs-keyword">as</span> langchain_tool<br><span class="hljs-keyword">from</span> langchain.agents <span class="hljs-keyword">import</span> create_tool_calling_agent, AgentExecutor<br><br><span class="hljs-comment">## 取消注释</span><br><span class="hljs-comment">## 安全地提示用户并将 API 密钥设置为环境变量</span><br>os.environ[<span class="hljs-string">&quot;GOOGLE_API_KEY&quot;</span>] = getpass.getpass(<span class="hljs-string">&quot;Enter your Google API key: &quot;</span>)<br>os.environ[<span class="hljs-string">&quot;OPENAI_API_KEY&quot;</span>] = getpass.getpass(<span class="hljs-string">&quot;Enter your OpenAI API key: &quot;</span>)<br><br><span class="hljs-keyword">try</span>:<br>    <span class="hljs-comment"># 需要具有函数/工具调用能力的模型。</span><br>    llm = ChatGoogleGenerativeAI(model=<span class="hljs-string">&quot;gemini-2.0-flash&quot;</span>, temperature=<span class="hljs-number">0</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;✅ 语言模型已初始化：<span class="hljs-subst">&#123;llm.model&#125;</span>&quot;</span>)<br><span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;🛑 初始化语言模型时出错：<span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br>    llm = <span class="hljs-literal">None</span><br><br><span class="hljs-comment">## --- 定义工具 ---</span><br><span class="hljs-meta">@langchain_tool</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">search_information</span>(<span class="hljs-params">query: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    提供有关给定主题的事实信息。使用此工具查找诸如&quot;法国首都&quot;或&quot;伦敦的天气？&quot;等短语的答案。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\n--- 🛠️ 工具调用：search_information，查询：&#x27;<span class="hljs-subst">&#123;query&#125;</span>&#x27; ---&quot;</span>)<br>    <br>    <span class="hljs-comment"># 使用预定义结果字典模拟搜索工具。</span><br>    simulated_results = &#123;<br>        <span class="hljs-string">&quot;weather in london&quot;</span>: <span class="hljs-string">&quot;伦敦目前多云，温度为 15°C。&quot;</span>,<br>        <span class="hljs-string">&quot;capital of france&quot;</span>: <span class="hljs-string">&quot;法国的首都是巴黎。&quot;</span>,<br>        <span class="hljs-string">&quot;population of earth&quot;</span>: <span class="hljs-string">&quot;地球的估计人口约为 80 亿人。&quot;</span>,<br>        <span class="hljs-string">&quot;tallest mountain&quot;</span>: <span class="hljs-string">&quot;珠穆朗玛峰是海拔最高的山峰。&quot;</span>,<br>        <span class="hljs-string">&quot;default&quot;</span>: <span class="hljs-string">f&quot;&#x27;<span class="hljs-subst">&#123;query&#125;</span>&#x27; 的模拟搜索结果：未找到特定信息，但该主题似乎很有趣。&quot;</span><br>    &#125;<br>    <br>    result = simulated_results.get(query.lower(), simulated_results[<span class="hljs-string">&quot;default&quot;</span>])<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;--- 工具结果：<span class="hljs-subst">&#123;result&#125;</span> ---&quot;</span>)<br>    <span class="hljs-keyword">return</span> result<br><br>tools = [search_information]<br><br><span class="hljs-comment">## --- 创建工具调用 Agent ---</span><br><span class="hljs-keyword">if</span> llm:<br>    <span class="hljs-comment"># 此提示词模板需要一个 `agent_scratchpad` 占位符用于 Agent 的内部步骤。</span><br>    agent_prompt = ChatPromptTemplate.from_messages([<br>        (<span class="hljs-string">&quot;system&quot;</span>, <span class="hljs-string">&quot;你是一个有用的助手。&quot;</span>),<br>        (<span class="hljs-string">&quot;human&quot;</span>, <span class="hljs-string">&quot;&#123;input&#125;&quot;</span>),<br>        (<span class="hljs-string">&quot;placeholder&quot;</span>, <span class="hljs-string">&quot;&#123;agent_scratchpad&#125;&quot;</span>),<br>    ])<br>    <br>    <span class="hljs-comment"># 创建 Agent，将 LLM、工具和提示词绑定在一起。</span><br>    agent = create_tool_calling_agent(llm, tools, agent_prompt)<br>    <br>    <span class="hljs-comment"># AgentExecutor 是调用 Agent 并执行所选工具的运行时。</span><br>    <span class="hljs-comment"># 这里不需要 &#x27;tools&#x27; 参数，因为它们已经绑定到 Agent。</span><br>    agent_executor = AgentExecutor(agent=agent, verbose=<span class="hljs-literal">True</span>, tools=tools)<br><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">run_agent_with_tool</span>(<span class="hljs-params">query: <span class="hljs-built_in">str</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;使用查询调用 Agent 执行器并打印最终响应。&quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\n--- 🏃 使用查询运行 Agent：&#x27;<span class="hljs-subst">&#123;query&#125;</span>&#x27; ---&quot;</span>)<br>    <span class="hljs-keyword">try</span>:<br>        response = <span class="hljs-keyword">await</span> agent_executor.ainvoke(&#123;<span class="hljs-string">&quot;input&quot;</span>: query&#125;)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- ✅ 最终 Agent 响应 ---&quot;</span>)<br>        <span class="hljs-built_in">print</span>(response[<span class="hljs-string">&quot;output&quot;</span>])<br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\n🛑 Agent 执行期间发生错误：<span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;并发运行所有 Agent 查询。&quot;&quot;&quot;</span><br>    tasks = [<br>        run_agent_with_tool(<span class="hljs-string">&quot;法国的首都是什么？&quot;</span>),<br>        run_agent_with_tool(<span class="hljs-string">&quot;伦敦的天气怎么样？&quot;</span>),<br>        run_agent_with_tool(<span class="hljs-string">&quot;告诉我一些关于狗的事情。&quot;</span>) <span class="hljs-comment"># 应该触发默认工具响应</span><br>    ]<br>    <span class="hljs-keyword">await</span> asyncio.gather(*tasks)<br><br>nest_asyncio.apply()<br>asyncio.run(main())<br></code></pre></td></tr></table></figure>
+<p>代码使用 LangChain 库和 Google Gemini 模型设置了一个工具调用 Agent。它定义了一个 search_information 工具，模拟为特定查询提供事实答案。该工具对"weather in london"、"capital of france"和"population of earth"有预定义的响应，以及其他查询的默认响应。初始化了一个 ChatGoogleGenerativeAI 模型，确保其具有工具调用能力。创建了一个 ChatPromptTemplate 来指导 Agent 的交互。使用 create_tool_calling_agent 函数将语言模型、工具和提示词组合成一个 Agent。然后设置一个 AgentExecutor 来管理 Agent 的执行和工具调用。定义了 run_agent_with_tool 异步函数以使用给定查询调用 Agent 并打印结果。main 异步函数准备多个要并发运行的查询。这些查询旨在测试 search_information 工具的特定和默认响应。最后，asyncio.run(main()) 调用执行所有 Agent 任务。代码包括在继续 Agent 设置和执行之前成功 LLM 初始化的检查。</p>
+<h2 id="实操代码示例crewai">实操代码示例（CrewAI）</h2>
+<p>此代码演示了在 CrewAI 框架中实现函数调用（工具）的具体案例。通过设置简单场景：让配备信息查询工具的 Agent 获取模拟股价，展示核心实现逻辑。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## pip install crewai langchain-openai</span><br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> crewai <span class="hljs-keyword">import</span> Agent, Task, Crew<br><span class="hljs-keyword">from</span> crewai.tools <span class="hljs-keyword">import</span> tool<br><span class="hljs-keyword">import</span> logging<br><br><span class="hljs-comment">## --- 最佳实践：配置日志 ---</span><br><span class="hljs-comment">## 基本日志设置有助于调试和跟踪团队的执行。</span><br>logging.basicConfig(level=logging.INFO, <span class="hljs-built_in">format</span>=<span class="hljs-string">&#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;</span>)<br><br><span class="hljs-comment">## --- 设置您的 API 密钥 ---</span><br><span class="hljs-comment">## 对于生产环境，建议使用更安全的密钥管理方法</span><br><span class="hljs-comment">## 例如在运行时加载的环境变量或秘密管理器。</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">## 为您选择的 LLM 提供商设置环境变量（例如，OPENAI_API_KEY）</span><br><span class="hljs-comment">## os.environ[&quot;OPENAI_API_KEY&quot;] = &quot;YOUR_API_KEY&quot;</span><br><span class="hljs-comment">## os.environ[&quot;OPENAI_MODEL_NAME&quot;] = &quot;gpt-4o&quot;</span><br><br><span class="hljs-comment">## --- 1. 重构的工具：返回干净的数据 ---</span><br><span class="hljs-comment">## 该工具现在返回原始数据（浮点数）或引发标准 Python 错误。</span><br><span class="hljs-comment">## 这使其更可重用，并强制 Agent 正确处理结果。</span><br><span class="hljs-meta">@tool(<span class="hljs-params"><span class="hljs-string">&quot;Stock Price Lookup Tool&quot;</span></span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_stock_price</span>(<span class="hljs-params">ticker: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">float</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    获取给定股票代码符号的最新模拟股票价格。</span><br><span class="hljs-string">    以浮点数形式返回价格。如果未找到代码，则引发 ValueError。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    logging.info(<span class="hljs-string">f&quot;工具调用：get_stock_price，代码为 &#x27;<span class="hljs-subst">&#123;ticker&#125;</span>&#x27;&quot;</span>)<br>    <br>    simulated_prices = &#123;<br>        <span class="hljs-string">&quot;AAPL&quot;</span>: <span class="hljs-number">178.15</span>,<br>        <span class="hljs-string">&quot;GOOGL&quot;</span>: <span class="hljs-number">1750.30</span>,<br>        <span class="hljs-string">&quot;MSFT&quot;</span>: <span class="hljs-number">425.50</span>,<br>    &#125;<br>    <br>    price = simulated_prices.get(ticker.upper())<br>    <span class="hljs-keyword">if</span> price <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>        <span class="hljs-keyword">return</span> price<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-comment"># 引发特定错误比返回字符串更好。</span><br>        <span class="hljs-comment"># Agent 配备了处理异常的能力，可以决定下一步行动。</span><br>        <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">f&quot;未找到代码 &#x27;<span class="hljs-subst">&#123;ticker.upper()&#125;</span>&#x27; 的模拟价格。&quot;</span>)<br><br><span class="hljs-comment">## --- 2. 定义 Agent ---</span><br><span class="hljs-comment">## Agent 定义保持不变，但它现在将利用改进的工具。</span><br>financial_analyst_agent = Agent(<br>    role=<span class="hljs-string">&#x27;高级财务分析师&#x27;</span>,<br>    goal=<span class="hljs-string">&#x27;使用提供的工具分析股票数据并报告关键价格。&#x27;</span>,<br>    backstory=<span class="hljs-string">&quot;你是一位经验丰富的财务分析师，擅长使用数据源查找股票信息。你提供清晰、直接的答案。&quot;</span>,<br>    verbose=<span class="hljs-literal">True</span>,<br>    tools=[get_stock_price],<br>    <span class="hljs-comment"># 允许委托可能很有用，但对于这个简单任务不是必需的。</span><br>    allow_delegation=<span class="hljs-literal">False</span>,<br>)<br><br><span class="hljs-comment">## --- 3. 精炼任务：更清晰的说明和错误处理 ---</span><br><span class="hljs-comment">## 任务描述更具体，并指导 Agent 如何应对</span><br><span class="hljs-comment">## 成功的数据检索和潜在错误。</span><br>analyze_aapl_task = Task(<br>    description=(<br>        <span class="hljs-string">&quot;Apple（代码：AAPL）的当前模拟股票价格是多少？&quot;</span><br>        <span class="hljs-string">&quot;使用 &#x27;Stock Price Lookup Tool&#x27; 查找它。&quot;</span><br>        <span class="hljs-string">&quot;如果未找到代码，你必须报告无法检索价格。&quot;</span><br>    ),<br>    expected_output=(<br>        <span class="hljs-string">&quot;一个清晰的句子，说明 AAPL 的模拟股票价格。&quot;</span><br>        <span class="hljs-string">&quot;例如：&#x27;AAPL 的模拟股票价格是 $178.15。&#x27;&quot;</span><br>        <span class="hljs-string">&quot;如果无法找到价格，请明确说明。&quot;</span><br>    ),<br>    agent=financial_analyst_agent,<br>)<br><br><span class="hljs-comment">## --- 4. 组建团队 ---</span><br><span class="hljs-comment">## 团队协调 Agent 和任务如何协同工作。</span><br>financial_crew = Crew(<br>    agents=[financial_analyst_agent],<br>    tasks=[analyze_aapl_task],<br>    verbose=<span class="hljs-literal">True</span> <span class="hljs-comment"># 在生产环境中设置为 False 以获得较少的详细日志</span><br>)<br><br><span class="hljs-comment">## --- 5. 在主执行块中运行团队 ---</span><br><span class="hljs-comment">## 使用 __name__ == &quot;__main__&quot;: 块是标准 Python 最佳实践。</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;运行团队的主函数。&quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 在启动前检查 API 密钥以避免运行时错误。</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.environ.get(<span class="hljs-string">&quot;OPENAI_API_KEY&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;错误：未设置 OPENAI_API_KEY 环境变量。&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;请在运行脚本之前设置它。&quot;</span>)<br>        <span class="hljs-keyword">return</span><br>    <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n## 启动财务团队...&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;---------------------------------&quot;</span>)<br>    <br>    <span class="hljs-comment"># kickoff 方法启动执行。</span><br>    result = financial_crew.kickoff()<br>    <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n---------------------------------&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;## 团队执行完成。&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n最终结果：\n&quot;</span>, result)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+<p>此代码演示了使用 CrewAI 库模拟财务分析任务的简单应用程序。它定义了一个自定义工具 get_stock_price，模拟查找预定义股票代码的价格。该工具设计为对有效代码返回浮点数，或对无效代码引发 ValueError。创建了一个名为 financial_analyst_agent 的 CrewAI Agent，角色为高级财务分析师。该 Agent 被赋予 get_stock_price 工具进行交互。定义了一个任务 analyze_aapl_task，专门指示 Agent 使用工具查找 AAPL 的模拟股票价格。任务描述包括关于使用工具时如何处理成功和失败情况的明确说明。组建了一个团队，包含 financial_analyst_agent 和 analyze_aapl_task。为 Agent 和团队启用了详细设置，以在执行期间提供详细日志。脚本的主要部分在标准 if <strong>name</strong> == "<strong>main</strong>": 块中使用 kickoff() 方法运行团队的任务。在启动团队之前，它会检查是否设置了 OPENAI_API_KEY 环境变量，这是 Agent 运行所必需的。然后将团队执行的结果（即任务的输出）打印到控制台。代码还包括基本日志配置，以更好地跟踪团队的行动和工具调用。它使用环境变量进行 API 密钥管理，尽管它指出对于生产环境建议使用更安全的方法。简而言之，核心逻辑展示了如何定义工具、Agent 和任务，以在 CrewAI 中创建协作工作流。</p>
+<h2 id="实操代码google-adk">实操代码（Google ADK）</h2>
+<h2 id="google-agent-developer-kit-adk-提供原生集成工具库可直接扩展-agent-能力">Google Agent Developer Kit (ADK) 提供原生集成工具库，可直接扩展 Agent 能力。</h2>
+<h2 id="google-搜索-此类组件的主要示例是-google-搜索工具此工具作为-google-搜索引擎的直接接口为-agent-提供执行网络搜索和检索外部信息的功能"><strong>Google 搜索：</strong> 此类组件的主要示例是 Google 搜索工具。此工具作为 Google 搜索引擎的直接接口，为 Agent 提供执行网络搜索和检索外部信息的功能。</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> Agent<br><span class="hljs-keyword">from</span> google.adk.runners <span class="hljs-keyword">import</span> Runner<br><span class="hljs-keyword">from</span> google.adk.sessions <span class="hljs-keyword">import</span> InMemorySessionService<br><span class="hljs-keyword">from</span> google.adk.tools <span class="hljs-keyword">import</span> google_search<br><span class="hljs-keyword">from</span> google.genai <span class="hljs-keyword">import</span> types<br><span class="hljs-keyword">import</span> nest_asyncio<br><span class="hljs-keyword">import</span> asyncio<br><br><span class="hljs-comment">## 定义会话设置和 Agent 执行所需的变量</span><br>APP_NAME=<span class="hljs-string">&quot;Google Search_agent&quot;</span><br>USER_ID=<span class="hljs-string">&quot;user1234&quot;</span><br>SESSION_ID=<span class="hljs-string">&quot;1234&quot;</span><br><br><span class="hljs-comment">## 使用搜索工具定义 Agent</span><br>root_agent = ADKAgent(<br>  name=<span class="hljs-string">&quot;basic_search_agent&quot;</span>,<br>  model=<span class="hljs-string">&quot;gemini-2.0-flash-exp&quot;</span>,<br>  description=<span class="hljs-string">&quot;使用 Google 搜索回答问题的 Agent。&quot;</span>,<br>  instruction=<span class="hljs-string">&quot;我可以通过搜索互联网回答您的问题。随便问我什么！&quot;</span>,<br>  tools=[google_search] <span class="hljs-comment"># Google 搜索是执行 Google 搜索的预构建工具。</span><br>)<br><br><span class="hljs-comment">## Agent 交互</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">call_agent</span>(<span class="hljs-params">query</span>):<br>  <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">  使用查询调用 Agent 的辅助函数。</span><br><span class="hljs-string">  &quot;&quot;&quot;</span><br>  <span class="hljs-comment"># 会话和运行器</span><br>  session_service = InMemorySessionService()<br>  session = <span class="hljs-keyword">await</span> session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID)<br>  runner = Runner(agent=root_agent, app_name=APP_NAME, session_service=session_service)<br>  <br>  content = types.Content(role=<span class="hljs-string">&#x27;user&#x27;</span>, parts=[types.Part(text=query)])<br>  events = runner.run(user_id=USER_ID, session_id=SESSION_ID, new_message=content)<br>  <br>  <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> events:<br>      <span class="hljs-keyword">if</span> event.is_final_response():<br>          final_response = event.content.parts[<span class="hljs-number">0</span>].text<br>          <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Agent 响应：&quot;</span>, final_response)<br><br>nest_asyncio.apply()<br>asyncio.run(call_agent(<span class="hljs-string">&quot;最新的 AI 新闻是什么？&quot;</span>))<br></code></pre></td></tr></table></figure>
+<p>此代码演示了如何使用 Python 的 Google ADK 创建和使用由 Google ADK 驱动的基本 Agent。该 Agent 设计为通过利用 Google 搜索作为工具来回答问题。首先，从 IPython、google.adk 和 google.genai 导入必要的库。定义了应用程序名称、用户 ID 和会话 ID 的常量。创建了一个名为"basic_search_agent"的 Agent 实例，带有描述和说明指示其目的。它被配置为使用 Google 搜索工具，这是 ADK 提供的预构建工具。初始化 InMemorySessionService（见第 8 章）以管理 Agent 的会话。为指定的应用程序、用户和会话 ID 创建新会话。实例化 Runner，将创建的 Agent 与会话服务链接。此运行器负责在会话中执行 Agent 的交互。定义了辅助函数 call_agent 以简化向 Agent 发送查询和处理响应的过程。在 call_agent 内部，用户的查询被格式化为具有角色"user"的 types.Content 对象。使用用户 ID、会话 ID 和新消息内容调用 runner.run 方法。runner.run 方法返回表示 Agent 操作和响应的事件列表。代码遍历这些事件以查找最终响应。如果事件被识别为最终响应，则提取该响应的文本内容。提取的 Agent 响应然后打印到控制台。最后，使用查询"最新的 AI 新闻是什么？"调用 call_agent 函数以演示 Agent 的运行情况。</p>
+<p><strong>代码执行：</strong> Google ADK 包含专为动态代码执行设计的组件。built_in_code_execution 工具提供沙盒化 Python 解释器，让模型能编写运行代码执行计算、操作数据结构及运行脚本。此功能对需要确定性逻辑和精确计算的任务至关重要，弥补了概率性语言生成的不足。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os, getpass<br><span class="hljs-keyword">import</span> asyncio<br><span class="hljs-keyword">import</span> nest_asyncio<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">List</span><br><span class="hljs-keyword">from</span> dotenv <span class="hljs-keyword">import</span> load_dotenv<br><span class="hljs-keyword">import</span> logging<br><br><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> LlmAgent <span class="hljs-comment"># Removed ADKAgent as it&#x27;s deprecated</span><br><span class="hljs-keyword">from</span> google.adk.runners <span class="hljs-keyword">import</span> Runner<br><span class="hljs-keyword">from</span> google.adk.sessions <span class="hljs-keyword">import</span> InMemorySessionService<br><span class="hljs-keyword">from</span> google.adk.tools <span class="hljs-keyword">import</span> google_search<br><span class="hljs-keyword">from</span> google.adk.code_executors <span class="hljs-keyword">import</span> BuiltInCodeExecutor<br><span class="hljs-keyword">from</span> google.genai <span class="hljs-keyword">import</span> types<br><br><span class="hljs-comment">## 定义会话设置和 Agent 执行所需的变量</span><br>APP_NAME = <span class="hljs-string">&quot;calculator&quot;</span><br>USER_ID = <span class="hljs-string">&quot;user1234&quot;</span><br>SESSION_ID = <span class="hljs-string">&quot;session_code_exec_async&quot;</span><br><br><span class="hljs-comment">## Agent 定义</span><br>code_agent = LlmAgent(<br>    name=<span class="hljs-string">&quot;calculator_agent&quot;</span>,<br>    model=<span class="hljs-string">&quot;gemini-2.0-flash&quot;</span>,<br>    code_executor=BuiltInCodeExecutor(),<br>    instruction=<span class="hljs-string">&quot;&quot;&quot;你是一个计算器 Agent。</span><br><span class="hljs-string">    当给定数学表达式时，编写并执行 Python 代码来计算结果。</span><br><span class="hljs-string">    仅返回最终的数值结果作为纯文本，不带 markdown 或代码块。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span>,<br>    description=<span class="hljs-string">&quot;执行 Python 代码以进行计算。&quot;</span>,<br>)<br><br><span class="hljs-comment">## Agent 交互（异步）</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">call_agent_async</span>(<span class="hljs-params">query</span>):<br>    <span class="hljs-comment"># 会话和运行器</span><br>    session_service = InMemorySessionService()<br>    session = <span class="hljs-keyword">await</span> session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID)<br>    runner = Runner(agent=code_agent, app_name=APP_NAME, session_service=session_service)<br>    <br>    content = types.Content(role=<span class="hljs-string">&#x27;user&#x27;</span>, parts=[types.Part(text=query)])<br>    <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\n--- 运行查询：<span class="hljs-subst">&#123;query&#125;</span> ---&quot;</span>)<br>    final_response_text = <span class="hljs-string">&quot;未捕获最终文本响应。&quot;</span><br>    <br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-comment"># 使用 run_async</span><br>        <span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> runner.run_async(user_id=USER_ID, session_id=SESSION_ID, new_message=content):<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;事件 ID：<span class="hljs-subst">&#123;event.<span class="hljs-built_in">id</span>&#125;</span>，作者：<span class="hljs-subst">&#123;event.author&#125;</span>&quot;</span>)<br>            <br>            <span class="hljs-comment"># --- 首先检查特定部分 ---</span><br>            <span class="hljs-comment"># has_specific_part = False</span><br>            <span class="hljs-keyword">if</span> event.content <span class="hljs-keyword">and</span> event.content.parts <span class="hljs-keyword">and</span> event.is_final_response():<br>                <span class="hljs-keyword">for</span> part <span class="hljs-keyword">in</span> event.content.parts: <span class="hljs-comment"># 遍历所有部分</span><br>                    <span class="hljs-keyword">if</span> part.executable_code:<br>                        <span class="hljs-comment"># 通过 .code 访问实际代码字符串</span><br>                        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  调试：Agent 生成的代码：\n```python\n<span class="hljs-subst">&#123;part.executable_code.code&#125;</span>\n```&quot;</span>)<br>                        <span class="hljs-comment"># has_specific_part = True # Removed as it&#x27;s not used</span><br>                    <span class="hljs-keyword">elif</span> part.code_execution_result:<br>                        <span class="hljs-comment"># 正确访问结果和输出</span><br>                        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  调试：代码执行结果：<span class="hljs-subst">&#123;part.code_execution_result.outcome&#125;</span> - 输出：\n<span class="hljs-subst">&#123;part.code_execution_result.output&#125;</span>&quot;</span>)<br>                        <span class="hljs-comment"># has_specific_part = True # Removed as it&#x27;s not used</span><br>                    <span class="hljs-comment"># 也打印在任何事件中找到的任何文本部分以进行调试</span><br>                    <span class="hljs-keyword">elif</span> part.text <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> part.text.isspace():<br>                        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  文本：&#x27;<span class="hljs-subst">&#123;part.text.strip()&#125;</span>&#x27;&quot;</span>)<br>                        <span class="hljs-comment"># 不要在这里设置 has_specific_part=True，因为我们希望下面的最终响应逻辑</span><br>                <br>                <span class="hljs-comment"># --- 在特定部分之后检查最终响应 ---</span><br>                text_parts = [part.text <span class="hljs-keyword">for</span> part <span class="hljs-keyword">in</span> event.content.parts <span class="hljs-keyword">if</span> part.text]<br>                final_result = <span class="hljs-string">&quot;&quot;</span>.join(text_parts)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;==&gt; 最终 Agent 响应：<span class="hljs-subst">&#123;final_result&#125;</span>&quot;</span>)<br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Agent 运行期间出错：<span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br>    <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;-&quot;</span> * <span class="hljs-number">30</span>)<br><br><span class="hljs-comment">## 运行示例的主异步函数</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    <span class="hljs-keyword">await</span> call_agent_async(<span class="hljs-string">&quot;计算 (5 + 7) * 3 的值&quot;</span>)<br>    <span class="hljs-keyword">await</span> call_agent_async(<span class="hljs-string">&quot;10 的阶乘是多少？&quot;</span>)<br><br><span class="hljs-comment">## 执行主异步函数</span><br><span class="hljs-keyword">try</span>:<br>    nest_asyncio.apply()<br>    asyncio.run(main())<br><span class="hljs-keyword">except</span> RuntimeError <span class="hljs-keyword">as</span> e:<br>    <span class="hljs-comment"># 在已运行的循环中运行 asyncio.run 时处理特定错误（如 Jupyter/Colab）</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;cannot be called from a running event loop&quot;</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">str</span>(e):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n在现有事件循环中运行（如 Colab/Jupyter）。&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;请在笔记本单元格中运行 `await main()` 代替。&quot;</span>)<br>        <span class="hljs-comment"># 如果在交互式环境（如笔记本）中，您可能需要运行：</span><br>        <span class="hljs-comment"># await main()</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">raise</span> e <span class="hljs-comment"># 重新引发其他运行时错误</span><br></code></pre></td></tr></table></figure>
+<p>此脚本使用 Google 的 Agent Development Kit (ADK) 创建一个通过编写和执行 Python 代码解决数学问题的 Agent。它定义了一个 LlmAgent，专门指示其充当计算器，为其配备 built_in_code_execution 工具。主要逻辑位于 call_agent_async 函数中，该函数向 Agent 的运行器发送用户查询并处理结果事件。在此函数内部，异步循环遍历事件，打印生成的 Python 代码及其执行结果以进行调试。代码仔细区分这些中间步骤和包含数值答案的最终事件。最后，main 函数使用两个不同的数学表达式运行 Agent，以演示其执行计算的能力。</p>
+<p><strong>企业搜索：</strong> 此代码使用 Python 中的 google.adk 库定义了一个 Google ADK 应用程序。它专门使用 VSearchAgent，该 Agent 旨在通过搜索指定的 Vertex AI 搜索数据存储来回答问题。代码初始化一个名为"q2_strategy_vsearch_agent"的 VSearchAgent，提供描述、要使用的模型（"gemini-2.0-flash-exp"）和 Vertex AI 搜索数据存储的 ID。DATASTORE_ID 预期设置为环境变量。然后为 Agent 设置 Runner，使用 InMemorySessionService 管理对话历史。定义了异步函数 call_vsearch_agent_async 以与 Agent 交互。此函数接受查询，构造消息内容对象，并调用运行器的 run_async 方法将查询发送到 Agent。然后该函数将 Agent 的响应流式传输回控制台。它还打印有关最终响应的信息，包括来自数据存储的任何源归因。包含错误处理以捕获 Agent 执行期间的异常，提供有关潜在问题（如数据存储 ID 不正确或缺少权限）的信息性消息。提供了另一个异步函数 run_vsearch_example 以演示如何使用示例查询调用 Agent。主执行块检查 DATASTORE_ID 是否已设置，然后使用 asyncio.run 运行示例。它包括检查以处理在已有运行事件循环的环境（如 Jupyter 笔记本）中运行代码的情况。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio<br><span class="hljs-keyword">from</span> google.genai <span class="hljs-keyword">import</span> types<br><span class="hljs-keyword">from</span> google.adk <span class="hljs-keyword">import</span> agents<br><span class="hljs-keyword">from</span> google.adk.runners <span class="hljs-keyword">import</span> Runner<br><span class="hljs-keyword">from</span> google.adk.sessions <span class="hljs-keyword">import</span> InMemorySessionService<br><span class="hljs-keyword">import</span> os<br><br><span class="hljs-comment">## --- 配置 ---</span><br><span class="hljs-comment">## 确保您已设置 GOOGLE_API_KEY 和 DATASTORE_ID 环境变量</span><br><span class="hljs-comment">## 例如：</span><br><span class="hljs-comment">## os.environ[&quot;GOOGLE_API_KEY&quot;] = &quot;YOUR_API_KEY&quot;</span><br><span class="hljs-comment">## os.environ[&quot;DATASTORE_ID&quot;] = &quot;YOUR_DATASTORE_ID&quot;</span><br><br>DATASTORE_ID = os.environ.get(<span class="hljs-string">&quot;DATASTORE_ID&quot;</span>)<br><br><span class="hljs-comment">## --- 应用程序常量 ---</span><br>APP_NAME = <span class="hljs-string">&quot;vsearch_app&quot;</span><br>USER_ID = <span class="hljs-string">&quot;user_123&quot;</span>  <span class="hljs-comment"># 示例用户 ID</span><br>SESSION_ID = <span class="hljs-string">&quot;session_456&quot;</span> <span class="hljs-comment"># 示例会话 ID</span><br><br><span class="hljs-comment">## --- Agent 定义（根据指南的示例更新） ---</span><br>vsearch_agent = agents.VSearchAgent(<br>    name=<span class="hljs-string">&quot;q2_strategy_vsearch_agent&quot;</span>,<br>    description=<span class="hljs-string">&quot;使用 Vertex AI 搜索回答有关 Q2 战略文档的问题。&quot;</span>,<br>    model=<span class="hljs-string">&quot;gemini-2.0-flash-exp&quot;</span>, <span class="hljs-comment"># 根据指南示例更新模型</span><br>    datastore_id=DATASTORE_ID,<br>    model_parameters=&#123;<span class="hljs-string">&quot;temperature&quot;</span>: <span class="hljs-number">0.0</span>&#125;<br>)<br><br><span class="hljs-comment">## --- 运行器和会话初始化 ---</span><br>runner = Runner(<br>    agent=vsearch_agent,<br>    app_name=APP_NAME,<br>    session_service=InMemorySessionService(),<br>)<br><br><span class="hljs-comment">## --- Agent 调用逻辑 ---</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">call_vsearch_agent_async</span>(<span class="hljs-params">query: <span class="hljs-built_in">str</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;初始化会话并流式传输 Agent 的响应。&quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;用户：<span class="hljs-subst">&#123;query&#125;</span>&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Agent：&quot;</span>, end=<span class="hljs-string">&quot;&quot;</span>, flush=<span class="hljs-literal">True</span>)<br>    <br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-comment"># 正确构造消息内容</span><br>        content = types.Content(role=<span class="hljs-string">&#x27;user&#x27;</span>, parts=[types.Part(text=query)])<br>        <br>        <span class="hljs-comment"># 从异步运行器处理到达的事件</span><br>        <span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> event <span class="hljs-keyword">in</span> runner.run_async(<br>            user_id=USER_ID,<br>            session_id=SESSION_ID,<br>            new_message=content<br>        ):<br>            <span class="hljs-comment"># 用于响应文本的逐令牌流式传输</span><br>            <span class="hljs-keyword">if</span> <span class="hljs-built_in">hasattr</span>(event, <span class="hljs-string">&#x27;content_part_delta&#x27;</span>) <span class="hljs-keyword">and</span> event.content_part_delta:<br>                <span class="hljs-built_in">print</span>(event.content_part_delta.text, end=<span class="hljs-string">&quot;&quot;</span>, flush=<span class="hljs-literal">True</span>)<br>            <br>            <span class="hljs-comment"># 处理最终响应及其关联的元数据</span><br>            <span class="hljs-keyword">if</span> event.is_final_response():<br>                <span class="hljs-built_in">print</span>() <span class="hljs-comment"># 流式响应后换行</span><br>                <span class="hljs-keyword">if</span> event.grounding_metadata:<br>                    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;  (来源归因：找到 <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(event.grounding_metadata.grounding_attributions)&#125;</span> 个来源)&quot;</span>)<br>                <span class="hljs-keyword">else</span>:<br>                    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;  (未找到基础元数据)&quot;</span>)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;-&quot;</span> * <span class="hljs-number">30</span>)<br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\n发生错误：<span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;请确保您的数据存储 ID 正确，并且服务帐户具有必要的权限。&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;-&quot;</span> * <span class="hljs-number">30</span>)<br><br><span class="hljs-comment">## --- 运行示例 ---</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">run_vsearch_example</span>():<br>    <span class="hljs-comment"># 替换为与您的数据存储内容相关的问题</span><br>    <span class="hljs-keyword">await</span> call_vsearch_agent_async(<span class="hljs-string">&quot;总结 Q2 战略文档的要点。&quot;</span>)<br>    <span class="hljs-keyword">await</span> call_vsearch_agent_async(<span class="hljs-string">&quot;实验室 X 提到了哪些安全程序？&quot;</span>)<br><br><span class="hljs-comment">## --- 执行 ---</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> DATASTORE_ID:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;错误：未设置 DATASTORE_ID 环境变量。&quot;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">try</span>:<br>            asyncio.run(run_vsearch_example())<br>        <span class="hljs-keyword">except</span> RuntimeError <span class="hljs-keyword">as</span> e:<br>            <span class="hljs-comment"># 这处理在已有运行事件循环的环境中调用 asyncio.run 的情况</span><br>            <span class="hljs-comment"># （如 Jupyter 笔记本）。</span><br>            <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;cannot be called from a running event loop&quot;</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">str</span>(e):<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;在运行事件循环中跳过执行。请直接运行此脚本。&quot;</span>)<br>            <span class="hljs-keyword">else</span>:<br>                <span class="hljs-keyword">raise</span> e<br></code></pre></td></tr></table></figure>
+<p>总的来说，此代码为构建利用 Vertex AI 搜索根据存储在数据存储中的信息回答问题的对话式 AI 应用程序提供了基本框架。它演示了如何定义 Agent、设置运行器以及在流式传输响应的同时异步与 Agent 交互。重点是从特定数据存储检索和综合信息以回答用户查询。</p>
+<p><strong>Vertex Extensions：</strong> Vertex AI 扩展是一个结构化的 API 包装器，使模型能够连接到外部 API 以进行实时数据处理和操作执行。扩展提供企业级安全性、数据隐私和性能保证。它们可用于生成和运行代码、查询网站以及分析来自私有数据存储的信息等任务。Google 为常见用例提供预构建扩展，如代码解释器和 Vertex AI 搜索，并可选择创建自定义扩展。扩展的主要好处包括强大的企业控制和与其他 Google 产品的无缝集成。扩展和函数调用之间的关键区别在于它们的执行：Vertex AI 自动执行扩展，而函数调用需要用户或客户端手动执行。</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么：</strong> 大型语言模型（LLM）是强大的文本生成器，但它们基本上与外部世界断开连接。它们的知识是静态的，仅限于训练数据，并且缺乏执行操作或检索实时信息的能力。这种固有的限制阻止它们完成需要与外部 API、数据库或服务交互的任务。没有通往这些外部系统的桥梁，它们解决现实世界问题的效用受到严重限制。</p>
+<p><strong>为什么：</strong> 工具使用模式（通常通过函数调用实现）为此问题提供了标准化解决方案。它的工作原理是以 LLM 可以理解的方式向其描述可用的外部函数或"工具"。基于用户的请求，Agent LLM 可以决定是否需要工具，并生成指定要调用哪个函数以及使用什么参数的结构化数据对象（如 JSON）。编排层执行此函数调用，检索结果，并将其反馈给 LLM。这允许 LLM 将最新的外部信息或操作结果合并到其最终响应中，有效地赋予其行动能力。</p>
+<p><strong>经验法则：</strong> 当 Agent 需要突破 LLM 的内部知识并与外部世界交互时，使用工具使用模式。这对于需要实时数据（例如，检查天气、股票价格）、访问私有或专有信息（例如，查询公司数据库）、执行精确计算、执行代码或触发其他系统中的操作（例如，发送电子邮件、控制智能设备）的任务至关重要。</p>
+<p><strong>视觉摘要：</strong></p>
+<p><strong><img src="../images/agent_images/chapter-5/image2.png" srcset="/img/loading.gif" lazyload /></strong></p>
+<p>图 2：工具使用设计模式</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>工具使用（函数调用）允许 Agent 与外部系统交互并访问动态信息。</li>
+<li>它涉及定义具有 LLM 可以理解的清晰描述和参数的工具。</li>
+<li>LLM 决定何时使用工具并生成结构化函数调用。</li>
+<li>Agent 框架执行实际的工具调用并将结果返回给 LLM。</li>
+<li>工具使用对于构建可以执行现实世界操作并提供最新信息的 Agent 至关重要。</li>
+<li>LangChain 使用 <span class="citation" data-cites="tool">@tool</span> 装饰器简化工具定义，并提供 create_tool_calling_agent 和 AgentExecutor 用于构建工具使用 Agent。</li>
+<li>Google ADK 有许多非常有用的预构建工具，如 Google 搜索、代码执行和 Vertex AI 搜索工具。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>工具使用模式是将大型语言模型的功能范围扩展到其固有文本生成能力之外的关键架构原则。通过为模型配备与外部软件和数据源交互的能力，此范式允许 Agent 执行操作、进行计算并从其他系统检索信息。此过程涉及模型在确定满足用户查询需要时生成调用外部工具的结构化请求。LangChain、Google ADK 和 CrewAI 等框架提供结构化抽象和组件，促进这些外部工具的集成。这些框架管理向模型公开工具规范并解析其后续工具使用请求的过程。这简化了可以与外部数字环境交互并在其中采取行动的复杂 Agent 系统的开发。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>LangChain Documentation (Tools): <a target="_blank" rel="noopener" href="https://python.langchain.com/docs/integrations/tools/">https://python.langchain.com/docs/integrations/tools/</a></li>
+<li>Google Agent Developer Kit (ADK) Documentation (Tools): <a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/tools/">https://google.github.io/adk-docs/tools/</a></li>
+<li>OpenAI Function Calling Documentation: <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/function-calling">https://platform.openai.com/docs/guides/function-calling</a></li>
+<li>CrewAI Documentation (Tools): <a target="_blank" rel="noopener" href="https://docs.crewai.com/concepts/tools">https://docs.crewai.com/concepts/tools</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 05 工具调用</div>
+      <div>https://linxkon.github.io/第05章-工具调用.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC06%E7%AB%A0-%E4%BB%BB%E5%8A%A1%E8%A7%84%E5%88%92.html" title="Agent 设计模式 - 06 任务规划">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 06 任务规划</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC04%E7%AB%A0-%E5%8F%8D%E6%80%9D%E4%BC%98%E5%8C%96.html" title="Agent 设计模式 - 04 反思优化">
+                        <span class="hidden-mobile">Agent 设计模式 - 04 反思优化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '40dd39440322398236b33242275ba6d0'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

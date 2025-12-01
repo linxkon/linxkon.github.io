@@ -1,0 +1,851 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="附录 C - Agentic 框架快速概览 LangChain LangChain 是一个用于开发由大语言模型（LLM）驱动的应用程序的框架。其核心优势在于 LangChain 表达式语言（LCEL），它允许您使用管道操作符将组件连接成链。这种设计形成了清晰的线性序列，每一步的输出自动成为下一步的输入。该框架专为有向无环图（DAG）工作流构建，意味着处理流程单向流动且无循环。 适用场景：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 附录C Agent框架概览">
+<meta property="og:url" content="https://linxkon.github.io/%E9%99%84%E5%BD%95C-Agent%E6%A1%86%E6%9E%B6%E6%A6%82%E8%A7%88.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="附录 C - Agentic 框架快速概览 LangChain LangChain 是一个用于开发由大语言模型（LLM）驱动的应用程序的框架。其核心优势在于 LangChain 表达式语言（LCEL），它允许您使用管道操作符将组件连接成链。这种设计形成了清晰的线性序列，每一步的输出自动成为下一步的输入。该框架专为有向无环图（DAG）工作流构建，意味着处理流程单向流动且无循环。 适用场景：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:53:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.846Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 附录C Agent框架概览 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 附录C Agent框架概览"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:53" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 附录C Agent框架概览</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="附录-c---agentic-框架快速概览">附录 C - Agentic 框架快速概览</h1>
+<h2 id="langchain">LangChain</h2>
+<p>LangChain 是一个用于开发由大语言模型（LLM）驱动的应用程序的框架。其核心优势在于 LangChain 表达式语言（LCEL），它允许您使用管道操作符将组件连接成链。这种设计形成了清晰的线性序列，每一步的输出自动成为下一步的输入。该框架专为有向无环图（DAG）工作流构建，意味着处理流程单向流动且无循环。</p>
+<p>适用场景：</p>
+<ul>
+<li>简单 RAG：检索文档，构建提示，从 LLM 获取答案。</li>
+<li>文本摘要：接收用户文本，输入至摘要提示，返回摘要结果。</li>
+<li>数据提取：从文本块中提取结构化数据（如 JSON 格式）。</li>
+</ul>
+<p>Python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## 一个简单的 LCEL 链概念示例</span><br><span class="hljs-comment">## （此为示意性代码，展示流程结构）</span><br>chain = prompt | model | output_parse<br></code></pre></td></tr></table></figure>
+<h3 id="langgraph">LangGraph</h3>
+<p>LangGraph 是构建于 LangChain 之上的库，专为处理更高级的 Agentic 系统设计。它允许您将工作流定义为包含节点（函数或 LCEL 链）和边（条件逻辑）的图结构。其主要优势在于支持循环创建，使应用程序能够循环执行、重试操作或以灵活顺序调用工具，直至任务完成。该库显式管理应用程序状态，状态在节点间传递并在整个流程中持续更新。</p>
+<p>适用场景：</p>
+<ul>
+<li>多 Agent 系统：监督 Agent 将任务路由至专业化工作 Agent，可能循环执行直至目标达成。</li>
+<li>规划与执行 Agent：Agent 制定计划，执行步骤，随后基于结果循环反馈以更新计划。</li>
+<li>人机协同：图结构可等待人工输入，再决定后续执行节点。</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">特性</th>
+<th style="text-align: left;">LangChain</th>
+<th style="text-align: left;">LangGraph</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">核心抽象</td>
+<td style="text-align: left;">链（使用 LCEL）</td>
+<td style="text-align: left;">节点图</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">工作流类型</td>
+<td style="text-align: left;">线性（有向无环图）</td>
+<td style="text-align: left;">循环（支持循环的图）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">状态管理</td>
+<td style="text-align: left;">通常单次运行无状态</td>
+<td style="text-align: left;">显式且持久的状态对象</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">主要用途</td>
+<td style="text-align: left;">简单、可预测的序列</td>
+<td style="text-align: left;">复杂、动态、有状态的 Agent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="如何选择">如何选择？</h3>
+<ul>
+<li>当应用程序具备清晰、可预测的线性步骤流程时，选择 LangChain。若您能定义从 A 到 B 再到 C 的直连过程而无需回环，则采用 LCEL 的 LangChain 是理想工具。</li>
+<li>当应用程序需进行推理、规划或循环操作时，选择 LangGraph。若您的 Agent 需使用工具、反思结果并可能尝试不同策略，则需借助 LangGraph 的循环和有状态特性。</li>
+</ul>
+<p>Python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## 图状态</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">State</span>(<span class="hljs-title class_ inherited__">TypedDict</span>):<br>    topic: <span class="hljs-built_in">str</span><br>    joke: <span class="hljs-built_in">str</span><br>    story: <span class="hljs-built_in">str</span><br>    poem: <span class="hljs-built_in">str</span><br>    combined_output: <span class="hljs-built_in">str</span><br><br><span class="hljs-comment">## 节点</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">call_llm_1</span>(<span class="hljs-params">state: State</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;第一次 LLM 调用以生成初始笑话&quot;&quot;&quot;</span><br>    msg = llm.invoke(<span class="hljs-string">f&quot;Write a joke about <span class="hljs-subst">&#123;state[<span class="hljs-string">&#x27;topic&#x27;</span>]&#125;</span>&quot;</span>)<br>    <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;joke&quot;</span>: msg.content&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">call_llm_2</span>(<span class="hljs-params">state: State</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;第二次 LLM 调用以生成故事&quot;&quot;&quot;</span><br>    msg = llm.invoke(<span class="hljs-string">f&quot;Write a story about <span class="hljs-subst">&#123;state[<span class="hljs-string">&#x27;topic&#x27;</span>]&#125;</span>&quot;</span>)<br>    <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;story&quot;</span>: msg.content&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">call_llm_3</span>(<span class="hljs-params">state: State</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;第三次 LLM 调用以生成诗歌&quot;&quot;&quot;</span><br>    msg = llm.invoke(<span class="hljs-string">f&quot;Write a poem about <span class="hljs-subst">&#123;state[<span class="hljs-string">&#x27;topic&#x27;</span>]&#125;</span>&quot;</span>)<br>    <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;poem&quot;</span>: msg.content&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">aggregator</span>(<span class="hljs-params">state: State</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;将笑话和故事组合成单个输出&quot;&quot;&quot;</span><br>    combined = <span class="hljs-string">f&quot;Here&#x27;s a story, joke, and poem about <span class="hljs-subst">&#123;state[<span class="hljs-string">&#x27;topic&#x27;</span>]&#125;</span>!\n\n&quot;</span><br>    combined += <span class="hljs-string">f&quot;STORY:\n<span class="hljs-subst">&#123;state[<span class="hljs-string">&#x27;story&#x27;</span>]&#125;</span>\n\n&quot;</span><br>    combined += <span class="hljs-string">f&quot;JOKE:\n<span class="hljs-subst">&#123;state[<span class="hljs-string">&#x27;joke&#x27;</span>]&#125;</span>\n\n&quot;</span><br>    combined += <span class="hljs-string">f&quot;POEM:\n<span class="hljs-subst">&#123;state[<span class="hljs-string">&#x27;poem&#x27;</span>]&#125;</span>&quot;</span><br>    <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;combined_output&quot;</span>: combined&#125;<br><br><span class="hljs-comment">## 构建工作流</span><br>parallel_builder = StateGraph(State)<br><br><span class="hljs-comment">## 添加节点</span><br>parallel_builder.add_node(<span class="hljs-string">&quot;call_llm_1&quot;</span>, call_llm_1)<br>parallel_builder.add_node(<span class="hljs-string">&quot;call_llm_2&quot;</span>, call_llm_2)<br>parallel_builder.add_node(<span class="hljs-string">&quot;call_llm_3&quot;</span>, call_llm_3)<br>parallel_builder.add_node(<span class="hljs-string">&quot;aggregator&quot;</span>, aggregator)<br><br><span class="hljs-comment">## 添加边来连接节点</span><br>parallel_builder.add_edge(START, <span class="hljs-string">&quot;call_llm_1&quot;</span>)<br>parallel_builder.add_edge(START, <span class="hljs-string">&quot;call_llm_2&quot;</span>)<br>parallel_builder.add_edge(START, <span class="hljs-string">&quot;call_llm_3&quot;</span>)<br>parallel_builder.add_edge(<span class="hljs-string">&quot;call_llm_1&quot;</span>, <span class="hljs-string">&quot;aggregator&quot;</span>)<br>parallel_builder.add_edge(<span class="hljs-string">&quot;call_llm_2&quot;</span>, <span class="hljs-string">&quot;aggregator&quot;</span>)<br>parallel_builder.add_edge(<span class="hljs-string">&quot;call_llm_3&quot;</span>, <span class="hljs-string">&quot;aggregator&quot;</span>)<br>parallel_builder.add_edge(<span class="hljs-string">&quot;aggregator&quot;</span>, END)<br><br>parallel_workflow = parallel_builder.<span class="hljs-built_in">compile</span>()<br><br><span class="hljs-comment">## 显示工作流</span><br>display(Image(parallel_workflow.get_graph().draw_mermaid_png()))<br><br><span class="hljs-comment">## 调用</span><br>state = parallel_workflow.invoke(&#123;<span class="hljs-string">&quot;topic&quot;</span>: <span class="hljs-string">&quot;cats&quot;</span>&#125;)<br><span class="hljs-built_in">print</span>(state[<span class="hljs-string">&quot;combined_output&quot;</span>])<br></code></pre></td></tr></table></figure>
+<p>这段代码定义并运行了一个并行操作的 LangGraph 工作流。其主要目的是同时生成关于给定主题的笑话、故事和诗歌，然后将它们组合成单个格式化的文本输出。</p>
+<h2 id="googles-adk">Google's ADK</h2>
+<p>Google 的 Agent 开发工具包（ADK）提供了一个高级、结构化的框架，用于构建和部署由多个交互式 AI Agent 组成的应用程序。与 LangChain 和 LangGraph 相比，它提供了一个更偏向指导性和生产就绪的系统，用于编排 Agent 协作，而不是提供 Agent 内部逻辑的基础构建块。</p>
+<p>LangChain 在最基础层面运作，提供组件和标准化接口以创建操作序列，例如调用模型并解析其输出。LangGraph 通过引入更灵活强大的控制流对此进行扩展；它将 Agent 工作流视为有状态图。使用 LangGraph，开发者显式定义节点（函数或工具）和边（决定执行路径）。这种图结构支持复杂循环推理，系统可循环执行、重试任务，并基于节点间传递的显式管理状态对象做出决策。它为开发者提供了对单个 Agent 认知过程的细粒度控制，或从第一性原理构建多 Agent 系统的能力。</p>
+<p>Google 的 ADK 抽象了大部分此类低级图构建工作。ADK 不要求开发者定义每个节点和边，而是为多 Agent 交互提供预构建的架构模式。例如，ADK 包含 SequentialAgent 或 ParallelAgent 等内置 Agent 类型，它们自动管理不同 Agent 间的控制流。其架构围绕 Agent"团队"概念设计，通常由主 Agent 将任务委派给专业化子 Agent。状态和会话管理由框架更隐式地处理，提供了比 LangGraph 显式状态传递更连贯但精细度稍低的方法。因此，若将 LangGraph 比作提供详细工具以设计单个机器人或团队复杂接线的工具箱，Google 的 ADK 则如同一个工厂装配线，旨在构建和管理一支已具备协同工作能力的机器人舰队。</p>
+<p>Python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> LlmAgent<br><span class="hljs-keyword">from</span> google.adk.tools <span class="hljs-keyword">import</span> google_Search<br><br>dice_agent = LlmAgent(<br>    model=<span class="hljs-string">&quot;gemini-2.0-flash-exp&quot;</span>,<br>    name=<span class="hljs-string">&quot;question_answer_agent&quot;</span>,<br>    description=<span class="hljs-string">&quot;一个能回答问题的有用助手 Agent。&quot;</span>,<br>    instruction=<span class="hljs-string">&quot;&quot;&quot;使用谷歌搜索响应查询&quot;&quot;&quot;</span>,<br>    tools=[google_search],<br>)<br></code></pre></td></tr></table></figure>
+<p>此代码创建了一个搜索增强型 Agent。当该 Agent 收到问题时，不会仅依赖其既有知识。相反，遵循其指令，它将使用 Google 搜索工具从网络查找相关实时信息，并据此构建答案。</p>
+<p>Crew.AI</p>
+<p>CrewAI 提供了一个编排框架，通过聚焦协作角色与结构化流程来构建多 Agent 系统。它在比基础工具包更高的抽象层级运作，提供模拟人类团队的概念模型。开发者无需将逻辑细粒度流程定义为图，而是定义参与者及其任务分配，由 CrewAI 管理其交互。</p>
+<p>该框架核心组件包括 Agent、Task 和 Crew。Agent 不仅由功能定义，还通过角色、目标和背景故事等角色特征来定义，这些特征指导其行为与沟通风格。Task 是具备明确描述和预期输出的离散工作单元，分配给特定 Agent。Crew 是包含 Agent 和 Task 列表的协调单元，执行预定义的 Process。此流程决定工作流模式，通常为顺序型（一个任务的输出成为下一任务的输入）或层级型（经理型 Agent 委派任务并协调其他 Agent 间的工作流）。</p>
+<p>与其他框架相比，CrewAI 定位独特。它脱离了 LangGraph 的低层级、显式状态管理与控制流（后者要求开发者连接每个节点与条件边）。开发者不是构建状态机，而是设计团队章程。尽管 Google 的 ADK 为整个 Agent 生命周期提供了全面、生产就绪的平台，CrewAI 则专注于 Agent 协作逻辑与专家团队模拟。</p>
+<p>Python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">@crew</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">crew</span>(<span class="hljs-params">self</span>) -&gt; Crew:<br>    <span class="hljs-string">&quot;&quot;&quot;创建研究团队&quot;&quot;&quot;</span><br>    <span class="hljs-keyword">return</span> Crew(<br>        agents=self.agents,<br>        tasks=self.tasks,<br>        process=Process.sequential,<br>        verbose=<span class="hljs-literal">True</span>,<br>    )<br></code></pre></td></tr></table></figure>
+<p>此代码为 AI Agent 组配置了顺序工作流，Agent 按特定顺序处理任务列表，并启用详细日志以监控进度。</p>
+<p>其他 Agent 开发框架</p>
+<p><strong>Microsoft AutoGen</strong>：AutoGen 是一个以对话方式编排多 Agent 解决任务为核心的框架。其架构使具备不同能力的 Agent 能够交互，支持复杂问题分解与协作解决。AutoGen 主要优势在于其灵活的对话驱动方法，可应对动态复杂的多 Agent 交互。然而，这种对话范式可能导致执行路径预测性降低，且需复杂提示工程以确保任务高效收敛。</p>
+<p><strong>LlamaIndex</strong>：LlamaIndex 本质上是数据框架，旨在连接大语言模型与外部及私有数据源。它擅长构建复杂的数据摄取与检索管道，这对创建能执行 RAG 的知识型 Agent 至关重要。尽管其数据索引与查询能力对构建情境感知 Agent 极为强大，但与 Agent 优先框架相比，其在复杂 agentic 控制流和多 Agent 编排方面的原生工具较少。当核心技术挑战为数据检索与综合时，LlamaIndex 是最佳选择。</p>
+<p><strong>Haystack</strong>：Haystack 是专为构建语言模型驱动的可扩展、生产就绪搜索系统而设计的开源框架。其架构由模块化、可互操作的节点组成，这些节点构成文档检索、问答和摘要的管道。Haystack 主要优势在于其对大规模信息检索任务性能与可扩展性的专注，使其适用于企业级应用。潜在权衡在于，其针对搜索管道优化的设计在实现高度动态和创造性 agentic 行为时可能较为僵化。</p>
+<p><strong>MetaGPT</strong>：MetaGPT 通过基于预定义标准操作程序（SOP）分配角色和任务来实现多 Agent 系统。该框架将 Agent 协作结构化以模拟软件开发公司，Agent 承担产品经理或工程师等角色完成复杂任务。这种 SOP 驱动方法产生高度结构化且连贯的输出，对代码生成等专业领域是显著优势。该框架主要局限在于其高度专业化，使其在核心设计范畴外的通用 agentic 任务适应性较弱。</p>
+<p><strong>SuperAGI</strong>：SuperAGI 是旨在为自主 Agent 提供完整生命周期管理系统的开源框架。它包括 Agent 配置、监控和图形界面等功能，旨在提升 Agent 执行可靠性。关键优势在于其对生产就绪性的关注，具备处理循环等常见故障模式的内置机制，并提供 Agent 性能可观测性。潜在缺点在于，与更轻量级库框架相比，其全面平台方法可能引入更多复杂性与开销。</p>
+<p><strong>Semantic Kernel</strong>：由 Microsoft 开发，Semantic Kernel 是通过"插件"和"规划器"系统将大语言模型与传统编程代码集成的 SDK。它允许 LLM 调用原生函数并编排工作流，有效将模型视为大型软件应用中的推理引擎。其主要优势是与现有企业代码库（尤其在 .NET 和 Python 环境）的无缝集成。其插件与规划器架构的概念开销可能带来比更直接 Agent 框架更陡峭的学习曲线。</p>
+<p><strong>Strands Agents</strong>：AWS 的轻量级灵活 SDK，采用模型驱动方法构建和运行 AI Agent。其设计简洁且可扩展，支持从基础对话助手到复杂多 Agent 自主系统的各类场景。该框架与模型无关，广泛支持多种 LLM 提供商，并包含与 MCP 的原生集成以便轻松访问外部工具。其核心优势是简洁性与灵活性，提供易于上手的可定制 Agent 循环。潜在权衡在于，其轻量级设计意味着开发者可能需要构建更多周边运营基础设施（如高级监控或生命周期管理系统），而更全面框架可能提供开箱即用功能。</p>
+<p>结论</p>
+<p>Agentic 框架生态提供了多样化工具，涵盖从定义 Agent 逻辑的低级库到编排多 Agent 协作的高级平台。在基础层，LangChain 支持简单线性工作流，而 LangGraph 引入有状态循环图以实现更复杂推理。如 CrewAI 和 Google ADK 等高级框架将重心转向编排具预定义角色的 Agent 团队，而 LlamaIndex 等其他框架则专注数据密集型应用。这种多样性为开发者带来了基于图系统的细粒度控制与更具指导性平台的简化开发之间的核心权衡。因此，框架选择取决于应用需求：简单序列、动态推理循环还是受管专家团队。最终，这一不断演进的技术生态系统使开发者能通过选择项目所需的精确抽象级别，构建日益复杂的 AI 系统。</p>
+<p>参考文献</p>
+<ol type="1">
+<li>LangChain, <a target="_blank" rel="noopener" href="https://www.langchain.com/">https://www.langchain.com/</a><br />
+</li>
+<li>LangGraph, <a target="_blank" rel="noopener" href="https://www.langchain.com/langgraph">https://www.langchain.com/langgraph</a><br />
+</li>
+<li>Google's ADK, <a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/">https://google.github.io/adk-docs/</a><br />
+</li>
+<li>Crew.AI, <a target="_blank" rel="noopener" href="https://docs.crewai.com/en/introduction">https://docs.crewai.com/en/introduction</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 附录C Agent框架概览</div>
+      <div>https://linxkon.github.io/附录C-Agent框架概览.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E9%99%84%E5%BD%95D-%E4%BD%BF%E7%94%A8AgentSpace%E6%9E%84%E5%BB%BAAgent.html" title="Agent 设计模式 - 附录D 使用AgentSpace构建Agent">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 附录D 使用AgentSpace构建Agent</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E9%99%84%E5%BD%95B-AI-Agent%E4%BA%A4%E4%BA%92-%E4%BB%8EGUI%E5%88%B0%E7%9C%9F%E5%AE%9E%E4%B8%96%E7%95%8C.html" title="Agent 设计模式 - 附录B AI-Agent交互-从GUI到真实世界">
+                        <span class="hidden-mobile">Agent 设计模式 - 附录B AI-Agent交互-从GUI到真实世界</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '5d3f5940a75e0d475edfc6b96de9b31d'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

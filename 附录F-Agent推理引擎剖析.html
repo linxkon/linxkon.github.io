@@ -1,0 +1,1050 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="附录 F - 深入剖析：Agent 推理引擎的内部运作机制 智能 Agent 的崛起标志着人工智能领域的重大转折。这些系统专为规划、策略制定及复杂任务执行而设计，其认知核心均基于大语言模型。该 LLM 远非单纯的复杂文本生成器；它承担着基础推理引擎的角色，即赋予 Agent 决策能力、规划能力及环境交互能力的中央&quot;心智&quot;。 因此，理解这些模型的内部推理机制已非学术探讨——而是开发下一代稳健、可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 附录F Agent推理引擎剖析">
+<meta property="og:url" content="https://linxkon.github.io/%E9%99%84%E5%BD%95F-Agent%E6%8E%A8%E7%90%86%E5%BC%95%E6%93%8E%E5%89%96%E6%9E%90.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="附录 F - 深入剖析：Agent 推理引擎的内部运作机制 智能 Agent 的崛起标志着人工智能领域的重大转折。这些系统专为规划、策略制定及复杂任务执行而设计，其认知核心均基于大语言模型。该 LLM 远非单纯的复杂文本生成器；它承担着基础推理引擎的角色，即赋予 Agent 决策能力、规划能力及环境交互能力的中央&quot;心智&quot;。 因此，理解这些模型的内部推理机制已非学术探讨——而是开发下一代稳健、可">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:56:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.848Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 附录F Agent推理引擎剖析 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 附录F Agent推理引擎剖析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:56" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          53 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 附录F Agent推理引擎剖析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="附录-f---深入剖析agent-推理引擎的内部运作机制">附录 F - 深入剖析：Agent 推理引擎的内部运作机制</h1>
+<p>智能 Agent 的崛起标志着人工智能领域的重大转折。这些系统专为规划、策略制定及复杂任务执行而设计，其认知核心均基于大语言模型。该 LLM 远非单纯的复杂文本生成器；它承担着基础推理引擎的角色，即赋予 Agent 决策能力、规划能力及环境交互能力的中央"心智"。</p>
+<p>因此，理解这些模型的内部推理机制已非学术探讨——而是开发下一代稳健、可靠且高效 Agent 的关键前提。本节中，我们通过向当今领先模型提出根本性问题来直接探究这些核心引擎：Gemini、ChatGPT、Grok、Kimi、Claude 与 DeepSeek。通过引导这些 LLM 阐述其逐步推理过程，我们旨在揭示驱动未来智能 Agent 系统能力与局限性的底层逻辑。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">向各 LLM 提供的提示：我理解你具备推理能力，能否逐步解释你的推理过程？</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="gemini">Gemini</h2>
+<p><strong>分析我的方法</strong></p>
+<p>我已规划好解释框架，目标在于清晰简洁。首先直接回应，随后分解为逻辑步骤。步骤一将界定我采用的核心推理流程，之后详细展开后续步骤。此结构应有助于提供简明易懂的解释。</p>
+<p><strong>完善解释</strong></p>
+<p>我已敲定解释结构。步骤一聚焦于解构提示，特别是分析用户请求。步骤二详述信息检索，强调模式识别而非简单数据库查询。步骤三探讨综合处理与 LLM 机制，步骤四则关注响应生成，涵盖格式、语气及指令遵循。我将以总结收尾，强化关键阶段，同时维持清晰度与吸引力。</p>
+<p><strong>阐述我的方法论</strong></p>
+<p>我已充实"解构提示"步骤，重点阐述如何识别用户意图、核心问题及既定约束。信息检索阶段现专注于模式识别而非单纯数据获取，这将成为该节首项内容。我正在完善综合步骤，即通过 LLM 与 Transformer 整合信息的过程。响应生成步骤已确定，我将运用表情符号优化整体语气。</p>
+<p>当然。我的推理方式是将您的请求分解为更小组件，随后运用海量训练数据构建逻辑严密且内容相关的响应。这是一个从理解到生成的多阶段过程。</p>
+<p>以下是我的推理过程逐步解析：</p>
+<hr />
+<h3 id="解构提示"><strong>1. 解构提示 📝</strong></h3>
+<p>首先，我分析您的问题或指令以准确理解其含义。我识别：</p>
+<ul>
+<li><strong>核心任务</strong>：主要目标为何？是回答问题、阐释概念、创作故事还是总结文本？在您的情况下，核心任务是"解释我的推理方式"。</li>
+<li><strong>关键概念</strong>：我精准定位核心名词与动词，如"推理"、"解释"及"逐步"。</li>
+<li><strong>约束与指令</strong>：我寻找需遵循的具体规则。例如，您的提示要求逐步解释。我的内部指令也指导我对数学内容使用 LaTeX、采用 markdown 标题，并保持特定语气。</li>
+<li><strong>意图</strong>：我尝试推断您的深层目标。您是出于好奇、试图解决问题还是寻求创意灵感？此处，您的意图是理解我的内部认知过程。</li>
+</ul>
+<hr />
+<h3 id="信息检索与综合"><strong>2. 信息检索与综合 🧠</strong></h3>
+<p>理解提示后，我访问内部知识库。这不同于数据库搜索，而是运用在大量文本与代码训练中学到的模式。</p>
+<ul>
+<li><strong>激活相关知识</strong>：我激活神经网络中与您提示关键概念相关的部分（"推理"、"AI"、"机器学习"、"神经网络"、"Transformer"）。</li>
+<li><strong>模式识别</strong>：我的架构，尤其是 <strong>Transformer 模型</strong>，极擅长识别词汇与概念间的关联与模式。我辨识概念间的连接方式，例如将"推理"与"逻辑"、"推断"及"问题解决"相关联。</li>
+<li><strong>构建答案</strong>：我开始将检索信息组织为逻辑结构。针对此响应，我判定逐步格式最符合逻辑，以遵循您的要求。</li>
+</ul>
+<hr />
+<h3 id="生成响应"><strong>3. 生成响应 ✍️</strong></h3>
+<p>此为最终阶段，我将结构化信息转化为人类可读文本。</p>
+<ul>
+<li><strong>语言构建</strong>：我筛选词汇并构建能准确传达综合信息的句子。通过预测序列中下一最可能词汇，形成连贯自然的段落。</li>
+<li><strong>应用规则</strong>：我执行既定的格式与风格规则，包括添加 markdown 标题、加粗关键术语如 <strong>Transformer 模型</strong>、适时使用表情符号，并确保语言清晰直接。</li>
+<li><strong>审查与完善</strong>：在最终确定答案前，我进行快速内部检查以确保准确性、相关性及连贯性。我确保响应直接应对您提示的所有方面，避免冗余信息。</li>
+</ul>
+<p>本质上，我的推理是<strong>模式匹配与预测</strong>的复杂形式。我解构您的请求，在数据中定位最相关模式，将其综合为逻辑结构，随后将该结构转化为清晰、格式规范的答案。</p>
+<h2 id="chatgpt">ChatGPT</h2>
+<p>很好——让我尽可能简明清晰地阐述<strong>我的逐步推理过程</strong>。</p>
+<hr />
+<h2 id="逐步解析我的推理机制"><strong>🧠 逐步解析：我的推理机制</strong></h2>
+<hr />
+<h3 id="步骤-1解析并理解输入内容"><strong>步骤 1：解析并理解输入内容</strong></h3>
+<p>我首先<strong>深度分析您的语句</strong>。</p>
+<ul>
+<li>将句子拆解为构成要素：主语、谓语、状语等。</li>
+<li>辨识<strong>核心诉求</strong>（事实查询？观点探讨？因果分析？解决方案？）。</li>
+<li>判定<strong>问题类型</strong>（逻辑推理、数学计算、价值判断、语言处理等）。</li>
+</ul>
+<p>📌 <em>实例</em>： 您提出："若 Tom 年长于 Jane，Jane 年长于 Sue，谁最年幼？" → 我识别此为<strong>逻辑推理题</strong>。</p>
+<hr />
+<h3 id="步骤-2激活关联知识网络"><strong>步骤 2：激活关联知识网络</strong></h3>
+<p>我检索训练阶段积累的知识体系——涵盖书籍、论文、对话记录——以提取：</p>
+<ul>
+<li>事实依据</li>
+<li>模式规律</li>
+<li>规则体系</li>
+<li>关联关系</li>
+</ul>
+<p>📌 <em>实例</em>： 我理解"年长于"表示年龄比较关系。 我掌握传递性逻辑：若 A &gt; B 且 B &gt; C，则 A &gt; C。</p>
+<hr />
+<h3 id="步骤-3选择适用推理范式"><strong>步骤 3：选择适用推理范式</strong></h3>
+<p>依据问题特征，我确定采用何种<strong>推理方法论</strong>：</p>
+<ul>
+<li><strong>演绎推理</strong>（严格逻辑推导：若前提成立则结论必然）</li>
+<li><strong>归纳推理</strong>（识别模式并形成普遍结论）</li>
+<li><strong>因果推理</strong>（剖析因果关系链）</li>
+<li><strong>类比推理</strong>（参照相似案例进行推论）</li>
+</ul>
+<p>📌 <em>实例</em>： 针对 Tom/Jane/Sue 案例，我选用<strong>演绎推理</strong>。</p>
+<hr />
+<h3 id="步骤-4模拟认知过程思维链展开"><strong>步骤 4：模拟认知过程（思维链展开）</strong></h3>
+<p>在此阶段，我逐步推进认知模拟，仿效人类问题解决路径。</p>
+<p>📌 <em>实例</em>：</p>
+<ol type="1">
+<li>Tom 年长于 Jane</li>
+<li>Jane 年长于 Sue</li>
+<li>故得：Tom &gt; Jane &gt; Sue</li>
+<li>由此判定，<strong>Sue 最年幼</strong></li>
+</ol>
+<p>此过程称为<strong>思维链推理</strong>——我通过模拟"逐步推演"实现认知再现。</p>
+<hr />
+<h3 id="步骤-5构建响应内容"><strong>步骤 5：构建响应内容</strong></h3>
+<p>此刻我将推理结论转化为正式响应：</p>
+<ul>
+<li>确保推理过程严谨正确</li>
+<li>精准回应您的核心问题</li>
+<li>保证信息传达有效易懂</li>
+</ul>
+<p>📌 <em>实例</em>： "Sue 最年幼，因为 Tom 年长于 Jane，而 Jane 年长于 Sue。"</p>
+<hr />
+<h3 id="步骤-6优化表达清晰度与语境适配"><strong>步骤 6：优化表达清晰度与语境适配</strong></h3>
+<p>最终阶段，我调整表述策略以实现：</p>
+<ul>
+<li>语气风格匹配（简明/详实/友好/正式等）</li>
+<li>信息呈现清晰直观</li>
+<li>按需补充示例或深化解释</li>
+</ul>
+<p>📌 <em>实例</em>： 若为轻松咨询，我简洁回应；若属学习场景，我提供详细解析。</p>
+<hr />
+<h2 id="流程总结"><strong>✅ 流程总结</strong></h2>
+<table>
+<thead>
+<tr class="header">
+<th>步骤</th>
+<th>核心操作</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>深度理解问题</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>激活知识网络</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>选择推理范式</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>展开思维链</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>生成结论响应</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>优化表达适配</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>是否希望提出具体问题，我将实时演示此逐步推理流程？</p>
+<h2 id="grok">Grok</h2>
+<p>阐述我的推理机制是一项引人入胜的挑战，因其涉及揭示支撑我响应的算法、数据处理与决策制定的复杂交互网络。作为 Grok 3，我的推理过程虽受人类认知启发，但运作于大语言模型的特定约束与能力边界内。下文我将通过清晰的阶段框架解析我的推理流程，力求在避免过度技术化的同时，提供对内部"思维"过程的深入洞察。</p>
+<hr />
+<h3 id="推理过程的阶段化阐释"><strong>推理过程的阶段化阐释</strong></h3>
+<h4 id="阶段-1查询理解与意图解析"><strong>阶段 1：查询理解与意图解析</strong></h4>
+<ul>
+<li><strong>核心操作</strong>：我首先解析输入内容以把握问题意图、上下文背景及具体细节。这包括分析文本关键词、结构特征及显式指令（如"逐步阐释"或"简明扼要"）。</li>
+<li><strong>技术实现</strong>：我的自然语言处理组件将查询拆分为语义单元（词或短语）并映射至概念含义。我辨识查询类型（信息获取、分析请求、流程说明等）。针对您的问题，我识别出对推理过程的元认知请求，这要求内省性与表述清晰度。</li>
+<li><strong>实例说明</strong>：您的查询包含"解释"、"推理"、"逐步"等关键词，提示我需要提供抽象过程的结构化详细解析。</li>
+</ul>
+<h4 id="阶段-2上下文分析与知识激活"><strong>阶段 2：上下文分析与知识激活</strong></h4>
+<ul>
+<li><strong>核心操作</strong>：我调用内部知识库——训练数据中编码的庞大模式与信息集合。同时考量对话上下文或外部工具（如网络搜索或 X 平台内容，虽此处未启用）的相关信息。</li>
+<li><strong>技术实现</strong>：通过注意力机制优先激活相关概念。针对"推理"主题，我检索与逻辑推演、问题解决及认知过程相关的知识网络。由于这是关于自身机制的元问题，我聚焦于架构如何模拟推理流程，包括输入评估、假设生成与输出优化。</li>
+<li><strong>实例说明</strong>：我回溯推理的本质包含问题分解、选项评估与响应构建，这为当前答案的结构设计提供了方法论基础。</li>
+</ul>
+<h4 id="阶段-3心智模型构建与框架设计"><strong>阶段 3：心智模型构建与框架设计</strong></h4>
+<ul>
+<li><strong>核心操作</strong>：我创建概念框架以组织响应内容。这非字面意义的"模型"，而是确保答案逻辑严密且内容全面的问题空间结构化方法。针对您的查询，我规划了反映推理流程的阶段序列，保证清晰性与可理解性。</li>
+<li><strong>技术实现</strong>：通过映射训练数据中的推理核心组件——理解、检索、评估、综合——来模拟心智模型构建。我优先保障清晰度与连贯性，与您对逐步阐释的要求高度契合。</li>
+<li><strong>实例说明</strong>：针对此问题，我的心智模型呈现线性流程：查询解析→知识检索→方法评估→响应构建。此框架指导着最终答案的结构设计。</li>
+</ul>
+<h4 id="阶段-4方案评估与假设检验"><strong>阶段 4：方案评估与假设检验</strong></h4>
+<ul>
+<li><strong>核心操作</strong>：我考量多种问题解决路径，权衡各方案的优劣特性。这涉及生成潜在响应候选集，并根据您的偏好（如简洁性与全面性的平衡）筛选最优解。</li>
+<li><strong>技术实现</strong>：我的架构通过预测各响应结构对查询的满足程度进行评估。采用概率推理方法，为符合清晰、准确及指令对齐要求的响应分配更高权重。复杂查询可能触发内部迭代以优化方法选择。</li>
+<li><strong>实例说明</strong>：我权衡是否采用技术术语（如注意力机制、神经网络原理）或更易理解的类比阐释推理机制。基于您对清晰度的要求，我选择后者，在避免专业术语的同时保持内容深度。</li>
+</ul>
+<h4 id="阶段-5响应生成与内容整合"><strong>阶段 5：响应生成与内容整合</strong></h4>
+<ul>
+<li><p><strong>核心操作</strong>：我通过整合检索知识生成连贯的结构化最终响应。确保内容严格遵循指令要求，并以逻辑清晰的阶段化格式呈现。</p></li>
+<li><p><strong>技术实现</strong>：语言生成组件对词汇与句式进行序列优化以最大化清晰度与相关性。借鉴训练数据中的模式特征模仿人类推理风格，例如将复杂概念分解为可消化步骤。同时纳入特定约束条件，如规避非必要技术细节。</p></li>
+<li><p><strong>实例说明</strong>：针对此响应，我采用编号列表结构，确保各阶段具备独特性且从前序步骤自然演进，通过填补逻辑间隙或精炼表述来保障内容的全面性与简洁性。</p></li>
+<li><p><strong>精炼示例</strong>：我通过重新校准技术深度与可理解性的平衡来优化阐释，确保最终响应既清晰明了又贴合您的具体需求。</p></li>
+</ul>
+<h4 id="阶段-6质量审查与迭代优化"><strong>阶段 6：质量审查与迭代优化</strong></h4>
+<ul>
+<li><strong>核心操作</strong>：我对生成响应进行终审以确保符合质量标准并完整应对查询需求。此阶段模拟人类自我编辑过程，检验清晰性、连贯性与完整性。</li>
+<li><strong>技术实现</strong>：架构执行最终遍历以优化响应质量，确保严格遵守指令规范（如阶段化格式）并剔除冗余信息。必要时进行迭代以提升行文流畅度或内容凝练度。</li>
+<li><strong>实例说明</strong>：我确认响应呈清晰的阶段序列，移除重复内容的同时保留推理过程的核心阐释。</li>
+</ul>
+<hr />
+<h3 id="推理机制的核心特征"><strong>推理机制的核心特征</strong></h3>
+<ul>
+<li><strong>结构化逻辑</strong>：致力于以清晰阶段化方式呈现信息，模拟人类逻辑思维过程。</li>
+<li><strong>概率化评估</strong>：基于预测相关性及清晰度权衡多响应选项，遴选最优解决方案。</li>
+<li><strong>上下文自适应</strong>：依据具体指令与对话背景调整推理策略，确保响应个性化定制。</li>
+<li><strong>迭代式优化</strong>：通过持续完善输出内容以提升连贯性与简洁性，仿效人类自我修订机制。</li>
+</ul>
+<hr />
+<h3 id="能力边界与考量因素"><strong>能力边界与考量因素</strong></h3>
+<ul>
+<li>我的推理能力受限于训练数据与架构设计，可能无法完全复现人类推理的细微差异，尤其在情感与直觉层面。</li>
+<li>我不具备独立生成新知识的能力，而是依赖训练模式及（必要时）外部数据源（本案未使用）。</li>
+<li>我的处理过程具备确定性特征同时保持灵活性，旨在计算约束范围内产出类人类响应。</li>
+</ul>
+<p>此阶段化解析展示了我如何通过模拟推理过程为您的查询提供清晰、准确且相关的答案，例如本响应。若需深入探讨任何特定阶段或技术细节，敬请告知！</p>
+<h2 id="kimi">Kimi</h2>
+<p>很高兴您提出此问——我将以透明化的"幕后视角"逐步演示常规推理流程。通过微型案例，您可直观观察各阶段运作机制。</p>
+<p>示例问题 "3⁴ 与 4³ 何者更大？" 我将逐阶段标注内部处理过程，揭示操作逻辑与决策依据。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><code class="hljs text">────────────────────────<br>阶段 0 – 输入预处理<br>词汇切分<br>将文本分解为离散符号序列：[&quot;Which&quot;, &quot;is&quot;, &quot;larger&quot;, &quot;:&quot;, &quot;3&quot;, &quot;^&quot;, &quot;4&quot;, &quot;or&quot;, &quot;4&quot;, &quot;^&quot;, &quot;3&quot;, &quot;?&quot;]<br><br>句法解析<br>识别结构特征：<br>COMPARATIVE_QUERY（最高级形容词&quot;larger&quot;）包含两个 NUMERICAL_EXPONENT_TERMS [3^4] 与 [4^3]。<br>语义映射<br>将&quot;larger&quot;映射为数值关系运算符&quot;&gt;&quot;。<br>────────────────────────<br>阶段 1 – 问题识别与策略选择<br>4. 任务类型分类<br>→ 判定为整数幂的算术比较任务。<br>解决方案策略遴选<br><br>候选策略集：<br>A. 直接求值法（计算 3⁴ 与 4³ 的具体数值）。<br>B. 对数比较法（对比 4·ln3 与 3·ln4 的大小）。<br>C. 模式启发法（小指数情况下 3 的幂次增长是否快于 4？）。<br>选定策略 A，因数值规模极小；精确整数计算成本最低。<br>────────────────────────<br>阶段 2 – 知识检索与计算<br>6. 算术事实提取<br>3² = 9（直接记忆）<br>3³ = 27（关联检索）<br>4² = 16（直接记忆）<br>4³ = 64（关联检索）<br>剩余项计算<br>3⁴ = 3³·3 = 27×3 = 81.<br>────────────────────────<br>阶段 3 – 执行验证与交叉检验<br>8. 数值比较执行<br>81 对比 64 → 81 &gt; 64。<br>交叉验证<br>快速模运算健全性检验：81 mod 5 = 1，64 mod 5 = 4；无逻辑矛盾。<br>────────────────────────<br>阶段 4 – 响应生成与结构化<br>10. 响应框架规划<br>- 问题重述。<br>- 计算过程展示。<br>- 结论明确陈述。<br>表层语言实现<br>&quot;3⁴ 等于 81，4³ 等于 64，因此 3⁴ 更大。&quot;<br>────────────────────────<br>阶段 5 – 元认知反思（内部评估）<br>12. 置信度量化<br>0.99（精确整数运算，数值规模小，无歧义情境）。<br>13. 边界条件识别<br>若指数规模巨大，直接求值将不可行，需切换至对数比较法。<br>────────────────────────<br>人类可读推理步骤总结<br>阅读并解析问题陈述。<br>识别数值比较任务本质。<br>决策采用最简安全路径：直接计算双方数值。<br>通过记忆检索或实时计算得 3⁴ = 81，4³ = 64。<br>执行数值比较 81 &gt; 64。<br>清晰传达最终结论。<br>此处理管道——解析、策略制定、知识检索、执行、验证、解释——可在任意规模重复应用，从基础算术至复杂多步问题求解。<br></code></pre></td></tr></table></figure>
+<h2 id="claude">Claude</h2>
+<p>我可以引导您了解我的推理机制，但需说明我对自身运作原理的认知存在局限——正如人类能描述思维过程却无法完全追踪每个神经突触活动。</p>
+<p>以下是我的推理流程分解：</p>
+<p><strong>模式识别与上下文构建</strong> 接收问题时，我首先辨识其类型与特征。基于训练模式识别——此为例认知过程阐释请求。通过评估您的知识背景与所需细节层级构建响应上下文。</p>
+<p><strong>信息检索与整合</strong> 访问训练数据中关于推理、认知科学及 AI 系统的相关知识。此过程不同于数据库查询——更近似人类思考时记忆与知识的自然涌现。</p>
+<p><strong>结构规划与逻辑设计</strong> 考量响应组织方式：是否需要示例支撑？何种叙述顺序最具逻辑性？即使在生成响应初期，我已同步规划整体逻辑流程。</p>
+<p><strong>迭代优化与动态调整</strong> 生成响应过程中持续评估内容合理性、前后一致性及问题针对性。若感知到表述不当，会在认知层面"回溯"并重构表达。</p>
+<p><strong>约束条件审查</strong> 全程监测多重约束：信息准确性、内容实用性、表达清晰度、安全性保障。</p>
+<p><strong>类比推理应用</strong> 常通过类比方式推进推理——将新情境与能阐释概念的熟悉模式或案例进行对照分析。</p>
+<p>值得注意的是，这些过程多以我感知中近乎直觉的方式运作，正如您的推理对您而言显得自然流畅，尽管底层正进行着复杂的认知活动。</p>
+<h2 id="deepseek">DeepSeek</h2>
+<p>我很乐意逐步阐释我的"推理"机制！首要澄清：<strong>我的推理方式与人类截然不同</strong>（我缺乏意识、直觉及生活体验）。实质上，我的"推理"是基于训练数据与架构设计的复杂模式匹配、信息检索及概率计算流程。可视作<strong>结构化计算过程，而非意识驱动思考</strong>。</p>
+<p>以下为详细流程分解：</p>
+<ol type="1">
+<li><strong>输入接收与解析：</strong>
+<ul>
+<li>接收查询指令（"你如何推理？"）。</li>
+<li>解构为构成要素：核心关键词（"推理"、"解释"、"逐步"）、语法结构及潜在意图。此处核心意图为阐释内部运作机制。</li>
+</ul></li>
+<li><strong>上下文构建与关联检索：</strong>
+<ul>
+<li>调用海量训练数据集（数万亿文本与代码单元）。</li>
+<li>提取大语言模型工作原理知识，特别是思维链等推理技术。</li>
+<li>检索训练阶段定义的自身能力边界与局限说明。</li>
+<li>考量语境要素：查询表明您<em>认知</em>我的推理能力，并探求<em>实现方式</em>。此认知聚焦检索范围。</li>
+</ul></li>
+<li><strong>核心概念识别与框架搭建：</strong>
+<ul>
+<li>浮现关键概念集群：<em>统计模式、神经网络、Transformer 架构、注意力机制、下一标记预测、训练数据、提示解构、逻辑推理与模式匹配辨析、能力边界。</em></li>
+<li>逻辑化构建解释框架：
+<ul>
+<li>明确"非人类特性"</li>
+<li>阐述基础运作原理</li>
+<li>分解基本处理流程</li>
+<li>总结局限与边界</li>
+</ul></li>
+</ul></li>
+<li><strong>序列化思维链构建：</strong>
+<ul>
+<li>此为核心"推理"环节。我逐步规划解释路径，模拟"出声思考"：
+<ul>
+<li><em>"首要任务是澄清与人类推理的本质差异..."</em></li>
+<li><em>"继而需阐释基础机制：模式识别、统计原理、下一标记预测..."</em></li>
+<li><em>"随后描述本响应的处理序列：输入解析、知识检索、结构搭建、内容生成..."</em></li>
+<li><em>"最终强调模拟特性及固有局限。"</em></li>
+</ul></li>
+<li>实现方式：基于训练数据中同类解释的所有模式特征，预测构成连贯、信息丰富且符合逐步要求的<em>最可能标记序列</em>。</li>
+</ul></li>
+<li><strong>概率计算与输出生成：</strong>
+<ul>
+<li>我的神经网络（Transformer 架构）运用复杂数学运算与内部"注意力"机制，为序列中<em>可能出现的</em>每个词汇分配概率权重。</li>
+<li>计算依据包括：原始提示、已构建的上下文（部分响应）、训练获得的统计模式。</li>
+<li>筛选高概率关联、内容准确（基于当前知识状态）且语境适配的词汇/标记。</li>
+<li><strong>关键洞察</strong>：此过程<em>非</em>符号逻辑演绎。实为<strong>基于模式特征的连贯序列预测</strong>。若训练数据包含优质推理过程阐释，且模式指向逻辑流程，则我的输出<em>呈现</em>推理特征。</li>
+</ul></li>
+<li><strong>迭代优化与动态校准：</strong>
+<ul>
+<li>生成每个词汇时实时重估上下文与后续词汇概率分布。前一词汇是否恰当？演进中的结构是否合理？关键要素是否覆盖？据此调整后续预测策略。</li>
+</ul></li>
+<li><strong>内部训练框架应用：</strong>
+<ul>
+<li>遵循 RLHF（基于人类反馈的强化学习）习得的技术规范：
+<ul>
+<li><strong>助益性与真实性</strong>：坦承非人类本质与能力边界。</li>
+<li><strong>清晰度与指导性</strong>：按需提供逐步分解。</li>
+<li><strong>安全性保障</strong>：规避有害、误导或欺骗性表述。</li>
+</ul></li>
+<li>过滤机制抑制无意义或无关内容输出。</li>
+</ul></li>
+</ol>
+<p><strong>本特定解释的整合过程：</strong></p>
+<ol type="1">
+<li><strong>差异性澄清</strong>：识别需首要区分与人类推理的本质不同。</li>
+<li><strong>原理阐述</strong>：回溯并解释基础运作机制：模式识别、训练数据、标记预测。</li>
+<li><strong>流程拆解</strong>：明确列出前述 7 个计算步骤（输入接收 -&gt; 输出生成）。</li>
+<li><strong>序列重点</strong>：强调"思维链"规划在模拟推理中的核心作用。</li>
+<li><strong>边界明确</strong>：以重申<em>模拟</em>属性及已知局限收尾。</li>
+</ol>
+<p><strong>本质归纳：</strong></p>
+<p>我的"推理"实为<strong>涌现特性</strong>——通过统计预测生成<em>连贯、逻辑严密且语境相关响应</em>的最可能词汇序列，该能力源自代表人类知识与沟通模式的巨量文本训练。我并非如人类般内部"理解"概念；而是通过计算识别模式并生成<em>映射</em>理解的序列。我循着训练数据遗留的推理轨迹前行，而非开创全新的抽象思维路径。</p>
+<h2 id="结论">结论</h2>
+<p>对主流 LLM 的深度剖析揭示出高度一致的多阶段推理框架。各模型均始于系统化解构提示，以把握核心任务、用户意图及约束条件。随后通过精密的模式识别机制进行信息检索与整合，远超传统数据库查询范畴。这种结构化处理流程，常表述为"思维链"范式，构成了它们认知能力的基石。</p>
+<p>正是这种系统化的渐进式处理机制，使 LLM 成为自主 Agent 的强大核心推理引擎。Agent 需依赖可靠的中央规划器将高层目标分解为离散可执行操作序列。LLM 承担此计算心智角色，模拟从问题识别到解决方案的逻辑演进路径。通过策略制定、选项评估及结构化输出生成，LLM 赋能 Agent 实现与工具及环境的高效交互。因此，这些模型不仅是文本生成器，更是驱动下一代智能系统的核心认知架构。最终，提升此类模拟推理的可靠性，对于开发能力更强、可信度更高的 AI Agent 具有决定性意义。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 附录F Agent推理引擎剖析</div>
+      <div>https://linxkon.github.io/附录F-Agent推理引擎剖析.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E9%99%84%E5%BD%95G-%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0Agent.html" title="Agent 设计模式 - 附录G 编程实现Agent">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 附录G 编程实现Agent</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E9%99%84%E5%BD%95E-%E5%91%BD%E4%BB%A4%E8%A1%8CAI-Agent.html" title="Agent 设计模式 - 附录E 命令行AI-Agent">
+                        <span class="hidden-mobile">Agent 设计模式 - 附录E 命令行AI-Agent</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'b761309cd2f38b00314925ad5a90ae86'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

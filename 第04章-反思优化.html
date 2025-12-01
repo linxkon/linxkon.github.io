@@ -1,0 +1,887 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 4 章：反思 反思模式概述 在前面的章节中，我们探讨了基础的Agent模式：顺序执行的链式、动态路径选择的路由以及并发任务执行的并行化。这些模式使Agent能够更高效、更灵活地执行复杂任务。然而，即使采用复杂的工作流，Agent的初始输出或计划也可能并非最优、准确或完整。这正是反思模式发挥关键作用之处。 反思模式涉及 Agent 评估其自身工作、输出或内部状态，并利用该评估来提升性能或优">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 04 反思优化">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC04%E7%AB%A0-%E5%8F%8D%E6%80%9D%E4%BC%98%E5%8C%96.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 4 章：反思 反思模式概述 在前面的章节中，我们探讨了基础的Agent模式：顺序执行的链式、动态路径选择的路由以及并发任务执行的并行化。这些模式使Agent能够更高效、更灵活地执行复杂任务。然而，即使采用复杂的工作流，Agent的初始输出或计划也可能并非最优、准确或完整。这正是反思模式发挥关键作用之处。 反思模式涉及 Agent 评估其自身工作、输出或内部状态，并利用该评估来提升性能或优">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:32:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.837Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 04 反思优化 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 04 反思优化"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:32" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 04 反思优化</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-4-章反思">第 4 章：反思</h1>
+<h2 id="反思模式概述">反思模式概述</h2>
+<p>在前面的章节中，我们探讨了基础的Agent模式：顺序执行的链式、动态路径选择的路由以及并发任务执行的并行化。这些模式使Agent能够更高效、更灵活地执行复杂任务。然而，即使采用复杂的工作流，Agent的初始输出或计划也可能并非最优、准确或完整。这正是<strong>反思</strong>模式发挥关键作用之处。</p>
+<p>反思模式涉及 Agent 评估其自身工作、输出或内部状态，并利用该评估来提升性能或优化响应。这是一种自我纠正或自我改进机制，允许 Agent 基于反馈、内部评审或与预期标准的对比，迭代优化其输出或调整策略。反思有时可由专门的 Agent 来促进，其特定职责是分析初始 Agent 的输出。</p>
+<p>与简单顺序链（输出直接传递至下一步）或路径选择的路由不同，反思引入了反馈循环。Agent不仅产生输出，还会检查该输出（或其生成过程），识别潜在问题或改进空间，并运用这些洞察生成优化版本或调整后续行动。</p>
+<p>该过程通常包含以下步骤：</p>
+<ol type="1">
+<li><strong>执行：</strong> Agent 执行任务或生成初始输出</li>
+<li><strong>评估/评审：</strong> Agent（通常通过另一个 LLM 调用或规则集）分析上一步结果。此评估可能涉及事实准确性、连贯性、风格、完整性、指令遵循度或其他相关标准</li>
+<li><strong>反思/优化：</strong> 基于评审意见，Agent 确定改进方向。这可能包括生成优化后的输出、调整后续步骤参数，甚至修改整体计划</li>
+<li><strong>迭代（可选但常见）：</strong> 优化后的输出或调整后的方法可继续执行，反思过程可重复进行，直至获得满意结果或达到停止条件</li>
+</ol>
+<p>反思模式的关键高效实现是将流程分离为两个逻辑角色：生产者和评审者。这通常称为"生成器-评审者"或"生产者-审查者"模型。虽然单个Agent可执行自我反思，但使用两个专门 Agent（或两个不同系统提示的独立LLM调用）通常产生更稳健客观的结果。</p>
+<ol type="1">
+<li><p>生产者 Agent：此 Agent 的主要职责是执行任务的初始工作。它完全专注于内容生成，无论是编写代码、起草博客文章还是制定计划。它接收初始提示并生成输出的第一版</p></li>
+<li><p>评审者 Agent：此 Agent 的唯一目的是评估生产者生成的输出。它被赋予不同的指令集，通常承担特定角色（如"高级软件工程师"、"严谨的事实核查员"）。评审者的指令引导其根据特定标准分析生产者工作，包括事实准确性、代码质量、风格要求或完整性。其设计目标是发现缺陷、提出改进建议并提供结构化反馈</p></li>
+</ol>
+<p>这种关注点分离有效避免了 Agent 审查自身工作时可能产生的"认知偏差"。评审者 Agent 以全新视角处理输出，专注于发现错误和改进空间。其反馈传回生产者 Agent，生产者以此为指南生成优化版本。LangChain和ADK代码示例均实现这种双 Agent 模型：LangChain使用特定"reflector_prompt"创建评审者角色，而ADK明确定义生产者和审查者 Agent。</p>
+<p>实现反思需要在Agent工作流中构建反馈循环，可通过迭代循环或支持状态管理的框架实现。虽然单步评估优化可在LangChain/LangGraph、ADK或Crew.AI链中完成，但真正的迭代反思通常涉及更复杂编排。</p>
+<p>反思模式对于构建高质量输出、处理精细任务并展现自我适应性的 Agent 至关重要。它推动 Agent 从单纯执行指令转向更复杂的问题解决和内容生成。</p>
+<p>值得注意的是反思与目标设定和监控（见第11章）的交叉点。目标为 Agent 自我评估提供最终基准，监控跟踪其进展。实践中，反思常充当纠正引擎，利用监控反馈分析偏差并调整策略。这种协同使 Agent 从被动执行者转变为有目的的自适应工作体。</p>
+<p>当LLM保持对话记忆（见第8章）时，反思模式有效性显著增强。对话历史提供关键上下文，使 Agent 能在先前交互和用户反馈背景下评估输出。没有记忆时，反思是独立事件；有了记忆，反思成为累积过程，每个周期基于前一个，实现更智能的上下文感知优化。</p>
+<h2 id="实际应用与用例">实际应用与用例</h2>
+<p>反思模式在输出质量、准确性或复杂约束遵循度至关重要的场景中极具价值：</p>
+<ol type="1">
+<li>创意写作与内容生成： 优化生成的文本、故事、诗歌或营销文案</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 博客文章撰写 Agent
+<ul>
+<li><strong>反思：</strong> 生成草稿，评审其流畅度、语气和清晰度，然后基于评审重写。重复直至内容达到质量标准</li>
+<li><strong>优势：</strong> 产出更精炼有效的内容</li>
+</ul></li>
+</ul>
+<ol start="2" type="1">
+<li>代码生成与调试： 编写代码、识别错误并进行修复</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> Python 函数编写 Agent
+<ul>
+<li><strong>反思：</strong> 编写初始代码，运行测试或静态分析，识别错误或低效环节，然后基于发现修改代码</li>
+<li><strong>优势：</strong> 生成更健壮和功能完善的代码</li>
+</ul></li>
+</ul>
+<ol start="3" type="1">
+<li>复杂问题解决： 评估多步推理任务中的中间步骤或建议方案</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 逻辑谜题求解 Agent
+<ul>
+<li><strong>反思：</strong> 提出步骤，评估其是否接近解决方案或引入矛盾，必要时回溯或选择不同步骤</li>
+<li><strong>优势：</strong> 提升 Agent 在复杂问题空间中的导航能力</li>
+</ul></li>
+</ul>
+<ol start="4" type="1">
+<li>摘要与信息综合： 优化摘要的准确性、完整性和简洁性</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 长文档摘要 Agent
+<ul>
+<li><strong>反思：</strong> 生成初始摘要，与原始文档关键点对比，优化摘要以补全缺失信息或提升准确性</li>
+<li><strong>优势：</strong> 创建更准确全面的摘要</li>
+</ul></li>
+</ul>
+<ol start="5" type="1">
+<li>规划与策略： 评估提议计划并识别潜在缺陷或改进点</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 目标达成行动规划 Agent
+<ul>
+<li><strong>反思：</strong> 生成计划，模拟执行或根据约束评估可行性，基于评估修订计划</li>
+<li><strong>优势：</strong> 制定更有效和现实的计划</li>
+</ul></li>
+</ul>
+<ol start="6" type="1">
+<li>对话 Agent： 审查对话历史轮次以保持上下文、纠正误解或提升响应质量</li>
+</ol>
+<ul>
+<li><strong>用例：</strong> 客户支持聊天机器人
+<ul>
+<li><strong>反思：</strong> 用户响应后，审查对话历史和最后生成消息，确保连贯性并准确回应用户最新输入</li>
+<li><strong>优势：</strong> 促成更自然有效的对话</li>
+</ul></li>
+</ul>
+<p>反思为 Agent 系统增加了元认知层，使其能从自身输出和过程中学习，从而产生更智能、可靠和高质量的结果</p>
+<h2 id="实操代码示例langchain">实操代码示例（LangChain）</h2>
+<p>实现完整的迭代反思过程需要状态管理和循环执行机制。虽然这些在基于图的框架（如 LangGraph）中内置处理或通过自定义程序代码实现，但单个反思周期的基本原理可通过 LCEL（LangChain 表达式语言）的组合语法有效演示。</p>
+<p>此示例使用 Langchain 库和 OpenAI 的 GPT-4o 模型实现反思循环，迭代生成并优化计算数字阶乘的 Python 函数。该过程从任务提示开始，生成初始代码，然后基于模拟高级软件工程师角色的评审反复反思代码，在每次迭代中优化代码，直至评审阶段确认代码完美或达到最大迭代次数。最后打印优化后的代码。</p>
+<p>首先确保安装必要库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install langchain langchain-community langchain-openai<br></code></pre></td></tr></table></figure>
+<p>您还需要使用所选语言模型的 API 密钥配置环境（如 OpenAI、Google Gemini、Anthropic）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> dotenv <span class="hljs-keyword">import</span> load_dotenv<br><span class="hljs-keyword">from</span> langchain_openai <span class="hljs-keyword">import</span> ChatOpenAI<br><span class="hljs-keyword">from</span> langchain_core.prompts <span class="hljs-keyword">import</span> ChatPromptTemplate<br><span class="hljs-keyword">from</span> langchain_core.messages <span class="hljs-keyword">import</span> SystemMessage, HumanMessage<br><br><span class="hljs-comment">## --- 配置 ---</span><br><span class="hljs-comment">## 从 .env 文件加载环境变量（用于 OPENAI_API_KEY）</span><br>load_dotenv()<br><br><span class="hljs-comment">## 检查是否设置了 API 密钥</span><br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.getenv(<span class="hljs-string">&quot;OPENAI_API_KEY&quot;</span>):<br>    <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&quot;在 .env 文件中未找到 OPENAI_API_KEY。请添加它。&quot;</span>)<br><br><span class="hljs-comment">## 初始化聊天 LLM。我们使用 gpt-4o 以获得更好的推理。</span><br><span class="hljs-comment">## 使用较低的温度以获得更确定性的输出。</span><br>llm = ChatOpenAI(model=<span class="hljs-string">&quot;gpt-4o&quot;</span>, temperature=<span class="hljs-number">0.1</span>)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">run_reflection_loop</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    演示多步 AI 反思循环以逐步改进 Python 函数。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># --- 核心任务 ---</span><br>    task_prompt = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    你的任务是创建一个名为 `calculate_factorial` 的 Python 函数。</span><br><span class="hljs-string">    此函数应执行以下操作：</span><br><span class="hljs-string">    1. 接受单个整数 `n` 作为输入。</span><br><span class="hljs-string">    2. 计算其阶乘 (n!)。</span><br><span class="hljs-string">    3. 包含清楚解释函数功能的文档字符串。</span><br><span class="hljs-string">    4. 处理边缘情况：0 的阶乘是 1。</span><br><span class="hljs-string">    5. 处理无效输入：如果输入是负数，则引发 ValueError。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <br>    <span class="hljs-comment"># --- 反思循环 ---</span><br>    max_iterations = <span class="hljs-number">3</span><br>    current_code = <span class="hljs-string">&quot;&quot;</span><br>    <br>    <span class="hljs-comment"># 我们将构建对话历史以在每一步中提供上下文。</span><br>    message_history = [HumanMessage(content=task_prompt)]<br>    <br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(max_iterations):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&quot;</span> + <span class="hljs-string">&quot;=&quot;</span>*<span class="hljs-number">25</span> + <span class="hljs-string">f&quot; 反思循环：迭代 <span class="hljs-subst">&#123;i + <span class="hljs-number">1</span>&#125;</span> &quot;</span> + <span class="hljs-string">&quot;=&quot;</span>*<span class="hljs-number">25</span>)<br>        <br>        <span class="hljs-comment"># --- 1. 生成/完善阶段 ---</span><br>        <span class="hljs-comment"># 在第一次迭代中，它生成。在后续迭代中，它完善。</span><br>        <span class="hljs-keyword">if</span> i == <span class="hljs-number">0</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&gt;&gt;&gt; 阶段 1：生成初始代码...&quot;</span>)<br>            <span class="hljs-comment"># 第一条消息只是任务提示词。</span><br>            response = llm.invoke(message_history)<br>            current_code = response.content<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&gt;&gt;&gt; 阶段 1：基于先前批评完善代码...&quot;</span>)<br>            <span class="hljs-comment"># 消息历史现在包含任务、</span><br>            <span class="hljs-comment"># 最后一个代码和最后一个批评。</span><br>            <span class="hljs-comment"># 我们指示模型应用批评。</span><br>            message_history.append(HumanMessage(content=<span class="hljs-string">&quot;请使用提供的批评完善代码。&quot;</span>))<br>            response = llm.invoke(message_history)<br>            current_code = response.content<br>        <br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- 生成的代码 (v&quot;</span> + <span class="hljs-built_in">str</span>(i + <span class="hljs-number">1</span>) + <span class="hljs-string">&quot;) ---\n&quot;</span> + current_code)<br>        message_history.append(response) <span class="hljs-comment"># 将生成的代码添加到历史记录</span><br>        <br>        <span class="hljs-comment"># --- 2. 反思阶段 ---</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&gt;&gt;&gt; 阶段 2：对生成的代码进行反思...&quot;</span>)<br>        <span class="hljs-comment"># 为反思 Agent 创建特定提示词。</span><br>        <span class="hljs-comment"># 这要求模型充当高级代码审查员。</span><br>        reflector_prompt = [<br>            SystemMessage(content=<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">                你是一名高级软件工程师和 Python 专家。</span><br><span class="hljs-string">                你的角色是执行细致的代码审查。</span><br><span class="hljs-string">                根据原始任务要求批判性地评估提供的 Python 代码。</span><br><span class="hljs-string">                查找错误、风格问题、缺失的边缘情况和改进领域。</span><br><span class="hljs-string">                如果代码完美并满足所有要求，</span><br><span class="hljs-string">                用单一短语 &#x27;CODE_IS_PERFECT&#x27; 响应。</span><br><span class="hljs-string">                否则，提供批评的项目符号列表。</span><br><span class="hljs-string">            &quot;&quot;&quot;</span>),<br>            HumanMessage(content=<span class="hljs-string">f&quot;原始任务：\n<span class="hljs-subst">&#123;task_prompt&#125;</span>\n\n要审查的代码：\n<span class="hljs-subst">&#123;current_code&#125;</span>&quot;</span>)<br>        ]<br>        <br>        critique_response = llm.invoke(reflector_prompt)<br>        critique = critique_response.content<br>        <br>        <span class="hljs-comment"># --- 3. 停止条件 ---</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;CODE_IS_PERFECT&quot;</span> <span class="hljs-keyword">in</span> critique:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- 批评 ---\n未发现进一步批评。代码令人满意。&quot;</span>)<br>            <span class="hljs-keyword">break</span><br>        <br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- 批评 ---\n&quot;</span> + critique)<br>        <br>        <span class="hljs-comment"># 将批评添加到历史记录以用于下一个完善循环。</span><br>        message_history.append(HumanMessage(content=<span class="hljs-string">f&quot;对先前代码的批评：\n<span class="hljs-subst">&#123;critique&#125;</span>&quot;</span>))<br>    <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&quot;</span> + <span class="hljs-string">&quot;=&quot;</span>*<span class="hljs-number">30</span> + <span class="hljs-string">&quot; 最终结果 &quot;</span> + <span class="hljs-string">&quot;=&quot;</span>*<span class="hljs-number">30</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n反思过程后的最终精炼代码：\n&quot;</span>)<br>    <span class="hljs-built_in">print</span>(current_code)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    run_reflection_loop()<br></code></pre></td></tr></table></figure>
+<p>代码首先设置环境，加载 API 密钥，并使用低温度初始化强大的语言模型（如 GPT-4o）以获得专注输出。核心任务由提示定义，要求创建计算数字阶乘的 Python 函数，包括文档字符串、边界情况（0 的阶乘）和负输入错误处理的特定要求。run_reflection_loop 函数协调迭代优化过程。在循环中，第一次迭代时语言模型根据任务提示生成初始代码，后续迭代中则基于前一步的评审优化代码。单独的"反思者"角色（同样由语言模型扮演但使用不同系统提示）充当高级软件工程师，根据原始任务要求评审生成的代码。此评审以问题项目符号列表或短语 'CODE_IS_PERFECT'（如无问题）形式提供。循环持续至评审指示代码完美或达到最大迭代次数。对话历史被维护并在每一步传递给语言模型，为生成/优化和反思阶段提供上下文。最后，脚本在循环结束后打印最终生成的代码版本</p>
+<h2 id="实操代码示例adk">实操代码示例（ADK）</h2>
+<p>现在让我们看一个使用 Google ADK 实现的概念性代码示例。具体而言，代码通过采用生成器-评审者结构来展示，其中一个组件（生成器）产生初始结果或计划，另一个组件（评审者）提供批判性反馈或评审，引导生成器朝向更优化或准确的最终输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> google.adk.agents <span class="hljs-keyword">import</span> SequentialAgent, LlmAgent<br><br><span class="hljs-comment">## 第一个 Agent 生成初始草稿。</span><br>generator = LlmAgent(<br>    name=<span class="hljs-string">&quot;DraftWriter&quot;</span>,<br>    description=<span class="hljs-string">&quot;生成关于给定主题的初始草稿内容。&quot;</span>,<br>    instruction=<span class="hljs-string">&quot;撰写关于用户主题的简短、信息丰富的段落。&quot;</span>,<br>    output_key=<span class="hljs-string">&quot;draft_text&quot;</span> <span class="hljs-comment"># 输出保存到此状态键。</span><br>)<br><br><span class="hljs-comment">## 第二个 Agent 评审第一个 Agent 的草稿。</span><br>reviewer = LlmAgent(<br>    name=<span class="hljs-string">&quot;FactChecker&quot;</span>,<br>    description=<span class="hljs-string">&quot;审查给定文本的事实准确性并提供结构化评审。&quot;</span>,<br>    instruction=<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    你是一个细致的事实核查员。</span><br><span class="hljs-string">    1. 阅读状态键 &#x27;draft_text&#x27; 中提供的文本。</span><br><span class="hljs-string">    2. 仔细验证所有声明的事实准确性。</span><br><span class="hljs-string">    3. 你的最终输出必须是包含两个键的字典：</span><br><span class="hljs-string">       - &quot;status&quot;: 字符串，&quot;ACCURATE&quot; 或 &quot;INACCURATE&quot;。</span><br><span class="hljs-string">       - &quot;reasoning&quot;: 字符串，提供对你的状态的清楚解释，如果发现任何问题则引用具体问题。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span>,<br>    output_key=<span class="hljs-string">&quot;review_output&quot;</span> <span class="hljs-comment"># 结构化字典保存在这里。</span><br>)<br><br><span class="hljs-comment">## SequentialAgent 确保生成器在审查者之前运行。</span><br>review_pipeline = SequentialAgent(<br>    name=<span class="hljs-string">&quot;WriteAndReview_Pipeline&quot;</span>,<br>    sub_agents=[generator, reviewer]<br>)<br><br><span class="hljs-comment">## 执行流程：</span><br><span class="hljs-comment">## 1. generator 运行 -&gt; 将其段落保存到 state[&#x27;draft_text&#x27;]。</span><br><span class="hljs-comment">## 2. reviewer 运行 -&gt; 读取 state[&#x27;draft_text&#x27;] 并将其字典输出保存到 state[&#x27;review_output&#x27;]。</span><br></code></pre></td></tr></table></figure>
+<p>此代码演示了在 Google ADK 中使用顺序 Agent 管道生成和审查文本。它定义了两个 LlmAgent 实例：generator 和 reviewer。generator Agent 设计用于创建关于给定主题的初始草稿段落，被指示撰写简短信息丰富的文章，并将其输出保存至状态键 draft_text。reviewer Agent 作为生成器产出文本的事实核查员，被指示从 draft_text 读取文本并验证其事实准确性。评审者的输出是包含两个键的结构化字典：status 和 reasoning。status 指示文本为"ACCURATE"或"INACCURATE"，reasoning 则提供状态解释。此字典保存至状态键 review_output。创建名为 review_pipeline 的 SequentialAgent 来管理两个 Agent 的执行顺序，确保生成器先运行，然后是评审者。整体执行流程为：生成器产出文本并保存至状态，随后评审者从状态读取文本，执行事实核查，并将其发现（状态和推理）保存回状态。此管道允许使用独立 Agent 进行结构化内容创建和审查过程。<strong>注意：</strong> 对于感兴趣者，还提供了利用 ADK 的 LoopAgent 的替代实现。</p>
+<p>结束前需考虑，虽然反思模式显著提升输出质量，但也带来重要权衡。迭代过程虽强大，但可能导致更高成本和延迟，因为每个优化循环可能需要新的 LLM 调用，使其对时间敏感应用并非最优选择。此外，该模式内存密集；随着每次迭代，对话历史扩展，包含初始输出、评审和后续优化</p>
+<h2 id="概览">概览</h2>
+<p><strong>是什么：</strong> Agent 的初始输出通常次优，存在不准确、不完整或未满足复杂要求的问题。基础 Agent 工作流缺乏 Agent 识别和修复自身错误的内置流程。这通过让 Agent 评估自身工作，或更稳健地引入独立逻辑 Agent 充当评审者来解决，防止无论质量如何初始响应都成为最终结果</p>
+<p><strong>为什么：</strong> 反思模式通过引入自我纠正和优化机制提供解决方案。它建立反馈循环，其中"生产者" Agent 生成输出，然后"评审者" Agent（或生产者自身）根据预定义标准进行评估。随后使用此评审生成改进版本。这种生成、评估和优化的迭代过程逐步提升最终结果质量，从而产生更准确、连贯和可靠的结果</p>
+<p><strong>经验法则：</strong> 当最终输出的质量、准确性和细节比速度和成本更重要时使用反思模式。它对生成精炼长篇内容、编写调试代码以及创建详细计划等任务特别有效。当任务需要通用生产者 Agent 可能遗漏的高客观性或专门评估时，使用独立评审者 Agent</p>
+<p><strong>视觉摘要</strong></p>
+<p><strong><img src="../images/agent_images/chapter-4/image1.png" srcset="/img/loading.gif" lazyload /></strong></p>
+<p>图 1：反思设计模式，自我反思</p>
+<p><strong><img src="../images/agent_images/chapter-4/image2.png" srcset="/img/loading.gif" lazyload /></strong></p>
+<p>图 2：反思设计模式，生产者和评审者 Agent</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>反思模式的主要优势在于其迭代自我纠正和优化输出的能力，带来显著更高的质量、准确性和复杂指令遵循度</li>
+<li>它涉及执行、评估/评审和优化的反馈循环。反思对需要高质量、准确或精细输出的任务至关重要</li>
+<li>一个强大的实现是生产者-评审者模型，其中独立 Agent（或提示角色）评估初始输出。这种关注点分离增强客观性，并支持更专业、结构化的反馈</li>
+<li>然而，这些优势以增加的延迟和计算成本为代价，同时伴随超出模型上下文窗口或被 API 服务限制的更高风险</li>
+<li>虽然完整迭代反思通常需要状态化工作流（如 LangGraph），但单个反思步骤可在 LangChain 中使用 LCEL 实现，以传递输出进行评审和后续优化</li>
+<li>Google ADK 可通过顺序工作流促进反思，其中一个 Agent 的输出被另一个 Agent 评审，允许后续优化步骤</li>
+<li>此模式使 Agent 能够执行自我纠正并随时间提升性能</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>反思模式为 Agent 工作流中的自我纠正提供关键机制，实现超越单次执行的迭代改进。这是通过创建循环实现的：系统生成输出，根据特定标准评估，然后使用该评估产生优化结果。此评估可由 Agent 自身（自我反思）执行，或通常更有效地由不同评审者 Agent 执行，这代表了模式内的关键架构选择</p>
+<p>虽然完全自主的多步反思过程需要强大的状态管理架构，但其核心原理可在单个生成-评审-优化周期中有效演示。作为控制结构，反思可与其他基础模式集成，以构建更健壮和功能更复杂的 Agent 系统</p>
+<h2 id="参考文献">参考文献</h2>
+<p>以下是有关反思模式和相关概念的一些进一步阅读资源：</p>
+<ol type="1">
+<li>Training Language Models to Self-Correct via Reinforcement Learning, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2409.12917">https://arxiv.org/abs/2409.12917</a></li>
+<li>LangChain Expression Language (LCEL) Documentation: <a target="_blank" rel="noopener" href="https://python.langchain.com/docs/introduction/">https://python.langchain.com/docs/introduction/</a></li>
+<li>LangGraph Documentation:<a target="_blank" rel="noopener" href="https://www.langchain.com/langgraph">https://www.langchain.com/langgraph</a></li>
+<li>Google Agent Developer Kit (ADK) Documentation (Multi-Agent Systems): <a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/agents/multi-agents/">https://google.github.io/adk-docs/agents/multi-agents/</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 04 反思优化</div>
+      <div>https://linxkon.github.io/第04章-反思优化.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC05%E7%AB%A0-%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8.html" title="Agent 设计模式 - 05 工具调用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 05 工具调用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC03%E7%AB%A0-%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C.html" title="Agent 设计模式 - 03 并行执行">
+                        <span class="hidden-mobile">Agent 设计模式 - 03 并行执行</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'aa4933ffc9c577562ccbe9e53e3a87f7'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>

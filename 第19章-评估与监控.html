@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="第 19 章：评估和监控 本章探讨了使智能 Agent 能够系统地评估其性能、监控目标进展以及检测操作异常的方法论。虽然第 11 章概述了目标设定和监控，第 17 章讨论了推理机制，但本章侧重于持续的、通常是外部的、对 Agent 有效性、效率和合规性要求的测量。这包括定义指标、建立反馈循环以及实施报告系统，以确保 Agent 性能在操作环境中与期望保持一致（见图 1）。  图 1：评估和监">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 19 评估与监控">
+<meta property="og:url" content="https://linxkon.github.io/%E7%AC%AC19%E7%AB%A0-%E8%AF%84%E4%BC%B0%E4%B8%8E%E7%9B%91%E6%8E%A7.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="第 19 章：评估和监控 本章探讨了使智能 Agent 能够系统地评估其性能、监控目标进展以及检测操作异常的方法论。虽然第 11 章概述了目标设定和监控，第 17 章讨论了推理机制，但本章侧重于持续的、通常是外部的、对 Agent 有效性、效率和合规性要求的测量。这包括定义指标、建立反馈循环以及实施报告系统，以确保 Agent 性能在操作环境中与期望保持一致（见图 1）。  图 1：评估和监">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+<meta property="article:published_time" content="2025-11-30T11:47:13.000Z">
+<meta property="article:modified_time" content="2025-12-01T14:20:25.845Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记摘抄">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
+  
+  
+  
+  <title>Agent 设计模式 - 19 评估与监控 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 19 评估与监控"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-30 19:47" pubdate>
+          2025年11月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          65 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 19 评估与监控</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第-19-章评估和监控">第 19 章：评估和监控</h1>
+<p>本章探讨了使智能 Agent 能够系统地评估其性能、监控目标进展以及检测操作异常的方法论。虽然第 11 章概述了目标设定和监控，第 17 章讨论了推理机制，但本章侧重于持续的、通常是外部的、对 Agent 有效性、效率和合规性要求的测量。这包括定义指标、建立反馈循环以及实施报告系统，以确保 Agent 性能在操作环境中与期望保持一致（见图 1）。</p>
+<p><img src="../images/agent_images/chapter-19/image1.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 1：评估和监控的最佳实践</p>
+<h2 id="实际应用与用例">实际应用与用例</h2>
+<p>最常见的应用和用例：</p>
+<ul>
+<li><strong>实时系统中的性能跟踪：</strong> 持续监控部署在生产环境中的 Agent 的准确性、延迟和资源消耗（例如，客户服务聊天机器人的解决率、响应时间）。</li>
+<li><strong>Agent 改进的 A/B 测试：</strong> 系统地并行比较不同 Agent 版本或策略的性能，以确定最优方法（例如，为物流 Agent 尝试两种不同的规划算法）。</li>
+<li><strong>合规性和安全审计：</strong> 生成自动化审计报告，跟踪 Agent 随时间遵守道德准则、监管要求和安全协议的情况。这些报告可以由人机协同或另一个 Agent 验证，并可以生成 KPI 或在发现问题时触发警报。</li>
+<li><strong>企业系统：</strong> 为了治理企业系统中的 Agentic AI，需要一种新的控制工具，即 AI"合约"。这种动态协议为 AI 委派的任务编纂目标、规则和控制。</li>
+<li><strong>漂移检测：</strong> 随时间监控 Agent 输出的相关性或准确性，检测其性能何时因输入数据分布变化（概念漂移）或环境变化而退化。</li>
+<li><strong>Agent 行为中的异常检测：</strong> 识别 Agent 采取的异常或意外操作，这些操作可能表明错误、恶意攻击或涌现的不良行为。</li>
+<li><strong>学习进度评估：</strong> 对于设计为学习的 Agent，跟踪它们的学习曲线、特定技能的改进或在不同任务或数据集上的泛化能力。</li>
+</ul>
+<h2 id="实践代码示例">实践代码示例</h2>
+<p>为 AI Agent 开发一个全面的评估框架是一项具有挑战性的工作，其复杂性堪比学术学科或大量出版物。这种困难源于需要考虑的众多因素，如模型性能、用户交互、道德影响和更广泛的社会影响。然而，对于实际实施，可以将重点缩小到对 AI Agent 高效有效运行至关重要的关键用例。</p>
+<p><strong>Agent 响应评估：</strong> 这个核心过程对于评估 Agent 输出的质量和准确性至关重要。它涉及确定 Agent 是否针对给定输入提供相关、正确、合乎逻辑、无偏见和准确的信息。评估指标可能包括事实正确性、流畅性、语法精确性和对用户预期目的的遵守。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">evaluate_response_accuracy</span>(<span class="hljs-params">agent_output: <span class="hljs-built_in">str</span>, expected_output: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">float</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;计算 Agent 响应的简单准确度分数。&quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 这是一个非常基本的精确匹配；现实世界会使用更复杂的指标</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1.0</span> <span class="hljs-keyword">if</span> agent_output.strip().lower() == expected_output.strip().lower() <span class="hljs-keyword">else</span> <span class="hljs-number">0.0</span><br><br><span class="hljs-comment">## 示例使用</span><br>agent_response = <span class="hljs-string">&quot;The capital of France is Paris.&quot;</span><br>ground_truth = <span class="hljs-string">&quot;Paris is the capital of France.&quot;</span><br>score = evaluate_response_accuracy(agent_response, ground_truth)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Response accuracy: <span class="hljs-subst">&#123;score&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>Python 函数 <code>evaluate_response_accuracy</code> 通过对 Agent 输出和期望输出进行精确的、不区分大小写的比较（在去除前导和尾随空格后），计算 AI Agent 响应的基本准确度分数。对于精确匹配，它返回 1.0 分，否则返回 0.0，表示二元的正确或不正确评估。这种方法虽然适合简单检查，但不考虑诸如释义或语义等价性等变化。</p>
+<p>问题在于其比较方法。该函数执行两个字符串的严格的、逐字符比较。在提供的示例中：</p>
+<ul>
+<li>agent_response："The capital of France is Paris."</li>
+<li>ground_truth："Paris is the capital of France."</li>
+</ul>
+<p>即使在去除空格并转换为小写后，这两个字符串也不完全相同。因此，该函数将错误地返回准确度分数 <code>0.0</code>，即使两个句子传达相同的含义。</p>
+<p>简单的比较在评估语义相似性方面不足，只有当 Agent 的响应与期望输出完全匹配时才能成功。更有效的评估需要高级自然语言处理（NLP）技术来辨别句子之间的含义。对于真实世界场景中的全面 AI Agent 评估，更复杂的指标通常是必不可少的。这些指标可以包括字符串相似性度量（如 Levenshtein 距离和 Jaccard 相似性）、关键词分析（特定关键词的存在或缺失）、使用嵌入模型的语义相似性（余弦相似性）、LLM-as-a-Judge 评估（稍后讨论，用于评估细微的正确性和有用性）以及 RAG 特定指标（如忠实性和相关性）。</p>
+<p><strong>延迟监控：</strong> 对 Agent 操作的延迟监控在 AI Agent 响应或操作速度是关键因素的应用中至关重要。此过程测量 Agent 处理请求和生成输出所需的持续时间。较高的延迟会对用户体验和 Agent 的整体有效性产生不利影响，特别是在实时或交互式环境中。在实际应用中，仅将延迟数据打印到控制台是不够的。建议将此信息记录到持久存储系统。选项包括结构化日志文件（例如 JSON）、时间序列数据库（例如 InfluxDB、Prometheus）、数据仓库（例如 Snowflake、BigQuery、PostgreSQL）或可观测性平台（例如 Datadog、Splunk、Grafana Cloud）。</p>
+<p><strong>跟踪 LLM 交互的 Token 使用量：</strong> 对于 LLM 驱动的 Agent，跟踪 token 使用量对于管理成本和优化资源分配至关重要。LLM 交互的计费通常取决于处理的 token 数量（输入和输出）。因此，高效的 token 使用直接降低运营费用。此外，监控 token 计数有助于识别提示词工程或响应生成过程中的潜在改进领域。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## 这是概念性的，因为实际的 token 计数取决于 LLM API</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LLMInteractionMonitor</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        self.total_input_tokens = <span class="hljs-number">0</span><br>        self.total_output_tokens = <span class="hljs-number">0</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">record_interaction</span>(<span class="hljs-params">self, prompt: <span class="hljs-built_in">str</span>, response: <span class="hljs-built_in">str</span></span>):<br>        <span class="hljs-comment"># 在真实场景中，使用 LLM API 的 token 计数器或 tokenizer</span><br>        input_tokens = <span class="hljs-built_in">len</span>(prompt.split()) <span class="hljs-comment"># 占位符</span><br>        output_tokens = <span class="hljs-built_in">len</span>(response.split()) <span class="hljs-comment"># 占位符</span><br>        self.total_input_tokens += input_tokens<br>        self.total_output_tokens += output_tokens<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;已记录交互：输入 tokens=<span class="hljs-subst">&#123;input_tokens&#125;</span>，输出 tokens=<span class="hljs-subst">&#123;output_tokens&#125;</span>&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_total_tokens</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> self.total_input_tokens, self.total_output_tokens<br><br><span class="hljs-comment">## 示例使用</span><br>monitor = LLMInteractionMonitor()<br>monitor.record_interaction(<span class="hljs-string">&quot;What is the capital of France?&quot;</span>, <span class="hljs-string">&quot;The capital of France is Paris.&quot;</span>)<br>monitor.record_interaction(<span class="hljs-string">&quot;Tell me a joke.&quot;</span>, <span class="hljs-string">&quot;Why don&#x27;t scientists trust atoms? Because they make up everything!&quot;</span>)<br>input_t, output_t = monitor.get_total_tokens()<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;总输入 tokens：<span class="hljs-subst">&#123;input_t&#125;</span>，总输出 tokens：<span class="hljs-subst">&#123;output_t&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>本节介绍了一个概念性的 Python 类 <code>LLMInteractionMonitor</code>，旨在跟踪 LLM 交互中的 token 使用量。该类包含输入和输出 token 的计数器。其 <code>record_interaction</code> 方法通过分割提示词和响应字符串来模拟 token 计数。在实际实现中，将使用特定的 LLM API tokenizer 进行精确的 token 计数。随着交互的发生，监视器累积总的输入和输出 token 计数。<code>get_total_tokens</code> 方法提供对这些累积总数的访问，这对于成本管理和 LLM 使用优化至关重要。</p>
+<p><strong>使用 LLM-as-a-Judge 的"有用性"自定义指标：</strong> 评估 AI Agent 的"有用性"等主观品质带来了超越标准客观指标的挑战。一个潜在的框架涉及使用 LLM 作为评估者。这种 LLM-as-a-Judge 方法根据预定义的"有用性"标准评估另一个 AI Agent 的输出。利用 LLM 的高级语言能力，此方法提供细微的、类人的主观品质评估，超越了简单的关键词匹配或基于规则的评估。虽然仍在发展中，但这项技术显示出自动化和扩展定性评估的前景。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> google.generativeai <span class="hljs-keyword">as</span> genai<br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> logging<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">Optional</span><br><br><span class="hljs-comment">## --- 配置 ---</span><br>logging.basicConfig(level=logging.INFO, <span class="hljs-built_in">format</span>=<span class="hljs-string">&#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;</span>)<br><br><span class="hljs-comment">## 将您的 API 密钥设置为环境变量以运行此脚本</span><br><span class="hljs-comment">## 例如，在您的终端中：export GOOGLE_API_KEY=&#x27;your_key_here&#x27;</span><br><span class="hljs-keyword">try</span>:<br>    genai.configure(api_key=os.environ[<span class="hljs-string">&quot;GOOGLE_API_KEY&quot;</span>])<br><span class="hljs-keyword">except</span> KeyError:<br>    logging.error(<span class="hljs-string">&quot;错误：GOOGLE_API_KEY 环境变量未设置。&quot;</span>)<br>    exit(<span class="hljs-number">1</span>)<br><br><span class="hljs-comment">## --- 法律调查质量的 LLM-as-a-Judge 评分标准 ---</span><br>LEGAL_SURVEY_RUBRIC = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">您是一位专家法律调查方法学家和严格的法律审查员。您的任务是评估给定法律调查问题的质量。为整体质量提供 1 到 5 的分数，以及详细的理由和具体反馈。重点关注以下标准：</span><br><span class="hljs-string">1.  **清晰性和精确性（分数 1-5）：**</span><br><span class="hljs-string">    * 1：极度模糊、高度歧义或令人困惑。</span><br><span class="hljs-string">    * 3：中等清晰，但可以更精确。</span><br><span class="hljs-string">    * 5：完全清晰、无歧义，在法律术语（如适用）和意图上精确。</span><br><span class="hljs-string">2.  **中立性和偏见（分数 1-5）：**</span><br><span class="hljs-string">    * 1：高度引导性或有偏见，明确影响受访者偏向特定答案。</span><br><span class="hljs-string">    * 3：略微暗示性或可能被解释为引导性。</span><br><span class="hljs-string">    * 5：完全中立、客观，没有任何引导性语言或带有倾向性的术语。</span><br><span class="hljs-string">3.  **相关性和焦点（分数 1-5）：**</span><br><span class="hljs-string">    * 1：与声明的调查主题无关或超出范围。</span><br><span class="hljs-string">    * 3：松散相关，但可以更集中。</span><br><span class="hljs-string">    * 5：与调查目标直接相关，并且集中于单一概念。</span><br><span class="hljs-string">4.  **完整性（分数 1-5）：**</span><br><span class="hljs-string">    * 1：遗漏了准确回答所需的关键信息或提供的上下文不足。</span><br><span class="hljs-string">    * 3：基本完整，但缺少次要细节。</span><br><span class="hljs-string">    * 5：提供受访者彻底回答所需的所有必要上下文和信息。</span><br><span class="hljs-string">5.  **受众适当性（分数 1-5）：**</span><br><span class="hljs-string">    * 1：使用目标受众无法理解的术语或对专家来说过于简单。</span><br><span class="hljs-string">    * 3：通常适当，但某些术语可能具有挑战性或过于简化。</span><br><span class="hljs-string">    * 5：完全适合目标调查受众的假定法律知识和背景。</span><br><span class="hljs-string"></span><br><span class="hljs-string">**输出格式：** 您的响应必须是具有以下键的 JSON 对象：</span><br><span class="hljs-string">* `overall_score`：一个从 1 到 5 的整数（标准分数的平均值或您的整体判断）。</span><br><span class="hljs-string">* `rationale`：给出此分数原因的简明摘要，突出主要优势和劣势。</span><br><span class="hljs-string">* `detailed_feedback`：详细说明每个标准（清晰性、中立性、相关性、完整性、受众适当性）反馈的要点列表。建议具体改进。</span><br><span class="hljs-string">* `concerns`：任何具体的法律、道德或方法学问题的列表。</span><br><span class="hljs-string">* `recommended_action`：简短的建议（例如&quot;修改以保持中立&quot;，&quot;按原样批准&quot;，&quot;明确范围&quot;）。</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LLMJudgeForLegalSurvey</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;使用生成式 AI 模型评估法律调查问题的类。&quot;&quot;&quot;</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, model_name: <span class="hljs-built_in">str</span> = <span class="hljs-string">&#x27;gemini-1.5-flash-latest&#x27;</span>, temperature: <span class="hljs-built_in">float</span> = <span class="hljs-number">0.2</span></span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        初始化 LLM Judge。</span><br><span class="hljs-string"></span><br><span class="hljs-string">        Args:</span><br><span class="hljs-string">            model_name (str)：要使用的 Gemini 模型名称。</span><br><span class="hljs-string">                               推荐使用 &#x27;gemini-1.5-flash-latest&#x27; 以获得速度和成本效益。</span><br><span class="hljs-string">                               &#x27;gemini-1.5-pro-latest&#x27; 提供最高质量。</span><br><span class="hljs-string">            temperature (float)：生成温度。较低的温度更适合确定性评估。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        self.model = genai.GenerativeModel(model_name)<br>        self.temperature = temperature<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">_generate_prompt</span>(<span class="hljs-params">self, survey_question: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>        <span class="hljs-string">&quot;&quot;&quot;为 LLM judge 构建完整提示词。&quot;&quot;&quot;</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;<span class="hljs-subst">&#123;LEGAL_SURVEY_RUBRIC&#125;</span>\n\n---\n**要评估的法律调查问题：**\n<span class="hljs-subst">&#123;survey_question&#125;</span>\n---&quot;</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">judge_survey_question</span>(<span class="hljs-params">self, survey_question: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-type">Optional</span>[<span class="hljs-built_in">dict</span>]:<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        使用 LLM 判断单个法律调查问题的质量。</span><br><span class="hljs-string"></span><br><span class="hljs-string">        Args:</span><br><span class="hljs-string">            survey_question (str)：要评估的法律调查问题。</span><br><span class="hljs-string">        Returns:</span><br><span class="hljs-string">            Optional[dict]：包含 LLM 判断的字典，如果发生错误则返回 None。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        full_prompt = self._generate_prompt(survey_question)<br><br>        <span class="hljs-keyword">try</span>:<br>            logging.info(<span class="hljs-string">f&quot;向 &#x27;<span class="hljs-subst">&#123;self.model.model_name&#125;</span>&#x27; 发送判断请求...&quot;</span>)<br>            response = self.model.generate_content(<br>                full_prompt,<br>                generation_config=genai.types.GenerationConfig(<br>                    temperature=self.temperature,<br>                    response_mime_type=<span class="hljs-string">&quot;application/json&quot;</span><br>                )<br>            )<br>            <span class="hljs-comment"># 检查内容审核或其他导致响应为空的原因。</span><br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> response.parts:<br>                safety_ratings = response.prompt_feedback.safety_ratings<br>                logging.error(<span class="hljs-string">f&quot;LLM 响应为空或被阻止。安全评级：<span class="hljs-subst">&#123;safety_ratings&#125;</span>&quot;</span>)<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br><br>            <span class="hljs-keyword">return</span> json.loads(response.text)<br>        <span class="hljs-keyword">except</span> json.JSONDecodeError:<br>            logging.error(<span class="hljs-string">f&quot;无法将 LLM 响应解码为 JSON。原始响应：<span class="hljs-subst">&#123;response.text&#125;</span>&quot;</span>)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br>        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>            logging.error(<span class="hljs-string">f&quot;LLM 判断期间发生意外错误：<span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br><br><span class="hljs-comment">## --- 示例使用 ---</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    judge = LLMJudgeForLegalSurvey()<br><br>    <span class="hljs-comment"># --- 好的示例 ---</span><br>    good_legal_survey_question = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    在多大程度上您同意或不同意瑞士当前的知识产权法充分保护新兴的 AI 生成内容，假设该内容满足联邦最高法院确立的原创性标准？</span><br><span class="hljs-string">    （选择一项：强烈不同意、不同意、中立、同意、强烈同意）</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- 评估好的法律调查问题 ---&quot;</span>)<br>    judgment_good = judge.judge_survey_question(good_legal_survey_question)<br>    <span class="hljs-keyword">if</span> judgment_good:<br>        <span class="hljs-built_in">print</span>(json.dumps(judgment_good, indent=<span class="hljs-number">2</span>))<br><br>    <span class="hljs-comment"># --- 有偏见/差的示例 ---</span><br>    biased_legal_survey_question = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    难道您不同意像 FADP 这样过度限制性的数据隐私法正在阻碍瑞士的基本技术创新和经济增长吗？</span><br><span class="hljs-string">    （选择一项：是、否）</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- 评估有偏见的法律调查问题 ---&quot;</span>)<br>    judgment_biased = judge.judge_survey_question(biased_legal_survey_question)<br>    <span class="hljs-keyword">if</span> judgment_biased:<br>        <span class="hljs-built_in">print</span>(json.dumps(judgment_biased, indent=<span class="hljs-number">2</span>))<br><br>    <span class="hljs-comment"># --- 模糊/含糊的示例 ---</span><br>    vague_legal_survey_question = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    您对法律科技有什么想法？</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n--- 评估含糊的法律调查问题 ---&quot;</span>)<br>    judgment_vague = judge.judge_survey_question(vague_legal_survey_question)<br>    <span class="hljs-keyword">if</span> judgment_vague:<br>        <span class="hljs-built_in">print</span>(json.dumps(judgment_vague, indent=<span class="hljs-number">2</span>))<br></code></pre></td></tr></table></figure>
+<p>Python 代码定义了一个名为 LLMJudgeForLegalSurvey 的类，旨在使用生成式 AI 模型评估法律调查问题的质量。它利用 google.generativeai 库与 Gemini 模型交互。</p>
+<p>核心功能涉及将调查问题与详细的评估标准一起发送给模型。评分标准指定了判断调查问题的五个标准：清晰性和精确性、中立性和偏见、相关性和焦点、完整性以及受众适当性。对于每个标准，分配 1 到 5 的分数，并要求在输出中提供详细的理由和反馈。代码构建一个提示词，其中包括标准和要评估的调查问题。</p>
+<p>judge_survey_question 方法将此提示词发送到配置的 Gemini 模型，请求根据定义的结构格式化的 JSON 响应。期望的输出 JSON 包括整体分数、摘要理由、每个标准的详细反馈、问题列表和推荐的操作。该类处理 AI 模型交互期间的潜在错误，例如 JSON 解码问题或空响应。脚本通过评估法律调查问题的示例来演示其操作，说明 AI 如何根据预定义的标准评估质量。</p>
+<p>在结束之前，让我们检查各种评估方法，考虑它们的优势和劣势。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">评估方法</th>
+<th style="text-align: left;">优势</th>
+<th style="text-align: left;">劣势</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">人工评估</td>
+<td style="text-align: left;">捕获细微行为</td>
+<td style="text-align: left;">难以扩展、昂贵且耗时，因为它考虑主观的人为因素。</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LLM-as-a-Judge</td>
+<td style="text-align: left;">一致、高效且可扩展。</td>
+<td style="text-align: left;">可能忽略中间步骤。受 LLM 能力限制。</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">自动化指标</td>
+<td style="text-align: left;">可扩展、高效且客观</td>
+<td style="text-align: left;">在捕获完整能力方面可能存在限制。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="agent-轨迹">Agent 轨迹</h2>
+<p>评估 Agent 的轨迹至关重要，因为传统的软件测试是不够的。标准代码产生可预测的通过/失败结果，而 Agent 以概率方式运行，需要对最终输出和 Agent 的轨迹——达到解决方案所采取的步骤序列——进行定性评估。评估多 Agent 系统具有挑战性，因为它们不断变化。这需要开发超越个体性能的复杂指标来衡量沟通和团队合作的有效性。此外，环境本身不是静态的，要求评估方法（包括测试用例）随时间适应。</p>
+<p>这涉及检查决策的质量、推理过程和整体结果。实施自动化评估很有价值，特别是对于超越原型阶段的开发。分析轨迹和工具使用包括评估 Agent 用于实现目标的步骤，例如工具选择、策略和任务效率。例如，处理客户产品查询的 Agent 可能理想地遵循涉及意图确定、数据库搜索工具使用、结果审查和报告生成的轨迹。将 Agent 的实际操作与这个预期的或真实的轨迹进行比较，以识别错误和低效率。比较方法包括精确匹配（要求与理想序列完美匹配）、按序匹配（正确的操作按顺序，允许额外步骤）、任意顺序匹配（正确的操作以任何顺序，允许额外步骤）、精确度（测量预测操作的相关性）、召回率（测量捕获了多少基本操作）和单工具使用（检查特定操作）。指标选择取决于特定的 Agent 要求，高风险场景可能要求精确匹配，而更灵活的情况可能使用按序或任意顺序匹配。</p>
+<p>AI Agent 的评估涉及两种主要方法：使用测试文件和使用评估集文件。测试文件以 JSON 格式表示单个、简单的 Agent-模型交互或会话，非常适合在活跃开发期间进行单元测试，侧重于快速执行和简单的会话复杂性。每个测试文件包含一个带有多个回合的单个会话，其中回合是一个用户-Agent 交互，包括用户的查询、预期的工具使用轨迹、中间 Agent 响应和最终响应。例如，测试文件可能详细说明用户请求"关闭卧室中的 device_2"，指定 Agent 使用带有参数（如 location: Bedroom、device_id: device_2 和 status: OFF）的 set_device_info 工具，以及预期的最终响应"我已将 device_2 状态设置为关闭"。测试文件可以组织到文件夹中，并可能包含 test_config.json 文件来定义评估标准。评估集文件利用称为"evalset"的数据集来评估交互，包含多个可能很长的会话，适合模拟复杂的多回合对话和集成测试。评估集文件包含多个"评估"，每个评估代表一个具有一个或多个"回合"的不同会话，其中包括用户查询、预期的工具使用、中间响应和参考最终响应。示例评估集可能包括一个会话，其中用户首先询问"你能做什么？"然后说"掷两次 10 面骰子，然后检查 9 是否是质数"，定义预期的 roll_die 工具调用和 check_prime 工具调用，以及总结骰子结果和质数检查的最终响应。</p>
+<p><strong>多 Agent：</strong> 评估具有多个 Agent 的复杂 AI 系统非常像评估团队项目。因为有许多步骤和交接，其复杂性是一个优势，允许您检查每个阶段的工作质量。您可以检查每个单独的"Agent"如何执行其特定工作，但您还必须评估整个系统作为一个整体的表现如何。</p>
+<p>为此，您需要提出关于团队动态的关键问题，并以具体示例作为支持：</p>
+<ul>
+<li>Agent 是否有效合作？例如，在"航班预订 Agent"确保航班后，它是否成功地将正确的日期和目的地传递给"酒店预订 Agent"？合作失败可能导致酒店预订在错误的周。</li>
+<li>他们是否制定了好的计划并坚持执行？想象计划是首先预订航班，然后预订酒店。如果"酒店 Agent"在航班确认之前尝试预订房间，它已经偏离了计划。您还要检查 Agent 是否卡住，例如，无休止地搜索"完美"租车，从不进入下一步。</li>
+<li>是否为正确的任务选择了正确的 Agent？如果用户询问他们旅行的天气，系统应该使用提供实时数据的专门"天气 Agent"。如果它使用提供通用答案（如"夏天通常很温暖"）的"通用知识 Agent"，它为这项工作选择了错误的工具。</li>
+<li>最后，添加更多 Agent 是否提高了性能？如果您向团队添加一个新的"餐厅预订 Agent"，它是否使整体旅行规划更好、更高效？还是它会造成冲突并减慢系统速度，表明可扩展性存在问题？</li>
+</ul>
+<h2 id="从-agent-到高级承包商">从 Agent 到高级承包商</h2>
+<p>最近，有人提出（Agent Companion，gulli 等人）从简单的 AI Agent 演变为高级"承包商"，从概率性的、通常不可靠的系统转向为复杂的、高风险环境设计的更确定性和可问责的系统（见图 2）。</p>
+<p>当今常见的 AI Agent 基于简短的、规格不明确的指令运行，这使得它们适合简单的演示，但在生产中很脆弱，因为歧义会导致失败。"承包商"模型通过建立用户和 AI 之间严格的、正式化的关系来解决这个问题，该关系建立在明确定义和相互同意的条款基础上，就像人类世界中的法律服务协议一样。这种转变得到四个关键支柱的支持，这些支柱共同确保了以前超出自主系统范围的任务的清晰性、可靠性和稳健执行。</p>
+<p>首先是正式化合约的支柱，这是一个详细的规范，作为任务的唯一真实来源。它远远超出了简单的提示词。例如，财务分析任务的合约不会只说"分析上个季度的销售"；它会要求"一份 20 页的 PDF 报告，分析 2025 年第一季度的欧洲市场销售，包括五个特定的数据可视化、与 2024 年第一季度的比较分析以及基于提供的供应链中断数据集的风险评估"。此合约明确定义了所需的可交付成果、其精确规格、可接受的数据源、工作范围，甚至预期的计算成本和完成时间，使结果客观可验证。</p>
+<p>第二是动态的协商和反馈生命周期支柱。合约不是静态命令，而是对话的开始。承包商 Agent 可以分析初始条款并进行协商。例如，如果合约要求使用 Agent 无法访问的特定专有数据源，它可以返回反馈，说明"指定的 XYZ 数据库不可访问。请提供凭据或批准使用替代公共数据库，这可能会略微改变数据的粒度。"这个协商阶段也允许 Agent 标记歧义或潜在风险，在执行开始之前解决误解，防止代价高昂的失败，并确保最终输出与用户的实际意图完全一致。</p>
+<p><img src="../images/agent_images/chapter-19/image2.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 2：Agent 之间的合约执行示例</p>
+<p>第三个支柱是以质量为中心的迭代执行。与为低延迟响应设计的 Agent 不同，承包商优先考虑正确性和质量。它基于自我验证和纠正的原则运作。例如，对于代码生成合约，Agent 不会只是编写代码；它会生成多个算法方法，根据合约中定义的一套单元测试编译和运行它们，对性能、安全性和可读性等指标对每个解决方案进行评分，并且只提交通过所有验证标准的版本。这种生成、审查和改进自己的工作的内部循环，直到满足合约的规格，对于建立对其输出的信任至关重要。</p>
+<p>最后，第四个支柱是通过子合约的层次化分解。对于复杂度很高的任务，主承包商 Agent 可以充当项目经理，将主要目标分解为更小的、更易管理的子任务。它通过生成新的、正式的"子合约"来实现这一点。例如，"构建电子商务移动应用程序"的主合约可以由主 Agent 分解为"设计 UI/UX"、"开发用户身份验证模块"、"创建产品数据库架构"和"集成支付网关"的子合约。这些子合约中的每一个都是一个完整的、独立的合约，具有自己的可交付成果和规格，可以分配给其他专门的 Agent。这种结构化的分解使系统能够以高度组织和可扩展的方式处理巨大的、多方面的项目，标志着 AI 从简单工具向真正自主和可靠的问题解决引擎的转变。</p>
+<p>最终，这个承包商框架通过将正式规范、协商和可验证执行的原则直接嵌入到 Agent 的核心逻辑中，重新构想了 AI 交互。这种方法化的方法将人工智能从一个有前途但经常不可预测的助手提升为能够以可审计的精度自主管理复杂项目的可靠系统。通过解决歧义和可靠性的关键挑战，该模型为在信任和问责至关重要的关键任务领域部署 AI 铺平了道路。</p>
+<h2 id="google-的-adk">Google 的 ADK</h2>
+<p>在结束之前，让我们看一个支持评估的框架的具体示例。使用 Google 的 ADK 进行 Agent 评估（见图 3）可以通过三种方法进行：基于 Web 的 UI（adk web）用于交互式评估和数据集生成、使用 pytest 的编程集成用于整合到测试管道中，以及直接命令行界面（adk eval）用于适合定期构建生成和验证过程的自动化评估。</p>
+<p><img src="../images/agent_images/chapter-19/image3.png" srcset="/img/loading.gif" lazyload /></p>
+<p>图 3：Google ADK 的评估支持</p>
+<p>基于 Web 的 UI 支持交互式会话创建并保存到现有或新的评估集中，显示评估状态。Pytest 集成允许通过调用 AgentEvaluator.evaluate 并指定 Agent 模块和测试文件路径，将测试文件作为集成测试的一部分运行。</p>
+<p>命令行界面通过提供 Agent 模块路径和评估集文件来促进自动化评估，并具有指定配置文件或打印详细结果的选项。可以通过在评估集文件名后列出（用逗号分隔）来选择较大评估集中的特定评估以供执行。</p>
+<h2 id="概览">概览</h2>
+<p><strong>内容：</strong> Agentic 系统和 LLM 在复杂的动态环境中运行，它们的性能可能会随时间退化。它们的概率性和非确定性本质意味着传统的软件测试不足以确保可靠性。评估动态多 Agent 系统是一项重大挑战，因为它们不断变化的性质以及其环境的性质要求开发适应性测试方法和能够测量超越个体性能的协作成功的复杂指标。部署后可能出现数据漂移、意外交互、工具调用和偏离预期目标等问题。因此，持续评估对于测量 Agent 的有效性、效率以及对操作和安全要求的遵守是必要的。</p>
+<p><strong>原因：</strong> 标准化的评估和监控框架提供了一种系统的方式来评估和确保智能 Agent 的持续性能。这涉及为准确性、延迟和资源消耗（如 LLM 的 token 使用量）定义明确的指标。它还包括高级技术，例如分析 Agent 轨迹以理解推理过程，以及采用 LLM-as-a-Judge 进行细微的、定性的评估。通过建立反馈循环和报告系统，该框架允许持续改进、A/B 测试以及检测异常或性能漂移，确保 Agent 与其目标保持一致。</p>
+<p><strong>经验法则：</strong> 在部署 Agent 到实时性能和可靠性至关重要的生产环境时使用此模式。此外，当需要系统地比较 Agent 或其底层模型的不同版本以推动改进时，以及在需要合规性、安全性和道德审计的受监管或高风险领域运营时使用它。当 Agent 的性能可能由于数据或环境变化（漂移）而随时间退化时，或者在评估复杂的 Agent 行为时（包括操作序列（轨迹）和主观输出（如有用性）的质量），此模式也适用。</p>
+<p><strong>视觉摘要</strong></p>
+<p><img src="../images/agent_images/chapter-19/image4.png" srcset="/img/loading.gif" lazyload /> 图 4：评估和监控设计模式</p>
+<h2 id="关键要点">关键要点</h2>
+<ul>
+<li>评估智能 Agent 超越了传统测试，在真实世界环境中持续测量其有效性、效率以及对要求的遵守。</li>
+<li>Agent 评估的实际应用包括实时系统中的性能跟踪、改进的 A/B 测试、合规审计以及检测行为中的漂移或异常。</li>
+<li>基本 Agent 评估涉及评估响应准确性，而真实世界场景需要更复杂的指标，如延迟监控和 LLM 驱动 Agent 的 token 使用跟踪。</li>
+<li>Agent 轨迹（Agent 采取的步骤序列）对于评估至关重要，将实际操作与理想的、真实的路径进行比较，以识别错误和低效率。</li>
+<li>ADK 通过用于单元测试的单个测试文件和用于集成测试的综合评估集文件提供结构化的评估方法，两者都定义了预期的 Agent 行为。</li>
+<li>Agent 评估可以通过基于 Web 的 UI 进行交互式测试、使用 pytest 进行 CI/CD 集成的编程方式，或通过命令行界面进行自动化工作流执行。</li>
+<li>为了使 AI 在复杂的、高风险的任务中可靠，我们必须从简单的提示词转向精确定义可验证可交付成果和范围的正式"合约"。这种结构化协议允许 Agent 协商、澄清歧义并迭代验证其自己的工作，将其从不可预测的工具转变为可问责和值得信赖的系统。</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>总之，有效评估 AI Agent 需要超越简单的准确性检查，对其在动态环境中的性能进行持续的、多方面的评估。这涉及实际监控延迟和资源消耗等指标，以及通过其轨迹对 Agent 决策过程进行复杂分析。对于有用性等细微品质，诸如 LLM-as-a-Judge 之类的创新方法变得必不可少，而像 Google 的 ADK 这样的框架为单元和集成测试提供了结构化的工具。对于多 Agent 系统，挑战加剧，重点转向评估协作成功和有效合作。</p>
+<p>为了确保关键应用中的可靠性，范式正在从简单的、提示词驱动的 Agent 转向受正式协议约束的高级"承包商"。这些承包商 Agent 在明确的、可验证的条款上运作，允许它们协商、分解任务并自我验证其工作以满足严格的质量标准。这种结构化方法将 Agent 从不可预测的工具转变为能够处理复杂的、高风险任务的可问责系统。最终，这种演变对于建立在关键任务领域部署复杂的 Agentic AI 所需的信任至关重要。</p>
+<h2 id="参考文献">参考文献</h2>
+<p>相关研究包括：</p>
+<ol type="1">
+<li>ADK Web：<a target="_blank" rel="noopener" href="https://github.com/google/adk-web">https://github.com/google/adk-web</a></li>
+<li>ADK Evaluate：<a target="_blank" rel="noopener" href="https://google.github.io/adk-docs/evaluate/">https://google.github.io/adk-docs/evaluate/</a></li>
+<li>Survey on Evaluation of LLM-based Agents：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2503.16416">https://arxiv.org/abs/2503.16416</a></li>
+<li>Agent-as-a-Judge: Evaluate Agents with Agents：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2410.10934">https://arxiv.org/abs/2410.10934</a></li>
+<li>Agent Companion, gulli et al：<a target="_blank" rel="noopener" href="https://www.kaggle.com/whitepaper-agent-companion">https://www.kaggle.com/whitepaper-agent-companion</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/" class="print-no-link">#笔记摘抄</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 19 评估与监控</div>
+      <div>https://linxkon.github.io/第19章-评估与监控.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC20%E7%AB%A0-%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86.html" title="Agent 设计模式 - 20 优先级管理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Agent 设计模式 - 20 优先级管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AC%AC18%E7%AB%A0-%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E6%A8%A1%E5%BC%8F.html" title="Agent 设计模式 - 18 安全护栏模式">
+                        <span class="hidden-mobile">Agent 设计模式 - 18 安全护栏模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '1f7ab87a47be68e1bef1961aa657905a'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</body>
+</html>
