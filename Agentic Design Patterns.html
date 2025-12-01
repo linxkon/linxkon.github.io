@@ -16,16 +16,16 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="Agent 设计模式 *构建智能系统的实战指南[^1]，作者：[Antonio Gulli] 目录总览（424页） - 致谢（1页） - 鸣谢（2页） - 前言（1页） - 思想领袖视角：权力与责任 - 引言（4页） - 是什么让AI系统成为&quot;Agent&quot;？（9页） 第一部分：核心模式（103页）  提示链（12页） 路由决策（13页） 并行执行（15页） 反思优化（13页）">
+    <meta name="description" content="Agent 设计模式 *构建智能系统的实战指南[^1]，作者：[Antonio Gulli] 第一部分：核心模式（103页）  提示链（12页） 路由决策（13页） 并行执行（15页） 反思优化（13页） 工具调用（20页） 任务规划（13页） 多 Agent 协作（17页）  第二部分：认知机制（61页）  记忆管理（21页） 学习与适应（12页） 模型上下文协议">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Agent 设计模式 - 目录总览">
 <meta property="og:url" content="https://linxkon.github.io/Agentic%20Design%20Patterns.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="Agent 设计模式 *构建智能系统的实战指南[^1]，作者：[Antonio Gulli] 目录总览（424页） - 致谢（1页） - 鸣谢（2页） - 前言（1页） - 思想领袖视角：权力与责任 - 引言（4页） - 是什么让AI系统成为&quot;Agent&quot;？（9页） 第一部分：核心模式（103页）  提示链（12页） 路由决策（13页） 并行执行（15页） 反思优化（13页）">
+<meta property="og:description" content="Agent 设计模式 *构建智能系统的实战指南[^1]，作者：[Antonio Gulli] 第一部分：核心模式（103页）  提示链（12页） 路由决策（13页） 并行执行（15页） 反思优化（13页） 工具调用（20页） 任务规划（13页） 多 Agent 协作（17页）  第二部分：认知机制（61页）  记忆管理（21页） 学习与适应（12页） 模型上下文协议">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent1.png">
 <meta property="article:published_time" content="2025-11-30T11:22:13.000Z">
-<meta property="article:modified_time" content="2025-12-01T13:38:07.355Z">
+<meta property="article:modified_time" content="2025-12-01T14:28:51.965Z">
 <meta property="article:author" content="linxkon">
 <meta property="article:tag" content="笔记摘抄">
 <meta property="article:tag" content="agent">
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          357 字
+          312 字
         
       </span>
     
@@ -315,57 +315,55 @@
                 
                 <h1 id="agent-设计模式">Agent 设计模式</h1>
 <p>*构建智能系统的实战指南[^1]，作者：[Antonio Gulli]</p>
-<p><strong>目录总览</strong>（424页）<br />
-- 致谢（1页） - 鸣谢（2页） - 前言（1页） - 思想领袖视角：权力与责任 - <a href="https://linxkon.github.io/引言.md">引言</a>（4页） - 是什么让AI系统成为"Agent"？（9页）</p>
 <h2 id="第一部分核心模式103页">第一部分：核心模式（103页）</h2>
 <ol type="1">
-<li><a href="https://linxkon.github.io/第01章-提示链.md">提示链</a>（12页）</li>
-<li><a href="https://linxkon.github.io/第02章-路由决策.md">路由决策</a>（13页）</li>
-<li><a href="https://linxkon.github.io/第03章-并行执行.md">并行执行</a>（15页）</li>
-<li><a href="https://linxkon.github.io/第04章-反思优化.md">反思优化</a>（13页）</li>
-<li><a href="https://linxkon.github.io/第05章-工具调用.md">工具调用</a>（20页）</li>
-<li><a href="https://linxkon.github.io/第06章-任务规划.md">任务规划</a>（13页）</li>
-<li><a href="https://linxkon.github.io/第07章-多Agent协作.md">多 Agent 协作</a>（17页）</li>
+<li><a href="https://linxkon.github.io/第01章-提示链">提示链</a>（12页）</li>
+<li><a href="https://linxkon.github.io/第02章-路由决策">路由决策</a>（13页）</li>
+<li><a href="https://linxkon.github.io/第03章-并行执行">并行执行</a>（15页）</li>
+<li><a href="https://linxkon.github.io/第04章-反思优化">反思优化</a>（13页）</li>
+<li><a href="https://linxkon.github.io/第05章-工具调用">工具调用</a>（20页）</li>
+<li><a href="https://linxkon.github.io/第06章-任务规划">任务规划</a>（13页）</li>
+<li><a href="https://linxkon.github.io/第07章-多Agent协作">多 Agent 协作</a>（17页）</li>
 </ol>
 <h2 id="第二部分认知机制61页">第二部分：认知机制（61页）</h2>
 <ol start="8" type="1">
-<li><a href="https://linxkon.github.io/第08章-记忆管理.md">记忆管理</a>（21页）</li>
-<li><a href="https://linxkon.github.io/第09章-学习与适应.md">学习与适应</a>（12页）</li>
-<li><a href="https://linxkon.github.io/第10章-模型上下文协议-MCP.md">模型上下文协议(MCP)</a>（16页）</li>
-<li><a href="https://linxkon.github.io/第11章-目标设定与监控.md">目标设定与监控</a>（12页）</li>
+<li><a href="https://linxkon.github.io/第08章-记忆管理">记忆管理</a>（21页）</li>
+<li><a href="https://linxkon.github.io/第09章-学习与适应">学习与适应</a>（12页）</li>
+<li><a href="https://linxkon.github.io/第10章-模型上下文协议-MCP">模型上下文协议(MCP)</a>（16页）</li>
+<li><a href="https://linxkon.github.io/第11章-目标设定与监控">目标设定与监控</a>（12页）</li>
 </ol>
 <h2 id="第三部分容错与扩展34页">第三部分：容错与扩展（34页）</h2>
 <ol start="12" type="1">
-<li><a href="https://linxkon.github.io/第12章-异常处理与恢复.md">异常处理与恢复</a>（8页）</li>
-<li><a href="https://linxkon.github.io/第13章-人机协同.md">人机协同</a>（9页）</li>
-<li><a href="https://linxkon.github.io/第14章-知识检索-RAG.md">知识检索(RAG)</a>（17页）</li>
+<li><a href="https://linxkon.github.io/第12章-异常处理与恢复">异常处理与恢复</a>（8页）</li>
+<li><a href="https://linxkon.github.io/第13章-人机协同">人机协同</a>（9页）</li>
+<li><a href="https://linxkon.github.io/第14章-知识检索-RAG">知识检索(RAG)</a>（17页）</li>
 </ol>
 <h2 id="第四部分高级架构114页">第四部分：高级架构（114页）</h2>
 <ol start="15" type="1">
-<li><a href="https://linxkon.github.io/第15章-Agent间通信-A2A.md">Agent 间通信(A2A)</a>（15页）</li>
-<li><a href="https://linxkon.github.io/第16章-资源感知优化.md">资源感知优化</a>（15页）</li>
-<li><a href="https://linxkon.github.io/第17章-推理技术.md">推理技术</a>（24页）</li>
-<li><a href="https://linxkon.github.io/第18章-安全护栏模式.md">安全护栏模式</a>（19页）</li>
-<li><a href="https://linxkon.github.io/第19章-评估与监控.md">评估与监控</a>（18页）</li>
-<li><a href="https://linxkon.github.io/第20章-优先级管理.md">优先级管理</a>（10页）</li>
-<li><a href="https://linxkon.github.io/第21章-探索与发现.md">探索与发现</a>（13页）</li>
+<li><a href="https://linxkon.github.io/第15章-Agent间通信-A2A">Agent 间通信(A2A)</a>（15页）</li>
+<li><a href="https://linxkon.github.io/第16章-资源感知优化">资源感知优化</a>（15页）</li>
+<li><a href="https://linxkon.github.io/第17章-推理技术">推理技术</a>（24页）</li>
+<li><a href="https://linxkon.github.io/第18章-安全护栏模式">安全护栏模式</a>（19页）</li>
+<li><a href="https://linxkon.github.io/第19章-评估与监控">评估与监控</a>（18页）</li>
+<li><a href="https://linxkon.github.io/第20章-优先级管理">优先级管理</a>（10页）</li>
+<li><a href="https://linxkon.github.io/第21章-探索与发现">探索与发现</a>（13页）</li>
 </ol>
 <h2 id="附录74页">附录（74页）</h2>
 <ol start="22" type="1">
-<li><a href="https://linxkon.github.io/附录A-高级提示技术.md">高级提示技术</a>（28页）</li>
-<li><a href="https://linxkon.github.io/附录B-AI-Agent交互-从GUI到真实世界.md">AI Agent 交互：从GUI到真实世界</a>（6页）</li>
-<li><a href="https://linxkon.github.io/附录C-Agent框架概览.md">Agent 框架概览</a>（8页）</li>
-<li><a href="https://linxkon.github.io/附录D-使用AgentSpace构建Agent.md">使用AgentSpace构建 Agent</a>（6页）</li>
-<li><a href="https://linxkon.github.io/附录E-命令行AI-Agent.md">命令行AI Agent</a>（5页）</li>
-<li><a href="https://linxkon.github.io/附录F-Agent推理引擎剖析.md">Agent 推理引擎剖析</a>（14页）</li>
-<li><a href="https://linxkon.github.io/附录G-编程实现Agent.md">编程实现 Agent</a>（7页）</li>
+<li><a href="https://linxkon.github.io/附录A-高级提示技术">高级提示技术</a>（28页）</li>
+<li><a href="https://linxkon.github.io/附录B-AI-Agent交互-从GUI到真实世界">AI Agent 交互：从GUI到真实世界</a>（6页）</li>
+<li><a href="https://linxkon.github.io/附录C-Agent框架概览">Agent 框架概览</a>（8页）</li>
+<li><a href="https://linxkon.github.io/附录D-使用AgentSpace构建Agent">使用AgentSpace构建 Agent</a>（6页）</li>
+<li><a href="https://linxkon.github.io/附录E-命令行AI-Agent">命令行AI Agent</a>（5页）</li>
+<li><a href="https://linxkon.github.io/附录F-Agent推理引擎剖析">Agent 推理引擎剖析</a>（14页）</li>
+<li><a href="https://linxkon.github.io/附录G-编程实现Agent">编程实现 Agent</a>（7页）</li>
 </ol>
 <h2 id="参考资料">参考资料</h2>
 <ul>
-<li><a href="https://linxkon.github.io/结论.md">结论</a>（5页）</li>
-<li><a href="https://linxkon.github.io/术语表.md">术语表</a>（4页）</li>
-<li><a href="https://linxkon.github.io/术语索引.md">术语索引</a>（11页，含 Agent 推理示例）</li>
-<li><a href="https://linxkon.github.io/常见问题解答.md">常见问题解答</a></li>
+<li><a href="https://linxkon.github.io/结论">结论</a>（5页）</li>
+<li><a href="https://linxkon.github.io/术语表">术语表</a>（4页）</li>
+<li><a href="https://linxkon.github.io/术语索引">术语索引</a>（11页，含 Agent 推理示例）</li>
+<li><a href="https://linxkon.github.io/常见问题解答">常见问题解答</a></li>
 </ul>
 <p><strong>预印本</strong>：<a href="https://linxkon.github.io/https://www.amazon.com/Agentic-Design-Patterns-Hands-Intelligent/dp/3032014018/">https://www.amazon.com/Agentic-Design-Patterns-Hands-Intelligent/dp/3032014018/</a></p>
 <figure>
