@@ -319,70 +319,49 @@
 <p>本文将带领大家循序渐进地探索AI技术的演进历程和实践应用。分享分为两部分，第一部分主要是从机器学习的基础概念出发,解析其如何一步步发展成为今天强大的语言模型，并针对具体任务给出一个简单示例。第二部分我们将深入剖析LLM的工程化应用,特别是检索增强生成(RAG)以及Agent技术如何帮助我们构建更智能、更可靠的AI应用系统。</p>
 <h2 id="从机器学习到语言模型">从机器学习到语言模型</h2>
 <p>在进入主题之前，让我们先了解一下人工智能、机器学习与深度学习的关系</p>
-<p>人工智能
-(AI)：AI的概念最早可以追溯到20世纪50年代，由麦卡锡、香农等学者提出。它旨在让机器展现出类似人类的智能能力，包括感知、学习、推理、规划、语言理解与生成等。AI的核心目标是开发能够解决复杂问题并执行智能任务的系统。</p>
-<p>机器学习 (ML)：ML 是实现 AI
-的一种方法，它让机器通过数据自动学习模式并进行决策，而不是通过硬编码规则。</p>
+<p>人工智能 (AI)：AI的概念最早可以追溯到20世纪50年代，由麦卡锡、香农等学者提出。它旨在让机器展现出类似人类的智能能力，包括感知、学习、推理、规划、语言理解与生成等。AI的核心目标是开发能够解决复杂问题并执行智能任务的系统。</p>
+<p>机器学习 (ML)：ML 是实现 AI 的一种方法，它让机器通过数据自动学习模式并进行决策，而不是通过硬编码规则。</p>
 <p>深度学习（DL）是机器学习的子集,深度学习的一大特点是用神经网络的方式来解决算法建模问题。深度学习两个热门的方向是CV,现在热门的实践应用包括智能驾驶技术。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314961-29.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314961-29.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <ol type="1">
 <li><h3 id="机器学习算法">机器学习算法</h3>
 <p>机器学习可以看作是让机器从数据中学习规律，从而进行预测或决策。想象一下，我们想让机器学会区分苹果和橘子，或者预测明天的股票价格，这就是机器学习可以做的事情。</p>
-<h4 id="机器学习主要解决两个核心问题分类与回归">1.1
-机器学习主要解决两个核心问题:分类与回归</h4>
-<p>分类 (Classification):
-就像给东西贴标签。机器会学习如何把数据分到不同的类别里。例如情绪识别、图像识别等问题。</p>
-<p>常见传统机器学习算法: 逻辑回归 (Logistic Regression)、支持向量机
-(SVM)、集成学习 (<a
-target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27689464">Ensemble
-Learning</a>)、K近邻 (KNN) 等。</p>
-<p>回归 (Regression):
-就像预测一个数值。机器会学习如何根据输入的数据，预测一个连续的输出值。例如房价预测、股票预测等问题。
-常见算法: 线性回归 (Linear Regression)、多项式回归 (Polynomial
-Regression) 等。</p>
+<h4 id="机器学习主要解决两个核心问题分类与回归">1.1 机器学习主要解决两个核心问题:分类与回归</h4>
+<p>分类 (Classification): 就像给东西贴标签。机器会学习如何把数据分到不同的类别里。例如情绪识别、图像识别等问题。</p>
+<p>常见传统机器学习算法: 逻辑回归 (Logistic Regression)、支持向量机 (SVM)、集成学习 (<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27689464">Ensemble Learning</a>)、K近邻 (KNN) 等。</p>
+<p>回归 (Regression): 就像预测一个数值。机器会学习如何根据输入的数据，预测一个连续的输出值。例如房价预测、股票预测等问题。 常见算法: 线性回归 (Linear Regression)、多项式回归 (Polynomial Regression) 等。</p>
 <p>1.2 机器学习的基础概念</p>
 <p>特征工程：指利用领域知识从原始数据中提取、构造或选择出对预测模型有用的特征的过程，它能够帮助模型更好地找到数据内在的规律，传统机器学习和深度学习的一大区别是ML更加依赖于特征工程。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314957-1.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314957-1.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>样本与标签：样本指用于训练机器学习模型的单个数据实例，它一般由若干“特征”组成。标签是与样本相对应的答案或目标值。</p>
 <p>训练集与测试集：训练集用于模型训练，测试集用于模型训练结果的评估；训练集还可以进一步划分出一部分数据作为验证集。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314957-2.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314957-2.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<h4 id="机器学习算法示例-random-forest解决情绪识别问题">1.2
-机器学习算法示例-random forest解决情绪识别问题</h4>
-<p>机器学习算法种类繁多，思想迥异。接下来以集成学习中 Bagging
-方法的代表算法——随机森林（Random
-Forest）为例，展开说明。同时结合TF-IDF构建特征与随机森林建模的方式演示如何解决情绪识别问题。</p>
+<h4 id="机器学习算法示例-random-forest解决情绪识别问题">1.2 机器学习算法示例-random forest解决情绪识别问题</h4>
+<p>机器学习算法种类繁多，思想迥异。接下来以集成学习中 Bagging 方法的代表算法——随机森林（Random Forest）为例，展开说明。同时结合TF-IDF构建特征与随机森林建模的方式演示如何解决情绪识别问题。</p>
 <h5 id="bagging与random-forest">1.2.1 Bagging与Random Forest</h5>
-<p>Bagging是一种集成学习技术，它通过对原始数据集进行有放回的随机抽样（Bootstrap
-sampling）来构建多个训练集，然后在这些训练集上分别训练出多个基学习器（如决策树、神经网络等），最后将这些基学习器的预测结果通过某种策略（如投票、平均等）组合起来作为最终的预测结果。</p>
+<p>Bagging是一种集成学习技术，它通过对原始数据集进行有放回的随机抽样（Bootstrap sampling）来构建多个训练集，然后在这些训练集上分别训练出多个基学习器（如决策树、神经网络等），最后将这些基学习器的预测结果通过某种策略（如投票、平均等）组合起来作为最终的预测结果。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314957-3.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314957-3.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p><em>Random Forest模型技术要点</em></p>
 <blockquote>
 <ol type="1">
 <li>用<em>N</em>来表示训练用例（样本）的个数，<em>M</em>表示特征数目。</li>
-<li>输入特征数目<em>m</em>，用于确定<a
-target="_blank" rel="noopener" href="https://baike.baidu.com/item/决策树/0?fromModule=lemma_inlink">决策树</a>上一个节点的决策结果；其中<em>m</em>应远小于<em>M</em>。</li>
-<li>从<em>N</em>个训练用例（样本）中以有放回抽样的方式，取样<em>N</em>次，形成一个<a
-target="_blank" rel="noopener" href="https://baike.baidu.com/item/训练集/0?fromModule=lemma_inlink">训练集</a>（即bootstrap取样），并用未抽到的用例（样本）作预测，评估其误差。</li>
+<li>输入特征数目<em>m</em>，用于确定<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/决策树/0?fromModule=lemma_inlink">决策树</a>上一个节点的决策结果；其中<em>m</em>应远小于<em>M</em>。</li>
+<li>从<em>N</em>个训练用例（样本）中以有放回抽样的方式，取样<em>N</em>次，形成一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/训练集/0?fromModule=lemma_inlink">训练集</a>（即bootstrap取样），并用未抽到的用例（样本）作预测，评估其误差。</li>
 <li>对于每一个节点，随机选择<em>m</em>个特征，决策树上每个节点的决定都是基于这些特征确定的。根据这m个特征，采用信息增益法计算其最佳的分裂方式。</li>
 </ol>
 </blockquote>
 <h5 id="tf-idf方法构建特征工程">1.2.2 TF-IDF方法构建特征工程</h5>
 <p>词频-逆文档频率法（TF-IDF）是一种常用的文本特征提取方法，用于衡量单词在文档和整个语料库中的重要性。它的计算方法为：</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314957-4.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314957-4.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>其核心思想是</p>
 <ol type="1">
@@ -391,8 +370,7 @@ target="_blank" rel="noopener" href="https://baike.baidu.com/item/训练集/0?fr
 <li>通过TF-IDF，常用词被赋值为低权重，独特词被赋值为高权重。</li>
 </ol>
 <h5 id="代码演示">1.2.3 代码演示</h5>
-<p>示例代码已分享至github，点击下载使用：<a
-target="_blank" rel="noopener" href="https://github.com/linxkon/emotion_class_dialog">github.com</a></p>
+<p>示例代码已分享至github，点击下载使用：<a target="_blank" rel="noopener" href="https://github.com/linxkon/emotion_class_dialog">github.com</a></p>
 <p>路径：/A_random_forest/</p></li>
 </ol>
 <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">dat<span class="hljs-built_in">a_process</span>.py<br></code></pre></td></tr></table></figure>
@@ -415,8 +393,7 @@ target="_blank" rel="noopener" href="https://github.com/linxkon/emotion_class_di
 <p>深度学习使用神经网络建模，使模型具备了特征自动提取的能力，以及更加强大的学习表达能力。</p>
 <h4 id="神经网络">2.1 神经网络</h4>
 <figure>
-<img src="/images/AI宣讲会/1736749314957-5.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314957-5.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>神经元</p>
 <p>神经元是神经网络的基本计算单元，模拟生物神经元的工作方式。它接收输入信号，对其加权求和后，使用激活函数决定输出。</p>
@@ -426,22 +403,17 @@ target="_blank" rel="noopener" href="https://github.com/linxkon/emotion_class_di
 <p>神经网络架构</p>
 <p>神经网络由多个“神经元”组成，这些神经元按层（layers）排列。通常来讲可以分为以下</p>
 <p>输入层 (Input Layer): 接收数据，例如一张图片的所有像素值。</p>
-<p>隐藏层 (Hidden Layer):
-对输入数据进行处理和转换。可以有多个隐藏层，层数越多，模型越复杂。</p>
-<p>输出层 (Output Layer):
-输出结果，例如分类问题中每个类别的概率，或回归问题中的预测值。</p>
+<p>隐藏层 (Hidden Layer): 对输入数据进行处理和转换。可以有多个隐藏层，层数越多，模型越复杂。</p>
+<p>输出层 (Output Layer): 输出结果，例如分类问题中每个类别的概率，或回归问题中的预测值。</p>
 <h4 id="神经网络的机制">2.2 神经网络的机制</h4>
 <figure>
-<img src="/images/AI宣讲会/1736749314957-6.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314957-6.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <h5 id="神经网络的基础机制">2.2.1 神经网络的基础机制</h5>
 <p>神经网络模型通过以下两个步骤实现其对数据的学习建模能力</p>
 <p>Step1：【前向传播】+【损失函数】计算损失</p>
-<p>前向传播（Forward
-Propagation）：是神经网络中将输入数据转换为输出数据的过程。它通过将输入数据逐层传递通过网络的各个层，并在每一层应用激活函数来计算输出值。</p>
-<p>损失函数（Loss
-FN）：描述的是预测值ŷ与真实值y之间的差异，常用的损失计算方法有均方误差（缩写为MSE，用于回归问题）、交叉熵损失（softmax损失，用于分类问题）</p>
+<p>前向传播（Forward Propagation）：是神经网络中将输入数据转换为输出数据的过程。它通过将输入数据逐层传递通过网络的各个层，并在每一层应用激活函数来计算输出值。</p>
+<p>损失函数（Loss FN）：描述的是预测值ŷ与真实值y之间的差异，常用的损失计算方法有均方误差（缩写为MSE，用于回归问题）、交叉熵损失（softmax损失，用于分类问题）</p>
 <p>Step2：【反向传播】+【梯度下降】更新梯度值</p>
 <p>反向传播：从输出层开始，逐层计算每个神经元对损失函数的贡献，并根据链式法则计算每个权重的梯度。</p>
 <p>梯度下降：通过寻找梯度负方向的方式迭代调整模型参数，使损失函数逐渐减小，最终找到其最小值。</p>
@@ -449,25 +421,18 @@ FN）：描述的是预测值ŷ与真实值y之间的差异，常用的损失计
 <p>梯度下降的原理</p>
 <p>梯度下降法是一种寻找使损失函数最小化的方法。从数学上的角度来看，梯度的方向是函数增长速度最快的方向，那么梯度的反方向就是函数减少最快的方向，梯度下降的过程如下图所示：</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314957-7.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314957-7.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>梯度下降公式：</p>
-<p><span
-class="math display">\[w_{ij}^{new}=w_{ij}^{old}\quad-\quad\eta\quad\frac{\partial
-E}{\partial w_{ij}}\]</span></p>
-<p>W_new为更新后的参数值，W_old为更新前的参数值，η是学习率，<span
-class="math display">\[\frac{\partial E}{\partial
-w_{ij}}\]</span>是损失函数对参数的梯度，即损失函数在参数处的导数。</p>
+<p><span class="math display">\[w_{ij}^{new}=w_{ij}^{old}\quad-\quad\eta\quad\frac{\partial E}{\partial w_{ij}}\]</span></p>
+<p>W_new为更新后的参数值，W_old为更新前的参数值，η是学习率，<span class="math display">\[\frac{\partial E}{\partial w_{ij}}\]</span>是损失函数对参数的梯度，即损失函数在参数处的导数。</p>
 </blockquote>
-<h5 id="从数据流向来理解梯度值的更新过程">2.2.2
-从数据流向来理解梯度值的更新过程</h5>
+<h5 id="从数据流向来理解梯度值的更新过程">2.2.2 从数据流向来理解梯度值的更新过程</h5>
 <blockquote>
 <p>构建一个2-2-2结构的前馈神经网络（如下图）</p>
 <figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">示例代码：example<span class="hljs-string">\nerual_network_BP.py</span><br></code></pre></td></tr></table></figure>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-8.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-8.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 </blockquote>
 <blockquote>
@@ -492,36 +457,28 @@ w_{ij}}\]</span>是损失函数对参数的梯度，即损失函数在参数处�
 </blockquote>
 <blockquote>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-9.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-9.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-10.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-10.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-11.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-11.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p><em>依此类推,可以得到W6,W7,W8的值,继而可进一步推算出其它参数的值,至此,我们完成了第一步的梯度更新</em></p>
 <p><em>以后便是重复以上步骤持续更新参数,直到到达指定步数或损失值</em></p>
 </blockquote>
 <h5 id="神经网络的其它机制">2.2.3 神经网络的其它机制</h5>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-12.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-12.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<h4 id="深度学习算法示例-lstm解决情绪识别问题">2.3
-深度学习算法示例-LSTM解决情绪识别问题</h4>
+<h4 id="深度学习算法示例-lstm解决情绪识别问题">2.3 深度学习算法示例-LSTM解决情绪识别问题</h4>
 <p>通过基础神经元的组合以及隐藏层的设计，可以构建出多种神经网络架构，例如前文提到的前馈神经网络（FF）、循环神经网络（RNN）、长短期记忆网络（LSTM）等（如下图）。接下来，我们以LSTM为例进行详细讲解。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-13.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-13.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <h5 id="lstm简介">2.3.1 LSTM简介</h5>
-<p>LSTM（Long Short-Term Memory）也称长短时记忆结构, 它是RNN的变体,
-与经典RNN相比能够有效捕捉长序列之间的语义关联,
-缓解梯度消失或爆炸现象。LSTM的核心结构可以分为四个部分去解析:</p>
+<p>LSTM（Long Short-Term Memory）也称长短时记忆结构, 它是RNN的变体, 与经典RNN相比能够有效捕捉长序列之间的语义关联, 缓解梯度消失或爆炸现象。LSTM的核心结构可以分为四个部分去解析:</p>
 <blockquote>
 <p>1.细胞状态（CellState）：用于保存长期的状态信息，可以看作是贯穿整个序列的“记忆”。</p>
 <p>2.遗忘门（ForgetGate）：决定当前时间步的记忆细胞状态中哪些信息需要丢弃。遗忘门通过一个sigmoid函数来决定保留哪些信息，输出在0到1之间。</p>
@@ -530,8 +487,7 @@ w_{ij}}\]</span>是损失函数对参数的梯度，即损失函数在参数处�
 <p>细胞状态更新：通过遗忘门和输入门的作用，更新当前细胞状态，形成新的细胞状态和隐藏状态。</p>
 </blockquote>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-14.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-14.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <h5 id="代码演示-1">2.3.2 代码演示</h5>
 <figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">B_LSTM<span class="hljs-string">\lstm_model.py</span><br></code></pre></td></tr></table></figure>
@@ -559,16 +515,12 @@ w_{ij}}\]</span>是损失函数对参数的梯度，即损失函数在参数处�
 <figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">B_LSTM<span class="hljs-string">\lstm_infer.py</span><br></code></pre></td></tr></table></figure>
 <p>模型加载与推理</p>
 <ol type="1">
-<li><h3
-id="transformers与预训练语言模型">Transformers与预训练语言模型</h3>
+<li><h3 id="transformers与预训练语言模型">Transformers与预训练语言模型</h3>
 <p>传统RNN在处理长序列任务时难以记住早期信息。虽然LSTM通过门控机制在一定程度上缓解了这个问题，但直到注意力机制和Transformer的出现才真正突破了这一限制。</p>
-<h4 id="注意力机制与-transfomers架构">3.1 注意力机制与
-transfomers架构</h4>
+<h4 id="注意力机制与-transfomers架构">3.1 注意力机制与 transfomers架构</h4>
 <h5 id="注意力机制">3.1.1 注意力机制</h5>
 <p>基础概念：</p>
-<p>注意力机制 (Attention Mechanism)
-是一种模仿人类注意力认知机制的技术，它允许模型在处理信息时，集中关注于输入中最相关的部分，从而提高模型的性能。就像我们在阅读一篇文章时，会重点关注一些关键词句，忽略一些不重要的细节，注意力机制也让模型学会了这种
-"聚焦" 的能力。</p>
+<p>注意力机制 (Attention Mechanism) 是一种模仿人类注意力认知机制的技术，它允许模型在处理信息时，集中关注于输入中最相关的部分，从而提高模型的性能。就像我们在阅读一篇文章时，会重点关注一些关键词句，忽略一些不重要的细节，注意力机制也让模型学会了这种 "聚焦" 的能力。</p>
 <p>核心思想:为输入数据的每个部分分配一个权重，权重越高，表示该部分越重要，模型会更加关注它。这些权重是动态计算的，会根据不同的输入和任务目标而变化。</p>
 <p>注意力机制有很多种，比如硬注意力、软注意力、自注意力等，接下来以经典的自注意力为例进行讲解。</p>
 <p>自注意力机制(Self-Attention)：</p>
@@ -587,35 +539,29 @@ transfomers架构</h4>
 </blockquote>
 <p>自注意力通常以缩放点积的方式实现，其公式为:</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-15.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-15.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>下图直观地描述了自注意力如何作用在一系列单词上。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-16.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-16.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <blockquote>
 <p>输入单词序列（最下方的灰色框）：</p>
 <ul>
-<li>这是输入的一组词，表示为 "I am eating an
-apple"。每个词会被嵌入成一个向量（Embedding），用于后续计算。</li>
+<li>这是输入的一组词，表示为 "I am eating an apple"。每个词会被嵌入成一个向量（Embedding），用于后续计算。</li>
 </ul>
 <p>Keys, Values, Query：</p>
 <ul>
-<li>对每个输入词，我们生成三个向量：Key (橙色)、Value (蓝色)、Query
-(绿色)。这些向量由嵌入向量通过不同的线性变换得到，用于计算注意力权重和输出。</li>
+<li>对每个输入词，我们生成三个向量：Key (橙色)、Value (蓝色)、Query (绿色)。这些向量由嵌入向量通过不同的线性变换得到，用于计算注意力权重和输出。</li>
 </ul>
 <p>α 权重：</p>
 <ul>
-<li>每个输入词的 Query 和所有词的 Key 进行点积（计算相似度），再通过
-Softmax 得到注意力权重（α）。</li>
+<li>每个输入词的 Query 和所有词的 Key 进行点积（计算相似度），再通过 Softmax 得到注意力权重（α）。</li>
 <li>这些权重反映了当前 Query 词与每个输入词的相关性。</li>
 </ul>
 <p>加权求和（Weighted Sum）：</p>
 <ul>
-<li>权重 α 作用于对应的 Value
-向量，计算加权求和，得到当前词的输出向量。</li>
+<li>权重 α 作用于对应的 Value 向量，计算加权求和，得到当前词的输出向量。</li>
 </ul>
 <p>输出特征：</p>
 <ul>
@@ -625,8 +571,7 @@ Softmax 得到注意力权重（α）。</li>
 <p>多头自注意力机制</p>
 <p>多头注意力机制是对自注意力机制的扩展。它通过引入多个注意力头，允许模型从不同的表示子空间中获取信息，从而增强模型的表达能力。具体来说：</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-17.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-17.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <ul>
 <li>将 Q、K、V 分成多个子空间，每个子空间独立计算注意力。</li>
@@ -635,97 +580,70 @@ Softmax 得到注意力权重（α）。</li>
 </ul>
 <p>理解了多头自注意力机制,便理解了transfomers架构的核心内容。</p>
 <h5 id="transfomers架构">3.1.2 transfomers架构</h5>
-<p>2017年,来自谷歌的Google Brain团队发布题为《Attention Is All You
-Need》的论文,该论文提出Transformer这一革命性架构,从此世界进入Scale
-Law主宰的大模型时代。</p>
+<p>2017年,来自谷歌的Google Brain团队发布题为《Attention Is All You Need》的论文,该论文提出Transformer这一革命性架构,从此世界进入Scale Law主宰的大模型时代。</p>
 <p>Transformer最突出的贡献就是解决了传统RNN和LSTM等序列处理中的长距离依赖差、计算效率低、拓展性差三大核心问题，被广泛应用于自然语言处理（NLP）任务，例如机器翻译、文本摘要等，除此之外也被广泛应用于各种其它领域，包括计算机视觉、语音识别等。Transformer已经成为现代深度学习中的主流架构。</p>
 <p>Transformers的模型架构</p>
-<p>一个典型的 Transformer 模型主要由两部分组成：编码器（Encoder） 和
-解码器（Decoder）。</p>
+<p>一个典型的 Transformer 模型主要由两部分组成：编码器（Encoder） 和 解码器（Decoder）。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-18.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-18.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <blockquote>
 <ol type="1">
 <li>编码器（Encoder）：</li>
 </ol>
 <ul>
-<li>作用： 将输入序列（例如一个句子）编码成一个包含丰富语义信息的
-上下文向量（Context Vector）。</li>
-<li>结构： 通常由 N 个相同的编码器层堆叠而成（论文中
-N=6）。每个编码器层包含两个主要子层：
+<li>作用： 将输入序列（例如一个句子）编码成一个包含丰富语义信息的 上下文向量（Context Vector）。</li>
+<li>结构： 通常由 N 个相同的编码器层堆叠而成（论文中 N=6）。每个编码器层包含两个主要子层：
 <ul>
-<li>多头自注意力层（Multi-Head Self-Attention）： 这是 Transformer
-的核心。它允许模型关注输入序列中不同位置的单词，并计算它们之间的关系，从而捕捉上下文信息。</li>
-<li>前馈神经网络层（Feed-Forward Network）：
-对每个位置的单词表示进行非线性变换，进一步增强模型的表达能力。</li>
+<li>多头自注意力层（Multi-Head Self-Attention）： 这是 Transformer 的核心。它允许模型关注输入序列中不同位置的单词，并计算它们之间的关系，从而捕捉上下文信息。</li>
+<li>前馈神经网络层（Feed-Forward Network）： 对每个位置的单词表示进行非线性变换，进一步增强模型的表达能力。</li>
 </ul></li>
-<li>输入： 输入序列（例如单词序列）经过词嵌入（Word
-Embedding）和位置编码（Positional Encoding）后，输入到编码器中。</li>
+<li>输入： 输入序列（例如单词序列）经过词嵌入（Word Embedding）和位置编码（Positional Encoding）后，输入到编码器中。</li>
 </ul>
 <ol start="2" type="1">
 <li>解码器（Decoder）：</li>
 </ol>
 <ul>
-<li>作用：
-根据编码器生成的上下文向量和已生成的输出序列，生成目标序列（例如翻译后的句子）。</li>
-<li>结构： 也由 N 个相同的解码器层堆叠而成（论文中
-N=6）。每个解码器层包含三个主要子层：
+<li>作用： 根据编码器生成的上下文向量和已生成的输出序列，生成目标序列（例如翻译后的句子）。</li>
+<li>结构： 也由 N 个相同的解码器层堆叠而成（论文中 N=6）。每个解码器层包含三个主要子层：
 <ul>
-<li>掩码多头自注意力层（Masked Multi-Head Self-Attention）：
-与编码器中的自注意力层类似，但会添加一个掩码（Mask），以防止解码器在生成当前单词时“偷看”到未来的单词，确保生成的序列是自回归的。</li>
-<li>多头自注意力层（Multi-Head Self-Attention）：
-允许解码器关注编码器输出的上下文向量，从而获取输入序列的信息。</li>
-<li>前馈神经网络层（Feed-Forward Network）：
-与编码器中的前馈神经网络层相同。</li>
+<li>掩码多头自注意力层（Masked Multi-Head Self-Attention）： 与编码器中的自注意力层类似，但会添加一个掩码（Mask），以防止解码器在生成当前单词时“偷看”到未来的单词，确保生成的序列是自回归的。</li>
+<li>多头自注意力层（Multi-Head Self-Attention）： 允许解码器关注编码器输出的上下文向量，从而获取输入序列的信息。</li>
+<li>前馈神经网络层（Feed-Forward Network）： 与编码器中的前馈神经网络层相同。</li>
 </ul></li>
-<li>输入：
-解码器的输入包括两部分：编码器输出的上下文向量和已生成的输出序列（经过词嵌入和位置编码）。</li>
+<li>输入： 解码器的输入包括两部分：编码器输出的上下文向量和已生成的输出序列（经过词嵌入和位置编码）。</li>
 </ul>
 </blockquote>
 <h4 id="预训练语言模型">3.2 预训练语言模型</h4>
 <p>基于transformer架构的强大能力，使用大规模语料集训练“多用途”的预训练语言模型（PLM）成为热门趋势；而大语言模型（LLM），可以简单理解为参数量超过10亿的预训练语言模型。</p>
 <p>大语言模型相对于传统NLP模型的核心优势就是通过强大的泛化能力和上下文理解能力，统一了各类NLP任务的解决范式，甚至重塑了人类整合和获取知识的方式。</p>
-<p>下图介绍了Encoder Only | Decoder Only |
-Encoder+Decoder三种技术路线的模型的发展趋势，可以很明显看出越往后推出的模型，呈现出其性能越高，其参数量越大的规律，这就是我们常提到Scale
-Law。</p>
+<p>下图介绍了Encoder Only | Decoder Only | Encoder+Decoder三种技术路线的模型的发展趋势，可以很明显看出越往后推出的模型，呈现出其性能越高，其参数量越大的规律，这就是我们常提到Scale Law。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-19.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-19.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>接下来我们以Encoder Only 的典型代表——Bert，Decoder
-Only的典型代表——GPT展开作详细讲解。</p>
+<p>接下来我们以Encoder Only 的典型代表——Bert，Decoder Only的典型代表——GPT展开作详细讲解。</p>
 <h5 id="bert">3.2.1 Bert</h5>
-<p>BERT (Bidirectional Encoder Representations from Transformers) 是
-Google 于 2018 年提出的一种预训练语言模型，它是基于transformers
-Encoder部分的改良。</p>
+<p>BERT (Bidirectional Encoder Representations from Transformers) 是 Google 于 2018 年提出的一种预训练语言模型，它是基于transformers Encoder部分的改良。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-20.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-20.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Bert被广泛应用在文本分类、句子对识别、序列标注等任务。它凭借较小的资源占用和较高的稳定性，在NLP领域扮演着不可或缺的角色。</p>
 <p>Bert模型的架构</p>
-<p>BERT 的核心思想是利用双向 Transformer
-编码器进行无监督预训练，从而学习到丰富的上下文相关的词嵌入表示。宏观上BERT分三个主要模块。</p>
+<p>BERT 的核心思想是利用双向 Transformer 编码器进行无监督预训练，从而学习到丰富的上下文相关的词嵌入表示。宏观上BERT分三个主要模块。</p>
 <ul>
 <li>最底层黄色标记的Embedding模块。</li>
 <li>中间层蓝色标记的Transformer 的 encoder模块。</li>
 <li>最上层绿色标记的预微调模块。</li>
 </ul>
 <figure>
-<img src="/images/AI宣讲会/1736749314958-21.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314958-21.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure></li>
 </ol>
 <p>如何训练BERT</p>
 <p>Bert训练使用了132GB的数据（33亿图书馆+百科词汇语料），由谷歌团队用16个TPU，4天时间训练完成。并同时应用了以下两个训练任务：</p>
 <blockquote>
 <ol type="1">
-<li>掩码语言模型 (Masked Language Model, MLM)： 随机掩盖 (mask)
-输入句子中的部分词（使用特殊标记 [MASK]
-替换），然后训练模型根据上下文预测这些被掩盖的词。这使得 BERT
-能够学习到双向的上下文表示。为了提高效率，BERT只预测被遮盖的单词，而不是重建整个输入。
+<li>掩码语言模型 (Masked Language Model, MLM)： 随机掩盖 (mask) 输入句子中的部分词（使用特殊标记 [MASK] 替换），然后训练模型根据上下文预测这些被掩盖的词。这使得 BERT 能够学习到双向的上下文表示。为了提高效率，BERT只预测被遮盖的单词，而不是重建整个输入。
 <ol type="1">
 <li>遮盖策略：
 <ul>
@@ -735,9 +653,7 @@ Encoder部分的改良。</p>
 <li>为什么要这样设计呢？如果100%都用[MASK]替换，模型就只学会了预测[MASK]，如果只替换不mask，模型直接复制就行，为了防止模型学到捷径，同时引入其他词带来的噪音，所以混合了这几种策略。</li>
 </ul></li>
 </ol></li>
-<li>下一句预测 (Next Sentence Prediction, NSP)：
-判断两个句子是否是连续的句子。输入是一对句子 A 和 B，模型需要预测 B
-是否是 A 的下一句。这个任务有助于 BERT 学习句子之间的关系。</li>
+<li>下一句预测 (Next Sentence Prediction, NSP)： 判断两个句子是否是连续的句子。输入是一对句子 A 和 B，模型需要预测 B 是否是 A 的下一句。这个任务有助于 BERT 学习句子之间的关系。</li>
 </ol>
 </blockquote>
 <p>BERT模型参数</p>
@@ -745,76 +661,52 @@ Encoder部分的改良。</p>
 <ul>
 <li><p>BERT-base : L=12，H=768，A=12，参数总量110M；</p></li>
 <li><p>BERT-large: L=24，H=1024，A=16，参数总量340M；</p>
-<p>在上面的超参数中，L表示网络的层数（即Transformer
-blocks的数量），A表示Multi-Head
-Attention中self-Attention的数量。</p></li>
+<p>在上面的超参数中，L表示网络的层数（即Transformer blocks的数量），A表示Multi-Head Attention中self-Attention的数量。</p></li>
 </ul>
 <h5 id="gpt">3.2.2 GPT</h5>
-<p>2018 年 6 月， OpenAI 发布题为 "Improving Language Understanding by
-Generative Pre-Training"的论文，标志着 GPT 系列模型的开端。</p>
+<p>2018 年 6 月， OpenAI 发布题为 "Improving Language Understanding by Generative Pre-Training"的论文，标志着 GPT 系列模型的开端。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314959-22.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314959-22.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>GPT采用的是Decoder
-only的架构，即transformers架构的右半部分。GPT的核心任务是NWP（Next word
-prediction），即通过自回归生成的方式，依次预测下一个词，直至生成完整的句子或段落。</p>
-<p>下图以“robot must obey
-orders”这句话为例，演示了如何通过倒三角掩码的方式构建自回归训练任务。</p>
+<p>GPT采用的是Decoder only的架构，即transformers架构的右半部分。GPT的核心任务是NWP（Next word prediction），即通过自回归生成的方式，依次预测下一个词，直至生成完整的句子或段落。</p>
+<p>下图以“robot must obey orders”这句话为例，演示了如何通过倒三角掩码的方式构建自回归训练任务。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314959-23.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314959-23.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>GPT的训练流程</p>
 <blockquote>
 <ol type="1">
 <li>预训练 (Pre-training)
 <ol type="1">
-<li>目标:
-让模型学习通用的语言表示，捕捉语言的统计规律、语法结构、语义关系以及一些常识知识等。</li>
-<li>数据集:
-这个阶段使用的数据集非常庞大，通常包括互联网上的各种文本，例如网页、书籍、新闻文章、维基百科等等。例如，GPT-3.5
-的训练数据量达到了 45TB。</li>
-<li>训练方法: 在海量文本数据集上进行无监督学习 (Unsupervised
-Learning)，通常使用自回归语言模型 (Autoregressive Language Modeling)
-作为训练目标。需要数千个GPU进行数月的大规模分布式训练，95%的训练成本都用在这个阶段。</li>
-<li>结果:
-预训练阶段得到的模型具有很强的通用性，可以理解和生成各种类型的文本，但它还没有针对特定任务进行优化。</li>
+<li>目标: 让模型学习通用的语言表示，捕捉语言的统计规律、语法结构、语义关系以及一些常识知识等。</li>
+<li>数据集: 这个阶段使用的数据集非常庞大，通常包括互联网上的各种文本，例如网页、书籍、新闻文章、维基百科等等。例如，GPT-3.5 的训练数据量达到了 45TB。</li>
+<li>训练方法: 在海量文本数据集上进行无监督学习 (Unsupervised Learning)，通常使用自回归语言模型 (Autoregressive Language Modeling) 作为训练目标。需要数千个GPU进行数月的大规模分布式训练，95%的训练成本都用在这个阶段。</li>
+<li>结果: 预训练阶段得到的模型具有很强的通用性，可以理解和生成各种类型的文本，但它还没有针对特定任务进行优化。</li>
 </ol></li>
 <li>微调 (Fine-tuning)
 <ol type="1">
-<li>目标:
-将预训练模型适配到具体的下游任务，例如问答、翻译、摘要生成等等。</li>
+<li>目标: 将预训练模型适配到具体的下游任务，例如问答、翻译、摘要生成等等。</li>
 <li>数据集:由承包商编写的理想助手响应（包括提示和响应对），数量在1万到10万对之间，质量较高。</li>
-<li>方法: 在特定任务的标注数据集上进行监督学习 (Supervised
-Learning)。需要1到100个GPU，训练时间为数天。</li>
-<li>过程:
-将预训练模型的参数作为初始值，并在标注数据集上进行进一步的训练。</li>
+<li>方法: 在特定任务的标注数据集上进行监督学习 (Supervised Learning)。需要1到100个GPU，训练时间为数天。</li>
+<li>过程: 将预训练模型的参数作为初始值，并在标注数据集上进行进一步的训练。</li>
 <li>结果: 经过微调的模型在特定任务上的表现会得到显著提升。</li>
 </ol></li>
-<li>基于人类反馈的强化学习 (Reinforcement Learning from Human Feedback,
-RLHF)
+<li>基于人类反馈的强化学习 (Reinforcement Learning from Human Feedback, RLHF)
 <ol type="1">
-<li>目标:
-进一步提升模型的生成质量，使其生成的内容更符合人类的偏好，例如更加有用、真实、无害。</li>
+<li>目标: 进一步提升模型的生成质量，使其生成的内容更符合人类的偏好，例如更加有用、真实、无害。</li>
 <li>数据集：构建人类偏好数据集，由承包商编写的比较数据，数量在10万到100万之间，质量较高</li>
 <li>训练方法：从SFT模型初始化并使用奖励模型，需要1到100个GPU，训练时间为数天。</li>
 <li>这个阶段通常包含三个步骤：</li>
 </ol>
 <ul>
-<li>监督微调 (Supervised Fine-tuning, SFT):
-使用人工标注的数据进一步微调模型，例如让人类标注员编写高质量的回复。</li>
-<li>训练奖励模型 (Reward Model, RM):
-使用人工标注的偏好数据训练一个奖励模型。例如，对于同一个问题，人类标注员会对模型的多个回复进行排序，然后训练一个模型来预测人类的排序。</li>
-<li>使用强化学习 (例如 PPO 算法) 优化策略:
-使用奖励模型作为反馈信号，通过强化学习算法优化模型的策略，使其生成的内容获得更高的奖励。</li>
+<li>监督微调 (Supervised Fine-tuning, SFT): 使用人工标注的数据进一步微调模型，例如让人类标注员编写高质量的回复。</li>
+<li>训练奖励模型 (Reward Model, RM): 使用人工标注的偏好数据训练一个奖励模型。例如，对于同一个问题，人类标注员会对模型的多个回复进行排序，然后训练一个模型来预测人类的排序。</li>
+<li>使用强化学习 (例如 PPO 算法) 优化策略: 使用奖励模型作为反馈信号，通过强化学习算法优化模型的策略，使其生成的内容获得更高的奖励。</li>
 </ul></li>
 </ol>
-<p>结果: 经过 RLHF
-训练的模型，其生成的内容通常更符合人类的期望，更加安全可靠。</p>
+<p>结果: 经过 RLHF 训练的模型，其生成的内容通常更符合人类的期望，更加安全可靠。</p>
 </blockquote>
-<h4 id="预训练语言模型示例-基于bert微调解决情绪识别问题">3.3
-预训练语言模型示例-基于bert微调解决情绪识别问题</h4>
+<h4 id="预训练语言模型示例-基于bert微调解决情绪识别问题">3.3 预训练语言模型示例-基于bert微调解决情绪识别问题</h4>
 <p><code>C_Bert\Bert_model.py</code></p>
 <p>使用torch库构建数据预处理类</p>
 <ul>
@@ -841,7 +733,6 @@ RLHF)
 <p>模型加载与推理</p>
 <p>三类模型在情绪识别任务的特点总结</p>
 <table>
-
 <thead>
 <tr class="header">
 <th>类型</th>
@@ -885,9 +776,7 @@ RLHF)
 </table>
 <h2 id="大语言模型的工程化应用">大语言模型的工程化应用</h2>
 <h3 id="rag">1. RAG</h3>
-<p>RAG：检索增强生成（Retrieval Augmented Generation,
-RAG）。它将传统信息检索系统（例如数据库）的优势与生成式大语言模型 (LLM)
-的功能结合在一起。 数据搜索+大模型。</p>
+<p>RAG：检索增强生成（Retrieval Augmented Generation, RAG）。它将传统信息检索系统（例如数据库）的优势与生成式大语言模型 (LLM) 的功能结合在一起。 数据搜索+大模型。</p>
 <h4 id="rag要解决的问题">1.1 RAG要解决的问题：</h4>
 <ul>
 <li>模型的知识量不足问题</li>
@@ -896,19 +785,16 @@ RAG）。它将传统信息检索系统（例如数据库）的优势与生成�
 </ul>
 <h4 id="rag一般实现流程">1.2 RAG一般实现流程：</h4>
 <ul>
-<li>创建数据库：
-会先将相关文档分块，为这些块生成嵌入向量，并存储到向量库中。</li>
+<li>创建数据库： 会先将相关文档分块，为这些块生成嵌入向量，并存储到向量库中。</li>
 <li>输入： 用户输入。</li>
 <li>检索： 输入对话生成嵌入向量，通过向量相似查询，找到相关的文档。</li>
-<li>生成：
-将找到的相关文档与原始输入结合，然后传递给模型进行回应生成，最终形成系统对用户的回答。</li>
+<li>生成： 将找到的相关文档与原始输入结合，然后传递给模型进行回应生成，最终形成系统对用户的回答。</li>
 </ul>
 <p>设计到的技术：</p>
 <p>embedding模型：文本转化成向量表示，语义越相似生成的向量越接近。（一种基于transformer的结构。）</p>
 <p>向量数据库：向量的相似度匹配。（索引优化。请求向量对比数据库中所有向量效率太低。）</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314959-24.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314959-24.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <h4 id="简单rag实现">1.3 简单RAG实现</h4>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs Python">texts =  [<br>    <span class="hljs-string">&quot;小明喜欢小红&quot;</span>,<br>    <span class="hljs-string">&quot;小红喜欢小王&quot;</span>,<br>    <span class="hljs-string">&quot;小王喜欢小宋&quot;</span>,<br>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">save_to_faiss</span>():<br>    vectors = embedding_api(texts)  <span class="hljs-comment"># 调用模型 【0.1,0.3.。。。】</span><br>    index = faiss.IndexFlatL2(<span class="hljs-number">1024</span>)  <span class="hljs-comment"># 使用 L2 距离（欧氏距离）</span><br>    <span class="hljs-comment"># 将向量添加到索引中</span><br>    index.add(vectors)<br>    <span class="hljs-keyword">return</span> index<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">search_faiss</span>(<span class="hljs-params">index, query</span>):<br>    query_vector = embedding_api([query])<br>    <span class="hljs-comment"># 使用向量进行搜索</span><br>    D, I = index.search(query_vector, k=<span class="hljs-number">3</span>)<br>    <span class="hljs-built_in">print</span>(D, I)<br>    <span class="hljs-keyword">return</span> texts[I[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]]<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    index = save_to_faiss()<br><br>    query = <span class="hljs-string">&quot;小明喜欢谁&quot;</span><br>    text = search_faiss(index, query)<br><br>    query = (text + <span class="hljs-string">&#x27;\n&#x27;</span><br>                  <span class="hljs-string">&quot;请根据以上内容回答：&quot;</span>+ query)<br>    <span class="hljs-built_in">print</span>(query)<br>    <span class="hljs-built_in">print</span>(llm_api([&#123;<span class="hljs-string">&quot;role&quot;</span>: <span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;content&quot;</span>: query&#125;]))<br></code></pre></td></tr></table></figure>
@@ -924,14 +810,12 @@ RAG）。它将传统信息检索系统（例如数据库）的优势与生成�
 <li>检索结果内容太多。</li>
 </ol>
 <figure>
-<img src="/images/AI宣讲会/1736749314959-25.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314959-25.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>对齐查询和文档（1）</p>
 <p>查询转换，利用LLMs生成多条类似的查询（新的查询更符合文档表达形式）。然后多条查询分别检索相关记录。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314959-26.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314959-26.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>上下文增强（2）</p>
 <p>一是通过在检索到的较小块周围添加句子来扩展上下文，</p>
@@ -949,8 +833,7 @@ RAG）。它将传统信息检索系统（例如数据库）的优势与生成�
 <p>查询路由（6）</p>
 <p>用户输入，LLM判断用户意图，将查询路由的相关的数据库。</p>
 <figure>
-<img src="/images/AI宣讲会/1736749314959-27.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314959-27.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>响应合成器（7）</p>
 <p>RAG最后一步 —— 基于检索的上下文和用户的查询来生成答案。</p>
@@ -971,8 +854,7 @@ RAG）。它将传统信息检索系统（例如数据库）的优势与生成�
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">webthink</span>(<span class="hljs-params">idx=<span class="hljs-literal">None</span>, prompt=webthink_prompt, to_print=<span class="hljs-literal">True</span></span>):<br>    question = env.reset(idx=idx)<br>    <span class="hljs-keyword">if</span> to_print:<br>        <span class="hljs-built_in">print</span>(idx, question)<br>    prompt += question + <span class="hljs-string">&quot;\n&quot;</span><br>    n_calls, n_badcalls = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">8</span>):<br>        n_calls += <span class="hljs-number">1</span><br>        thought_action = llm(prompt + <span class="hljs-string">f&quot;Thought <span class="hljs-subst">&#123;i&#125;</span>:&quot;</span>, stop=[<span class="hljs-string">f&quot;\nObservation <span class="hljs-subst">&#123;i&#125;</span>:&quot;</span>])<br>        <span class="hljs-keyword">try</span>:<br>            thought, action = thought_action.strip().split(<span class="hljs-string">f&quot;\nAction <span class="hljs-subst">&#123;i&#125;</span>: &quot;</span>)<br>        <span class="hljs-keyword">except</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;ohh...&#x27;</span>, thought_action)<br>            n_badcalls += <span class="hljs-number">1</span><br>            n_calls += <span class="hljs-number">1</span><br>            thought = thought_action.strip().split(<span class="hljs-string">&#x27;\n&#x27;</span>)[<span class="hljs-number">0</span>]<br>            action = llm(prompt + <span class="hljs-string">f&quot;Thought <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;thought&#125;</span>\nAction <span class="hljs-subst">&#123;i&#125;</span>:&quot;</span>, stop=[<span class="hljs-string">f&quot;\n&quot;</span>]).strip()<br>        obs, r, done, info = step(env, action[<span class="hljs-number">0</span>].lower() + action[<span class="hljs-number">1</span>:])<br>        obs = obs.replace(<span class="hljs-string">&#x27;\\n&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)<br>        step_str = <span class="hljs-string">f&quot;Thought <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;thought&#125;</span>\nAction <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;action&#125;</span>\nObservation <span class="hljs-subst">&#123;i&#125;</span>: <span class="hljs-subst">&#123;obs&#125;</span>\n&quot;</span><br>        prompt += step_str<br>        <span class="hljs-keyword">if</span> to_print:<br>            <span class="hljs-built_in">print</span>(step_str)<br>        <span class="hljs-keyword">if</span> done:<br>            <span class="hljs-keyword">break</span><br>  <br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> done:<br>        obs, r, done, info = step(env, <span class="hljs-string">&quot;finish[]&quot;</span>)<br>    <span class="hljs-keyword">if</span> to_print:<br>        <span class="hljs-built_in">print</span>(info, <span class="hljs-string">&#x27;\n&#x27;</span>)<br>    info.update(&#123;<span class="hljs-string">&#x27;n_calls&#x27;</span>: n_calls, <span class="hljs-string">&#x27;n_badcalls&#x27;</span>: n_badcalls, <span class="hljs-string">&#x27;traj&#x27;</span>: prompt&#125;)<br>    <span class="hljs-keyword">return</span> r, info<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">step</span>(<span class="hljs-params">self, action</span>):<br>  reward = <span class="hljs-number">0</span><br>  done = <span class="hljs-literal">False</span><br>  action = action.strip()<br>  <span class="hljs-keyword">if</span> self.answer <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:  <span class="hljs-comment"># already finished</span><br>    done = <span class="hljs-literal">True</span><br>    <span class="hljs-keyword">return</span> self.obs, reward, done, self._get_info()<br>  <br>  <span class="hljs-keyword">if</span> action.startswith(<span class="hljs-string">&quot;search[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    entity = action[<span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;search[&quot;</span>):-<span class="hljs-number">1</span>]<br>    self.search_step(entity)<br>  <span class="hljs-keyword">elif</span> action.startswith(<span class="hljs-string">&quot;lookup[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    keyword = action[<span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;lookup[&quot;</span>):-<span class="hljs-number">1</span>]<br>    <span class="hljs-keyword">if</span> self.lookup_keyword != keyword:  <span class="hljs-comment"># reset lookup</span><br>      self.lookup_keyword = keyword<br>      self.lookup_list = self.construct_lookup_list(keyword)<br>      self.lookup_cnt = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">if</span> self.lookup_cnt &gt;= <span class="hljs-built_in">len</span>(self.lookup_list):<br>      self.obs = <span class="hljs-string">&quot;No more results.\n&quot;</span><br>    <span class="hljs-keyword">else</span>:<br>      self.obs = <span class="hljs-string">f&quot;(Result <span class="hljs-subst">&#123;self.lookup_cnt + <span class="hljs-number">1</span>&#125;</span> / <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(self.lookup_list)&#125;</span>) &quot;</span> + self.lookup_list[self.lookup_cnt]<br>      self.lookup_cnt += <span class="hljs-number">1</span><br>  <span class="hljs-keyword">elif</span> action.startswith(<span class="hljs-string">&quot;finish[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    answer = action[<span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;finish[&quot;</span>):-<span class="hljs-number">1</span>]<br>    self.answer = answer<br>    done = <span class="hljs-literal">True</span><br>    self.obs = <span class="hljs-string">f&quot;Episode finished, reward = <span class="hljs-subst">&#123;reward&#125;</span>\n&quot;</span><br>  <span class="hljs-keyword">elif</span> action.startswith(<span class="hljs-string">&quot;think[&quot;</span>) <span class="hljs-keyword">and</span> action.endswith(<span class="hljs-string">&quot;]&quot;</span>):<br>    self.obs = <span class="hljs-string">&quot;Nice thought.&quot;</span><br>  <span class="hljs-keyword">else</span>:<br>    self.obs = <span class="hljs-string">&quot;Invalid action: &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(action)<br><br>  self.steps += <span class="hljs-number">1</span><br><br>  <span class="hljs-keyword">return</span> self.obs, reward, done, self._get_info()<br></code></pre></td></tr></table></figure>
 <h4 id="agent结构">2.2 Agent结构</h4>
 <figure>
-<img src="/images/AI宣讲会/1736749314959-28.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/AI宣讲会/1736749314959-28.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <ol type="1">
 <li>规划（Planning）：</li>
@@ -1026,8 +908,7 @@ RAG）。它将传统信息检索系统（例如数据库）的优势与生成�
 <p>问题：算力消耗大，延迟高</p>
 <p>AI应用</p>
 <p>AI不只是大语言模型LLM。除了生成文本，生成图片，生成视频的模型，huggingface有很多常用的各任务类型模型图像识别，语音识别，视频文本分类等等。</p>
-<p>大模型的应用技术总体分两种：微调 &amp;
-提示词工程（rag，agent）。一般不从零训练。特定的任务训练一个参数量小的网络模型，强化学习非常适合游戏方向的训练。</p>
+<p>大模型的应用技术总体分两种：微调 &amp; 提示词工程（rag，agent）。一般不从零训练。特定的任务训练一个参数量小的网络模型，强化学习非常适合游戏方向的训练。</p>
 <p>游戏AI</p>
 <p>AI 对话，AI 内容生成，AI NPC，AI 游戏内容搜索，AI 策略决策 等等。</p>
 <p>有伙伴有什么想法可以一起研究一下。</p>

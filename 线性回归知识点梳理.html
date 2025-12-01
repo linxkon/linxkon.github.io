@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖">
+    <meta name="description" content="🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线性回归知识点梳理">
 <meta property="og:url" content="https://linxkon.github.io/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖">
+<meta property="og:description" content="🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.png">
 <meta property="article:published_time" content="2019-03-11T12:21:13.000Z">
@@ -314,16 +314,10 @@
             
               <div class="markdown-body">
                 
-                <p>🏠
-线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈
-，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼
-接下来让我们走进线性回归💖</p>
+                <p>🏠 线性回归可以称得上最经典的回归模型，从房子值多少钱，再到股票价格的涨跌🌈 ，疾病与各种因素的关联，广告投放的收益等，都使它擅长的领域💼 接下来让我们走进线性回归💖</p>
 <span id="more"></span>
 <h3 id="线性回归的概念">1.线性回归的概念</h3>
-<h5
-id="利用-回归方程函数-对-一个或多个自变量特征值和因变量目标值之间-关系进行建模的一种分析方式.">利用
-回归方程(函数) 对 一个或多个自变量(特征值)和因变量(目标值)之间
-关系进行建模的一种分析方式.</h5>
+<h5 id="利用-回归方程函数-对-一个或多个自变量特征值和因变量目标值之间-关系进行建模的一种分析方式.">利用 回归方程(函数) 对 一个或多个自变量(特征值)和因变量(目标值)之间 关系进行建模的一种分析方式.</h5>
 <h5 id="yw1x1w2x2....wnb-wtb">y=w1x1+w2x2+....+w(n)+b= wT+b</h5>
 <ul>
 <li>w=weight</li>
@@ -331,8 +325,7 @@ id="利用-回归方程函数-对-一个或多个自变量特征值和因变量�
 </ul>
 <h5 id="常用于分类与回归问题">常用于分类与回归问题</h5>
 <h3 id="损失函数">2.损失函数</h3>
-<h5 id="loss-functioncost-function目标函数成本函数">loss function/cost
-function/目标函数/成本函数</h5>
+<h5 id="loss-functioncost-function目标函数成本函数">loss function/cost function/目标函数/成本函数</h5>
 <h5 id="最小二乘损失计算">最小二乘损失计算:</h5>
 <p><span class="math display">\[
 J(w,b)=\sum_{i=0}^m\bigl(h\bigl(x^i\bigr)-y^i\bigr)^2
@@ -342,9 +335,7 @@ J(w,b)=\sum_{i=0}^m\bigl(h\bigl(x^i\bigr)-y^i\bigr)^2
 J(w,b)=\frac1m\sum_{i=0}^m\left(h\left(x^i\right)-y^i\right)^2
 \]</span></p>
 <h5 id="平均绝对误差mae">平均绝对误差MAE</h5>
-<h5
-id="注-mse与mae既能在模型训练阶段作为损失函数求解拟合函数最优解又可作为模型评估阶段衡量已有模型误差大小">注:
-MSE与MAE既能在模型训练阶段作为损失函数求解拟合函数最优解,又可作为模型评估阶段,衡量已有模型误差大小</h5>
+<h5 id="注-mse与mae既能在模型训练阶段作为损失函数求解拟合函数最优解又可作为模型评估阶段衡量已有模型误差大小">注: MSE与MAE既能在模型训练阶段作为损失函数求解拟合函数最优解,又可作为模型评估阶段,衡量已有模型误差大小</h5>
 <h3 id="损失函数推导_正规方程法">3.损失函数推导_正规方程法</h3>
 <p><span class="math display">\[
 J(w) =∥Xw−y∥_2^2
@@ -353,11 +344,9 @@ J(w) =∥Xw−y∥_2^2
 w=(X^TX)^{-1}*X^Ty
 \]</span></p>
 <h5 id="优点可以精确求解">优点:可以精确求解</h5>
-<h5 id="缺点计算量极大xt-x的逆不存在时无解">缺点:计算量极大,X^T
-X的逆不存在时无解</h5>
+<h5 id="缺点计算量极大xt-x的逆不存在时无解">缺点:计算量极大,X^T X的逆不存在时无解</h5>
 <h3 id="梯度与导数">4.梯度与导数</h3>
-<h5
-id="导数表征了函数在某点处的变化速率.">导数表征了函数在某点处的变化速率.</h5>
+<h5 id="导数表征了函数在某点处的变化速率.">导数表征了函数在某点处的变化速率.</h5>
 <h5 id="梯度gradient">梯度（gradient）</h5>
 <ul>
 <li>多元函数中，导数不再是一个单一的数值，而是一个向量，因为它涉及到函数对多个自变量的变化率。这个向量被称为梯度（gradient），它表示了函数在某一点上沿着各个自变量方向的变化率。</li>
@@ -373,10 +362,7 @@ id="导数表征了函数在某点处的变化速率.">导数表征了函数在�
 f(\theta)=\theta_0x_0+\theta_1x_1+\theta_2x_2+\theta_3x_3+\cdots+\theta_nx_n
 \]</span></p>
 <p><span class="math display">\[
-\nabla f=\begin{bmatrix}\frac{\partial
-f}{\partial\theta_0}\\\frac{\partial
-f}{\partial\theta_1}\\\vdots\\\frac{\partial
-f}{\partial\theta_n}\end{bmatrix}=\begin{bmatrix}x_0\\x_1\\\vdots\\x_n\end{bmatrix}
+\nabla f=\begin{bmatrix}\frac{\partial f}{\partial\theta_0}\\\frac{\partial f}{\partial\theta_1}\\\vdots\\\frac{\partial f}{\partial\theta_n}\end{bmatrix}=\begin{bmatrix}x_0\\x_1\\\vdots\\x_n\end{bmatrix}
 \]</span></p>
 <h3 id="梯度下降">5.梯度下降</h3>
 <h5 id="梯度下降公式"><strong>梯度下降公式</strong></h5>
@@ -386,8 +372,7 @@ f}{\partial\theta_n}\end{bmatrix}=\begin{bmatrix}x_0\\x_1\\\vdots\\x_n\end{bmatr
 </ul>
 <p><span class="math display">\[
 \theta_{i+1}=\theta_i-\alpha\frac\partial{\partial\theta_i}J(\theta)
-\]</span> - θ_i:初始位置 α:学习率(步长),一般取值范围0.001 ~ 0.01 ∂/(∂θ_i
-) J(θ) :损失函数在i处的导数</p>
+\]</span> - θ_i:初始位置 α:学习率(步长),一般取值范围0.001 ~ 0.01 ∂/(∂θ_i ) J(θ) :损失函数在i处的导数</p>
 <h5 id="梯度下降优化过程"><strong>梯度下降优化过程 </strong></h5>
 <ul>
 <li><p>给定学习率,步长,初始位置</p></li>
@@ -404,8 +389,7 @@ f}{\partial\theta_n}\end{bmatrix}=\begin{bmatrix}x_0\\x_1\\\vdots\\x_n\end{bmatr
 <ul>
 <li>步长决定了在梯度下降迭代过程中</li>
 <li>学习率太小，下降的速度会慢</li>
-<li>学习率太大：容易造成错过最低点、产生下降过程中
-的震荡、甚至梯度爆炸</li>
+<li>学习率太大：容易造成错过最低点、产生下降过程中 的震荡、甚至梯度爆炸</li>
 </ul>
 <h5 id="推导过程">推导过程</h5>
 <ul>
@@ -446,9 +430,7 @@ x,y:特征向量与目标向量</p>
 </li>
 <li>(容易受异常值影响)</li>
 </ul>
-<h5
-id="小批量梯度下降算法-mini-bantch-最常用"><strong>小批量梯度下降算法
-mini-bantch 最常用√</strong></h5>
+<h5 id="小批量梯度下降算法-mini-bantch-最常用"><strong>小批量梯度下降算法 mini-bantch 最常用√</strong></h5>
 <ul>
 <li>每次迭代随机选择并使用小批量的样本梯度<br />
 </li>
@@ -505,25 +487,18 @@ RMSE=\sqrt{\frac1n\sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2}
 </ul></li>
 </ul>
 <h3 id="正则化">9.正则化</h3>
-<h5
-id="概念在模型训练时数据中有些特征影响模型复杂度或者某个特征的异常值较多-所以要尽量减少这个特征的影响甚至删除某个特征的影响这就是正则化正则化是添加在损失函数中的特殊项.">概念:在模型训练时，数据中有些特征影响模型复杂度、或者某个特征的异常值较多，
-所以要尽量减少这个特征的影响（甚至删除某个特征的影响），这就是正则化。正则化是添加在损失函数中的特殊项.</h5>
+<h5 id="概念在模型训练时数据中有些特征影响模型复杂度或者某个特征的异常值较多-所以要尽量减少这个特征的影响甚至删除某个特征的影响这就是正则化正则化是添加在损失函数中的特殊项.">概念:在模型训练时，数据中有些特征影响模型复杂度、或者某个特征的异常值较多， 所以要尽量减少这个特征的影响（甚至删除某个特征的影响），这就是正则化。正则化是添加在损失函数中的特殊项.</h5>
 <h5 id="l1正则化"><strong>L1正则化:</strong></h5>
 <p><span class="math display">\[
 J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^{n}\mid w_{i}\mid
-\]</span> - • α
-叫做惩罚系数，该值越大则权重调整的幅度就越大，即：表示对特征权重惩罚力度就越大
-- L1 正则化会使得权重趋向于 0，甚至等于
-0，使得某些特征失效，达到特征筛选的目的 - from sklearn.linear_model
-import Lasso</p>
+\]</span> - • α 叫做惩罚系数，该值越大则权重调整的幅度就越大，即：表示对特征权重惩罚力度就越大 - L1 正则化会使得权重趋向于 0，甚至等于 0，使得某些特征失效，达到特征筛选的目的 - from sklearn.linear_model import Lasso</p>
 <h5 id="l2正则化"><strong>L2正则化</strong></h5>
 <ul>
 <li></li>
 </ul>
 <p><span class="math display">\[
 J(w)=\mathrm{MSE}(w)+\alpha\sum_{i=1}^nw_i^2
-\]</span> - L2 正则化会使得权重趋向于 0，一般不等于 0 - from
-sklearn.linear_model import Ridge - L2的线性回归又称为岭回归</p>
+\]</span> - L2 正则化会使得权重趋向于 0，一般不等于 0 - from sklearn.linear_model import Ridge - L2的线性回归又称为岭回归</p>
 
                 
               </div>

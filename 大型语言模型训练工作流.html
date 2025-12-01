@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="更新内容 这里是近期(2024年8月1日)更新的LLaMA3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
+    <meta name="description" content="更新内容 这里是近期(2024年8月1日)更新的LLaMA3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。   LLM pipline  1.提示收集  Collected Prompts（收集">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大型语言模型LLM训练流程详解">
 <meta property="og:url" content="https://linxkon.github.io/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="更新内容 这里是近期(2024年8月1日)更新的LLaMA3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。    LLM pipline  1.提示收集  Collected Prompts">
+<meta property="og:description" content="更新内容 这里是近期(2024年8月1日)更新的LLaMA3.1的模型后训练（Post-training）策略和流程  在预训练的基础上，通过几轮后训练对模型进行微调，使其更好地与人类反馈对齐。 每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。   LLM pipline  1.提示收集  Collected Prompts（收集">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%B7%A5%E4%BD%9C%E6%B5%81.png">
 <meta property="article:published_time" content="2024-08-02T12:21:13.000Z">
@@ -321,18 +321,15 @@
 <p>每轮后训练包括监督微调（SFT）和直接偏好优化（DPO），后者使用了人工注释和合成的数据样本。</p>
 </blockquote>
 <figure>
-<img src="/images/llama3模型架构/llm训练流程.png" srcset="/img/loading.gif" lazyload alt="LLM pipline" />
-<figcaption aria-hidden="true">LLM pipline</figcaption>
+<img src="/images/llama3模型架构/llm训练流程.png" srcset="/img/loading.gif" lazyload alt="LLM pipline" /><figcaption aria-hidden="true">LLM pipline</figcaption>
 </figure>
 <h4 id="提示收集">1.提示收集</h4>
 <ul>
-<li><strong>Collected
-Prompts（收集的提示）</strong>：开始于收集各种输入提示。</li>
+<li><strong>Collected Prompts（收集的提示）</strong>：开始于收集各种输入提示。</li>
 </ul>
 <h4 id="响应生成">2. 响应生成</h4>
 <ul>
-<li><strong>K Generations per
-Prompt（每个提示生成K个响应）</strong>：每个提示生成多个响应（K个），以供后续选择和优化。</li>
+<li><strong>K Generations per Prompt（每个提示生成K个响应）</strong>：每个提示生成多个响应（K个），以供后续选择和优化。</li>
 </ul>
 <h4 id="响应筛选">3. 响应筛选</h4>
 <ul>
@@ -344,8 +341,7 @@ Prompt（每个提示生成K个响应）</strong>：每个提示生成多个响�
 </ul></li>
 </ul>
 <h4 id="奖励模型">4. 奖励模型</h4>
-<p>在预训练检查点的基础上训练奖励模型（Reward Model,
-RM），利用人类标注的偏好数据进行训练，主要目标是根据偏好数据进行排序和选择。</p>
+<p>在预训练检查点的基础上训练奖励模型（Reward Model, RM），利用人类标注的偏好数据进行训练，主要目标是根据偏好数据进行排序和选择。</p>
 <ul>
 <li>奖励模型使用（选择的、被拒绝的）响应对进行训练，此外，还可以通过对选择的响应进行编辑以创建第三种“编辑响应”。</li>
 <li>将提示和多个响应连接为单行进行训练，响应随机打乱，以提高训练效率。</li>
@@ -353,10 +349,8 @@ RM），利用人类标注的偏好数据进行训练，主要目标是根据偏
 <h4 id="监督微调">5. 监督微调</h4>
 <p>使用奖励模型对人类注释的提示进行拒绝采样，再结合合成数据进行监督微调。微调时使用交叉熵损失，采用的学习率和训练步数在实验中取得了良好的效果。</p>
 <ul>
-<li><strong>SFT
-Data（监督微调数据）</strong>：从拒绝采样中选出的高质量数据</li>
-<li><strong>Specialized Per-Capability
-Data（专门化的每项能力数据）</strong>：
+<li><strong>SFT Data（监督微调数据）</strong>：从拒绝采样中选出的高质量数据</li>
+<li><strong>Specialized Per-Capability Data（专门化的每项能力数据）</strong>：
 <ul>
 <li>这些数据专注于特定能力的提升，比如推理、编码、事实性、多语言支持、工具使用、长上下文理解以及精准指令执行等。</li>
 </ul></li>
@@ -364,8 +358,7 @@ Data（专门化的每项能力数据）</strong>：
 <ul>
 <li>利用SFT数据进行监督微调训练</li>
 <li>提高模型在特定任务上的表现</li>
-<li>使用<strong>Specialized Per-capability SFT
-data</strong>，针对特定能力进行微调</li>
+<li>使用<strong>Specialized Per-capability SFT data</strong>，针对特定能力进行微调</li>
 </ul></li>
 </ul>
 <p>使用交叉熵损失对目标标记进行训练，并对提示标记进行损失掩码。</p>
@@ -398,18 +391,15 @@ data</strong>，针对特定能力进行微调</li>
 <h2 id="预训练pretraining">2. 预训练（Pretraining）</h2>
 <ul>
 <li><strong>数据集</strong>：来自互联网的原始数据，包含数万亿个单词，质量较低但数量庞大</li>
-<li><strong>算法</strong>：语言模型，通过预测下一个token进行训练（涉及其他自监督学习任务，如masked
-language modeling）</li>
-<li><strong>模型</strong>：基础模型（Base
-model），需要数千个GPU进行数月的大规模分布式训练</li>
+<li><strong>算法</strong>：语言模型，通过预测下一个token进行训练（涉及其他自监督学习任务，如masked language modeling）</li>
+<li><strong>模型</strong>：基础模型（Base model），需要数千个GPU进行数月的大规模分布式训练</li>
 <li><strong>示例</strong>：GPT、LLaMA、PaLM等</li>
 <li><strong>备注</strong>：可以部署这个模型，过程涉及模型检查点保存和验证</li>
 </ul>
 <blockquote>
 <p>以下阶段统称后训练</p>
 </blockquote>
-<h2 id="监督微调supervised-finetuning">3. 监督微调（Supervised
-Finetuning）</h2>
+<h2 id="监督微调supervised-finetuning">3. 监督微调（Supervised Finetuning）</h2>
 <ul>
 <li><strong>数据集</strong>：由承包商编写的理想助手响应（包括提示和响应对），数量在1万到10万对之间，质量较高</li>
 <li><strong>特点</strong>：
@@ -419,8 +409,7 @@ Finetuning）</h2>
 <li>可能引入特定领域的数据，以增强模型在某些领域的能力</li>
 </ul></li>
 <li><strong>算法</strong>：语言模型，通过预测下一个token进行训练</li>
-<li><strong>模型</strong>：SFT模型（Supervised Finetuning
-Model），从基础模型初始化，需要1到100个GPU，训练时间为数天</li>
+<li><strong>模型</strong>：SFT模型（Supervised Finetuning Model），从基础模型初始化，需要1到100个GPU，训练时间为数天</li>
 <li><strong>示例</strong>：Vicuna-13B</li>
 <li><strong>备注</strong>：可以部署这个模型</li>
 </ul>
@@ -429,10 +418,8 @@ Model），从基础模型初始化，需要1到100个GPU，训练时间为数�
 <li><strong>数据集</strong>：构建人类偏好数据集，由承包商编写的<strong>比较数据</strong>，数量在10万到100万之间，质量较高</li>
 </ul>
 <blockquote>
-<p>比较对（pairwise
-comparisons）形式，即对于两个输出，标注出哪一个更符合人类偏好</p>
+<p>比较对（pairwise comparisons）形式，即对于两个输出，标注出哪一个更符合人类偏好</p>
 <table>
-
 <thead>
 <tr class="header">
 <th>输入</th>
@@ -459,18 +446,15 @@ comparisons）形式，即对于两个输出，标注出哪一个更符合人类
 </blockquote>
 <ul>
 <li><strong>算法</strong>：<strong>二元分类</strong>或其它<strong>排序评分</strong>机制，通过预测一致性奖励来进行训练</li>
-<li><strong>模型</strong>：RM模型（Reward
-Model），从SFT模型初始化，需要1到100个GPU，训练时间为数天</li>
+<li><strong>模型</strong>：RM模型（Reward Model），从SFT模型初始化，需要1到100个GPU，训练时间为数天</li>
 <li><strong>备注</strong>：<strong>奖励模型可以独立部署</strong>，<strong>用于评估模型输出的质量</strong>。</li>
 </ul>
-<h2 id="强化学习reinforcement-learning">5. 强化学习（Reinforcement
-Learning）</h2>
+<h2 id="强化学习reinforcement-learning">5. 强化学习（Reinforcement Learning）</h2>
 <ul>
 <li><strong>数据集</strong>：由承包商编写的提示数据，数量在1万到10万之间，质量较高</li>
 </ul>
 <blockquote>
 <table>
-
 <thead>
 <tr class="header">
 <th>输入</th>
@@ -490,14 +474,11 @@ Learning）</h2>
 </table>
 </blockquote>
 <ul>
-<li><p><strong>模型</strong>：<strong>RL模型</strong>（Reinforcement
-Learning
-Model），从SFT模型初始化并<strong>使用奖励模型</strong>，需要1到100个GPU，训练时间为数天</p></li>
+<li><p><strong>模型</strong>：<strong>RL模型</strong>（Reinforcement Learning Model），从SFT模型初始化并<strong>使用奖励模型</strong>，需要1到100个GPU，训练时间为数天</p></li>
 <li><p><strong>算法</strong>：强化学习，通过生成最大化奖励的token进行训练</p></li>
 </ul>
 <blockquote>
-<p>常用强化学习算法包括Proximal Policy
-Optimization（PPO）等，使用奖励模型（RM）来提供反馈。</p>
+<p>常用强化学习算法包括Proximal Policy Optimization（PPO）等，使用奖励模型（RM）来提供反馈。</p>
 <p>当模型生成的输出获得较高的奖励分数时，调整参数以增加生成此类输出的概率。</p>
 <p>当模型生成的输出获得较低的奖励分数时，调整参数以减少生成此类输出的概率。</p>
 </blockquote>
@@ -511,7 +492,6 @@ Optimization（PPO）等，使用奖励模型（RM）来提供反馈。</p>
 </ul>
 <blockquote>
 <table>
-
 <thead>
 <tr class="header">
 <th>输入</th>
@@ -531,20 +511,15 @@ Optimization（PPO）等，使用奖励模型（RM）来提供反馈。</p>
 </table>
 </blockquote>
 <ul>
-<li><strong>模型</strong>：<strong>领域适应模型</strong>（Domain
-Adaptation
-Model），通常使用迁移学习技术，将预训练模型在源领域的知识迁移到目标领域。可使用1到10个GPU，训练时间从数小时到数天不等，具体取决于数据规模和复杂度。</li>
-<li><strong>算法</strong>：使用<strong>对抗性训练</strong>（如DANN：Domain-Adversarial
-Neural Networks）或<strong>重加权方法</strong>（如TCA：Transfer
-Component Analysis）来最小化源领域和目标领域的分布差异</li>
+<li><strong>模型</strong>：<strong>领域适应模型</strong>（Domain Adaptation Model），通常使用迁移学习技术，将预训练模型在源领域的知识迁移到目标领域。可使用1到10个GPU，训练时间从数小时到数天不等，具体取决于数据规模和复杂度。</li>
+<li><strong>算法</strong>：使用<strong>对抗性训练</strong>（如DANN：Domain-Adversarial Neural Networks）或<strong>重加权方法</strong>（如TCA：Transfer Component Analysis）来最小化源领域和目标领域的分布差异</li>
 </ul>
 <blockquote>
 <p>领域适应通常涉及在源领域预训练模型，然后在目标领域进行微调或通过对抗性损失调整模型，使其在目标领域上表现良好。</p>
 <p>主要思想是通过<strong>对抗性训练</strong>使模型对源领域和目标领域的数据分布差异不敏感。</p>
 <p>通过减少源领域和目标领域特征空间的分布差异，提高模型在目标领域的性能。</p>
 </blockquote>
-<h2 id="多任务学习multi-task-learning">7. 多任务学习（Multi-task
-Learning）</h2>
+<h2 id="多任务学习multi-task-learning">7. 多任务学习（Multi-task Learning）</h2>
 <p>主要内容:设计多种下游任务 , 联合训练模型以提高泛化能力</p>
 <ul>
 <li><strong>数据集</strong>：多任务学习需要来自多个相关任务的数据集，各任务数据量可根据实际情况调整，通常任务间有某种程度的相关性</li>
@@ -574,9 +549,7 @@ Learning）</h2>
 </table>
 </blockquote>
 <ul>
-<li><strong>模型</strong>：<strong>多任务学习模型</strong>（Multi-task
-Learning
-Model），通过共享表示学习多个任务。可用1到100个GPU，训练时间因任务和数据量而异，从数小时到数天不等。</li>
+<li><strong>模型</strong>：<strong>多任务学习模型</strong>（Multi-task Learning Model），通过共享表示学习多个任务。可用1到100个GPU，训练时间因任务和数据量而异，从数小时到数天不等。</li>
 <li><strong>算法</strong>：使用<strong>共享参数架构</strong>（如共享编码器-解码器）或<strong>任务特定头</strong>，在多个相关任务间共享知识和表示</li>
 </ul>
 <blockquote>
@@ -655,22 +628,15 @@ Model），通过共享表示学习多个任务。可用1到100个GPU，训练�
 <li>多模态模型（如GPT-4）的训练可能涉及更复杂的流程和数据处理。</li>
 </ul>
 </blockquote>
-<h4
-id="大模型对齐large-language-model-alignment与rlhf"><strong>大模型对齐</strong>(Large
-Language Model Alignment)与RLHF</h4>
-<p>大模型对齐指的是在预训练的基础上，进一步将大模型的输出与任务场景和人类的价值观相统一，大模型对齐分为SFT，RLHF两个阶段,<strong>RLHF</strong>（Reinforcement
-Learning from Human
-Feedback）指的是人类反馈强化学习的方法，它一般涵盖奖励模型和强化学习两个步骤。
-<img src="/images/llama3模型架构/SFT与RLHF.jpg" srcset="/img/loading.gif" lazyload alt="SFT与RLHF" /></p>
+<h4 id="大模型对齐large-language-model-alignment与rlhf"><strong>大模型对齐</strong>(Large Language Model Alignment)与RLHF</h4>
+<p>大模型对齐指的是在预训练的基础上，进一步将大模型的输出与任务场景和人类的价值观相统一，大模型对齐分为SFT，RLHF两个阶段,<strong>RLHF</strong>（Reinforcement Learning from Human Feedback）指的是人类反馈强化学习的方法，它一般涵盖奖励模型和强化学习两个步骤。 <img src="/images/llama3模型架构/SFT与RLHF.jpg" srcset="/img/loading.gif" lazyload alt="SFT与RLHF" /></p>
 <p><strong>监督微调（SFT）</strong></p>
 <p><strong>定义</strong>：在新任务的小规模标注数据集上，使用有监督学习的方法对预训练模型进行微调，以使其适应新任务。</p>
-<p><strong>步骤</strong>：加载预训练模型 → 准备新任务的数据集 →
-调整模型输出层 → 在新任务数据集上训练模型。</p>
+<p><strong>步骤</strong>：加载预训练模型 → 准备新任务的数据集 → 调整模型输出层 → 在新任务数据集上训练模型。</p>
 <p><strong>应用</strong>：适用于那些有明确标注数据集的任务，如文本分类、命名实体识别等。</p>
 <p><strong>基于人类反馈的强化学习微调（RLHF)</strong></p>
 <p><strong>定义</strong>：在SFT的基础上，通过强化学习和人类反馈来进一步微调模型，使其输出更加符合人类的偏好或期望。</p>
-<p><strong>步骤</strong>：首先进行SFT → 收集人类反馈数据 → 训练奖励模型
-→ 使用奖励模型指导强化学习过程来微调模型。</p>
+<p><strong>步骤</strong>：首先进行SFT → 收集人类反馈数据 → 训练奖励模型 → 使用奖励模型指导强化学习过程来微调模型。</p>
 <p><strong>应用</strong>：适用于那些需要高度人类判断或创造力的任务，如对话生成、文本摘要等。</p>
 
                 

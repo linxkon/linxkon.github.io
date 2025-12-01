@@ -313,59 +313,42 @@
             
               <div class="markdown-body">
                 
-                <p>用远程服务器进行模型训练和程序运行，最蛋疼的一点就是程序运行到一半，挂掉了，前功尽弃。Tmux很好的解决了这个需求点。
-<span id="more"></span></p>
+                <p>用远程服务器进行模型训练和程序运行，最蛋疼的一点就是程序运行到一半，挂掉了，前功尽弃。Tmux很好的解决了这个需求点。 <span id="more"></span></p>
 <p>简单来讲，Tmux的核心功能包含：</p>
 <blockquote>
 <p><strong>1. 会话管理：</strong></p>
 <ul>
-<li><strong>持久化会话:</strong> 这是 Tmux
-最重要的功能之一。即使终端窗口关闭或网络断开，Tmux
-会话仍然在后台运行，用户可以重新连接并恢复到之前的状态，避免工作丢失和重新启动任务的麻烦。</li>
-<li><strong>会话共享:</strong> 多个用户可以共享同一个 Tmux
-会话，方便协同工作、演示或教学。</li>
-<li><strong>会话切换:</strong> 用户可以在多个 Tmux
-会话之间快速切换，方便管理不同项目或任务。</li>
+<li><strong>持久化会话:</strong> 这是 Tmux 最重要的功能之一。即使终端窗口关闭或网络断开，Tmux 会话仍然在后台运行，用户可以重新连接并恢复到之前的状态，避免工作丢失和重新启动任务的麻烦。</li>
+<li><strong>会话共享:</strong> 多个用户可以共享同一个 Tmux 会话，方便协同工作、演示或教学。</li>
+<li><strong>会话切换:</strong> 用户可以在多个 Tmux 会话之间快速切换，方便管理不同项目或任务。</li>
 </ul>
 <p><strong>2. 窗口和面板管理：</strong></p>
 <ul>
-<li><strong>分屏:</strong> Tmux
-可以将终端窗口分割成多个窗格（pane），并在每个窗格中运行不同的程序或命令，方便用户同时监控和操作多个任务，提高工作效率。</li>
-<li><strong>窗口管理:</strong> Tmux
-支持创建多个窗口，每个窗口可以包含多个窗格，方便用户组织和管理不同的工作环境。</li>
-<li><strong>灵活布局:</strong>
-用户可以根据需要自由调整窗格的大小和位置，创建自定义的终端布局。</li>
+<li><strong>分屏:</strong> Tmux 可以将终端窗口分割成多个窗格（pane），并在每个窗格中运行不同的程序或命令，方便用户同时监控和操作多个任务，提高工作效率。</li>
+<li><strong>窗口管理:</strong> Tmux 支持创建多个窗口，每个窗口可以包含多个窗格，方便用户组织和管理不同的工作环境。</li>
+<li><strong>灵活布局:</strong> 用户可以根据需要自由调整窗格的大小和位置，创建自定义的终端布局。</li>
 </ul>
 <p><strong>3. 终端复用：</strong></p>
 <ul>
-<li><strong>多终端访问:</strong> 用户可以通过多个终端窗口或 SSH
-连接到同一个 Tmux 会话，方便在不同设备上访问和控制正在运行的程序。</li>
-<li><strong>远程协作:</strong> Tmux
-方便用户进行远程协作，多个用户可以同时连接到同一个会话，共同操作和调试程序。</li>
+<li><strong>多终端访问:</strong> 用户可以通过多个终端窗口或 SSH 连接到同一个 Tmux 会话，方便在不同设备上访问和控制正在运行的程序。</li>
+<li><strong>远程协作:</strong> Tmux 方便用户进行远程协作，多个用户可以同时连接到同一个会话，共同操作和调试程序。</li>
 </ul>
 <p><strong>4. 自动化和脚本:</strong></p>
 <ul>
-<li><strong>可定制化:</strong> Tmux
-提供了丰富的配置选项和命令，用户可以根据自己的需求定制 Tmux
-的行为和外观。</li>
-<li><strong>脚本支持:</strong> Tmux
-支持使用脚本来自动化任务，例如自动创建会话、窗口和窗格，运行特定命令等。</li>
+<li><strong>可定制化:</strong> Tmux 提供了丰富的配置选项和命令，用户可以根据自己的需求定制 Tmux 的行为和外观。</li>
+<li><strong>脚本支持:</strong> Tmux 支持使用脚本来自动化任务，例如自动创建会话、窗口和窗格，运行特定命令等。</li>
 </ul>
 </blockquote>
 <h3 id="下面分享一些常用的命令">下面分享一些常用的命令：</h3>
-<p><strong>notice</strong>：tmux开头的命令在bash直接输入就ok，Ctrl+b
-开头的命令要进入tmux的会话中才可以输入</p>
+<p><strong>notice</strong>：tmux开头的命令在bash直接输入就ok，Ctrl+b 开头的命令要进入tmux的会话中才可以输入</p>
 <p><strong>会话管理</strong></p>
 <ul>
 <li>tmux: 启动一个新的 tmux 会话。</li>
-<li><strong>tmux new -s <session-name>:
-创建一个指定名称的会话。</strong></li>
+<li><strong>tmux new -s <session-name>: 创建一个指定名称的会话。</strong></li>
 <li><strong>tmux ls: 列出当前所有的 tmux 会话。</strong></li>
 <li><strong>tmux a 或 tmux attach: 接入到最近使用的会话。</strong></li>
-<li><strong>tmux a -t <session-name></strong> 或 tmux attach -t
-<session-name>: 接入到指定名称的会话。</li>
-<li>tmux detach 或 <strong>Ctrl+b d:
-将会话分离到后台运行</strong>。</li>
+<li><strong>tmux a -t <session-name></strong> 或 tmux attach -t <session-name>: 接入到指定名称的会话。</li>
+<li>tmux detach 或 <strong>Ctrl+b d: 将会话分离到后台运行</strong>。</li>
 <li><strong>tmux kill-session: 杀死当前的 tmux 会话</strong>。</li>
 <li>tmux kill-session -t <session-name>: 杀死指定名称的会话。</li>
 <li>tmux rename-session -t <old-name> <new-name>: 重命名会话名称。</li>
@@ -401,8 +384,7 @@
 <li>Ctrl+b ?: 显示快捷键帮助信息。</li>
 <li>Ctrl+b :: 进入命令模式，可以输入 tmux 命令。例如：
 <ul>
-<li>:setw synchronize-panes on:
-开启同步输入模式，在一个面板输入的命令会同步到其他面板。</li>
+<li>:setw synchronize-panes on: 开启同步输入模式，在一个面板输入的命令会同步到其他面板。</li>
 <li>:setw synchronize-panes off: 关闭同步输入模式。</li>
 <li>:set -g mouse on: 开启鼠标支持，可以用鼠标选择面板和调整大小。</li>
 </ul></li>

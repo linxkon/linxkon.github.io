@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
+    <meta name="description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习框架中的动态图与静态图">
 <meta property="og:url" content="https://linxkon.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%9B%BE%E4%B8%8E%E9%9D%99%E6%80%81%E5%9B%BE.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
+<meta property="og:description" content="深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
 <meta property="article:published_time" content="2023-04-01T05:21:13.000Z">
@@ -314,33 +314,26 @@
             
               <div class="markdown-body">
                 
-                <p>深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static
-Computation
-Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。</p>
+                <p>深度学习框架中，动态图（Dynamic Computation Graph）和静态图（Static Computation Graph）是两种构建和执行计算图的方式。他们一个面向开发,一个面向部署,各有优势。</p>
 <span id="more"></span>
-<h3 id="一.-动态图dynamic-computation-graph">一. 动态图（Dynamic
-Computation Graph）</h3>
-<p>动态图，也称为即时执行模式（Eager
-Execution），是指在代码运行时即时构建和执行计算图。这种方式的特点是：</p>
+<h3 id="一.-动态图dynamic-computation-graph">一. 动态图（Dynamic Computation Graph）</h3>
+<p>动态图，也称为即时执行模式（Eager Execution），是指在代码运行时即时构建和执行计算图。这种方式的特点是：</p>
 <ol type="1">
 <li><strong>即时性</strong>：每一行代码在运行时都会立即执行相应的计算操作。</li>
 <li><strong>灵活性</strong>：因为计算图是在运行时动态构建的，修改和调试都非常方便。可以轻松地使用Python的控制流（如条件语句和循环）构建复杂的模型。</li>
 <li><strong>直观性</strong>：代码更加直观和易于理解，便于调试和开发。</li>
 </ol>
-<p>代表性的深度学习框架有： - PyTorch - TensorFlow 2.x 的Eager
-Execution模式</p>
+<p>代表性的深度学习框架有： - PyTorch - TensorFlow 2.x 的Eager Execution模式</p>
 <p>示例（PyTorch）：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-comment"># 动态构建和执行计算图</span><br>x = torch.tensor([<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>], requires_grad=<span class="hljs-literal">True</span>)<br>y = x * <span class="hljs-number">2</span><br>z = y.mean()<br>z.backward()<br><br><span class="hljs-built_in">print</span>(x.grad)  <span class="hljs-comment"># 输出: tensor([0.6667, 0.6667, 0.6667])</span><br></code></pre></td></tr></table></figure>
-<h3 id="二.-静态图static-computation-graph">二. 静态图（Static
-Computation Graph）</h3>
+<h3 id="二.-静态图static-computation-graph">二. 静态图（Static Computation Graph）</h3>
 <p>静态图，也称为定义-运行模式（Define-and-Run），是指在代码运行之前，先定义好计算图，然后再执行。这种方式的特点是：</p>
 <ol type="1">
 <li><strong>高效性</strong>：由于计算图在运行前已经完全定义好，框架可以进行各种优化，提升执行效率和性能。</li>
 <li><strong>可移植性</strong>：静态图可以保存为文件，便于在不同环境中加载和运行。</li>
 <li><strong>可调度性</strong>：在执行前可以进行图的优化和分布式调度，提高资源利用率。</li>
 </ol>
-<p>代表性的深度学习框架有： - TensorFlow 1.x - TensorFlow 2.x 的Graph
-Execution模式</p>
+<p>代表性的深度学习框架有： - TensorFlow 1.x - TensorFlow 2.x 的Graph Execution模式</p>
 <p>示例（TensorFlow 1.x）：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><br><span class="hljs-comment"># 定义计算图</span><br>x = tf.placeholder(tf.float32, shape=(<span class="hljs-literal">None</span>, <span class="hljs-number">3</span>))<br>y = x * <span class="hljs-number">2</span><br>z = tf.reduce_mean(y)<br><br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:<br>    <span class="hljs-comment"># 执行计算图</span><br>    result = sess.run(z, feed_dict=&#123;x: [[<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>]]&#125;)<br>    <span class="hljs-built_in">print</span>(result)  <span class="hljs-comment"># 输出: 4.0</span><br></code></pre></td></tr></table></figure>
 <h3 id="三.-对比总结">三. 对比总结</h3>

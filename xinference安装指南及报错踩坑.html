@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web ui管理界面，除了TEXT EMBEDDING LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。  建议在linux系统安装，win下推理存在问">
+    <meta name="description" content="xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web ui管理界面，除了TEXT EMBEDDING LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。  建议在linux系统安装，win下推理存在问题">
 <meta property="og:type" content="article">
 <meta property="og:title" content="xinference安装报错踩坑">
 <meta property="og:url" content="https://linxkon.github.io/xinference%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%E5%8F%8A%E6%8A%A5%E9%94%99%E8%B8%A9%E5%9D%91.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web ui管理界面，除了TEXT EMBEDDING LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。  建议在linux系统安装，win下推理存在问">
+<meta property="og:description" content="xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web ui管理界面，除了TEXT EMBEDDING LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。  建议在linux系统安装，win下推理存在问题">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
 <meta property="article:published_time" content="2024-03-11T01:21:13.000Z">
@@ -314,15 +314,12 @@
             
               <div class="markdown-body">
                 
-                <p>xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web
-ui管理界面，除了TEXT EMBEDDING
-LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。</p>
+                <p>xinference是一款流行度很高的本地模型部署框架，它可以非常方便地赋能本地RAG和Agent的构建，与ollama相比，它自带了web ui管理界面，除了TEXT EMBEDDING LLM之外，它还支持SPEECH2TEXT，TTS，RERANK模型的部署，可谓功能非常强大，但是美中不足的是，它的安装却一波三折，现整理下来供诸君避坑。</p>
 <blockquote>
 <p>建议在linux系统安装，win下推理存在问题</p>
 </blockquote>
 <h3 id="正常安装流程">正常安装流程</h3>
-<h4
-id="安装xinference库实现模型推理">1.安装xinference库，实现模型推理。</h4>
+<h4 id="安装xinference库实现模型推理">1.安装xinference库，实现模型推理。</h4>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install &quot;xinference[all]&quot;<br></code></pre></td></tr></table></figure>
 <h4 id="启动xinference">2.启动xinference</h4>
 <p>在安装完相应的环境后，启动xinference以进行模型部署。</p>
@@ -340,15 +337,13 @@ id="安装xinference库实现模型推理">1.安装xinference库，实现模型�
 <blockquote>
 <p>执行命令后：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> <span class="hljs-string">&quot;xinference[all]&quot;</span><br></code></pre></td></tr></table></figure>
-<p>报错信息：ERROR: Failed to build installable wheels for some
-pyproject.toml based projects (pynini)</p>
+<p>报错信息：ERROR: Failed to build installable wheels for some pyproject.toml based projects (pynini)</p>
 </blockquote>
 <p>解决：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">conda install -c conda-forge pynini=2.1.5<br></code></pre></td></tr></table></figure>
 <h4 id="问题3nameerror">问题3:NameError</h4>
 <blockquote>
-<p>NameError: Field name "schema" shadows a BaseModel attribute; use a
-different field name with "alias='schema'".</p>
+<p>NameError: Field name "schema" shadows a BaseModel attribute; use a different field name with "alias='schema'".</p>
 </blockquote>
 <p>解决：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install openai==1.39.0<br></code></pre></td></tr></table></figure>
@@ -356,8 +351,7 @@ different field name with "alias='schema'".</p>
 <blockquote>
 <p>RuntimeError: Cluster is not available after multiple attempts</p>
 </blockquote>
-<p>原因：xinference-local --host 0.0.0.0 --port
-9997中ip地址0.0.0.0无法使用，可能是windows的锅</p>
+<p>原因：xinference-local --host 0.0.0.0 --port 9997中ip地址0.0.0.0无法使用，可能是windows的锅</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">xinference-local --host localhost --port 9997<br></code></pre></td></tr></table></figure>
 
                 

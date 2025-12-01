@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="1 爬虫与反爬攻防的12层境界     步骤 攻击者 防守者 说明     1. 初学者 不管三七二十一，直接用 requests 模块开始抓取，不作任何反爬措施。 发现同一 IP 和 UA 都是 Python 程序，开始限制访问。 初学者不了解反爬技术，直接用简单方法抓取。网站会检测到这种异常访问并限制。   2. 小白入门 学会设置 UA 模拟浏览器，">
+    <meta name="description" content="1 爬虫与反爬攻防的12层境界     步骤 攻击者 防守者 说明     1. 初学者 不管三七二十一，直接用 requests 模块开始抓取，不作任何反爬措施。 发现同一 IP 和 UA 都是 Python 程序，开始限制访问。 初学者不了解反爬技术，直接用简单方法抓取。网站会检测到这种异常访问并限制。   2. 小白入门 学会设置 UA 模拟浏览器，并">
 <meta property="og:type" content="article">
 <meta property="og:title" content="爬虫与反爬虫技术点梳理">
 <meta property="og:url" content="https://linxkon.github.io/%E7%88%AC%E8%99%AB%E4%B8%8E%E5%8F%8D%E7%88%AC%E6%94%BB%E9%98%B2%E7%9A%8412%E5%B1%82%E5%A2%83%E7%95%8C.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="1 爬虫与反爬攻防的12层境界     步骤 攻击者 防守者 说明     1. 初学者 不管三七二十一，直接用 requests 模块开始抓取，不作任何反爬措施。 发现同一 IP 和 UA 都是 Python 程序，开始限制访问。 初学者不了解反爬技术，直接用简单方法抓取。网站会检测到这种异常访问并限制。   2. 小白入门 学会设置 UA 模拟浏览器，">
+<meta property="og:description" content="1 爬虫与反爬攻防的12层境界     步骤 攻击者 防守者 说明     1. 初学者 不管三七二十一，直接用 requests 模块开始抓取，不作任何反爬措施。 发现同一 IP 和 UA 都是 Python 程序，开始限制访问。 初学者不了解反爬技术，直接用简单方法抓取。网站会检测到这种异常访问并限制。   2. 小白入门 学会设置 UA 模拟浏览器，并">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%88%AC%E8%99%AB.jpg">
 <meta property="article:published_time" content="2022-01-01T07:21:13.000Z">
@@ -328,8 +328,7 @@
 <tbody>
 <tr class="odd">
 <td><strong>1. 初学者</strong></td>
-<td>不管三七二十一，直接用 requests
-模块开始抓取，不作任何反爬措施。</td>
+<td>不管三七二十一，直接用 requests 模块开始抓取，不作任何反爬措施。</td>
 <td>发现同一 IP 和 UA 都是 Python 程序，开始限制访问。</td>
 <td>初学者不了解反爬技术，直接用简单方法抓取。网站会检测到这种异常访问并限制。</td>
 </tr>
@@ -373,8 +372,7 @@
 <td><strong>8. 绕过动态内容</strong></td>
 <td>使用 Puppeteer 或 Playwright 等工具处理动态内容抓取。</td>
 <td>使用更复杂的动态加载和懒加载技术。</td>
-<td>攻击者利用现代工具处理 JavaScript
-渲染的网站。网站尝试通过更复杂的加载策略增加抓取难度。</td>
+<td>攻击者利用现代工具处理 JavaScript 渲染的网站。网站尝试通过更复杂的加载策略增加抓取难度。</td>
 </tr>
 <tr class="odd">
 <td><strong>9. 深度伪装</strong></td>
@@ -392,8 +390,7 @@
 <td><strong>11. AI 模拟</strong></td>
 <td>采用深度学习算法模拟真实用户行为，以躲避检测。</td>
 <td>使用 AI 和机器学习检测异常行为模式。</td>
-<td>攻击者利用 AI 技术模拟真实用户交互。网站同样采用 AI
-来识别和应对复杂的异常行为。</td>
+<td>攻击者利用 AI 技术模拟真实用户交互。网站同样采用 AI 来识别和应对复杂的异常行为。</td>
 </tr>
 <tr class="even">
 <td><strong>12. 复杂验证码破解</strong></td>
@@ -408,52 +405,42 @@
 <li><h2 id="爬虫与反爬虫对抗">爬虫与反爬虫对抗</h2>
 <h3 id="初学者阶段">初学者阶段</h3>
 <ul>
-<li><strong>攻击者</strong>：直接使用简单的 <code>requests</code>
-库进行抓取，不考虑反爬策略。</li>
-<li><strong>防守者</strong>：由于请求过于简单和单一，服务器能够快速检测到大量请求来自同一
-IP 和 UA（User Agent），并进行限制。</li>
+<li><strong>攻击者</strong>：直接使用简单的 <code>requests</code> 库进行抓取，不考虑反爬策略。</li>
+<li><strong>防守者</strong>：由于请求过于简单和单一，服务器能够快速检测到大量请求来自同一 IP 和 UA（User Agent），并进行限制。</li>
 </ul>
 <h3 id="小白入门">小白入门</h3>
 <ul>
-<li><strong>攻击者</strong>：学习伪装浏览器的 UA 和使用代理
-IP，以规避基本的反爬策略。</li>
+<li><strong>攻击者</strong>：学习伪装浏览器的 UA 和使用代理 IP，以规避基本的反爬策略。</li>
 <li><strong>防守者</strong>：若发现网站访问压力仍然很大，可能会启动登录限制，要求用户登录才能访问更多数据。</li>
 </ul>
 <h3 id="需要登录">需要登录</h3>
 <ul>
-<li><strong>攻击者</strong>：创建账号，使用登录后的 Cookie
-进行数据抓取。</li>
+<li><strong>攻击者</strong>：创建账号，使用登录后的 Cookie 进行数据抓取。</li>
 <li><strong>防守者</strong>：监控账号的使用情况，限制单个账号的访问频率，并检查异常访问模式。</li>
 </ul>
 <h3 id="多账号抓取">多账号抓取</h3>
 <ul>
-<li><strong>攻击者</strong>：购买多个账号以绕过单个账号的限制，使用多个
-Cookie 进行数据抓取。</li>
-<li><strong>防守者</strong>：实施 IP
-频率限制，尝试阻止过于频繁的访问，但这可能导致误封正常用户。</li>
+<li><strong>攻击者</strong>：购买多个账号以绕过单个账号的限制，使用多个 Cookie 进行数据抓取。</li>
+<li><strong>防守者</strong>：实施 IP 频率限制，尝试阻止过于频繁的访问，但这可能导致误封正常用户。</li>
 </ul>
 <h3 id="模拟人类请求">模拟人类请求</h3>
 <ul>
 <li><strong>攻击者</strong>：模拟人类的行为，使用多线程和多账号，在不同时间段进行抓取以避免被检测。</li>
-<li><strong>防守者</strong>：使用验证码，并对访问频繁的 IP
-进行更严格的验证。</li>
+<li><strong>防守者</strong>：使用验证码，并对访问频繁的 IP 进行更严格的验证。</li>
 </ul>
 <h3 id="打码平台">打码平台</h3>
 <ul>
 <li><strong>攻击者</strong>：借助打码平台自动识别验证码，甚至研究使用机器学习技术来识别复杂验证码。</li>
-<li><strong>防守者</strong>：将数据通过 Ajax
-动态加载，以增加抓取难度和反爬虫能力。</li>
+<li><strong>防守者</strong>：将数据通过 Ajax 动态加载，以增加抓取难度和反爬虫能力。</li>
 </ul>
 <h3 id="完全模拟">完全模拟</h3>
 <ul>
-<li><strong>攻击者</strong>：使用 Selenium
-等工具模拟完整的浏览器操作，几乎无法与真实用户行为区分。</li>
+<li><strong>攻击者</strong>：使用 Selenium 等工具模拟完整的浏览器操作，几乎无法与真实用户行为区分。</li>
 <li><strong>防守者</strong>：在这种情况下，防守难度极大，维护成本高，甚至可能放弃小部分数据的保护。</li>
 </ul>
 <h3 id="绕过动态内容">绕过动态内容</h3>
 <ul>
-<li><strong>攻击者</strong>：使用 Puppeteer 和 Playwright
-等工具渲染并抓取需要 JavaScript 执行的动态内容。</li>
+<li><strong>攻击者</strong>：使用 Puppeteer 和 Playwright 等工具渲染并抓取需要 JavaScript 执行的动态内容。</li>
 <li><strong>防守者</strong>：通过懒加载和动态加载技术增加爬取难度，确保数据不易被抓取。</li>
 </ul>
 <h3 id="深度伪装">深度伪装</h3>
@@ -463,35 +450,22 @@ Cookie 进行数据抓取。</li>
 </ul>
 <h3 id="分布式爬虫">分布式爬虫</h3>
 <ul>
-<li><strong>攻击者</strong>：使用分布式爬虫框架分散请求，避免集中 IP
-导致的封禁。</li>
-<li><strong>防守者</strong>：通过 Web 应用防火墙和 CDN
-监测并阻止异常流量。</li>
+<li><strong>攻击者</strong>：使用分布式爬虫框架分散请求，避免集中 IP 导致的封禁。</li>
+<li><strong>防守者</strong>：通过 Web 应用防火墙和 CDN 监测并阻止异常流量。</li>
 </ul>
 <h3 id="ai-模拟">AI 模拟</h3>
 <ul>
-<li><strong>攻击者</strong>：利用 AI
-模拟人类用户的复杂交互和行为，以规避传统检测手段。</li>
-<li><strong>防守者</strong>：使用 AI
-进行行为分析，识别并阻止异常的用户行为模式。</li>
+<li><strong>攻击者</strong>：利用 AI 模拟人类用户的复杂交互和行为，以规避传统检测手段。</li>
+<li><strong>防守者</strong>：使用 AI 进行行为分析，识别并阻止异常的用户行为模式。</li>
 </ul></li>
 </ul></li>
 </ol>
-<h2 id="playwright-相比-selenium-具有一些显著的优势">2.Playwright 相比
-Selenium 具有一些显著的优势：</h2>
-<p><strong>1. 更高效的页面加载和渲染：</strong> Playwright
-使用浏览器原生的 API
-进行交互，能够更快地加载和渲染页面，从而提高爬取效率。</p>
-<p><strong>2. 更强大的浏览器控制能力：</strong> Playwright
-提供了更细粒度的浏览器控制能力，例如拦截网络请求、模拟用户输入、处理
-JavaScript 执行等，可以更灵活地处理复杂的爬虫场景。</p>
-<p><strong>3. 更强的反检测能力：</strong> Playwright
-可以更好地模拟真实用户的行为，例如鼠标移动、页面滚动等，从而降低被目标网站识别为爬虫的风险。</p>
-<p><strong>4. 更易于处理动态内容：</strong> Playwright
-可以等待页面加载完成并执行 JavaScript
-渲染，从而更轻松地获取动态加载的内容。</p>
-<p><strong>5. 更简洁的代码实现：</strong> Playwright 的 API
-更简洁易懂，可以减少代码量，提高开发效率。</p>
+<h2 id="playwright-相比-selenium-具有一些显著的优势">2.Playwright 相比 Selenium 具有一些显著的优势：</h2>
+<p><strong>1. 更高效的页面加载和渲染：</strong> Playwright 使用浏览器原生的 API 进行交互，能够更快地加载和渲染页面，从而提高爬取效率。</p>
+<p><strong>2. 更强大的浏览器控制能力：</strong> Playwright 提供了更细粒度的浏览器控制能力，例如拦截网络请求、模拟用户输入、处理 JavaScript 执行等，可以更灵活地处理复杂的爬虫场景。</p>
+<p><strong>3. 更强的反检测能力：</strong> Playwright 可以更好地模拟真实用户的行为，例如鼠标移动、页面滚动等，从而降低被目标网站识别为爬虫的风险。</p>
+<p><strong>4. 更易于处理动态内容：</strong> Playwright 可以等待页面加载完成并执行 JavaScript 渲染，从而更轻松地获取动态加载的内容。</p>
+<p><strong>5. 更简洁的代码实现：</strong> Playwright 的 API 更简洁易懂，可以减少代码量，提高开发效率。</p>
 <p><strong>总结：</strong></p>
 <table>
 <thead>
@@ -530,10 +504,7 @@ JavaScript 执行等，可以更灵活地处理复杂的爬虫场景。</p>
 </tbody>
 </table>
 <p><strong>举例说明：</strong></p>
-<p>假设您需要爬取一个使用 AJAX 加载数据的网站。使用
-Selenium，您需要手动等待 AJAX 请求完成并更新页面内容，而使用
-Playwright，您可以使用 <code>waitForResponse</code>
-方法自动等待特定的网络请求完成，从而更方便地获取数据。</p>
+<p>假设您需要爬取一个使用 AJAX 加载数据的网站。使用 Selenium，您需要手动等待 AJAX 请求完成并更新页面内容，而使用 Playwright，您可以使用 <code>waitForResponse</code> 方法自动等待特定的网络请求完成，从而更方便地获取数据。</p>
 
                 
               </div>

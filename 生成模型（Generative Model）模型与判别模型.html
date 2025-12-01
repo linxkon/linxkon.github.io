@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="生成模型和判别模型是机器学习和统计建模中两种主要的模型类型，它们在目标、方法和应用上有显著的区别。以下是生成模型和判别模型的详细比较： 生成模型（Generative Model） 目标 生成模型的主要目标是建模数据的生成过程，即学习数据的联合分布 ( P(X, Y) )，其中 ( X ) 是输入数据，( Y ) 是标签或输出。 方法  联合概率分布：生成模型试图学习输入数据和输出标">
+    <meta name="description" content="生成模型和判别模型是机器学习和统计建模中两种主要的模型类型，它们在目标、方法和应用上有显著的区别。以下是生成模型和判别模型的详细比较： 生成模型（Generative Model） 目标 生成模型的主要目标是建模数据的生成过程，即学习数据的联合分布 ( P(X, Y) )，其中 ( X ) 是输入数据，( Y ) 是标签或输出。 方法  联合概率分布：生成模型试图学习输入数据和输出标签">
 <meta property="og:type" content="article">
 <meta property="og:title" content="生成式模型与判别式模型比较">
 <meta property="og:url" content="https://linxkon.github.io/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%EF%BC%88Generative%20Model%EF%BC%89%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%88%A4%E5%88%AB%E6%A8%A1%E5%9E%8B.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="生成模型和判别模型是机器学习和统计建模中两种主要的模型类型，它们在目标、方法和应用上有显著的区别。以下是生成模型和判别模型的详细比较： 生成模型（Generative Model） 目标 生成模型的主要目标是建模数据的生成过程，即学习数据的联合分布 ( P(X, Y) )，其中 ( X ) 是输入数据，( Y ) 是标签或输出。 方法  联合概率分布：生成模型试图学习输入数据和输出标">
+<meta property="og:description" content="生成模型和判别模型是机器学习和统计建模中两种主要的模型类型，它们在目标、方法和应用上有显著的区别。以下是生成模型和判别模型的详细比较： 生成模型（Generative Model） 目标 生成模型的主要目标是建模数据的生成过程，即学习数据的联合分布 ( P(X, Y) )，其中 ( X ) 是输入数据，( Y ) 是标签或输出。 方法  联合概率分布：生成模型试图学习输入数据和输出标签">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
 <meta property="article:published_time" content="2023-07-28T14:21:13.000Z">
@@ -317,12 +317,10 @@
                 <p>生成模型和判别模型是机器学习和统计建模中两种主要的模型类型，它们在目标、方法和应用上有显著的区别。以下是生成模型和判别模型的详细比较：</p>
 <h2 id="生成模型generative-model">生成模型（Generative Model）</h2>
 <h3 id="目标">目标</h3>
-<p>生成模型的主要目标是<strong>建模数据的生成过程</strong>，即学习数据的联合分布
-( P(X, Y) )，其中 ( X ) 是输入数据，( Y ) 是标签或输出。</p>
+<p>生成模型的主要目标是<strong>建模数据的生成过程</strong>，即学习数据的联合分布 ( P(X, Y) )，其中 ( X ) 是输入数据，( Y ) 是标签或输出。</p>
 <h3 id="方法">方法</h3>
 <ul>
-<li><strong>联合概率分布</strong>：生成模型试图学习输入数据和输出标签之间的联合概率分布
-( P(X, Y) )。通过这种建模，生成模型可以生成新的数据样本。</li>
+<li><strong>联合概率分布</strong>：生成模型试图学习输入数据和输出标签之间的联合概率分布 ( P(X, Y) )。通过这种建模，生成模型可以生成新的数据样本。</li>
 <li><strong>生成新样本</strong>：生成模型可以用于生成与训练数据分布相似的新样本。</li>
 <li><strong>最大似然估计</strong>：通常使用最大似然估计来找到使观察数据概率最大的参数。</li>
 </ul>
@@ -340,15 +338,12 @@
 <li><strong>生成对抗网络（GAN）</strong>：用于生成逼真的新数据样本。</li>
 <li><strong>变分自编码器（VAE）</strong>：用于生成新样本和数据压缩。</li>
 </ul>
-<h2 id="判别模型discriminative-model">判别模型（Discriminative
-Model）</h2>
+<h2 id="判别模型discriminative-model">判别模型（Discriminative Model）</h2>
 <h3 id="目标-1">目标</h3>
-<p>判别模型的主要目标是<strong>直接学习输入与输出之间的映射关系</strong>，即学习条件分布
-( P(Y|X) )，通过此分布进行分类或回归。</p>
+<p>判别模型的主要目标是<strong>直接学习输入与输出之间的映射关系</strong>，即学习条件分布 ( P(Y|X) )，通过此分布进行分类或回归。</p>
 <h3 id="方法-1">方法</h3>
 <ul>
-<li><strong>条件概率分布</strong>：判别模型直接对输入数据的条件概率 (
-P(Y|X) ) 进行建模，而不需要考虑输入数据的生成过程。</li>
+<li><strong>条件概率分布</strong>：判别模型直接对输入数据的条件概率 ( P(Y|X) ) 进行建模，而不需要考虑输入数据的生成过程。</li>
 <li><strong>直接预测</strong>：判别模型主要用于直接预测输入数据对应的输出标签。</li>
 <li><strong>优化分类边界</strong>：通过优化某种损失函数（如交叉熵损失）来找到最佳的分类边界。</li>
 </ul>
@@ -374,48 +369,38 @@ P(Y|X) ) 进行建模，而不需要考虑输入数据的生成过程。</li>
 </ul>
 <h2 id="联合分布joint-distribution">联合分布（Joint Distribution）</h2>
 <h3 id="定义">定义</h3>
-<p>联合分布描述的是两个或多个随机变量同时发生的概率。对于两个随机变量 (
-X ) 和 ( Y )，其联合分布表示为 ( P(X, Y) )，它给出了变量 ( X ) 和 ( Y )
-同时取某些特定值的概率。</p>
+<p>联合分布描述的是两个或多个随机变量同时发生的概率。对于两个随机变量 ( X ) 和 ( Y )，其联合分布表示为 ( P(X, Y) )，它给出了变量 ( X ) 和 ( Y ) 同时取某些特定值的概率。</p>
 <h3 id="公式">公式</h3>
-<p>如果 ( X ) 和 ( Y )
-是离散随机变量，则其联合概率质量函数（PMF）为：</p>
+<p>如果 ( X ) 和 ( Y ) 是离散随机变量，则其联合概率质量函数（PMF）为：</p>
 <p>[ P(X = x, Y = y) ]</p>
-<p>如果 ( X ) 和 ( Y )
-是连续随机变量，则其联合概率密度函数（PDF）为：</p>
+<p>如果 ( X ) 和 ( Y ) 是连续随机变量，则其联合概率密度函数（PDF）为：</p>
 <p>[ f(x, y) ]</p>
 <h3 id="示例-2">示例</h3>
-<p>假设我们有一副扑克牌，我们想要计算抽取一张红色牌且为红心的概率。设 (
-X ) 是抽取红色牌的事件，( Y ) 是抽取红心的事件，那么联合概率为：</p>
+<p>假设我们有一副扑克牌，我们想要计算抽取一张红色牌且为红心的概率。设 ( X ) 是抽取红色牌的事件，( Y ) 是抽取红心的事件，那么联合概率为：</p>
 <p>[ P(X = , Y = ) ]</p>
 <h3 id="特点">特点</h3>
 <ul>
 <li><strong>多维分布</strong>：联合分布用于描述多个随机变量的概率关系，可以是多维的。</li>
-<li><strong>概率总和</strong>：所有可能的组合概率之和等于 1，即 (_x _y
-P(X = x, Y = y) = 1)。</li>
+<li><strong>概率总和</strong>：所有可能的组合概率之和等于 1，即 (_x _y P(X = x, Y = y) = 1)。</li>
 <li><strong>对称性</strong>： (P(X, Y) = P(Y, X)) 。</li>
 </ul>
-<h2 id="条件分布conditional-distribution">条件分布（Conditional
-Distribution）</h2>
+<h2 id="条件分布conditional-distribution">条件分布（Conditional Distribution）</h2>
 <h3 id="定义-1">定义</h3>
-<p>条件分布描述的是一个随机变量在给定另一个随机变量已经发生的条件下的概率。对于随机变量
-( X ) 和 ( Y )，条件分布表示为 ( P(Y | X) )，即在 ( X )
-取某一特定值的情况下，( Y ) 取某值的概率。</p>
+<p>条件分布描述的是一个随机变量在给定另一个随机变量已经发生的条件下的概率。对于随机变量 ( X ) 和 ( Y )，条件分布表示为 ( P(Y | X) )，即在 ( X ) 取某一特定值的情况下，( Y ) 取某值的概率。</p>
 <h3 id="公式-1">公式</h3>
 <p>条件概率可以通过联合概率来定义：</p>
-<p>[ P(Y = y | X = x) = ]</p>
-<p>在这里，( P(X = x) )。</p>
+<p>[ P(Y = y | X = x) =  ]</p>
+<p>在这里，( P(X = x)  )。</p>
 <p>对于连续随机变量：</p>
-<p>[ f(y | x) = ]</p>
+<p>[ f(y | x) =  ]</p>
 <h3 id="示例-3">示例</h3>
 <p>继续上面的扑克牌例子，如果我们已经知道抽取的是红色牌，想计算这张牌为红心的概率，那么：</p>
-<p>[ P(Y = | X = ) ]</p>
+<p>[ P(Y =  | X = ) ]</p>
 <h3 id="特点-1">特点</h3>
 <ul>
 <li><strong>单向性</strong>：条件分布是单向的，即在一个随机变量已知的条件下，描述另一个随机变量的分布。</li>
 <li><strong>依赖关系</strong>：条件分布反映了随机变量之间的依赖关系。</li>
-<li><strong>归一化</strong>：对所有可能的 ( Y ) 的取值，条件概率的和为
-1，即 (_y P(Y = y | X = x) = 1)。</li>
+<li><strong>归一化</strong>：对所有可能的 ( Y ) 的取值，条件概率的和为 1，即 (_y P(Y = y | X = x) = 1)。</li>
 </ul>
 <h2 id="区别总结">区别总结</h2>
 <ul>
@@ -432,8 +417,7 @@ Distribution）</h2>
 <li><strong>关系</strong>：
 <ul>
 <li><strong>条件分布</strong>可以通过联合分布和边际分布计算出来。</li>
-<li><strong>联合分布</strong>可以分解为条件分布和边际分布的乘积： ( P(X,
-Y) = P(Y | X) P(X) )。</li>
+<li><strong>联合分布</strong>可以分解为条件分布和边际分布的乘积： ( P(X, Y) = P(Y | X) P(X) )。</li>
 </ul></li>
 <li><strong>应用场景</strong>：
 <ul>

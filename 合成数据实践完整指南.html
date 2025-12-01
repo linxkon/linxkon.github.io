@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="大型语言模型(LLM) 是强大的工具，不仅可以生成类似人类的文本，还可以创建高质量的合成数据。这种能力正在改变我们进行 AI 开发的方式，特别是在现实世界数据稀缺、昂贵或隐私敏感的情况下。在本综合指南中，我们将探索 LLM 驱动的合成数据生成，深入探讨其方法、应用和最佳实践。   image-20240812092339558  使用 LLM 进行合成数据生成简介 综合数据">
+    <meta name="description" content="大型语言模型(LLM) 是强大的工具，不仅可以生成类似人类的文本，还可以创建高质量的合成数据。这种能力正在改变我们进行 AI 开发的方式，特别是在现实世界数据稀缺、昂贵或隐私敏感的情况下。在本综合指南中，我们将探索 LLM 驱动的合成数据生成，深入探讨其方法、应用和最佳实践。  image-20240812092339558  使用 LLM 进行合成数据生成简介 综合数据 使用 LLM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LLM 合成数据生成完整指南">
 <meta property="og:url" content="https://linxkon.github.io/%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE%E5%AE%9E%E8%B7%B5%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="大型语言模型(LLM) 是强大的工具，不仅可以生成类似人类的文本，还可以创建高质量的合成数据。这种能力正在改变我们进行 AI 开发的方式，特别是在现实世界数据稀缺、昂贵或隐私敏感的情况下。在本综合指南中，我们将探索 LLM 驱动的合成数据生成，深入探讨其方法、应用和最佳实践。   image-20240812092339558  使用 LLM 进行合成数据生成简介 综合数据">
+<meta property="og:description" content="大型语言模型(LLM) 是强大的工具，不仅可以生成类似人类的文本，还可以创建高质量的合成数据。这种能力正在改变我们进行 AI 开发的方式，特别是在现实世界数据稀缺、昂贵或隐私敏感的情况下。在本综合指南中，我们将探索 LLM 驱动的合成数据生成，深入探讨其方法、应用和最佳实践。  image-20240812092339558  使用 LLM 进行合成数据生成简介 综合数据 使用 LLM">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE.png">
 <meta property="article:published_time" content="2023-10-11T15:21:13.000Z">
@@ -314,34 +314,21 @@
             
               <div class="markdown-body">
                 
-                <p>大型语言模型(LLM)
-是强大的工具，不仅可以生成类似人类的文本，还可以创建高质量的合成数据。这种能力正在改变我们进行
-AI
-开发的方式，特别是在现实世界数据稀缺、昂贵或隐私敏感的情况下。在本综合指南中，我们将探索
-LLM 驱动的合成数据生成，深入探讨其方法、应用和最佳实践。</p>
+                <p>大型语言模型(LLM) 是强大的工具，不仅可以生成类似人类的文本，还可以创建高质量的合成数据。这种能力正在改变我们进行 AI 开发的方式，特别是在现实世界数据稀缺、昂贵或隐私敏感的情况下。在本综合指南中，我们将探索 LLM 驱动的合成数据生成，深入探讨其方法、应用和最佳实践。</p>
 <figure>
-<img src="/images/合成数据/image-20240812092339558.png" srcset="/img/loading.gif" lazyload
-alt="image-20240812092339558" />
-<figcaption aria-hidden="true">image-20240812092339558</figcaption>
+<img src="/images/合成数据/image-20240812092339558.png" srcset="/img/loading.gif" lazyload alt="image-20240812092339558" /><figcaption aria-hidden="true">image-20240812092339558</figcaption>
 </figure>
-<h2 id="使用-llm-进行合成数据生成简介">使用 LLM
-进行合成数据生成简介</h2>
-<p><a
-target="_blank" rel="noopener" href="https://www.unite.ai/zh-CN/合成数据生成的创新为特定语言构建基础模型/">综合数据</a>
-使用 LLM 生成数据涉及利用这些先进的 AI
-模型来创建模拟真实世界数据的人工数据集。这种方法有几个优点：</p>
+<h2 id="使用-llm-进行合成数据生成简介">使用 LLM 进行合成数据生成简介</h2>
+<p><a target="_blank" rel="noopener" href="https://www.unite.ai/zh-CN/合成数据生成的创新为特定语言构建基础模型/">综合数据</a> 使用 LLM 生成数据涉及利用这些先进的 AI 模型来创建模拟真实世界数据的人工数据集。这种方法有几个优点：</p>
 <ol type="1">
 <li><strong>成本效益</strong>：生成合成数据通常比收集和注释真实世界数据更便宜。</li>
 <li><strong>隐私保护</strong>：可以创建合成数据而不暴露敏感信息。</li>
 <li><strong>可扩展性</strong>：LLM 可以快速生成大量不同的数据。</li>
 <li><strong>定制</strong>：数据可以根据特定用例或场景进行定制。</li>
 </ol>
-<h3
-id="合成数据训练可以分为以下四个步骤">合成数据训练可以分为以下四个步骤</h3>
+<h3 id="合成数据训练可以分为以下四个步骤">合成数据训练可以分为以下四个步骤</h3>
 <figure>
-<img src="/images/合成数据/image-20240812092304705.png" srcset="/img/loading.gif" lazyload
-alt="image-20240812092304705" />
-<figcaption aria-hidden="true">image-20240812092304705</figcaption>
+<img src="/images/合成数据/image-20240812092304705.png" srcset="/img/loading.gif" lazyload alt="image-20240812092304705" /><figcaption aria-hidden="true">image-20240812092304705</figcaption>
 </figure>
 <h4 id="合成数据的生成">1 合成数据的生成</h4>
 <p>常见的合成数据生成实践可以大致分为提示工程和多步骤生成。</p>
@@ -352,73 +339,54 @@ alt="image-20240812092304705" />
 <h4 id="合成数据的评估">3 合成数据的评估</h4>
 <p>数据评估：使用多种评价指标来评估数据质量，如准确性、多样性和相关性。多样性反映了生成数据的变化，包括文本长度、主题或写作风格的差异。这对于生成模拟真实世界数据的样本至关重要，从而防止模型训练或评估过程中的过拟合和偏差。</p>
 <blockquote>
-<p>论文题目：On LLMs-Driven Synthetic Data Generation, Curation, and
-Evaluation: A Survey</p>
+<p>论文题目：On LLMs-Driven Synthetic Data Generation, Curation, and Evaluation: A Survey</p>
 <p>论文链接：https://arxiv.org/pdf/2406.15126</p>
 </blockquote>
 <p>让我们大概了解使用 LLM 生成合成数据的基本过程：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> AutoTokenizer, AutoModelForCausalLM<br><span class="hljs-comment"># Load a pre-trained LLM</span><br>model_name = <span class="hljs-string">&quot;gpt2-large&quot;</span><br>tokenizer = AutoTokenizer.from_pretrained(model_name)<br>model = AutoModelForCausalLM.from_pretrained(model_name)<br><span class="hljs-comment"># Define a prompt for synthetic data generation</span><br>prompt = <span class="hljs-string">&quot;Generate a customer review for a smartphone:&quot;</span><br><span class="hljs-comment"># Generate synthetic data</span><br>input_ids = tokenizer.encode(prompt, return_tensors=<span class="hljs-string">&quot;pt&quot;</span>)<br>output = model.generate(input_ids, max_length=<span class="hljs-number">100</span>, num_return_sequences=<span class="hljs-number">1</span>)<br><span class="hljs-comment"># Decode and print the generated text</span><br>synthetic_review = tokenizer.decode(output[<span class="hljs-number">0</span>], skip_special_tokens=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(synthetic_review)<br></code></pre></td></tr></table></figure>
-<p>这个简单的例子展示了如何使用 LLM 生成合成客户评论。然而，LLM
-驱动的合成数据生成的真正威力在于更复杂的技术和应用。</p>
+<p>这个简单的例子展示了如何使用 LLM 生成合成客户评论。然而，LLM 驱动的合成数据生成的真正威力在于更复杂的技术和应用。</p>
 <figure>
-<img src="/images/合成数据/image-20240812092705811.png" srcset="/img/loading.gif" lazyload
-alt="image-20240812092705811" />
-<figcaption aria-hidden="true">image-20240812092705811</figcaption>
+<img src="/images/合成数据/image-20240812092705811.png" srcset="/img/loading.gif" lazyload alt="image-20240812092705811" /><figcaption aria-hidden="true">image-20240812092705811</figcaption>
 </figure>
 <h2 id="合成数据生成的高级技术">2. 合成数据生成的高级技术</h2>
 <h3 id="及时工程">2.1 及时工程</h3>
-<p><a
-target="_blank" rel="noopener" href="https://www.unite.ai/zh-CN/什么是人工智能中的即时工程-为什么它很重要/">即时工程</a>
-对于指导 LLM
-生成高质量、相关的合成数据至关重要。通过精心设计提示，我们可以控制生成数据的各个方面，例如样式、内容和格式。</p>
+<p><a target="_blank" rel="noopener" href="https://www.unite.ai/zh-CN/什么是人工智能中的即时工程-为什么它很重要/">即时工程</a> 对于指导 LLM 生成高质量、相关的合成数据至关重要。通过精心设计提示，我们可以控制生成数据的各个方面，例如样式、内容和格式。</p>
 <p>更复杂的提示示例：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python">prompt = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">Generate a detailed customer review for a smartphone with the following characteristics:</span><br><span class="hljs-string">- Brand: &#123;brand&#125;</span><br><span class="hljs-string">- Model: &#123;model&#125;</span><br><span class="hljs-string">- Key features: &#123;features&#125;</span><br><span class="hljs-string">- Rating: &#123;rating&#125;/5 stars</span><br><span class="hljs-string">The review should be between 50-100 words and include both positive and negative aspects.</span><br><span class="hljs-string">Review:</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br>brands = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Samsung&quot;</span>, <span class="hljs-string">&quot;Google&quot;</span>, <span class="hljs-string">&quot;OnePlus&quot;</span>]<br>models = [<span class="hljs-string">&quot;iPhone 13 Pro&quot;</span>, <span class="hljs-string">&quot;Galaxy S21&quot;</span>, <span class="hljs-string">&quot;Pixel 6&quot;</span>, <span class="hljs-string">&quot;9 Pro&quot;</span>]<br>features = [<span class="hljs-string">&quot;5G, OLED display, Triple camera&quot;</span>, <span class="hljs-string">&quot;120Hz refresh rate, 8K video&quot;</span>, <span class="hljs-string">&quot;AI-powered camera, 5G&quot;</span>, <span class="hljs-string">&quot;Fast charging, 120Hz display&quot;</span>]<br>ratings = [<span class="hljs-number">4</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">4</span>]<br><span class="hljs-comment"># Generate multiple reviews</span><br><span class="hljs-keyword">for</span> brand, model, feature, rating <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(brands, models, features, ratings):<br>    filled_prompt = prompt.<span class="hljs-built_in">format</span>(brand=brand, model=model, features=feature, rating=rating)<br>    input_ids = tokenizer.encode(filled_prompt, return_tensors=<span class="hljs-string">&quot;pt&quot;</span>)<br>    output = model.generate(input_ids, max_length=<span class="hljs-number">200</span>, num_return_sequences=<span class="hljs-number">1</span>)<br>    synthetic_review = tokenizer.decode(output[<span class="hljs-number">0</span>], skip_special_tokens=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Review for <span class="hljs-subst">&#123;brand&#125;</span> <span class="hljs-subst">&#123;model&#125;</span>:\n<span class="hljs-subst">&#123;synthetic_review&#125;</span>\n&quot;</span>)<br></code></pre></td></tr></table></figure>
 <p>这种方法可以生成更加可控、更加多样化的合成数据，以适应特定的场景或产品类型。</p>
 <h3 id="小样本学习">2.2 小样本学习</h3>
-<p>少量学习涉及向 LLM
-提供所需输出格式和样式的几个示例。此技术可以显著提高生成数据的质量和一致性。</p>
+<p>少量学习涉及向 LLM 提供所需输出格式和样式的几个示例。此技术可以显著提高生成数据的质量和一致性。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python">few_shot_prompt = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">Generate a customer support conversation between an agent (A) and a customer (C) about a product issue. Follow this format:</span><br><span class="hljs-string">C: Hello, I&#x27;m having trouble with my new headphones. The right earbud isn&#x27;t working.</span><br><span class="hljs-string">A: I&#x27;m sorry to hear that. Can you tell me which model of headphones you have?</span><br><span class="hljs-string">C: It&#x27;s the SoundMax Pro 3000.</span><br><span class="hljs-string">A: Thank you. Have you tried resetting the headphones by placing them in the charging case for 10 seconds?</span><br><span class="hljs-string">C: Yes, I tried that, but it didn&#x27;t help.</span><br><span class="hljs-string">A: I see. Let&#x27;s try a firmware update. Can you please go to our website and download the latest firmware?</span><br><span class="hljs-string">Now generate a new conversation about a different product issue:</span><br><span class="hljs-string">C: Hi, I just received my new smartwatch, but it won&#x27;t turn on.</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-comment"># Generate the conversation</span><br>input_ids = tokenizer.encode(few_shot_prompt, return_tensors=<span class="hljs-string">&quot;pt&quot;</span>)<br>output = model.generate(input_ids, max_length=<span class="hljs-number">500</span>, num_return_sequences=<span class="hljs-number">1</span>)<br>synthetic_conversation = tokenizer.decode(output[<span class="hljs-number">0</span>], skip_special_tokens=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(synthetic_conversation)<br></code></pre></td></tr></table></figure>
-<p>这种方法有助于 LLM
-了解所需的对话结构和风格，从而实现更真实的综合客户支持互动。</p>
+<p>这种方法有助于 LLM 了解所需的对话结构和风格，从而实现更真实的综合客户支持互动。</p>
 <h3 id="条件生成">2.3 条件生成</h3>
 <p>条件生成允许我们控制生成数据的特定属性。当我们需要创建具有某些受控特征的多样化数据集时，这尤其有用。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> GPT2LMHeadModel, GPT2Tokenizer<br><span class="hljs-keyword">import</span> torch<br>model = GPT2LMHeadModel.from_pretrained(<span class="hljs-string">&quot;gpt2-medium&quot;</span>)<br>tokenizer = GPT2Tokenizer.from_pretrained(<span class="hljs-string">&quot;gpt2-medium&quot;</span>)<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_conditional_text</span>(<span class="hljs-params">prompt, condition, max_length=<span class="hljs-number">100</span></span>):<br>    input_ids = tokenizer.encode(prompt, return_tensors=<span class="hljs-string">&quot;pt&quot;</span>)<br>    attention_mask = torch.ones(input_ids.shape, dtype=torch.long, device=input_ids.device)<br>    <span class="hljs-comment"># Encode the condition</span><br>    condition_ids = tokenizer.encode(condition, add_special_tokens=<span class="hljs-literal">False</span>, return_tensors=<span class="hljs-string">&quot;pt&quot;</span>)<br>    <span class="hljs-comment"># Concatenate condition with input_ids</span><br>    input_ids = torch.cat([condition_ids, input_ids], dim=-<span class="hljs-number">1</span>)<br>    attention_mask = torch.cat([torch.ones(condition_ids.shape, dtype=torch.long, device=condition_ids.device), attention_mask], dim=-<span class="hljs-number">1</span>)<br>    output = model.generate(input_ids, attention_mask=attention_mask, max_length=max_length, num_return_sequences=<span class="hljs-number">1</span>, no_repeat_ngram_size=<span class="hljs-number">2</span>, do_sample=<span class="hljs-literal">True</span>, top_k=<span class="hljs-number">50</span>, top_p=<span class="hljs-number">0.95</span>, temperature=<span class="hljs-number">0.7</span>)<br>    <span class="hljs-keyword">return</span> tokenizer.decode(output[<span class="hljs-number">0</span>], skip_special_tokens=<span class="hljs-literal">True</span>)<br><span class="hljs-comment"># Generate product descriptions with different conditions</span><br>conditions = [<span class="hljs-string">&quot;Luxury&quot;</span>, <span class="hljs-string">&quot;Budget-friendly&quot;</span>, <span class="hljs-string">&quot;Eco-friendly&quot;</span>, <span class="hljs-string">&quot;High-tech&quot;</span>]<br>prompt = <span class="hljs-string">&quot;Describe a backpack:&quot;</span><br><span class="hljs-keyword">for</span> condition <span class="hljs-keyword">in</span> conditions:<br>	description = generate_conditional_text(prompt, condition)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;<span class="hljs-subst">&#123;condition&#125;</span> backpack description:\n<span class="hljs-subst">&#123;description&#125;</span>\n&quot;</span>)<br></code></pre></td></tr></table></figure>
 <p>这种技术使我们能够生成多样化的合成数据，同时保持对特定属性的控制，确保生成的数据集涵盖广泛的场景或产品类型。</p>
 <h2 id="llm-生成的合成数据的应用">LLM 生成的合成数据的应用</h2>
 <h3 id="训练数据增强">训练数据增强</h3>
-<p>LLM
-生成的合成数据最强大的应用之一是增强现有的训练数据集。这在现实世界数据有限或获取成本高昂的情况下尤其有用。</p>
+<p>LLM 生成的合成数据最强大的应用之一是增强现有的训练数据集。这在现实世界数据有限或获取成本高昂的情况下尤其有用。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> pipeline<br><span class="hljs-comment"># Load a small real-world dataset</span><br>real_data = pd.read_csv(<span class="hljs-string">&quot;small_product_reviews.csv&quot;</span>)<br><span class="hljs-comment"># Split the data</span><br>train_data, test_data = train_test_split(real_data, test_size=<span class="hljs-number">0.2</span>, random_state=<span class="hljs-number">42</span>)<br><span class="hljs-comment"># Initialize the text generation pipeline</span><br>generator = pipeline(<span class="hljs-string">&quot;text-generation&quot;</span>, model=<span class="hljs-string">&quot;gpt2-medium&quot;</span>)<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">augment_dataset</span>(<span class="hljs-params">data, num_synthetic_samples</span>):<br>    synthetic_data = []<br>    <span class="hljs-keyword">for</span> _, row <span class="hljs-keyword">in</span> data.iterrows():<br>        prompt = <span class="hljs-string">f&quot;Generate a product review similar to: <span class="hljs-subst">&#123;row[<span class="hljs-string">&#x27;review&#x27;</span>]&#125;</span>\nNew review:&quot;</span><br>        synthetic_review = generator(prompt, max_length=<span class="hljs-number">100</span>, num_return_sequences=<span class="hljs-number">1</span>)[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;generated_text&#x27;</span>]<br>        synthetic_data.append(&#123;<span class="hljs-string">&#x27;review&#x27;</span>: synthetic_review,<span class="hljs-string">&#x27;sentiment&#x27;</span>: row[<span class="hljs-string">&#x27;sentiment&#x27;</span>] <span class="hljs-comment"># Assuming the sentiment is preserved&#125;)</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(synthetic_data) &gt;= num_synthetic_samples:<br>            <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">return</span> pd.DataFrame(synthetic_data)<br><span class="hljs-comment"># Generate synthetic data</span><br>synthetic_train_data = augment_dataset(train_data, num_synthetic_samples=<span class="hljs-built_in">len</span>(train_data))<br><span class="hljs-comment"># Combine real and synthetic data</span><br>augmented_train_data = pd.concat([train_data, synthetic_train_data], ignore_index=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Original training data size: <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(train_data)&#125;</span>&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Augmented training data size: <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(augmented_train_data)&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
 <p>这种方法可以显著增加训练数据集的大小和多样性，从而有可能提高机器学习模型的性能和稳健性。</p>
 <h2 id="挑战和最佳实践">挑战和最佳实践</h2>
 <p>虽然 LLM 驱动的合成数据生成提供了许多好处，但也带来了挑战：</p>
 <ol type="1">
 <li><strong>质量控制</strong>：确保生成的数据质量高且与您的用例相关。实施严格的验证流程。</li>
-<li><strong>减少偏见</strong>：LLM
-可以继承并放大其训练数据中存在的偏差。请注意这一点并实施偏差检测和缓解策略。</li>
+<li><strong>减少偏见</strong>：LLM 可以继承并放大其训练数据中存在的偏差。请注意这一点并实施偏差检测和缓解策略。</li>
 <li><strong>多元化</strong>：确保您的合成数据集多样化且能够代表真实世界场景。</li>
 <li><strong>持续一致</strong>：保持生成的数据的一致性，尤其是在创建大型数据集时。</li>
-<li><strong>关于
-SCIREQ</strong>：要注意道德问题，尤其是在生成模仿敏感或个人信息的合成数据时。</li>
+<li><strong>关于 SCIREQ</strong>：要注意道德问题，尤其是在生成模仿敏感或个人信息的合成数据时。</li>
 </ol>
 <p>LLM 驱动的合成数据生成的最佳实践：</p>
 <ol type="1">
 <li><strong>迭代细化</strong>：根据输出的质量不断改进您的提示和生成技术。</li>
-<li><strong>混合方法</strong>：将 LLM
-生成的数据与真实世界数据相结合以获得最佳结果。</li>
+<li><strong>混合方法</strong>：将 LLM 生成的数据与真实世界数据相结合以获得最佳结果。</li>
 <li><strong>验证</strong>：实施强有力的验证流程，以确保生成数据的质量和相关性。</li>
 <li><strong>配套文档</strong>：维护合成数据生成过程的清晰文档，以确保透明度和可重复性。</li>
 <li><strong>道德准则</strong>：制定并遵守合成数据生成和使用的道德准则。</li>
 </ol>
 <h2 id="结论">结论</h2>
-<p>LLM 驱动的合成数据生成是一种强大的技术，它正在改变我们以数据为中心的
-AI
-开发方式。通过利用高级语言模型的功能，我们可以创建多样化、高质量的数据集，推动各个领域的创新。随着技术的不断发展，它有望在
-AI
-研究和应用程序开发中释放新的可能性，同时解决与数据稀缺和隐私相关的关键挑战。</p>
-<p>随着我们不断前进，以平衡的视角看待合成数据生成至关重要，充分利用其优势，同时注意其局限性和道德影响。通过谨慎实施和不断改进，LLM
-驱动的合成数据生成有可能加速 AI
-进步并开辟机器学习和数据科学的新领域。</p>
+<p>LLM 驱动的合成数据生成是一种强大的技术，它正在改变我们以数据为中心的 AI 开发方式。通过利用高级语言模型的功能，我们可以创建多样化、高质量的数据集，推动各个领域的创新。随着技术的不断发展，它有望在 AI 研究和应用程序开发中释放新的可能性，同时解决与数据稀缺和隐私相关的关键挑战。</p>
+<p>随着我们不断前进，以平衡的视角看待合成数据生成至关重要，充分利用其优势，同时注意其局限性和道德影响。通过谨慎实施和不断改进，LLM 驱动的合成数据生成有可能加速 AI 进步并开辟机器学习和数据科学的新领域。</p>
 
                 
               </div>

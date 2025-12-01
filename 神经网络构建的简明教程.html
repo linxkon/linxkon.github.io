@@ -319,45 +319,31 @@
 <p>如下图，我们已知四个数据点(1,1)(-1,1)(-1,-1)(1,-1)，这四个点分别对应I~IV象限，如果这时候给我们一个新的坐标点（比如(2,2)），那么它应该属于哪个象限呢？（没错，当然是第I象限，但我们的任务是要让机器知道）</p>
 <p>“分类”是神经网络的一大应用，我们使用神经网络完成这个分类任务。</p>
 <figure>
-<img src="/images/深度学习/v2-98d50ca5e3a5c1a35eec112813b696f5.jpg" srcset="/img/loading.gif" lazyload
-alt="分类任务" />
-<figcaption aria-hidden="true">分类任务</figcaption>
+<img src="/images/深度学习/v2-98d50ca5e3a5c1a35eec112813b696f5.jpg" srcset="/img/loading.gif" lazyload alt="分类任务" /><figcaption aria-hidden="true">分类任务</figcaption>
 </figure>
 <h2 id="两层神经网络">两层神经网络</h2>
 <p>这里我们构建一个两层神经网络，理论上两层神经网络已经可以拟合任意函数。这个神经网络的结构如下图：</p>
 <figure>
-<img src="/images/深度学习/v2-3ecd2eacd744c89bf89335aad73851b3.jpg" srcset="/img/loading.gif" lazyload
-alt="图1.两层神经网络的一种典型结构" />
-<figcaption
-aria-hidden="true">图1.两层神经网络的一种典型结构</figcaption>
+<img src="/images/深度学习/v2-3ecd2eacd744c89bf89335aad73851b3.jpg" srcset="/img/loading.gif" lazyload alt="图1.两层神经网络的一种典型结构" /><figcaption aria-hidden="true">图1.两层神经网络的一种典型结构</figcaption>
 </figure>
 <p>是不是觉得有点复杂，没关系，我们一步步看，其实很容易理解。</p>
-<h2
-id="简化的两层神经网络分析"><strong>1.简化的两层神经网络分析</strong></h2>
+<h2 id="简化的两层神经网络分析"><strong>1.简化的两层神经网络分析</strong></h2>
 <p>首先去掉图1中一些难懂的东西，如下图（请仔细看一下图中的标注）：</p>
 <figure>
-<img src="/images/深度学习/v2-370e530f126a785c9c11b550a126499b.jpg" srcset="/img/loading.gif" lazyload
-alt="图2.简化过后的两层神经网络" />
-<figcaption aria-hidden="true">图2.简化过后的两层神经网络</figcaption>
+<img src="/images/深度学习/v2-370e530f126a785c9c11b550a126499b.jpg" srcset="/img/loading.gif" lazyload alt="图2.简化过后的两层神经网络" /><figcaption aria-hidden="true">图2.简化过后的两层神经网络</figcaption>
 </figure>
 <p><strong>1.1.输入层</strong></p>
 <p>在我们的例子中，输入层是坐标值，例如（1,1），这是一个包含两个元素的数组，也可以看作是一个1<em>2的矩阵。输入层的元素维度与输入量的特征息息相关，如果输入的是一张32</em>32像素的灰度图像，那么输入层的维度就是32*32。</p>
 <p><strong>1.2.从输入层到隐藏层</strong></p>
 <p>连接输入层和隐藏层的是W1和b1。由X计算得到H十分简单，就是矩阵运算：</p>
 <figure>
-<img
-src="https://pic2.zhimg.com/80/v2-b31ecd1eea01a5e52968075778cb9699_720w.webp" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="https://pic2.zhimg.com/80/v2-b31ecd1eea01a5e52968075778cb9699_720w.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>如果你学过线性代数，对这个式子一定不陌生。如上图中所示，在设定隐藏层为50维（也可以理解成50个神经元）之后，矩阵H的大小为（1*50）的矩阵。</p>
 <p><strong>1.3.从隐藏层到输出层</strong></p>
 <p>连接隐藏层和输出层的是W2和b2。同样是通过矩阵运算进行的：</p>
 <figure>
-<img
-src="https://pic4.zhimg.com/80/v2-0c8c9f5ea2376623cb31ba74e9256627_720w.webp" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="https://pic4.zhimg.com/80/v2-0c8c9f5ea2376623cb31ba74e9256627_720w.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p><strong>1.4.分析</strong></p>
 <p>通过上述两个线性方程的计算，我们就能得到最终的输出Y了，但是如果你还对线性代数的计算有印象的话，应该会知道：*<strong>一系列线性方程的运算最终都可以用一个线性方程表示*</strong>。也就是说，上述两个式子联立后可以用一个线性方程表达。对于两次神经网络是这样，就算网络深度加到100层，也依然是这样。这样的话神经网络就失去了意义。</p>
@@ -365,10 +351,7 @@ alt="img" />
 <h2 id="激活层">2.激活层</h2>
 <p>简而言之，激活层是为矩阵运算的结果添加非线性的。常用的激活函数有三种，分别是阶跃函数、Sigmoid和ReLU。不要被奇怪的函数名吓到，其实它们的形式都很简单，如下图：</p>
 <figure>
-<img src="/images/深度学习/v2-d23194bd4a68209b7cfcf994899d2381.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-d23194bd4a68209b7cfcf994899d2381" />
-<figcaption
-aria-hidden="true">v2-d23194bd4a68209b7cfcf994899d2381</figcaption>
+<img src="/images/深度学习/v2-d23194bd4a68209b7cfcf994899d2381.jpg" srcset="/img/loading.gif" lazyload alt="v2-d23194bd4a68209b7cfcf994899d2381" /><figcaption aria-hidden="true">v2-d23194bd4a68209b7cfcf994899d2381</figcaption>
 </figure>
 <p>图3.三种常用的激活函数</p>
 <p>阶跃函数：当输入小于等于0时，输出0；当输入大于0时，输出1。</p>
@@ -380,10 +363,7 @@ aria-hidden="true">v2-d23194bd4a68209b7cfcf994899d2381</figcaption>
 <p>需要注意的是，每个隐藏层计算（矩阵线性运算）之后，都需要加一层激活层，要不然该层线性计算是没有意义的。</p>
 <p>此时的神经网络变成了如下图所示的形式：</p>
 <figure>
-<img src="/images/深度学习/v2-c9b81dba190eb6768f419147d1b86c0d.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-c9b81dba190eb6768f419147d1b86c0d" />
-<figcaption
-aria-hidden="true">v2-c9b81dba190eb6768f419147d1b86c0d</figcaption>
+<img src="/images/深度学习/v2-c9b81dba190eb6768f419147d1b86c0d.jpg" srcset="/img/loading.gif" lazyload alt="v2-c9b81dba190eb6768f419147d1b86c0d" /><figcaption aria-hidden="true">v2-c9b81dba190eb6768f419147d1b86c0d</figcaption>
 </figure>
 <p>图4.加上激活层的两层神经网络</p>
 <p>神经网络是分为“训练”和“使用”两个步骤的。如果是在“使用”的步骤，图4就已经完成整个过程了，在求得的Y（大小为1*4）矩阵中，数值最大的就代表着当前分类。</p>
@@ -393,33 +373,24 @@ aria-hidden="true">v2-c9b81dba190eb6768f419147d1b86c0d</figcaption>
 <p>具体是怎么计算的呢？</p>
 <p>计算公式如下：</p>
 <figure>
-<img
-src="https://pic4.zhimg.com/80/v2-3ad93ae576918ff385485dab6a2e6b87_720w.webp" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="https://pic4.zhimg.com/80/v2-3ad93ae576918ff385485dab6a2e6b87_720w.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>简单来说分三步进行：（1）以e为底对所有元素求指数幂；（2）将所有指数幂求和；（3）分别将这些指数幂与该和做商。</p>
 <p>这样求出的结果中，所有元素的和一定为1，而每个元素可以代表概率值。</p>
 <p>我们将使用这个计算公式做输出结果正规化处理的层叫做“Softmax”层。此时的神经网络将变成如下图所示：</p>
 <figure>
-<img src="/images/深度学习/v2-3ecd2eacd744c89bf89335aad73851b3.jpg" srcset="/img/loading.gif" lazyload
-alt="输出正规化之后的神经网络" />
-<figcaption aria-hidden="true">输出正规化之后的神经网络</figcaption>
+<img src="/images/深度学习/v2-3ecd2eacd744c89bf89335aad73851b3.jpg" srcset="/img/loading.gif" lazyload alt="输出正规化之后的神经网络" /><figcaption aria-hidden="true">输出正规化之后的神经网络</figcaption>
 </figure>
 <h2 id="如何衡量输出的好坏">4.如何衡量输出的好坏</h2>
 <p>通过Softmax层之后，我们得到了I，II，III和IV这四个类别分别对应的概率，但是要注意，这是神经网络计算得到的概率值结果，而非真实的情况。</p>
 <p>比如，Softmax输出的结果是(90%,5%,3%,2%)，真实的结果是(100%,0,0,0)。虽然输出的结果可以正确分类，但是与真实结果之间是有差距的，一个优秀的网络对结果的预测要无限接近于100%，为此，我们需要将Softmax输出结果的好坏程度做一个“量化”。</p>
 <p>一种直观的解决方法，是用1减去Softmax输出的概率，比如1-90%=0.1。不过更为常用且巧妙的方法是，求<strong>对数的负数</strong>。</p>
 <p>还是用90%举例，对数的负数就是：-log0.9=0.046</p>
-<p>可以想见，概率越接近100%，该计算结果值越接近于0，说明结果越准确，该输出叫做“<strong>交叉熵损失</strong>（Cross
-Entropy Error）”。</p>
+<p>可以想见，概率越接近100%，该计算结果值越接近于0，说明结果越准确，该输出叫做“<strong>交叉熵损失</strong>（Cross Entropy Error）”。</p>
 <p>我们训练神经网络的目的，就是尽可能地减少这个“交叉熵损失”。</p>
 <p>此时的网络如下图：</p>
 <figure>
-<img src="/images/深度学习/v2-4c10b2e5e2d4001423524de264a57b05.jpg" srcset="/img/loading.gif" lazyload
-alt="图6.计算交叉熵损失后的神经网络" />
-<figcaption
-aria-hidden="true">图6.计算交叉熵损失后的神经网络</figcaption>
+<img src="/images/深度学习/v2-4c10b2e5e2d4001423524de264a57b05.jpg" srcset="/img/loading.gif" lazyload alt="图6.计算交叉熵损失后的神经网络" /><figcaption aria-hidden="true">图6.计算交叉熵损失后的神经网络</figcaption>
 </figure>
 <h2 id="反向传播与参数优化">5.反向传播与参数优化</h2>
 <p>上边的1~4节，讲述了神经网络的正向传播过程。一句话复习一下：<strong>神经网络的传播都是形如Y=WX+b的矩阵运算；为了给矩阵运算加入非线性，需要在隐藏层中加入激活层；输出层结果需要经过Softmax层处理为概率值，并通过交叉熵损失来量化当前网络的优劣。</strong></p>
@@ -428,17 +399,11 @@ aria-hidden="true">图6.计算交叉熵损失后的神经网络</figcaption>
 <p>这里举一个形象的例子描述一下这个参数优化的原理和过程：</p>
 <p>假设我们操纵着一个球型机器行走在沙漠中</p>
 <figure>
-<img src="/images/深度学习/v2-40db4875838c6dd2e4762f9d378030b8.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-40db4875838c6dd2e4762f9d378030b8" />
-<figcaption
-aria-hidden="true">v2-40db4875838c6dd2e4762f9d378030b8</figcaption>
+<img src="/images/深度学习/v2-40db4875838c6dd2e4762f9d378030b8.jpg" srcset="/img/loading.gif" lazyload alt="v2-40db4875838c6dd2e4762f9d378030b8" /><figcaption aria-hidden="true">v2-40db4875838c6dd2e4762f9d378030b8</figcaption>
 </figure>
 <p>我们在机器中操纵着四个旋钮，分别叫做W1，b1，W2，b2。当我们旋转其中的某个旋钮时，球形机器会发生移动，但是旋转旋钮大小和机器运动方向之间的对应关系是不知道的。而我们的目的就是<strong>走到沙漠的最低点</strong>。</p>
 <figure>
-<img src="/images/深度学习/v2-a2397f4b4b12cb3602e0b26842b59ae0.jpg" srcset="/img/loading.gif" lazyload
-alt="v2-a2397f4b4b12cb3602e0b26842b59ae0" />
-<figcaption
-aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
+<img src="/images/深度学习/v2-a2397f4b4b12cb3602e0b26842b59ae0.jpg" srcset="/img/loading.gif" lazyload alt="v2-a2397f4b4b12cb3602e0b26842b59ae0" /><figcaption aria-hidden="true">v2-a2397f4b4b12cb3602e0b26842b59ae0</figcaption>
 </figure>
 <p>此时我们该怎么办？只能挨个试喽。</p>
 <p>如果增大W1后，球向上走了，那就减小W1。</p>

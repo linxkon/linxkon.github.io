@@ -318,8 +318,7 @@
 <ul>
 <li><strong>优化内容提取的方法</strong>：从源头解决内容提取的有效性，包括文本内容、表格内容（保留制表符）和图片内容（OCR识别）等；</li>
 <li><strong>优化[chunking]</strong>：从最开始的512固定长度切分，到后面的句切分，再到后面的NLTK和[SpaCy]；</li>
-<li><strong>再之后是优化[embedding模型]</strong>：Embedding模型的选择其实很魔性，我们在优化过程中也会不断否定之前的一些判断。比如我们最开始用m3e，后面用bge，再后面还用了通义千问的embedding模型。总体来说，收费的通义千问还是好一些，但是不明显，有些方面却不如bge。最近一朋友也向我推荐了Jina
-embedding模型，不过他们的中文模型需要12月份才出来；</li>
+<li><strong>再之后是优化[embedding模型]</strong>：Embedding模型的选择其实很魔性，我们在优化过程中也会不断否定之前的一些判断。比如我们最开始用m3e，后面用bge，再后面还用了通义千问的embedding模型。总体来说，收费的通义千问还是好一些，但是不明显，有些方面却不如bge。最近一朋友也向我推荐了Jina embedding模型，不过他们的中文模型需要12月份才出来；</li>
 <li><strong>我们还优化了其他一些过程</strong>：比如[prompt模板]、关键词摘要、元数据存储等。</li>
 </ul>
 <p>这些优化确实给我们带来了非常好的效果，但不够！我们在一些客户的实践过程中，还是发现相关性效果不佳，甚至造成了其中一个客户选择了其他方案（使用RAG+GPT-4的方案）。</p>
@@ -327,22 +326,15 @@ embedding模型，不过他们的中文模型需要12月份才出来；</li>
 <p>所以，虽然Rerank优化我们还在做，但是今天我们可以先聊聊ReRank这个话题。</p>
 <h2 id="为什么需要rerank">为什么需要Rerank</h2>
 <p>我们发现，在10月中旬之前，国内外的互联网上很难发现Rerank相关的话题。有少量人提到了，但是基本上都没有提到解决方案。我和小明在讨论Rerank的时候其实是先从提问题开始的。</p>
-<h3
-id="elasticsearch中的相似度检索算法"><strong>[Elasticsearch]中的[相似度检索算法]</strong></h3>
+<h3 id="elasticsearch中的相似度检索算法"><strong>[Elasticsearch]中的[相似度检索算法]</strong></h3>
 <p>前面说了，我们自己的RAG产品之前是存在一些相关性问题的，其他方面能优化的我们觉得也基本上优化的差不多了，除了我们采用的国产大模型在通用能力上和ChatGPT-3.5/4是存在差距的。我们发现的最大的问题就是使用[elasticsearch]的<strong>retrieval</strong>召回的内容相关度有问题，多数情况下score最高的chunk相关度没问题，但是top2-5的相关度就很随机了，这是最影响最终结果的。</p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-b99e2b5ffdcbacbd1d49297723f61ccb_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-b99e2b5ffdcbacbd1d49297723f61ccb_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图1：elasticsearch8.4的knn使用方式</p>
 <p>我们看了elasticsearch的[相似度算法]，es用的是[KNN]算法（开始我们以为是暴力搜索），但仔细看了一下，在es8的相似度检索中，用的其实是基于HNSW（分层的最小世界导航算法），HNSW是有能力在几毫秒内从数百万个数据点中找到最近邻的。</p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-0017703c3263ec5230bbe684309c4995_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-0017703c3263ec5230bbe684309c4995_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图2：elasticsearch实际使用的是HNSW算法</p>
 <h3 id="hnsw带来的随机性问题"><strong>HNSW带来的随机性问题</strong></h3>
@@ -354,94 +346,61 @@ alt="img" />
 <li><strong>基于哈希的算法</strong>：流行的算法包括:位置敏感哈希（LSH）、[多索引哈希（MIH）]；</li>
 <li><strong>基于树的算法</strong>：流行的是kd树、[球树]和随机投影树（RP树）。对于低维空间（≤10），基于树的算法是非常有效的。</li>
 </ul>
-<p>HNSW借鉴了跳表（Skip
-List）的思路。[跳表]是一种数据结构，用于维护一组已排序的元素，并允许进行高效的搜索、插入和删除操作。它是由[William
-Pugh]在1989年发明的。图(3)显示了数字[3、6、7、9、12、17、19、21、25、26]的[排序链表]。假设我们想找到目标19。当值小于目标时，我们向右移动，如果是传统的方式，需要6步才能找到它。</p>
+<p>HNSW借鉴了跳表（Skip List）的思路。[跳表]是一种数据结构，用于维护一组已排序的元素，并允许进行高效的搜索、插入和删除操作。它是由[William Pugh]在1989年发明的。图(3)显示了数字[3、6、7、9、12、17、19、21、25、26]的[排序链表]。假设我们想找到目标19。当值小于目标时，我们向右移动，如果是传统的方式，需要6步才能找到它。</p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-14499dcd804e8311f52479bf9f181fe1_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-14499dcd804e8311f52479bf9f181fe1_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图3：链表中查找数据</p>
 <p>但是我们在每个节点增加向后的[指向指针]，比如列表中每三个其他节点都有一个指向后面三个节点的指针，如图(4)所示，那么只需要3步就可以到达19</p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-806796c3cbeaad78012a046d2aba0359_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-806796c3cbeaad78012a046d2aba0359_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图4：跳表每三个节点就设置一个多指向指针节点，可以让搜索速度明显加快，如果我们再增加这个指针节点数量呢？</p>
-<p>这就是[small world]的底层思路，说回到小世界（small
-world）网络，它是一种特殊的网络，在这种网络中，你可以快速地联系到网络中的其他人或点。这有点像“[凯文·培根]的六度”(Six
-Degrees of Kevin
-Bacon)游戏，在这个游戏中，你可以通过一系列其他演员，在不到六个步骤的时间里，将任何演员与凯文·培根联系起来。想象一下，你有一群朋友排成一个圆圈，如图5所示。每个朋友都与坐在他们旁边的人直接相连。我们称它为“原始圆”。</p>
-<p>现在，这就是奇迹发生的地方。你可以随机选择将其中一些连接改变给圆圈中的其他人，就像图5中的红色连接线一样。这就像这些连接的“抢椅子”游戏。有人跳到另一把椅子上的几率用概率p表示。如果p很小，移动的人就不多，网络看起来就很像原来的圆圈。但如果p很大，很多人就会跳来跳去，网络就会变得有点混乱。当您选择正确的<a
-href="不太小也不太大">p值</a>时，红色连接是最优的。网络变成了一个[小世界网络]。你可以很快地从一个朋友转到另一个朋友(这就是“小世界”的特点)。</p>
+<p>这就是[small world]的底层思路，说回到小世界（small world）网络，它是一种特殊的网络，在这种网络中，你可以快速地联系到网络中的其他人或点。这有点像“[凯文·培根]的六度”(Six Degrees of Kevin Bacon)游戏，在这个游戏中，你可以通过一系列其他演员，在不到六个步骤的时间里，将任何演员与凯文·培根联系起来。想象一下，你有一群朋友排成一个圆圈，如图5所示。每个朋友都与坐在他们旁边的人直接相连。我们称它为“原始圆”。</p>
+<p>现在，这就是奇迹发生的地方。你可以随机选择将其中一些连接改变给圆圈中的其他人，就像图5中的红色连接线一样。这就像这些连接的“抢椅子”游戏。有人跳到另一把椅子上的几率用概率p表示。如果p很小，移动的人就不多，网络看起来就很像原来的圆圈。但如果p很大，很多人就会跳来跳去，网络就会变得有点混乱。当您选择正确的<a href="不太小也不太大">p值</a>时，红色连接是最优的。网络变成了一个[小世界网络]。你可以很快地从一个朋友转到另一个朋友(这就是“小世界”的特点)。</p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-9ed00d3738d35131a35e84419f517f47_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-9ed00d3738d35131a35e84419f517f47_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图5：small world网络结构</p>
 <p>现在我们要扩展到高维空间，图中的每个节点都是一个高维向量。在高维空间中，搜索速度会变慢。这是不可避免的“维度的诅咒”。HNSW是一种[高级数据结构]，用于优化高维空间中的相似性搜索。让我们看看HNSW如何构建图的[层次结构]。HNSW从图(6)中的第0层这样的基础图开始。它通常使用<strong>[随机初始化数据点]</strong>来构建。</p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-33efb63cb78392eb99ee93357737bdf7_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-33efb63cb78392eb99ee93357737bdf7_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图6：HNSW的结构示例</p>
 <p>这里大家要注意再次出现了”<strong>随机</strong>“，所以，为了检索的快速，HNSW算法会存在一些随机性，反映在实际召回结果中，最大的影响就是返回结果中top_K并不是我们最想要的，至少这K个文件的排名并不是我们认为的从高分到低分排序的。</p>
-<h3
-id="rerank可以在小范围内逐一计算分值"><strong>Rerank可以在小范围内逐一计算分值</strong></h3>
+<h3 id="rerank可以在小范围内逐一计算分值"><strong>Rerank可以在小范围内逐一计算分值</strong></h3>
 <p><strong>因为在搜索的时候存在随机性，这应该就是我们在RAG中第一次召回的结果往往不太满意的原因</strong>。但是这也没办法，如果你的索引有数百万甚至千万的级别，那你只能牺牲一些精确度，换回时间。这时候我们可以做的就是增加<code>top_k</code>的大小，比如从原来的10个，增加到30个。然后再使用更精确的算法来做rerank，使用一一计算打分的方式，做好排序。比如30次的[遍历相似度]计算的时间，我们还是可以接受的。</p>
-<p><em>关于HNSW的内容，大家可以查看<a
-target="_blank" rel="noopener" href="https://www.luxiangdong.com/2023/11/06/hnsw/">像光速一样搜索——HNSW算法介绍</a>。</em></p>
+<p><em>关于HNSW的内容，大家可以查看<a target="_blank" rel="noopener" href="https://www.luxiangdong.com/2023/11/06/hnsw/">像光速一样搜索——HNSW算法介绍</a>。</em></p>
 <h2 id="主要的reank方式评测">主要的Reank方式评测</h2>
 <h3 id="评测方法"><strong>评测方法</strong></h3>
 <p>为了衡量我们的检索系统的有效性，我们主要依赖于两个被广泛接受的指标:<strong>命中率</strong>和<strong>平均倒数排名(MRR)</strong>。让我们深入研究这些指标，了解它们的重要性以及它们是如何运作的。我们来解释一下这两个指标：</p>
 <ul>
-<li><strong>命中率:</strong>Hit
-rate计算在前k个检索文档中找到正确答案的查询比例。简单来说，它是关于我们的系统在前几次猜测中正确的频率。</li>
+<li><strong>命中率:</strong>Hit rate计算在前k个检索文档中找到正确答案的查询比例。简单来说，它是关于我们的系统在前几次猜测中正确的频率。</li>
 <li><strong>平均倒数排名(MRR):</strong>对于每个查询，MRR通过查看排名最高的相关文档的排名来评估系统的准确性。具体来说，它是所有查询中这些秩的倒数的平均值。因此，如果第一个相关文档是顶部结果，则倒数排名为1;如果是第二个，倒数是1/2，以此类推。</li>
 </ul>
 <h3 id="评测结果"><strong>评测结果</strong></h3>
-<p>具体的评测过程大家可以看<a
-target="_blank" rel="noopener" href="https://www.luxiangdong.com/2023/11/06/rerank-ev">提升RAG——选择最佳Embedding和重新排名模型</a>，也是llamaindex最近刚刚发布的一篇著名rerank评测文章，我这里就不具体展开了，直接用他们的结果。评测采用的是<strong>embedding模型</strong>
-+ <strong>[rerank模型]</strong>的方式进行的。</p>
+<p>具体的评测过程大家可以看<a target="_blank" rel="noopener" href="https://www.luxiangdong.com/2023/11/06/rerank-ev">提升RAG——选择最佳Embedding和重新排名模型</a>，也是llamaindex最近刚刚发布的一篇著名rerank评测文章，我这里就不具体展开了，直接用他们的结果。评测采用的是<strong>embedding模型</strong> + <strong>[rerank模型]</strong>的方式进行的。</p>
 <p>以下是使用的模型:</p>
 <p><strong>Embedding模型</strong>:</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/embeddings">OpenAI
-Embedding</a></li>
+<li><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/embeddings">OpenAI Embedding</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.voyageai.com/">Voyage Embedding</a></li>
-<li><a target="_blank" rel="noopener" href="https://txt.cohere.com/introducing-embed-v3/">CohereAI
-Embedding</a> (v2.0/ v3.0)</li>
-<li><a
-target="_blank" rel="noopener" href="https://huggingface.co/jinaai/jina-embeddings-v2-small-en">Jina
-Embeddings</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-large-en">BAAI/bge-large-en</a></li>
+<li><a target="_blank" rel="noopener" href="https://txt.cohere.com/introducing-embed-v3/">CohereAI Embedding</a> (v2.0/ v3.0)</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/jinaai/jina-embeddings-v2-small-en">Jina Embeddings</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-large-en">BAAI/bge-large-en</a></li>
 </ul>
 <p><strong>[Rerank模型]</strong>:</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://txt.cohere.com/rerank/">CohereAI</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-base">bge-reranker-base</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-large">bge-reranker-large</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-base">bge-reranker-base</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-large">bge-reranker-large</a></li>
 </ul>
 <blockquote>
 <p>值得一提的是，这些结果为这个特定数据集和任务的性能提供了坚实的见解。但是，实际结果可能会根据数据特征、数据集大小和其他变量(如[chunk_size]、similarity_top_k等)而有所不同。</p>
 </blockquote>
 <p>下表展示了基于<strong>命中率</strong>和<strong>MRR</strong>指标的评估结果:</p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-b55576a528c8797f6202a2f2b35ea9ed_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-b55576a528c8797f6202a2f2b35ea9ed_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图7：测试结果</p>
 <p>我对[LlamaIndex]的评测结果做一个简单总结：</p>
@@ -451,13 +410,9 @@ alt="img" />
 <li><strong>embedding模型和rerank模型的组合也会有影响，可能需要开发者在实际过程中去调测最佳组合。</strong></li>
 </ul>
 <h2 id="我们可以如何使用rerank">我们可以如何使用Rerank</h2>
-<p>目前最无脑的方式就是使用bge-reranker-large，我们可以在<a
-target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-large/tree/main%E4%B8%8A%E6%89%BE%E5%88%B0models%E6%96%87%E4%BB%B6%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E3%80%82%E6%88%91%E5%B7%B2%E7%BB%8F%E4%B8%8B%E8%BD%BD%E4%BA%86%EF%BC%9A">https://huggingface.co/BAAI/bge-reranker-large/tree/main上找到models文件，下载安装。我已经下载了：</a></p>
+<p>目前最无脑的方式就是使用bge-reranker-large，我们可以在<a target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-large/tree/main%E4%B8%8A%E6%89%BE%E5%88%B0models%E6%96%87%E4%BB%B6%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E3%80%82%E6%88%91%E5%B7%B2%E7%BB%8F%E4%B8%8B%E8%BD%BD%E4%BA%86%EF%BC%9A">https://huggingface.co/BAAI/bge-reranker-large/tree/main上找到models文件，下载安装。我已经下载了：</a></p>
 <figure>
-<img
-src="/images/RAG中的rerank技术/v2-fe66d938455a56ed6277164cc29228de_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的rerank技术/v2-fe66d938455a56ed6277164cc29228de_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图8：bge-reranker-large的models文件，大约4.5GB</p>
 <p>这两天要给它安装起来，测测我们的产品rerank之后的效果。</p>

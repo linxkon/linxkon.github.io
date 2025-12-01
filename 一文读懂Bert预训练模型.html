@@ -314,18 +314,14 @@
             
               <div class="markdown-body">
                 
-                <p>BERT模型作为自然语言处理领域的重大突破，其核心优势在于创新性地采用了双向注意力机制和大规模无监督预训练方法。该模型通过深度双向上下文编码，有效捕捉了语言的复杂语义关系和长程依赖，显著提升了对语言理解的深度和广度。
-<span id="more"></span></p>
+                <p>BERT模型作为自然语言处理领域的重大突破，其核心优势在于创新性地采用了双向注意力机制和大规模无监督预训练方法。该模型通过深度双向上下文编码，有效捕捉了语言的复杂语义关系和长程依赖，显著提升了对语言理解的深度和广度。 <span id="more"></span></p>
 <h3 id="一.-关于bert">一. 关于Bert</h3>
-<p>BERT是一种革命性的自然语言处理模型,全称为"Bidirectional Encoder
-Representations from
-Transformers"(来自Transformer的双向编码器表示)。以下是BERT的简要介绍:</p>
+<p>BERT是一种革命性的自然语言处理模型,全称为"Bidirectional Encoder Representations from Transformers"(来自Transformer的双向编码器表示)。以下是BERT的简要介绍:</p>
 <ol type="1">
 <li><p>开发背景:由Google AI团队在2018年开发。</p></li>
 <li><p>核心技术:基于Transformer架构,使用双向训练。</p></li>
 <li><p>预训练方法:采用掩码语言模型(MLM)和下一句预测(NSP)任务。</p></li>
-<li><p>主要优势: &gt; - 捕捉更丰富的上下文信息 &gt; - 适用于多种NLP任务
-&gt; - 性能优异,在多个基准测试中取得突破</p></li>
+<li><p>主要优势: &gt; - 捕捉更丰富的上下文信息 &gt; - 适用于多种NLP任务 &gt; - 性能优异,在多个基准测试中取得突破</p></li>
 <li><p>应用领域:问答系统、情感分析、文本分类等。</p></li>
 <li><p>影响:推动了NLP领域的快速发展,催生了许多基于BERT的改进模型。</p></li>
 </ol>
@@ -342,10 +338,7 @@ Transformers"(来自Transformer的双向编码器表示)。以下是BERT的简�
 <tbody>
 <tr class="odd">
 <td><strong>RoBERTa</strong></td>
-<td><strong>更大的训练数据</strong>：使用了更大规模的数据进行预训练。<strong>longer训练时间</strong>：延长了模型的训练时间和迭代次数。<strong>移除Next
-Sentence
-Prediction(NSP)任务</strong>：发现NSP任务对模型性能影响不大,因此将其移除。<strong>动态掩码</strong>：每次输入序列时动态生成掩码,而不是静态掩码。<strong>更大的batch
-size</strong>：使用更大的batchsize进行训练。<strong>字节对编码</strong>(Byte-PairEncoding)：使用更大的词表</td>
+<td><strong>更大的训练数据</strong>：使用了更大规模的数据进行预训练。<strong>longer训练时间</strong>：延长了模型的训练时间和迭代次数。<strong>移除Next Sentence Prediction(NSP)任务</strong>：发现NSP任务对模型性能影响不大,因此将其移除。<strong>动态掩码</strong>：每次输入序列时动态生成掩码,而不是静态掩码。<strong>更大的batch size</strong>：使用更大的batchsize进行训练。<strong>字节对编码</strong>(Byte-PairEncoding)：使用更大的词表</td>
 <td>2019年7月</td>
 </tr>
 <tr class="even">
@@ -375,8 +368,7 @@ size</strong>：使用更大的batchsize进行训练。<strong>字节对编码</
 </tr>
 <tr class="odd">
 <td><strong>T5</strong></td>
-<td><strong>统一框架：</strong>T5将所有NLP任务转化为文本到文本的格式，包括分类、翻译、摘要等。<strong>编码器-解码器架构</strong>：与BERT的编码器结构不同，T5采用了编码器-解码器架构。<strong>更大的模型和数据集</strong>：T5使用了更大规模的模型参数和训练数据。<strong>新的预训练任务</strong>：T5使用了"spancorruption"作为预训练任务，不同于BERT的掩码语言模型。<strong>多任务学习</strong>：在预训练阶段就引入了多任务学习。
-<strong>改进的位置编码</strong>：使用相对位置编码而非绝对位置编码。</td>
+<td><strong>统一框架：</strong>T5将所有NLP任务转化为文本到文本的格式，包括分类、翻译、摘要等。<strong>编码器-解码器架构</strong>：与BERT的编码器结构不同，T5采用了编码器-解码器架构。<strong>更大的模型和数据集</strong>：T5使用了更大规模的模型参数和训练数据。<strong>新的预训练任务</strong>：T5使用了"spancorruption"作为预训练任务，不同于BERT的掩码语言模型。<strong>多任务学习</strong>：在预训练阶段就引入了多任务学习。 <strong>改进的位置编码</strong>：使用相对位置编码而非绝对位置编码。</td>
 <td>2019年10月</td>
 </tr>
 <tr class="even">
@@ -399,39 +391,27 @@ size</strong>：使用更大的batchsize进行训练。<strong>字节对编码</
 <p><strong>词嵌入</strong>(Word Embeddings)</p>
 <blockquote>
 <ul>
-<li><strong>Tokenization（分词）</strong>：将输入的文本字符串拆分为更小的单元，通常是词（words）或子词（subwords）。BERT使用的是WordPiece
-tokenizer。</li>
-<li><strong>Adding Special
-Tokens（添加特殊标记）</strong>：在每个输入序列的开头添加<code>[CLS]</code>标记，在两个句子之间添加<code>[SEP]</code>标记。</li>
+<li><strong>Tokenization（分词）</strong>：将输入的文本字符串拆分为更小的单元，通常是词（words）或子词（subwords）。BERT使用的是WordPiece tokenizer。</li>
+<li><strong>Adding Special Tokens（添加特殊标记）</strong>：在每个输入序列的开头添加<code>[CLS]</code>标记，在两个句子之间添加<code>[SEP]</code>标记。</li>
 <li><strong>Token IDs</strong>：将每个token映射到词汇表中的唯一ID。</li>
 </ul>
 </blockquote>
 <p><strong>分段嵌入</strong>(Segment Embeddings)</p>
 <blockquote>
-<p><strong>Segment
-IDs（分段ID）</strong>：在NSP任务中用于区分不同的句子。第一个句子的token
-IDs标记为0，第二个句子的token IDs标记为1。</p>
+<p><strong>Segment IDs（分段ID）</strong>：在NSP任务中用于区分不同的句子。第一个句子的token IDs标记为0，第二个句子的token IDs标记为1。</p>
 </blockquote>
-<p><strong>位置嵌入</strong>(Position Embeddings): 完成词嵌入操作后
-,模型自动执行位置嵌入</p>
-<p><strong>Attention
-Mask</strong>：用于区分填充（padding）部分和实际的token。在批处理时，将所有输入序列填充到相同的长度，填充值通常为0，实际token的attention
-mask为1。</p>
+<p><strong>位置嵌入</strong>(Position Embeddings): 完成词嵌入操作后 ,模型自动执行位置嵌入</p>
+<p>[^]: 特殊说明:实际bert 模型输入中还需要Attention Mask输入,在此一并说明</p>
+<p><strong>Attention Mask</strong>：用于区分填充（padding）部分和实际的token。在批处理时，将所有输入序列填充到相同的长度，填充值通常为0，实际token的attention mask为1。</p>
 <p>例如：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> BertTokenizer<br><br><span class="hljs-comment"># 加载预训练的BERT tokenizer</span><br>tokenizer = BertTokenizer.from_pretrained(<span class="hljs-string">&#x27;bert-base-chinese&#x27;</span>)<br><br><span class="hljs-comment"># 输入文本</span><br>text = [<span class="hljs-string">&quot;Hello, how are you?&quot;</span>, <span class="hljs-string">&quot;I am fine, thank you!&quot;</span>]<br><br><span class="hljs-comment"># 使用tokenizer对输入文本进行编码</span><br>encoded_input = tokenizer(text, return_tensors=<span class="hljs-string">&#x27;pt&#x27;</span>, padding=<span class="hljs-literal">True</span>, truncation=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(encoded_input)<br></code></pre></td></tr></table></figure>
 <h4 id="编码器层encoder-layer">2. 编码器层（Encoder Layer）</h4>
 <p>BERT的编码器层是由多个Transformer编码器堆叠而成的。每个Transformer编码器层包括以下几个部分：</p>
 <ul>
-<li><strong>Self-Attention
-Mechanism（自注意力机制）</strong>：每个token可以在序列中与其他token进行交互，从而捕捉句子中的全局依赖关系。BERT使用多头自注意力机制（Multi-Head
-Self-Attention），使得模型能够同时关注不同位置的信息。</li>
-<li><strong>Feed-Forward Neural
-Network（前馈神经网络）</strong>：每个自注意力层之后接一个前馈神经网络，进一步处理和变换注意力机制的输出。</li>
-<li><strong>Add &amp;
-Norm（加和归一化）</strong>：每个子层（自注意力和前馈神经网络）都有一个残差连接，并进行层归一化（Layer
-Normalization）。</li>
-<li><strong>Position-wise Feed-Forward
-Networks（逐位置前馈神经网络）</strong>：每个token在自注意力机制处理后，通过一个逐位置的前馈神经网络进行非线性变换。</li>
+<li><strong>Self-Attention Mechanism（自注意力机制）</strong>：每个token可以在序列中与其他token进行交互，从而捕捉句子中的全局依赖关系。BERT使用多头自注意力机制（Multi-Head Self-Attention），使得模型能够同时关注不同位置的信息。</li>
+<li><strong>Feed-Forward Neural Network（前馈神经网络）</strong>：每个自注意力层之后接一个前馈神经网络，进一步处理和变换注意力机制的输出。</li>
+<li><strong>Add &amp; Norm（加和归一化）</strong>：每个子层（自注意力和前馈神经网络）都有一个残差连接，并进行层归一化（Layer Normalization）。</li>
+<li><strong>Position-wise Feed-Forward Networks（逐位置前馈神经网络）</strong>：每个token在自注意力机制处理后，通过一个逐位置的前馈神经网络进行非线性变换。</li>
 </ul>
 <h4 id="输出层output-layer">3. 输出层（Output Layer）</h4>
 <p>BERT的输出层根据具体任务的不同而有所变化，常见的任务包括：</p>
@@ -442,10 +422,7 @@ Networks（逐位置前馈神经网络）</strong>：每个token在自注意力�
 </ul>
 <p>示例：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> BertModel<br><br><span class="hljs-comment"># 加载预训练的BERT模型</span><br>model = BertModel.from_pretrained(<span class="hljs-string">&#x27;bert-base-chinese&#x27;</span>)<br><br><span class="hljs-comment"># 使用模型进行推理</span><br>output = model(**encoded_input)<br><br><span class="hljs-comment"># 输出结果</span><br><span class="hljs-built_in">print</span>(output)<br></code></pre></td></tr></table></figure>
-<p><code>output</code>包含两个部分： -
-<code>last_hidden_state</code>：最后一个隐藏层的输出，可以用于各种下游任务。
--
-<code>pooler_output</code>：对应于<code>[CLS]</code>标记的输出，通常用于分类任务。</p>
+<p><code>output</code>包含两个部分： - <code>last_hidden_state</code>：最后一个隐藏层的输出，可以用于各种下游任务。 - <code>pooler_output</code>：对应于<code>[CLS]</code>标记的输出，通常用于分类任务。</p>
 <hr />
 <p>BERT模型作为自然语言处理领域的重大突破，其核心优势在于创新性地采用了双向注意力机制和大规模无监督预训练方法。该模型通过深度双向上下文编码，有效捕捉了语言的复杂语义关系和长程依赖，显著提升了对语言理解的深度和广度。BERT的预训练-微调范式不仅大幅降低了特定任务的训练成本，还实现了模型在多种NLP任务上的卓越迁移能力。其强大的特征表示能力和灵活的架构设计，为下游任务提供了高质量的语言表征基础。</p>
 

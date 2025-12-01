@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="UV 是一个快速的 Python 包管理器，它比 pip 和 venv 更高效，适用于 Python 环境管理。">
+    <meta name="description" content="UV 是一个快速的 Python 包管理器，它比 pip 和 venv 更高效，适用于 Python 环境管理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何使用UV管理python环境">
 <meta property="og:url" content="https://linxkon.github.io/UV%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86python%E7%8E%AF%E5%A2%83.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="UV 是一个快速的 Python 包管理器，它比 pip 和 venv 更高效，适用于 Python 环境管理。">
+<meta property="og:description" content="UV 是一个快速的 Python 包管理器，它比 pip 和 venv 更高效，适用于 Python 环境管理。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE.png">
 <meta property="article:published_time" content="2025-01-20T12:21:13.000Z">
@@ -314,8 +314,7 @@
             
               <div class="markdown-body">
                 
-                <p>UV 是一个快速的 Python 包管理器，它比 <code>pip</code> 和
-<code>venv</code> 更高效，适用于 Python 环境管理。</p>
+                <p>UV 是一个快速的 Python 包管理器，它比 <code>pip</code> 和 <code>venv</code> 更高效，适用于 Python 环境管理。</p>
 <span id="more"></span>
 <h2 id="uv-的安装">1. <strong>UV 的安装</strong></h2>
 <p>UV 可以直接通过 <code>pip</code> 或 <code>curl</code> 安装：</p>
@@ -325,8 +324,7 @@
 <p>安装后，可以使用 <code>uv --version</code> 验证是否成功。</p>
 <hr />
 <h2 id="创建和管理虚拟环境">2. <strong>创建和管理虚拟环境</strong></h2>
-<p>UV 提供了一种类似 <code>venv</code>
-的虚拟环境管理方式，但更加轻量和快速。</p>
+<p>UV 提供了一种类似 <code>venv</code> 的虚拟环境管理方式，但更加轻量和快速。</p>
 <h3 id="创建虚拟环境"><strong>创建虚拟环境</strong></h3>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">uv venv myenv<br></code></pre></td></tr></table></figure>
 <p>这将在 <code>myenv</code> 目录下创建一个隔离的 Python 环境。</p>
@@ -352,9 +350,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">uv pip list<br></code></pre></td></tr></table></figure>
 <hr />
 <h2 id="锁定依赖和管理环境">4. <strong>锁定依赖和管理环境</strong></h2>
-<p>UV 支持 <code>pyproject.toml</code> 和
-<code>requirements.txt</code>，也可以生成 <code>requirements.lock</code>
-以确保依赖一致性。</p>
+<p>UV 支持 <code>pyproject.toml</code> 和 <code>requirements.txt</code>，也可以生成 <code>requirements.lock</code> 以确保依赖一致性。</p>
 <h3 id="生成锁文件"><strong>生成锁文件</strong></h3>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">uv pip freeze &gt; requirements.lock<br></code></pre></td></tr></table></figure>
 <h3 id="安装锁定的依赖"><strong>安装锁定的依赖</strong></h3>
@@ -363,16 +359,13 @@
 <h2 id="uv-的优势">5. <strong>UV 的优势</strong></h2>
 <ul>
 <li><strong>比 pip 更快</strong>（使用 Rust 编写）</li>
-<li><strong>原生支持 venv</strong>（不需要
-<code>virtualenv</code>）</li>
+<li><strong>原生支持 venv</strong>（不需要 <code>virtualenv</code>）</li>
 <li><strong>兼容 pip</strong>（但执行更快）</li>
 <li><strong>更好的依赖解析</strong>（减少冲突）</li>
 </ul>
 <hr />
 <h2 id="总结"><strong>总结</strong></h2>
-<p>UV 既能管理虚拟环境，又能高效安装和锁定 Python 依赖，适合希望提升
-Python 开发效率的用户。如果你熟悉 <code>pip</code> 和
-<code>venv</code>，可以无缝过渡到 UV。</p>
+<p>UV 既能管理虚拟环境，又能高效安装和锁定 Python 依赖，适合希望提升 Python 开发效率的用户。如果你熟悉 <code>pip</code> 和 <code>venv</code>，可以无缝过渡到 UV。</p>
 
                 
               </div>

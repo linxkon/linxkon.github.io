@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="1.背景 随着chatGPT的火爆出圈，大模型也逐渐受到越来越多研究者的关注。有一份来自OpenAI的研究报告(Scaling laws for neural language models)曾经指出模型的性能常与模型的参数规模息息相关，那么如何训练一个超大规模的LLM也是大家比较关心的问题，常用的分布式训练框架有Megatron-LM和DeepSpeed，下面我们将简单介绍这些框架及其用到">
+    <meta name="description" content="1.背景 随着chatGPT的火爆出圈，大模型也逐渐受到越来越多研究者的关注。有一份来自OpenAI的研究报告(Scaling laws for neural language models)曾经指出模型的性能常与模型的参数规模息息相关，那么如何训练一个超大规模的LLM也是大家比较关心的问题，常用的分布式训练框架有Megatron-LM和DeepSpeed，下面我们将简单介绍这些框架及其用到的技">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式训练架构相关知识">
 <meta property="og:url" content="https://linxkon.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E6%A1%86%E6%9E%B6%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="1.背景 随着chatGPT的火爆出圈，大模型也逐渐受到越来越多研究者的关注。有一份来自OpenAI的研究报告(Scaling laws for neural language models)曾经指出模型的性能常与模型的参数规模息息相关，那么如何训练一个超大规模的LLM也是大家比较关心的问题，常用的分布式训练框架有Megatron-LM和DeepSpeed，下面我们将简单介绍这些框架及其用到">
+<meta property="og:description" content="1.背景 随着chatGPT的火爆出圈，大模型也逐渐受到越来越多研究者的关注。有一份来自OpenAI的研究报告(Scaling laws for neural language models)曾经指出模型的性能常与模型的参数规模息息相关，那么如何训练一个超大规模的LLM也是大家比较关心的问题，常用的分布式训练框架有Megatron-LM和DeepSpeed，下面我们将简单介绍这些框架及其用到的技">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E6%9E%B6%E6%9E%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86.png">
 <meta property="article:published_time" content="2024-09-12T07:21:13.000Z">
@@ -314,83 +314,55 @@
               <div class="markdown-body">
                 
                 <h3 id="背景">1.背景</h3>
-<p>随着chatGPT的火爆出圈，大模型也逐渐受到越来越多研究者的关注。有一份来自OpenAI的研究报告(Scaling
-laws for neural language
-models)曾经指出模型的性能常与模型的参数规模息息相关，那么如何训练一个超大规模的LLM也是大家比较关心的问题，常用的分布式训练框架有Megatron-LM和DeepSpeed，下面我们将简单介绍这些框架及其用到的技术。</p>
+<p>随着chatGPT的火爆出圈，大模型也逐渐受到越来越多研究者的关注。有一份来自OpenAI的研究报告(Scaling laws for neural language models)曾经指出模型的性能常与模型的参数规模息息相关，那么如何训练一个超大规模的LLM也是大家比较关心的问题，常用的分布式训练框架有Megatron-LM和DeepSpeed，下面我们将简单介绍这些框架及其用到的技术。</p>
 <h3 id="基础知识">2.基础知识</h3>
 <p>在介绍这些和框架和技术之前先介绍一下设计分布式训练的基本知识</p>
 <p><strong>1).通讯原语操作:</strong></p>
-<p>NCCL <a href="">英伟达</a>集合通信库，是一个专用于多个 GPU
-乃至多个节点间通信的实现。它专为英伟达的计算卡和网络优化，能带来更低的延迟和更高的带宽。</p>
+<p>NCCL <a href="">英伟达</a>集合通信库，是一个专用于多个 GPU 乃至多个节点间通信的实现。它专为英伟达的计算卡和网络优化，能带来更低的延迟和更高的带宽。</p>
 <p>a.Broadcast</p>
 <p>Broadcast代表广播行为，执行Broadcast时，数据从主节点0广播至其他各个指定的节点（0~3）</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-ddab6ac76e09c8a86bfc1f8fad8d1d6e_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-ddab6ac76e09c8a86bfc1f8fad8d1d6e_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Broadcast</p>
 <p>b.Scatter</p>
 <p>Scatter与Broadcast非常相似，都是一对多的通信方式，不同的是Broadcast的0号节点将相同的信息发送给所有的节点，而Scatter则是将数据的不同部分，按需发送给所有的节点。</p>
 <p>c.Reduce</p>
-<p>Reduce称为<a
-href="">规约运算</a>，是一系列简单运算操作的统称，细分可以包括：SUM、MIN、MAX、PROD、LOR等类型的规约操作。Reduce意为减少/精简，因为其操作在每个节点上获取一个输入元素数组，通过执行操作后，将得到精简的更少的元素。</p>
+<p>Reduce称为<a href="">规约运算</a>，是一系列简单运算操作的统称，细分可以包括：SUM、MIN、MAX、PROD、LOR等类型的规约操作。Reduce意为减少/精简，因为其操作在每个节点上获取一个输入元素数组，通过执行操作后，将得到精简的更少的元素。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-25e275b3a8c7a8b98054b83dc6420d8d_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-25e275b3a8c7a8b98054b83dc6420d8d_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Reduce</p>
 <p>d.AllReduce</p>
-<p>Reduce是一系列简单运算操作的统称，All
-Reduce则是在所有的节点上都应用同样的Reduce操作</p>
+<p>Reduce是一系列简单运算操作的统称，All Reduce则是在所有的节点上都应用同样的Reduce操作</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-4846a68e4fec0d3dbaf73e6c56c2983e_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-4846a68e4fec0d3dbaf73e6c56c2983e_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>AllReduce</p>
 <p>e.Gather</p>
 <p>Gather操作将多个sender上的数据收集到单个节点上，Gather可以理解为反向的Scatter。</p>
 <p>f.AllGather</p>
-<p>收集所有数据到所有节点上。从最基础的角度来看，All
-Gather相当于一个Gather操作之后跟着一个Broadcast操作。</p>
+<p>收集所有数据到所有节点上。从最基础的角度来看，All Gather相当于一个Gather操作之后跟着一个Broadcast操作。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-cd07564e08307b856586106bb79bf3e5_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-cd07564e08307b856586106bb79bf3e5_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>AllGather</p>
 <p>g.ReduceScatter</p>
-<p>Reduce
-Scatter操作会将个节点的输入先进行求和，然后在第0维度按卡数切分，将数据分发到对应的卡上。</p>
+<p>Reduce Scatter操作会将个节点的输入先进行求和，然后在第0维度按卡数切分，将数据分发到对应的卡上。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-55652f9d4274b76249f1e745c66a40d8_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-55652f9d4274b76249f1e745c66a40d8_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>ReduceScatter</p>
-<p>这里多说一下AllReduce操作，目标是高效得将不同机器中的数据整合（reduce）之后再把结果分发给各个机器。在深度学习应用中，数据往往是一个向量或者矩阵，通常用的整合则有Sum、Max、Min等。AllReduce具体实现的方法有很多种，最单纯的实现方式就是每个worker将自己的数据发给其他的所有worker，然而这种方式存在大量的浪费。一个略优的实现是利用<a
-href="">主从式架构</a>，将一个worker设为master，其余所有worker把数据发送给master之后，由master进行整合元算，完成之后再分发给其余worker。不过这种实现master往往会成为整个网络的瓶颈。AllReduce还有很多种不同的实现，多数实现都是基于某一些对数据或者运算环境的假设，来优化网络带宽的占用或者延迟。如Ring
-AllReduce：</p>
+<p>这里多说一下AllReduce操作，目标是高效得将不同机器中的数据整合（reduce）之后再把结果分发给各个机器。在深度学习应用中，数据往往是一个向量或者矩阵，通常用的整合则有Sum、Max、Min等。AllReduce具体实现的方法有很多种，最单纯的实现方式就是每个worker将自己的数据发给其他的所有worker，然而这种方式存在大量的浪费。一个略优的实现是利用<a href="">主从式架构</a>，将一个worker设为master，其余所有worker把数据发送给master之后，由master进行整合元算，完成之后再分发给其余worker。不过这种实现master往往会成为整个网络的瓶颈。AllReduce还有很多种不同的实现，多数实现都是基于某一些对数据或者运算环境的假设，来优化网络带宽的占用或者延迟。如Ring AllReduce：</p>
 <p>第一阶段，将N个worker分布在一个环上，并且把每个worker的数据分成N份。</p>
 <p>第二阶段，第k个worker会把第k份数据发给下一个worker，同时从前一个worker收到第k-1份数据。</p>
-<p>第三阶段，<a
-href="">worker</a>会把收到的第k-1份数据和自己的第k-1份数据整合，再将整合的数据发送给下一个worker</p>
+<p>第三阶段，<a href="">worker</a>会把收到的第k-1份数据和自己的第k-1份数据整合，再将整合的数据发送给下一个worker</p>
 <p>此循环N次之后，每一个worker都会包含最终整合结果的一份。</p>
-<p>假设每个worker的数据是一个长度为S的向量，那么个Ring
-AllReduce里，每个worker发送的数据量是O(S)，和worker的数量N无关。这样就避免了<a
-href="">主从架构</a>中master需要处理O(S*N)的数据量而成为网络瓶颈的问题。</p>
+<p>假设每个worker的数据是一个长度为S的向量，那么个Ring AllReduce里，每个worker发送的数据量是O(S)，和worker的数量N无关。这样就避免了<a href="">主从架构</a>中master需要处理O(S*N)的数据量而成为网络瓶颈的问题。</p>
 <p><strong>2).<a href="">并行计算</a>技术:</strong></p>
 <p>a.<a href="">数据并行</a></p>
 <p>DP (Data Parallel)</p>
-<p>本质上是单进程多线程的实现方式，只能实现单机训练不能算是严格意义上的<a
-href="">分布式训练</a>。步骤如下：</p>
+<p>本质上是单进程多线程的实现方式，只能实现单机训练不能算是严格意义上的<a href="">分布式训练</a>。步骤如下：</p>
 <ul>
 <li>首先将模型加载到主GPU上，再复制到各个指定从GPU；</li>
 <li>将输入数据按照Batch维度进行拆分，各个GPU独立进行forward计算；</li>
@@ -402,334 +374,157 @@ href="">分布式训练</a>。步骤如下：</p>
 <li>采用 PS 架构通信开销大</li>
 </ul>
 <p><a href="">分布式数据</a>并行 DDP (Distribution Data Parallel)</p>
-<p>采用 AllReduce
-架构，在单机和多机上都可以使用。负载分散在每个gpu节点上，通信成本是恒定的，与
-GPU 数量无关。</p>
+<p>采用 AllReduce 架构，在单机和多机上都可以使用。负载分散在每个gpu节点上，通信成本是恒定的，与 GPU 数量无关。</p>
 <p>b.张量并行</p>
-<p>分布式张量计算是一种正交且更通用的方法，它将张量操作划分到多个设备上，以加速计算或增加模型大小。把
-Masked Multi Self Attention 和Feed Forward
-都进行切分以并行化，利用Transformers网络的结构，通过添加一些同步原语来创建一个简单的模型并行实现。其实比较容易理解，直接上图：</p>
+<p>分布式张量计算是一种正交且更通用的方法，它将张量操作划分到多个设备上，以加速计算或增加模型大小。把 Masked Multi Self Attention 和Feed Forward 都进行切分以并行化，利用Transformers网络的结构，通过添加一些同步原语来创建一个简单的模型并行实现。其实比较容易理解，直接上图：</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-4588e2032b68511ede29943749c78c08_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-4588e2032b68511ede29943749c78c08_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>张量并行图解</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-0a00900a306a054990bfe7ba6cd4cd9b_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-0a00900a306a054990bfe7ba6cd4cd9b_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>张量并行公式</p>
 <p>在MLP层中，对A采用“列切割”，对B采用“行切割”。</p>
 <ul>
-<li><code>f</code> 的<a
-href="">forward计算</a>：把输入X拷贝到两块GPU上，每块GPU即可独立做forward计算。</li>
-<li><code>g</code>
-的forward计算：每块GPU上的forward的计算完毕，取得Z1和Z2后，GPU间做一次AllReduce，相加结果产生Z。</li>
-<li><code>g</code> 的backward计算：只需要把 ∂L∂Z
-拷贝到两块GPU上，两块GPU就能各自独立做梯度计算。</li>
-<li><code>f</code>
-的backward计算：当当前层的梯度计算完毕，需要传递到下一层继续做梯度计算时，我们需要求得
-∂L∂X 。则此时两块GPU做一次AllReduce，把各自的梯度 ∂L∂X|1|1|1 和
-∂L∂X|2|2|2 相加即可。</li>
+<li><code>f</code> 的<a href="">forward计算</a>：把输入X拷贝到两块GPU上，每块GPU即可独立做forward计算。</li>
+<li><code>g</code> 的forward计算：每块GPU上的forward的计算完毕，取得Z1和Z2后，GPU间做一次AllReduce，相加结果产生Z。</li>
+<li><code>g</code> 的backward计算：只需要把 ∂L∂Z 拷贝到两块GPU上，两块GPU就能各自独立做梯度计算。</li>
+<li><code>f</code> 的backward计算：当当前层的梯度计算完毕，需要传递到下一层继续做梯度计算时，我们需要求得 ∂L∂X  。则此时两块GPU做一次AllReduce，把各自的梯度 ∂L∂X|1|1|1 和 ∂L∂X|2|2|2 相加即可。</li>
 </ul>
-<p>为什么我们对A采用列切割，对B采用行切割呢？这样设计的原因是，我们尽量保证各GPU上的计算相互独立，减少通讯量。对A来说，需要做一次GELU的计算，而<a
-href="">GELU函数</a>是非线形的，也就意味着，如果对A采用行切割，我们必须在做GELU前，做一次AllReduce，这样就会产生额外通讯量。但是如果对A采用列切割，那每块GPU就可以继续独立计算了。一旦确认好A做列切割，那么也就相应定好B需要做行切割了。</p>
+<p>为什么我们对A采用列切割，对B采用行切割呢？这样设计的原因是，我们尽量保证各GPU上的计算相互独立，减少通讯量。对A来说，需要做一次GELU的计算，而<a href="">GELU函数</a>是非线形的，也就意味着，如果对A采用行切割，我们必须在做GELU前，做一次AllReduce，这样就会产生额外通讯量。但是如果对A采用列切割，那每块GPU就可以继续独立计算了。一旦确认好A做列切割，那么也就相应定好B需要做行切割了。</p>
 <p>MLP层做forward时产生一次AllReduce，做backward时产生一次AllReduce。AllReduce的过程分为两个阶段，Reduce-Scatter和All-Gather，每个阶段的通讯量都相等。现在我们设每个阶段的通讯量为Φ，则一次AllReduce产生的通讯量为2Φ2。MLP层的总通讯量为4Φ4。</p>
 <p>c.流水并行</p>
-<p>无论是数据并行还是模型并行，都会在相应的机器之间进行全连接的通信，当机器数量增大时，通信开销和时延会大到难以忍受。而流水并行既解决了超大模型无法在单设备上装下的难题，又很好解决了机器之间的通信开销的问题，每个阶段（stage）
-和下一个阶段之间仅有相邻的某一个 Tensor
-数据需要传输，每台机器的数据传输量跟总的网络大小、机器总数、并行规模无关。</p>
+<p>无论是数据并行还是模型并行，都会在相应的机器之间进行全连接的通信，当机器数量增大时，通信开销和时延会大到难以忍受。而流水并行既解决了超大模型无法在单设备上装下的难题，又很好解决了机器之间的通信开销的问题，每个阶段（stage） 和下一个阶段之间仅有相邻的某一个 Tensor 数据需要传输，每台机器的数据传输量跟总的网络大小、机器总数、并行规模无关。</p>
 <p>G-pipe</p>
-<p>将朴素流水线并行的 batch
-再进行切分，减小设备间空闲状态的时间，可以显著提升流水线并行设备利用率。其实也是
-F-then-B 调度方式所示，将原本的
-mini-batch（数据并行切分后的batch）划分成多个 <a
-href="">micro-batch</a>（mini-batch再切分后的batch），每个 pipeline
-stage
-（流水线并行的计算单元）先整体进行前向计算，再进行反向计算。通过在同一时刻分别计算模型的不同部分，F-then-B
-可以显著提升设备资源利用率。但也不难看出这种 F-then-B 模式由于缓存了多个
-micro-batch 的中间变量和梯度，显存的实际利用率并不高。1F1B （在<a
-href="">流水线并行</a>中，pipeline stage
-前向计算和反向计算交叉进行的方式）流水线<a
-href="">并行方式</a>解决了这个问题。在 1F1B 模式下，前向计算和<a
-href="">反向计算</a>交叉进行，可以及时释放不必要的中间变量。</p>
+<p>将朴素流水线并行的 batch 再进行切分，减小设备间空闲状态的时间，可以显著提升流水线并行设备利用率。其实也是 F-then-B 调度方式所示，将原本的 mini-batch（数据并行切分后的batch）划分成多个 <a href="">micro-batch</a>（mini-batch再切分后的batch），每个 pipeline stage （流水线并行的计算单元）先整体进行前向计算，再进行反向计算。通过在同一时刻分别计算模型的不同部分，F-then-B 可以显著提升设备资源利用率。但也不难看出这种 F-then-B 模式由于缓存了多个 micro-batch 的中间变量和梯度，显存的实际利用率并不高。1F1B （在<a href="">流水线并行</a>中，pipeline stage 前向计算和反向计算交叉进行的方式）流水线<a href="">并行方式</a>解决了这个问题。在 1F1B 模式下，前向计算和<a href="">反向计算</a>交叉进行，可以及时释放不必要的中间变量。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-b678a253f70613169172fd892e0e4064_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-b678a253f70613169172fd892e0e4064_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>G-pipe</p>
 <p>PipeDream</p>
-<p>PipeDream 在单个 GPU
-上进行短暂的运行时性能分析后，可以自动决定怎样分割这些 DNN
-算子，如何平衡不同 stage
-之间的计算负载，而同时尽可能减少目标平台上的通信量。PipeDream将DNN的这些层划分为多个阶段——每个阶段（stage）由模型中的一组连续层组成。PipeDream把模型的不同的阶段部署在不同的机器上，每个阶段可能有不同的replication。该阶段对本阶段中所有层执行向前和向后传递。PipeDream将包含输入层的阶段称为输入阶段，将包含输出层的阶段称为输出阶段。</p>
+<p>PipeDream 在单个 GPU 上进行短暂的运行时性能分析后，可以自动决定怎样分割这些 DNN 算子，如何平衡不同 stage 之间的计算负载，而同时尽可能减少目标平台上的通信量。PipeDream将DNN的这些层划分为多个阶段——每个阶段（stage）由模型中的一组连续层组成。PipeDream把模型的不同的阶段部署在不同的机器上，每个阶段可能有不同的replication。该阶段对本阶段中所有层执行向前和向后传递。PipeDream将包含输入层的阶段称为输入阶段，将包含输出层的阶段称为输出阶段。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-26f04fc799e3220d6806cfbebe415712_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-26f04fc799e3220d6806cfbebe415712_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>PipeDream</p>
 <p><a href="">virtual pipeline</a></p>
-<p>virtual pipeline 是 Megatron-2 这篇论文中最主要的一个创新点。传统的
-pipeline 并行通常会在一个 Device 上放置几个
-block，我理解这是为了扩展效率考虑，在计算强度和通信强度中间取一个平衡。但
-virtual pipeline 的却反其道而行之，在 device
-数量不变的情况下，分出更多的 pipeline
-stage，以更多的通信量，换取空泡比率降低，减小了 step e2e 用时。</p>
+<p>virtual pipeline 是 Megatron-2 这篇论文中最主要的一个创新点。传统的 pipeline 并行通常会在一个 Device 上放置几个 block，我理解这是为了扩展效率考虑，在计算强度和通信强度中间取一个平衡。但 virtual pipeline 的却反其道而行之，在 device 数量不变的情况下，分出更多的 pipeline stage，以更多的通信量，换取空泡比率降低，减小了 step e2e 用时。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-b5347bb2677de0ffd78e091a4e1e79bb_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-b5347bb2677de0ffd78e091a4e1e79bb_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>d.梯度累加</p>
-<p>Gradient Accumulation 就是把一个大 Batch 拆分成多个 micro-batch ，
-每个 micro-batch
-前后向计算后的梯度累加，在最后一个micro-batch累加结束后，统一更新模型。micro-batch
-跟数据并行有高度的相似性：数据并行是空间上的， 数据被拆分成多个 <a
-href="">tensor</a>，同时喂给多个设备并行计算，然后将梯度累加在一起更新；而
-micro-batch 是时间上的数据并行， 数据被拆分成多个 tensor，
-按照时序依次进入同一个设备串行计算，然后将梯度累加在一起更新。当总的
-batch size 一致，且数据并行的并行度和 micro-batch
-的累加次数相等时，数据并行和 Gradient Accumulation
-在数学上完全等价。Gradient Accumulation 通过多个
-micro-batch的梯度累加使得下一个 micro-batch 的前向计算不需要依赖上一个
-micro-batch 的反向计算，因此可以畅通无阻的进行下去（当然在一个大 batch
-的最后一次 micro-batch 还是会触发这个依赖）。</p>
+<p>Gradient Accumulation 就是把一个大 Batch 拆分成多个 micro-batch ， 每个 micro-batch 前后向计算后的梯度累加，在最后一个micro-batch累加结束后，统一更新模型。micro-batch 跟数据并行有高度的相似性：数据并行是空间上的， 数据被拆分成多个 <a href="">tensor</a>，同时喂给多个设备并行计算，然后将梯度累加在一起更新；而 micro-batch 是时间上的数据并行， 数据被拆分成多个 tensor， 按照时序依次进入同一个设备串行计算，然后将梯度累加在一起更新。当总的 batch size 一致，且数据并行的并行度和 micro-batch 的累加次数相等时，数据并行和 Gradient Accumulation 在数学上完全等价。Gradient Accumulation 通过多个 micro-batch的梯度累加使得下一个 micro-batch 的前向计算不需要依赖上一个 micro-batch 的反向计算，因此可以畅通无阻的进行下去（当然在一个大 batch 的最后一次 micro-batch 还是会触发这个依赖）。</p>
 <p>Gradient Accumulation 解决了很多问题：</p>
-<p>在单卡下，Gradient Accumulation 可以将一个大的 batch size
-拆分成等价的多个小 micro-batch ，从而达到节省显存的目的。</p>
-<p>在数据并行下，Gradient Accumulation
-解决了反向梯度同步开销占比过大的问题（随着机器数和设备数的增加，梯度的
-AllReduce 同步开销也加大），因为<a
-href="">梯度同步</a>变成了一个稀疏操作，因此可以提升数据并行的加速比。</p>
-<p>在流水并行下， Gradient Accumulation 使得不同 stage
-之间可以并行执行不同的 micro-batch，
-从而让各个阶段的计算不阻塞，达到流水的目的。如果每个 micro-batch
-前向计算的中间结果（activation）被后向计算所消费，则需要在显存中缓存
-8多份（梯度累加的次数）完整的前向
-activation。这时就不得不用另一项重要的技术：<a
-href="">激活检查点</a>（activation checkpointing）。</p>
+<p>在单卡下，Gradient Accumulation 可以将一个大的 batch size 拆分成等价的多个小 micro-batch ，从而达到节省显存的目的。</p>
+<p>在数据并行下，Gradient Accumulation 解决了反向梯度同步开销占比过大的问题（随着机器数和设备数的增加，梯度的 AllReduce 同步开销也加大），因为<a href="">梯度同步</a>变成了一个稀疏操作，因此可以提升数据并行的加速比。</p>
+<p>在流水并行下， Gradient Accumulation 使得不同 stage 之间可以并行执行不同的 micro-batch， 从而让各个阶段的计算不阻塞，达到流水的目的。如果每个 micro-batch 前向计算的中间结果（activation）被后向计算所消费，则需要在显存中缓存 8多份（梯度累加的次数）完整的前向 activation。这时就不得不用另一项重要的技术：<a href="">激活检查点</a>（activation checkpointing）。</p>
 <p>e.激活检查点</p>
-<p>Checkpointing 的核心思想 是在前向网络中标记少量的 Tensor （被
-Checkpointing 的 Tensor ），前向计算就只会保留这些被标记的 Tensor，
-其余的前向的 activation，会通过在反向传播中根据 Checkpointing 的 Tensor
-临时重新计算一遍前向得到。这样就使得大量的 activation
-不需要一直保存到后向计算，有效减少了大量 Tensor
-的生命周期，使得内存复用效率大幅提升。</p>
+<p>Checkpointing 的核心思想 是在前向网络中标记少量的 Tensor （被 Checkpointing 的 Tensor ），前向计算就只会保留这些被标记的 Tensor， 其余的前向的 activation，会通过在反向传播中根据 Checkpointing 的 Tensor 临时重新计算一遍前向得到。这样就使得大量的 activation 不需要一直保存到后向计算，有效减少了大量 Tensor 的生命周期，使得内存复用效率大幅提升。</p>
 <p>f.ZeRO</p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1710.03740">混合精度训练</a>（mixed
-precision training）和<a
-target="_blank" rel="noopener" href="https://arxiv.org/abs/1412.6980">Adam</a>优化器基本上已经是训练语言模型的标配，我们先来简单回顾下相关概念。Adam在SGD基础上，为每个参数梯度增加了一阶动量（momentum）和二阶动量（variance）。混合精度训练，字如其名，同时存在fp16和fp32两种格式的数值，其中模型参数、模型梯度都是fp16，此外还有fp32的模型参数，如果优化器是Adam，则还有fp32的momentum和variance。</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1710.03740">混合精度训练</a>（mixed precision training）和<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1412.6980">Adam</a>优化器基本上已经是训练语言模型的标配，我们先来简单回顾下相关概念。Adam在SGD基础上，为每个参数梯度增加了一阶动量（momentum）和二阶动量（variance）。混合精度训练，字如其名，同时存在fp16和fp32两种格式的数值，其中模型参数、模型梯度都是fp16，此外还有fp32的模型参数，如果优化器是Adam，则还有fp32的momentum和variance。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-25e3bd9ed7c200b194d3b9730d017ea9_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-25e3bd9ed7c200b194d3b9730d017ea9_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>混合精度训练</p>
 <p>ZeRO将模型训练阶段，每张卡中显存内容分为两类：</p>
 <ol type="1">
-<li>模型状态（model states）:
-模型参数（fp16）、模型梯度（fp16）和Adam状态（fp32的模型参数备份，fp32的momentum和fp32的variance）。假设模型参数量
-Φ，则共需要 2Φ+2Φ+(4Φ+4Φ+4Φ)=4Φ+12Φ=16Φ2+ 2+ (4+ 4+ 4) = 4+ 12= 16+ 2+
-(4+ 4+ 4) = 4+ 12= 16字节存储，可以看到，Adam状态占比 75%75%75% 。</li>
-<li>剩余状态（residual states）:
-除了模型状态之外的显存占用，包括激活值（activation）、各种临时缓冲区（buffer）以及无法使用的显存碎片（fragmentation）。</li>
+<li>模型状态（model states）: 模型参数（fp16）、模型梯度（fp16）和Adam状态（fp32的模型参数备份，fp32的momentum和fp32的variance）。假设模型参数量 Φ，则共需要 2Φ+2Φ+(4Φ+4Φ+4Φ)=4Φ+12Φ=16Φ2+ 2+ (4+ 4+ 4) = 4+ 12= 16+ 2+ (4+ 4+ 4) = 4+ 12= 16字节存储，可以看到，Adam状态占比 75%75%75% 。</li>
+<li>剩余状态（residual states）: 除了模型状态之外的显存占用，包括激活值（activation）、各种临时缓冲区（buffer）以及无法使用的显存碎片（fragmentation）。</li>
 </ol>
-<p>针对模型状态的存储优化（去除冗余），ZeRO使用的方法是分片（partition），即每张卡只存
-1N 的模型状态量，这样系统内只维护一份模型状态。</p>
+<p>针对模型状态的存储优化（去除冗余），ZeRO使用的方法是分片（partition），即每张卡只存 1N 的模型状态量，这样系统内只维护一份模型状态。</p>
 <ul>
-<li>首先进行分片操作的是模型状态中的Adam，也就是下图中的 PosP_{os}P_{os}
-，这里os指的是optimizer
-states。模型参数（parameters）和梯度（gradients）仍旧是每张卡保持一份，此时，每张卡的模型状态所需显存是
-4Φ+12ΦN4+ 4+ 字节，当 NNN 比较大时，趋向于 4ΦB4B4B ，也就是原来
-16ΦB16B16B 的 14 。</li>
-<li>如果继续对模型梯度进行分片，也就是下图中的 Pos+gP_{os+g}P_{os+g}
-，模型参数仍旧是每张卡保持一份，此时，每张卡的模型状态所需显存是
-2Φ+2Φ+12ΦN2+ 2+ 字节，当 NNN 比较大时，趋向于 2ΦB2B2B ，也即是原来
-16ΦB16B16B 的 18 。</li>
-<li>如果继续对模型参数进行分片，也就是下图中的
-Pos+g+pP_{os+g+p}P_{os+g+p} ，此时每张卡的模型状态所需显存是 16ΦN
-字节，当 NNN 比较大时，趋向于 00 0 。</li>
+<li>首先进行分片操作的是模型状态中的Adam，也就是下图中的 PosP_{os}P_{os} ，这里os指的是optimizer states。模型参数（parameters）和梯度（gradients）仍旧是每张卡保持一份，此时，每张卡的模型状态所需显存是 4Φ+12ΦN4+ 4+  字节，当 NNN 比较大时，趋向于 4ΦB4B4B ，也就是原来 16ΦB16B16B 的 14 。</li>
+<li>如果继续对模型梯度进行分片，也就是下图中的 Pos+gP_{os+g}P_{os+g} ，模型参数仍旧是每张卡保持一份，此时，每张卡的模型状态所需显存是 2Φ+2Φ+12ΦN2+ 2+  字节，当 NNN 比较大时，趋向于 2ΦB2B2B ，也即是原来 16ΦB16B16B 的 18 。</li>
+<li>如果继续对模型参数进行分片，也就是下图中的 Pos+g+pP_{os+g+p}P_{os+g+p} ，此时每张卡的模型状态所需显存是 16ΦN 字节，当 NNN 比较大时，趋向于 00 0 。</li>
 </ul>
-<p>传统数据数据并行在每一步（step/iteration）计算梯度后，需要进行一次AllReduce操作来计算梯度均值，目前常用的是Ring
-AllReduce，分为ReduceScatter和AllGather两步，每张卡的通信数据量（发送+接受）近似为
-2Φ2。</p>
-<p>我们直接分析 Pos+gP_{os+g}P_{os+g} ，每张卡只存储 1N
-的优化器状态和梯度，对于 gpu0gpu_{0}gpu_{0} 来说，为了计算它这 1N
-梯度的均值，需要进行一次Reduce操作，通信数据量是 1NΦ⋅N=Φ N=
-N=，然后其余显卡则不需要保存这部分梯度值了。实现中使用了bucket策略，保证
-1N 的梯度每张卡只发送一次。</p>
-<p>当 gpu0gpu_{0}gpu_{0}
-计算好梯度均值后，就可以更新局部的优化器状态（包括
-1NΦ的参数），当反向传播过程结束，进行一次Gather操作，更新 (1−1N)Φ(1-)
-(1-) 的模型参数，通信数据量是 1NΦ⋅N=Φ N= N=。</p>
+<p>传统数据数据并行在每一步（step/iteration）计算梯度后，需要进行一次AllReduce操作来计算梯度均值，目前常用的是Ring AllReduce，分为ReduceScatter和AllGather两步，每张卡的通信数据量（发送+接受）近似为 2Φ2。</p>
+<p>我们直接分析 Pos+gP_{os+g}P_{os+g} ，每张卡只存储 1N 的优化器状态和梯度，对于 gpu0gpu_{0}gpu_{0} 来说，为了计算它这 1N 梯度的均值，需要进行一次Reduce操作，通信数据量是 1NΦ⋅N=Φ N= N=，然后其余显卡则不需要保存这部分梯度值了。实现中使用了bucket策略，保证 1N 的梯度每张卡只发送一次。</p>
+<p>当 gpu0gpu_{0}gpu_{0} 计算好梯度均值后，就可以更新局部的优化器状态（包括 1NΦ的参数），当反向传播过程结束，进行一次Gather操作，更新 (1−1N)Φ(1-) (1-) 的模型参数，通信数据量是 1NΦ⋅N=Φ N= N=。</p>
 <p>从全局来看，相当于用Reduce-Scatter和AllGather两步，和数据并行一致。</p>
-<p>Pos+g+pP_{os+g+p}P_{os+g+p} 使得每张卡只存了 1N
-的参数，不管是在前向计算还是反向传播，都涉及一次Broadcast操作。</p>
+<p>Pos+g+pP_{os+g+p}P_{os+g+p} 使得每张卡只存了 1N 的参数，不管是在前向计算还是反向传播，都涉及一次Broadcast操作。</p>
 <p>综上，PosP_{os}P_{os}和Pos+gP_{os+g}P_{os+g}的通信量和传统数据并行相同，Pos+g+pP_{os+g+p}P_{os+g+p}会增加通信量。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-dab93749bc2294adb4781421ef0e5270_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-dab93749bc2294adb4781421ef0e5270_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Zero通信量</p>
 <h3 id="megatron-lm">3.Megatron-LM</h3>
 <p><strong>1).Megatron-LM-1</strong></p>
 <p>利用了张量并行和数据并行</p>
 <p><strong>2).Megatron-LM-2</strong></p>
-<p>Megatron 2 在 Megatron 1 的基础上新增了 pipeline 并行，提出了virtual
-pipeline:1F1B-interleaving，成为和 DeepSpeed 类似的 3D
-并行的训练框架，新增的 pipeline 并行就是本文主要所阐述的内容。另外
-Megatron-2 论文中还提及了一些通信优化的小 trick，本质是增加本地的 io
-操作和通信，从而降低低带宽网络的通信量。</p>
+<p>Megatron 2 在 Megatron 1 的基础上新增了 pipeline 并行，提出了virtual pipeline:1F1B-interleaving，成为和 DeepSpeed 类似的 3D 并行的训练框架，新增的 pipeline 并行就是本文主要所阐述的内容。另外 Megatron-2 论文中还提及了一些通信优化的小 trick，本质是增加本地的 io 操作和通信，从而降低低带宽网络的通信量。</p>
 <p>内存占用角度：</p>
-<p>主要是 G-pipe 到 PipeDream
-的进化完成的，通过及时安排反向过程，将前向激活值释放掉，避免积累太多激活值占用内存，提高了模型并行的能力。</p>
+<p>主要是 G-pipe 到 PipeDream 的进化完成的，通过及时安排反向过程，将前向激活值释放掉，避免积累太多激活值占用内存，提高了模型并行的能力。</p>
 <p>空泡比率角度：</p>
-<p>空泡比率的提升主要从 1F1B 到 1F1B-interleaving 的进化得来。pipeline
-并行的一个基本规律就是 pipeline 流水的级数越多，overhead 就越小。</p>
+<p>空泡比率的提升主要从 1F1B 到 1F1B-interleaving 的进化得来。pipeline 并行的一个基本规律就是 pipeline 流水的级数越多，overhead 就越小。</p>
 <p><strong>3).Megatron-LM-3</strong></p>
-<p>增加了Sequence Parallelism、Selective Activation
-Recomputation和Checkpointing Skipping三个feature</p>
+<p>增加了Sequence Parallelism、Selective Activation Recomputation和Checkpointing Skipping三个feature</p>
 <p>a.Sequence Parallelism</p>
-<p>在Tensor
-Parallelism的基础上，将Transformer核的LayerNorm以及Dropout层的输入按Sequence
-Length维度进行了切分，使得各个设备上面只需要做一部分的Dropout和LayerNorm。</p>
+<p>在Tensor Parallelism的基础上，将Transformer核的LayerNorm以及Dropout层的输入按Sequence Length维度进行了切分，使得各个设备上面只需要做一部分的Dropout和LayerNorm。</p>
 <p>这样做的好处有两个：</p>
 <ol type="1">
 <li>LayerNorm和Dropout的计算被平摊到了各个设备上，减少了计算资源的浪费；</li>
 <li>LayerNorm和Dropout所产生的激活值也被平摊到了各个设备上，进一步降低了显存开销。</li>
 </ol>
-<p>在Megatron1,
-2中，Transformer核的TP通信是由正向两个Allreduce以及后向两个Allreduce组成的。Megatron
-3由于对sequence维度进行了划分，Allreduce在这里已经不合适了。为了收集在各个设备上的sequence
-parallel所产生的结果，需要插入Allgather算子；而为了使得TP所产生的结果可以传入sequence
-parallel层，需要插入reduce-scatter算子。在下图中， ggg
-所代表的就是前向Allgather，反向reduce scatter，g¯gg
-则是相反的操作。这么一来，我们可以清楚地看到，Megatron-3中，一共有4个Allgather和4个reduce-scatter算子。乍一看，通信的操作比Megatron-1
-2都多得多，但其实不然。因为一般而言，一个Allreduce其实就相当于1个Reduce-scatter和1个Allgather，所以他们的总通信量是一样的。Megatron-3在总通信量一样的基础上，在后向代码的实现上，还把reduce-scatter和权重梯度的计算做了重叠，进一步减少了通信所占用的时间，使得提高设备的FLOPs
-Utilization成为了可能。</p>
+<p>在Megatron1, 2中，Transformer核的TP通信是由正向两个Allreduce以及后向两个Allreduce组成的。Megatron 3由于对sequence维度进行了划分，Allreduce在这里已经不合适了。为了收集在各个设备上的sequence parallel所产生的结果，需要插入Allgather算子；而为了使得TP所产生的结果可以传入sequence parallel层，需要插入reduce-scatter算子。在下图中， ggg 所代表的就是前向Allgather，反向reduce scatter，g¯gg 则是相反的操作。这么一来，我们可以清楚地看到，Megatron-3中，一共有4个Allgather和4个reduce-scatter算子。乍一看，通信的操作比Megatron-1 2都多得多，但其实不然。因为一般而言，一个Allreduce其实就相当于1个Reduce-scatter和1个Allgather，所以他们的总通信量是一样的。Megatron-3在总通信量一样的基础上，在后向代码的实现上，还把reduce-scatter和权重梯度的计算做了重叠，进一步减少了通信所占用的时间，使得提高设备的FLOPs Utilization成为了可能。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-06a0a77032c8a7262cb0f846f87ffe0e_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-06a0a77032c8a7262cb0f846f87ffe0e_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Sequence Parallelism</p>
 <p>b.Selective Activation Recomputation</p>
 <p>Megatron-3把Transformer族模型的所有activation消耗算了一遍，然后发现在Transformer核里有一些操作是产生的激活值又大，但是计算量又小的。所以他们就考虑干掉这一部分的激活值，然后其他的激活值我们就通通存下来，以节省我们的重计算量。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-55ac3a6658dc223524296842b89175bd_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-55ac3a6658dc223524296842b89175bd_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Selective Activation Recomputation</p>
 <p>c.Checkpointing Skipping</p>
 <p>Megatron-3提出，在GPU的显存没占满的时候，我们可以不做checkpointing，这么一来重计算所带来的额外计算代价会进一步减小。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-2154af6448b05283d58bd27f300b0533_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-2154af6448b05283d58bd27f300b0533_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Checkpointing Skipping</p>
 <h3 id="deepspeed">4.DeepSpeed</h3>
 <p><strong>1).3D 并行化实现万亿参数模型训练：</strong></p>
-<p>DeepSpeed
-实现了三种并行方法(数据并行训练，模型并行训练和流水线并行训练)的灵活组合：零冗余优化器（Zero
-Redundancy
-Optimizer，缩写为Zero）是一种用于大规模分布式深度学习的新型内存优化技术，可以在当前一代GPU集群上以当前最佳系统吞吐量的三到五倍的速度训练具有1000亿个参数的深度学习模型。它还为训练具有数万亿参数的模型提供了一条清晰的道路，展示了深度学习系统技术的前所未有的飞跃。ZeRO作为DeepSpeed的一部分，用于提高显存效率和计算效率。ZeRO
-支持的数据并行，流水线并行和张量切片模型并行。ZeRO可以克服数据并行和模型并行的局限性，同时实现两者的优点。通过在数据并行进程之间<strong>划分模型状态</strong>参数、梯度和优化器状态来消除数据并行进程中的内存冗余，而不是复制它们。在训练期间使用<strong>动态通信调度</strong>来在分布式设备之间共享必要的状态，以保持数据并行的计算粒度和通信量。ZeRO有三个主要的优化阶段（如下图所示），它们对应于优化器状态、梯度和参数的划分。</p>
+<p>DeepSpeed 实现了三种并行方法(数据并行训练，模型并行训练和流水线并行训练)的灵活组合：零冗余优化器（Zero Redundancy Optimizer，缩写为Zero）是一种用于大规模分布式深度学习的新型内存优化技术，可以在当前一代GPU集群上以当前最佳系统吞吐量的三到五倍的速度训练具有1000亿个参数的深度学习模型。它还为训练具有数万亿参数的模型提供了一条清晰的道路，展示了深度学习系统技术的前所未有的飞跃。ZeRO作为DeepSpeed的一部分，用于提高显存效率和计算效率。ZeRO 支持的数据并行，流水线并行和张量切片模型并行。ZeRO可以克服数据并行和模型并行的局限性，同时实现两者的优点。通过在数据并行进程之间<strong>划分模型状态</strong>参数、梯度和优化器状态来消除数据并行进程中的内存冗余，而不是复制它们。在训练期间使用<strong>动态通信调度</strong>来在分布式设备之间共享必要的状态，以保持数据并行的计算粒度和通信量。ZeRO有三个主要的优化阶段（如下图所示），它们对应于优化器状态、梯度和参数的划分。</p>
 <p>a.Pos:减少4倍内存，通信量与数据<a href="">并行性</a>相同</p>
 <p>b.Pos+g:减少8倍内存，通信量与数据并行性相同</p>
 <p>c.Pos+g+p:内存减少与数据并行度Nd呈线性关系。例如，在64个GPU（Nd=64）之间进行拆分将产生64倍的内存缩减。通信量有50%的适度增长。</p>
-<p>ZeRO消除了内存冗余，并使集群的全部聚合内存容量可用。在启用所有三个阶段的情况下，ZeRO可以在1024个NVIDIA
-GPU上训练万亿参数模型。像Adam这样具有16位精度的优化器的万亿参数模型需要大约16
-TB的内存来保存优化器的状态、梯度和参数。16TB除以1024是16GB，这对于GPU来说是在合理的范围内的。ZeRO2扩展了ZeRO-1，包括减少梯度内存占用，同时还添加了针对激活内存和碎片内存的优化。与ZeRO-1相比，ZeRO-2将DeepSpeed可以训练的模型大小增加了一倍，同时显著提高了训练效率。使用ZeRO-2，1000亿参数模型的训练速度可以比仅基于模型并行性的现有技术快10倍。</p>
-<p>ZeRO-3 offload是ZeRO Stage 3和ZeRO
-offload相结合的一种高效且易于使用的实施方式，旨在通过向每个人提供高效的大规模深度学习训练来实现人工智能民主化的持续目标。ZeRO-3
-offload的主要好处是：</p>
+<p>ZeRO消除了内存冗余，并使集群的全部聚合内存容量可用。在启用所有三个阶段的情况下，ZeRO可以在1024个NVIDIA GPU上训练万亿参数模型。像Adam这样具有16位精度的优化器的万亿参数模型需要大约16 TB的内存来保存优化器的状态、梯度和参数。16TB除以1024是16GB，这对于GPU来说是在合理的范围内的。ZeRO2扩展了ZeRO-1，包括减少梯度内存占用，同时还添加了针对激活内存和碎片内存的优化。与ZeRO-1相比，ZeRO-2将DeepSpeed可以训练的模型大小增加了一倍，同时显著提高了训练效率。使用ZeRO-2，1000亿参数模型的训练速度可以比仅基于模型并行性的现有技术快10倍。</p>
+<p>ZeRO-3 offload是ZeRO Stage 3和ZeRO offload相结合的一种高效且易于使用的实施方式，旨在通过向每个人提供高效的大规模深度学习训练来实现人工智能民主化的持续目标。ZeRO-3 offload的主要好处是：</p>
 <p>a.极高的内存效率，可以在有限的GPU资源上运行非常大的模型-例如，在单个GPU上具有超过40B的参数，在512个GPU上具有2万亿的参数的微调模型。</p>
 <p>b.极易使用:扩展到超过一万亿个参数，而不需要以复杂的方式组合多种并行技术。对于现有的DeepSpeed用户，只需在DeepSpeedConfig文件中使用几个标志即可打开ZeRO-3卸载。</p>
-<p>c.每个GPU的高性能吞吐量和跨GPU的超线性可扩展性，用于分布式训练。使用1万亿参数，ZeRO-3
-Offload在512个NVIDIA V100 GPU上的计算性能可维持25 PetaFlops，实现49
-TFlop/GPU。与ZeRO相比，单个GPU上，ZeRO offload吞吐量增加2倍。</p>
-<p><strong>2).ZeRO-Offload 使 GPU 单卡能够训练 10
-倍大的模型</strong></p>
-<p>为了同时利用 CPU 和 GPU 内存来训练大型模型，扩展了
-ZeRO-2。在使用带有单张英伟达 V100
-GPU的机器时，可以在不耗尽显存的情况下运行多达 130
-亿个参数的模型，模型规模扩展至现有方法的10倍，并保持有竞争力的吞吐量。此功能使数十亿参数的模型训练更加大众化。</p>
-<p><strong>3).通过 DeepSpeed Sparse Attention
-用6倍速度执行10倍长的序列</strong></p>
-<p>基于注意力的深度学习模型（如transformer）能很好的捕捉输入序列token之间的关系，即使是长距离的。因此，它们与基于文本、图像和声音的输入一起使用，其中序列长度可以以数千个token为单位。然而，实践中，它们在长序列输入中的应用受到注意力计算的计算和内存资源的限制，这些需求随着序列长度n二次增长。DeepSpeed提供了稀疏
-attention kernel
-——一种工具性技术，可支持长序列的模型输入，包括文本输入，图像输入和语音输入。通过块稀疏计算将注意力计算的计算和内存需求降低几个数量级。该方法不仅缓解了注意力计算的内存瓶颈，而且可以有效地执行稀疏计算。它的API允许与任何基于transformer的模型进行方便集成。除了提供广泛的稀疏性结构外，它还具有处理任何用户定义的块稀疏结构的灵活性。</p>
+<p>c.每个GPU的高性能吞吐量和跨GPU的超线性可扩展性，用于分布式训练。使用1万亿参数，ZeRO-3 Offload在512个NVIDIA V100 GPU上的计算性能可维持25 PetaFlops，实现49 TFlop/GPU。与ZeRO相比，单个GPU上，ZeRO offload吞吐量增加2倍。</p>
+<p><strong>2).ZeRO-Offload 使 GPU 单卡能够训练 10 倍大的模型</strong></p>
+<p>为了同时利用 CPU 和 GPU 内存来训练大型模型，扩展了 ZeRO-2。在使用带有单张英伟达 V100 GPU的机器时，可以在不耗尽显存的情况下运行多达 130 亿个参数的模型，模型规模扩展至现有方法的10倍，并保持有竞争力的吞吐量。此功能使数十亿参数的模型训练更加大众化。</p>
+<p><strong>3).通过 DeepSpeed Sparse Attention 用6倍速度执行10倍长的序列</strong></p>
+<p>基于注意力的深度学习模型（如transformer）能很好的捕捉输入序列token之间的关系，即使是长距离的。因此，它们与基于文本、图像和声音的输入一起使用，其中序列长度可以以数千个token为单位。然而，实践中，它们在长序列输入中的应用受到注意力计算的计算和内存资源的限制，这些需求随着序列长度n二次增长。DeepSpeed提供了稀疏 attention kernel ——一种工具性技术，可支持长序列的模型输入，包括文本输入，图像输入和语音输入。通过块稀疏计算将注意力计算的计算和内存需求降低几个数量级。该方法不仅缓解了注意力计算的内存瓶颈，而且可以有效地执行稀疏计算。它的API允许与任何基于transformer的模型进行方便集成。除了提供广泛的稀疏性结构外，它还具有处理任何用户定义的块稀疏结构的灵活性。</p>
 <p>其他常见的稀疏Attention方法：</p>
 <p>a.Generating Long Sequences with Sparse Transformers</p>
-<p>大家最容易想到的是每一个元素跳着求和其他元素的相关性，例如只和第k,2k,3k,4k的元素求。这里把这种方法叫做Atrous
-self-attention(空洞自注意力），但是，大家一般的解决方式是local
-self-attention，例子可以见下面的image transformer，OpenAI引入了Sparse
-self-attention，把两者结合在一块，既可以学习到局部的特性，又可以学习到远程稀疏的相关性。</p>
+<p>大家最容易想到的是每一个元素跳着求和其他元素的相关性，例如只和第k,2k,3k,4k的元素求。这里把这种方法叫做Atrous self-attention(空洞自注意力），但是，大家一般的解决方式是local self-attention，例子可以见下面的image transformer，OpenAI引入了Sparse self-attention，把两者结合在一块，既可以学习到局部的特性，又可以学习到远程稀疏的相关性。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-a39db55945b1ae7c413572b22fbe4cd1_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-a39db55945b1ae7c413572b22fbe4cd1_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Atrous self-attention</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-c2b46a79fb998e2030ecd8cea99100fb_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-c2b46a79fb998e2030ecd8cea99100fb_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>local self-attention</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-a2f4cfa836abe8a6fc537048be262ab3_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-a2f4cfa836abe8a6fc537048be262ab3_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Sparse self-attention</p>
-<p>b.Sparse Transformer: Concentrated Attention Through Explicit
-Selection</p>
+<p>b.Sparse Transformer: Concentrated Attention Through Explicit Selection</p>
 <p>通过Q和K生成相关性分数P，然后在P上选择最大的相关性元素即可。</p>
 <figure>
-<img
-src="/images/分布式训练框架相关知识/v2-c0da4d013bbf37ac5018d38fb3c6a130_b.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/分布式训练框架相关知识/v2-c0da4d013bbf37ac5018d38fb3c6a130_b.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>Sparse Transformer</p>
 <p>c.Longformer: The Long-Document Transformer</p>
-<p>提出local self-attention、Dilated sliding window和Global
-attention三种方法</p>
+<p>提出local self-attention、Dilated sliding window和Global attention三种方法</p>
 <p>d.Reformer</p>
-<p>通过Locality sensitive hashing（LSH)方法将attention
-score相近的分到一个bucket中，因为我们经过softmax之后，一个 query
-和其他的所有的token的计算 attention
-score主要是取决于高相似度的几个tokens，所以采用这种方式将近似算得最终的attention
-score。计算了每个桶中的注意力矩阵，并对相应的值进行加权。由于它们只能注意到给定的中的元素，当选取的桶大小合适时，这样做可以将注意力操作的整体<a
-href="">空间复杂度</a>降低。通过LSH的方法近似的快速找到最大的topk的值。并且Reformer构造了可逆的Feedforward
-Nateork来替换掉原来的Feedforward Network，降低了显存占用。</p>
+<p>通过Locality sensitive hashing（LSH)方法将attention score相近的分到一个bucket中，因为我们经过softmax之后，一个 query 和其他的所有的token的计算 attention score主要是取决于高相似度的几个tokens，所以采用这种方式将近似算得最终的attention score。计算了每个桶中的注意力矩阵，并对相应的值进行加权。由于它们只能注意到给定的中的元素，当选取的桶大小合适时，这样做可以将注意力操作的整体<a href="">空间复杂度</a>降低。通过LSH的方法近似的快速找到最大的topk的值。并且Reformer构造了可逆的Feedforward Nateork来替换掉原来的Feedforward Network，降低了显存占用。</p>
 <p><strong>4).1 比特 Adam 减少 5 倍通信量</strong></p>
-<p>Adam
-是一个在大规模深度学习模型训练场景下的有效的（也许是最广为应用的）优化器。然而，它与通信效率优化算法往往不兼容。因此，在跨设备进行分布式扩展时，通信开销可能成为瓶颈。推出了一种
-1 比特 Adam 新算法，以及其高效实现。该算法最多可减少 5
-倍通信量，同时实现了与Adam相似的收敛率。在通信受限的场景下，观察到分布式训练速度提升了
-3.5 倍，这使得该算法可以扩展到不同类型的 GPU 群集和网络环境。</p>
+<p>Adam 是一个在大规模深度学习模型训练场景下的有效的（也许是最广为应用的）优化器。然而，它与通信效率优化算法往往不兼容。因此，在跨设备进行分布式扩展时，通信开销可能成为瓶颈。推出了一种 1 比特 Adam 新算法，以及其高效实现。该算法最多可减少 5 倍通信量，同时实现了与Adam相似的收敛率。在通信受限的场景下，观察到分布式训练速度提升了 3.5 倍，这使得该算法可以扩展到不同类型的 GPU 群集和网络环境。</p>
 
                 
               </div>

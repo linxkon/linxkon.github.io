@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="BERT和T5怎么了？关于Transformer编码器、PrefixLM和去噪目标 那些在五年前就从事自然语言处理的人们，现在都在困惑：所有的编码器模型（encoder models）去哪了？如果BERT表现得如此出色，为什么不进行扩展？编码器-解码器模型（ encoder-decoders）或仅编码器模型（encoder-only models）到底发生了什么？ 今天，我试图解开这一切">
+    <meta name="description" content="BERT和T5怎么了？关于Transformer编码器、PrefixLM和去噪目标 那些在五年前就从事自然语言处理的人们，现在都在困惑：所有的编码器模型（encoder models）去哪了？如果BERT表现得如此出色，为什么不进行扩展？编码器-解码器模型（ encoder-decoders）或仅编码器模型（encoder-only models）到底发生了什么？ 今天，我试图解开这一切，在这">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在LLM时代，Bert为什么不香了？">
 <meta property="og:url" content="https://linxkon.github.io/BERT%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E9%A6%99%E4%BA%86.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="BERT和T5怎么了？关于Transformer编码器、PrefixLM和去噪目标 那些在五年前就从事自然语言处理的人们，现在都在困惑：所有的编码器模型（encoder models）去哪了？如果BERT表现得如此出色，为什么不进行扩展？编码器-解码器模型（ encoder-decoders）或仅编码器模型（encoder-only models）到底发生了什么？ 今天，我试图解开这一切">
+<meta property="og:description" content="BERT和T5怎么了？关于Transformer编码器、PrefixLM和去噪目标 那些在五年前就从事自然语言处理的人们，现在都在困惑：所有的编码器模型（encoder models）去哪了？如果BERT表现得如此出色，为什么不进行扩展？编码器-解码器模型（ encoder-decoders）或仅编码器模型（encoder-only models）到底发生了什么？ 今天，我试图解开这一切，在这">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E5%A4%A7%E6%A8%A1%E5%9E%8B.png">
 <meta property="article:published_time" content="2023-05-03T12:21:13.000Z">
@@ -314,160 +314,53 @@
               <div class="markdown-body">
                 
                 <p>B<strong>ERT和T5怎么了？关于Transformer编码器、PrefixLM和去噪目标</strong></p>
-<p>那些在五年前就从事<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=自然语言处理&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">自然语言处理</a>的人们，现在都在困惑：所有的<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=编码器模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">编码器模型</a>（encoder
-models）去哪了？如果BERT表现得如此出色，为什么不进行扩展？编码器-解码器模型（
-encoder-decoders）或仅编码器模型（encoder-only
-models）到底发生了什么？</p>
-<p>今天，我试图解开这一切，在这个新的<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=大模型（LLM）&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">大模型（LLM）</a>时代，希望这篇文章能有所帮助。</p>
+<p>那些在五年前就从事<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=自然语言处理&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">自然语言处理</a>的人们，现在都在困惑：所有的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=编码器模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">编码器模型</a>（encoder models）去哪了？如果BERT表现得如此出色，为什么不进行扩展？编码器-解码器模型（ encoder-decoders）或仅编码器模型（encoder-only models）到底发生了什么？</p>
+<p>今天，我试图解开这一切，在这个新的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=大模型（LLM）&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">大模型（LLM）</a>时代，希望这篇文章能有所帮助。</p>
 <h2 id="前情回顾">前情回顾</h2>
 <p>在过去几年里，主要有三种主流的模型架构范式。编码器模型（如BERT）、编码器-解码器模型（如T5）和仅解码器模型（如GPT系列）。人们经常对此感到困惑，并对这些分类方式和架构存在许多误解，所以我希望这篇文章能有所帮助。</p>
 <p>首先要真正理解的是，编码器-解码器模型实际上仍然是自回归模型。编码器-解码器模型中的解码器从本质上来说仍然是一个因果解码器。与其预填充解码器模型，不如将一些文本卸载到编码器上，然后通过交叉注意力机制发送给解码器。是的，T5模型也是语言模型！</p>
-<p>这种模型的一个变体是<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=前缀语言模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">前缀语言模型</a>或PrefixLM架构，它几乎做同样的事情，只是没有交叉注意力（还有一些其他小细节，如在编码器/解码器之间共享权重，以及没有编码器瓶颈）。PrefixLM有时也被称为<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=非因果解码器&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">非因果解码器</a>。简而言之，编码器-解码器、仅解码器模型和PrefixLM之间并没有太大的区别！</p>
-<p>在Hyung
-Won最近的一场精彩讲座中，他解释了这些模型之间的关系，可以在这里查看（需要梯子）</p>
-<p><a
-href="https://link.zhihu.com/?target=https%3A//www.youtube.com/watch%3Fv%3DorDKvo8h71o">Stanford
-CS25: V4 I Hyung Won Chung of
-OpenAIwww.youtube.com/watch?v=orDKvo8h71o</a></p>
-<p>与此同时，像原始BERT这样的仅编码器模型以不同的方式进行去噪（in-place，在掩码标记mask
-token之上直接添加分类头），在某种程度上，它们依赖分类"任务"头来在预训练后对基础模型做任何有用的事情。去噪目标后来被T5等模型以"改编风格"采用，使用序列到序列的形式。</p>
-<p>值得注意的是，T5中的去噪并不是一个全新的目标函数（从机器学习的角度来看），而更像是对输入的数据转换。顺便说一下，你也可以用因果解码器训练跨度损坏（span
-corruption）目标！</p>
-<p>人们总是认为编码器-解码器模型必须是去噪模型，部分原因是T5模型过于具有代表性。然而，这并不总是正确的。你可以用常规的语言建模任务（<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=CLM&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">CLM</a>：causal
-language
-models）来训练编码器-解码器。相反，你也可以用跨度损坏任务来训练因果解码器。正如我之前所说，这主要是一种数据转换。</p>
-<p>同样值得注意的是，一般来说，具有2N参数的编码器-解码器的计算成本与具有N参数的仅解码器模型相同，这给它带来了不同的<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=FLOP&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">FLOP</a>与参数数量比。这就像是在输入和目标之间分割的"<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=模型稀疏性&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">模型稀疏性</a>"。</p>
+<p>这种模型的一个变体是<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=前缀语言模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">前缀语言模型</a>或PrefixLM架构，它几乎做同样的事情，只是没有交叉注意力（还有一些其他小细节，如在编码器/解码器之间共享权重，以及没有编码器瓶颈）。PrefixLM有时也被称为<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=非因果解码器&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">非因果解码器</a>。简而言之，编码器-解码器、仅解码器模型和PrefixLM之间并没有太大的区别！</p>
+<p>在Hyung Won最近的一场精彩讲座中，他解释了这些模型之间的关系，可以在这里查看（需要梯子）</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//www.youtube.com/watch%3Fv%3DorDKvo8h71o">Stanford CS25: V4 I Hyung Won Chung of OpenAIwww.youtube.com/watch?v=orDKvo8h71o</a></p>
+<p>与此同时，像原始BERT这样的仅编码器模型以不同的方式进行去噪（in-place，在掩码标记mask token之上直接添加分类头），在某种程度上，它们依赖分类"任务"头来在预训练后对基础模型做任何有用的事情。去噪目标后来被T5等模型以"改编风格"采用，使用序列到序列的形式。</p>
+<p>值得注意的是，T5中的去噪并不是一个全新的目标函数（从机器学习的角度来看），而更像是对输入的数据转换。顺便说一下，你也可以用因果解码器训练跨度损坏（span corruption）目标！</p>
+<p>人们总是认为编码器-解码器模型必须是去噪模型，部分原因是T5模型过于具有代表性。然而，这并不总是正确的。你可以用常规的语言建模任务（<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=CLM&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">CLM</a>：causal language models）来训练编码器-解码器。相反，你也可以用跨度损坏任务来训练因果解码器。正如我之前所说，这主要是一种数据转换。</p>
+<p>同样值得注意的是，一般来说，具有2N参数的编码器-解码器的计算成本与具有N参数的仅解码器模型相同，这给它带来了不同的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=FLOP&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">FLOP</a>与参数数量比。这就像是在输入和目标之间分割的"<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=模型稀疏性&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">模型稀疏性</a>"。</p>
 <p>这里没有什么新东西，我也没有提出任何新的观点。这些内容在2019年的T5论文中就已经存在，并在UL2论文中得到了重申。</p>
 <p>现在让我们来谈谈目标函数。</p>
-<h2
-id="关于去噪目标的思考-不好用吗难以扩展吗太容易了吗">关于去噪目标的思考
-(不好用吗？难以扩展吗？太容易了吗？)</h2>
-<p>我提到的去噪目标是指任何形式的“跨度损坏（span
-corruption）”任务。这有时被称为“填充（infilling）”或“填空（fill in the
-blank）”。关于如何表达它有很多变体，例如，跨度长度（span
-length）、随机性（<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=randomness&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">randomness</a>）、哨兵标记等（sentinel
-tokens）等等。</p>
-<p>虽然 BERT 风格模型中的去噪目标大多是“in-place”的（例如，在<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=掩码标记&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">掩码标记</a>之上添加分类头），但稍微现代一点的方法是“T5
-风格”，即可以由编码器-解码器或仅解码器模型处理的数据转换。在这种数据转换中，掩码标记只是为了模型预测而“移到后面”。</p>
-<p>预训练的主要目标是构建一个有用的内部表示，以便能够以最有效的方式对下游任务进行对齐。内部表示越好，以后使用这些学习到的表示来做任何有用的事情就越容易。简单的下一个词预测“<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=因果语言建模&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">因果语言建模</a>”目标被证明在这方面做得很好，并且一直是
-LLM 革命的基石。现在的问题是去噪目标是否同样好。</p>
-<p>从公开的信息来看，我们知道 T5-11B 即使在对齐/SFT
-后也能很好地工作（Flan-T5 XXL 的 MMLU 得分超过
-55，对于这种规模和那个时代的模型来说已经相当不错了）。因此，我们可以得出一些结论，即去噪目标的迁移过程（预训练
--&gt; 对齐）在这个规模上运行得相当合理。</p>
-<p>去噪目标很棒，但作为独立目标来说还不够。一个很大的缺点是<strong>由于“损失曝光（loss
-exposure）”较少的原因</strong>。在去噪目标中，只有少量标记被掩码mask并因此被学习（即在损失中被考虑）。相反，在常规语言建模中，这接近
-100%。这使得每个 FLOP 的样本效率非常低，这使得去噪目标在基于 FLOP
-的比较中处于极大的劣势。</p>
+<h2 id="关于去噪目标的思考-不好用吗难以扩展吗太容易了吗">关于去噪目标的思考 (不好用吗？难以扩展吗？太容易了吗？)</h2>
+<p>我提到的去噪目标是指任何形式的“跨度损坏（span corruption）”任务。这有时被称为“填充（infilling）”或“填空（fill in the blank）”。关于如何表达它有很多变体，例如，跨度长度（span length）、随机性（<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=randomness&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">randomness</a>）、哨兵标记等（sentinel tokens）等等。</p>
+<p>虽然 BERT 风格模型中的去噪目标大多是“in-place”的（例如，在<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=掩码标记&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">掩码标记</a>之上添加分类头），但稍微现代一点的方法是“T5 风格”，即可以由编码器-解码器或仅解码器模型处理的数据转换。在这种数据转换中，掩码标记只是为了模型预测而“移到后面”。</p>
+<p>预训练的主要目标是构建一个有用的内部表示，以便能够以最有效的方式对下游任务进行对齐。内部表示越好，以后使用这些学习到的表示来做任何有用的事情就越容易。简单的下一个词预测“<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=因果语言建模&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">因果语言建模</a>”目标被证明在这方面做得很好，并且一直是 LLM 革命的基石。现在的问题是去噪目标是否同样好。</p>
+<p>从公开的信息来看，我们知道 T5-11B 即使在对齐/SFT 后也能很好地工作（Flan-T5 XXL 的 MMLU 得分超过 55，对于这种规模和那个时代的模型来说已经相当不错了）。因此，我们可以得出一些结论，即去噪目标的迁移过程（预训练 -&gt; 对齐）在这个规模上运行得相当合理。</p>
+<p>去噪目标很棒，但作为独立目标来说还不够。一个很大的缺点是<strong>由于“损失曝光（loss exposure）”较少的原因</strong>。在去噪目标中，只有少量标记被掩码mask并因此被学习（即在损失中被考虑）。相反，在常规语言建模中，这接近 100%。这使得每个 FLOP 的样本效率非常低，这使得去噪目标在基于 FLOP 的比较中处于极大的劣势。</p>
 <p>另一个缺点是，去噪目标比常规语言建模更不自然，因为它以一种奇怪的方式重新格式化输入/输出，这使得它们在少样本学习中有点尴尬。（虽然仍然可以调整这些模型在少样本任务上表现得相当不错）。因此，我认为去噪目标应该几乎只用作常规语言建模的补充目标。</p>
-<h2 id="统一时代的早期以及-xberts-灭绝的原因">统一时代的早期以及 <a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=xBERTs&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">xBERTs</a>
-灭绝的原因</h2>
-<p>统一时代初期，<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=BERT%20类模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">BERT
-类模型</a>逐渐被淘汰是一个有趣的阶段，如今很少有人提及。这个过程是悄无声息的，这也解释了为什么我们现在看不到任何大型的
-BERT 模型了。原因主要在于模型的统一和任务/建模范式的转变。BERT
-风格的模型笨拙，<strong>但 BERT
-模型真正被淘汰的原因是人们想要一次性完成所有任务，这导致了一种更好的去噪方法——使用<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=自回归模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">自回归模型</a>。</strong></p>
-<p>在 2018 年到 2021
-年期间，存在一个隐性的范式转变，从单任务微调转向大规模<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=多任务模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">多任务模型</a>。这逐渐将我们引向了如今看到的统一“SFT”模型，这些模型是通用的、多功能的。<strong>而用
-BERT
-来实现这一点非常困难。我认为这与“去噪”本身关系不大。人们只是找到了用另一种模型（例如
-T5）重新表达<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=去噪预训练&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">去噪预训练</a>任务的方法，这使得
-BERT
-风格的模型在此时基本上被淘汰了，因为存在一个严格更好的替代方案。</strong></p>
-<p>更具体地说，编码器-解码器和仅解码器模型能够一次表达多个任务，而不需要特定任务的分类头。对于编码器-解码器模型，如果解码器成为了阻碍，研究人员和工程师也开始发现，移除编码器也能达到与
-BERT 编码器一样好的效果。此外，它还保留了双向注意力机制，使 BERT
-在小型（通常是生产）规模上比 <a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=GPT%20模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">GPT
-模型</a>更具竞争力。</p>
+<h2 id="统一时代的早期以及-xberts-灭绝的原因">统一时代的早期以及 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=xBERTs&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">xBERTs</a> 灭绝的原因</h2>
+<p>统一时代初期，<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=BERT%20类模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">BERT 类模型</a>逐渐被淘汰是一个有趣的阶段，如今很少有人提及。这个过程是悄无声息的，这也解释了为什么我们现在看不到任何大型的 BERT 模型了。原因主要在于模型的统一和任务/建模范式的转变。BERT 风格的模型笨拙，<strong>但 BERT 模型真正被淘汰的原因是人们想要一次性完成所有任务，这导致了一种更好的去噪方法——使用<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=自回归模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">自回归模型</a>。</strong></p>
+<p>在 2018 年到 2021 年期间，存在一个隐性的范式转变，从单任务微调转向大规模<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=多任务模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">多任务模型</a>。这逐渐将我们引向了如今看到的统一“SFT”模型，这些模型是通用的、多功能的。<strong>而用 BERT 来实现这一点非常困难。我认为这与“去噪”本身关系不大。人们只是找到了用另一种模型（例如 T5）重新表达<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=去噪预训练&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">去噪预训练</a>任务的方法，这使得 BERT 风格的模型在此时基本上被淘汰了，因为存在一个严格更好的替代方案。</strong></p>
+<p>更具体地说，编码器-解码器和仅解码器模型能够一次表达多个任务，而不需要特定任务的分类头。对于编码器-解码器模型，如果解码器成为了阻碍，研究人员和工程师也开始发现，移除编码器也能达到与 BERT 编码器一样好的效果。此外，它还保留了双向注意力机制，使 BERT 在小型（通常是生产）规模上比 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=GPT%20模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">GPT 模型</a>更具竞争力。</p>
 <h2 id="降噪目标的价值">降噪目标的价值</h2>
-<p><a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=降噪预训练&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">降噪预训练</a>目标也学习预测下一个词，类似于常规的语言模型。然而，与常规的因果语言模型不同，它对序列应用数据转换，使得模型学习“填补空白”，而不是简单地预测自然出现的从左到右的文本。</p>
-<p>值得注意的是，降噪目标有时也被称为“填充任务（infilling
-tasks）”，有时与常规的语言建模任务一起混合到预训练中。</p>
-<p>虽然确切的配置和实现细节可能有所不同，但如今的现代大型语言模型可能会在某种程度上使用语言建模和填充的组合。有趣的是，这种
-LM + 填充的混合似乎在同一时间传播开来（例如，<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2205.05131">UL2</a>、<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/2207.14255">FIM</a>、<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2210.02414">GLM</a>、<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2201.07520">CM3</a>），许多团队都以某种方式带来了这种混合的独特风格。顺便说一句，以这种方式训练的最大公开披露和报告的模型可能是
-<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2305.10403">PaLM-2</a>
-。</p>
-<p>同样值得注意的是，预训练任务混合可以按顺序堆叠，并不一定需要同时混合，例如，<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=Flan-T5&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">Flan-T5</a>
-最初在 1T 跨度损坏标记上进行训练，并在 <a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=flan&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">flan</a>
-指令微调之前切换到 100B
-标记的前缀语言建模目标。在某种程度上，这算得上是一种混合降噪/LM
-目标模型。需要明确的是，前缀语言建模目标（不要与架构混淆）只是在随机确定的分割点处进行因果语言建模，并将其发送到输入端（没有损失和<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=非因果掩码&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">非因果掩码</a>）。</p>
-<p>顺便说一句，填充可能起源于代码大型语言模型领域，其中填补空白是编码应用程序更需要的功能。同时，UL2
-的动机更多的是统一降噪目标和双向大型语言模型擅长处理的任务类别，以及本质上是生成性的任务（例如，摘要或开放式生成）。这种自回归式降噪“向后移动”的一个优点是，它允许模型不仅学习更长的范围依赖关系，而且还隐式地从<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=非显式双向注意力&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">非显式双向注意力</a>中获益（因为你已经看到了未来才能填补空白）。</p>
-<p>经验表明，降噪目标学习的表示在某些类型的任务中表现更好，有时效率更高。在<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2210.11399">U-PaLM</a>
-论文中，我们展示了少量跨度损坏的向上训练如何改变行为并在 BIG-Bench
-任务集上出现。最重要的是，使用这种目标训练的模型进行微调通常会导致更好的监督微调模型，尤其是在较小规模下。</p>
-<p>在单任务微调方面，你可以看到<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2204.02311">PaLM-1
-62B</a> 模型被一个更小的 <a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=T5%20模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">T5
-模型</a>击败。<a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=双向注意力&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">双向注意力</a>
-+
-降噪目标在相对较小的规模上发挥了作用！我相信许多从业人员现在也看到了这种情况，尤其是在生产环境中。</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=降噪预训练&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">降噪预训练</a>目标也学习预测下一个词，类似于常规的语言模型。然而，与常规的因果语言模型不同，它对序列应用数据转换，使得模型学习“填补空白”，而不是简单地预测自然出现的从左到右的文本。</p>
+<p>值得注意的是，降噪目标有时也被称为“填充任务（infilling tasks）”，有时与常规的语言建模任务一起混合到预训练中。</p>
+<p>虽然确切的配置和实现细节可能有所不同，但如今的现代大型语言模型可能会在某种程度上使用语言建模和填充的组合。有趣的是，这种 LM + 填充的混合似乎在同一时间传播开来（例如，<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2205.05131">UL2</a>、<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/2207.14255">FIM</a>、<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2210.02414">GLM</a>、<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2201.07520">CM3</a>），许多团队都以某种方式带来了这种混合的独特风格。顺便说一句，以这种方式训练的最大公开披露和报告的模型可能是 <a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2305.10403">PaLM-2</a> 。</p>
+<p>同样值得注意的是，预训练任务混合可以按顺序堆叠，并不一定需要同时混合，例如，<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=Flan-T5&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">Flan-T5</a> 最初在 1T 跨度损坏标记上进行训练，并在 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=flan&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">flan</a> 指令微调之前切换到 100B 标记的前缀语言建模目标。在某种程度上，这算得上是一种混合降噪/LM 目标模型。需要明确的是，前缀语言建模目标（不要与架构混淆）只是在随机确定的分割点处进行因果语言建模，并将其发送到输入端（没有损失和<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=非因果掩码&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">非因果掩码</a>）。</p>
+<p>顺便说一句，填充可能起源于代码大型语言模型领域，其中填补空白是编码应用程序更需要的功能。同时，UL2 的动机更多的是统一降噪目标和双向大型语言模型擅长处理的任务类别，以及本质上是生成性的任务（例如，摘要或开放式生成）。这种自回归式降噪“向后移动”的一个优点是，它允许模型不仅学习更长的范围依赖关系，而且还隐式地从<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=非显式双向注意力&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">非显式双向注意力</a>中获益（因为你已经看到了未来才能填补空白）。</p>
+<p>经验表明，降噪目标学习的表示在某些类型的任务中表现更好，有时效率更高。在<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2210.11399">U-PaLM</a> 论文中，我们展示了少量跨度损坏的向上训练如何改变行为并在 BIG-Bench 任务集上出现。最重要的是，使用这种目标训练的模型进行微调通常会导致更好的监督微调模型，尤其是在较小规模下。</p>
+<p>在单任务微调方面，你可以看到<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2204.02311">PaLM-1 62B</a> 模型被一个更小的 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=T5%20模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">T5 模型</a>击败。<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=双向注意力&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">双向注意力</a> + 降噪目标在相对较小的规模上发挥了作用！我相信许多从业人员现在也看到了这种情况，尤其是在生产环境中。</p>
 <h2 id="双向注意力机制如何">双向注意力机制如何？</h2>
-<p>双向注意力机制是语言模型的一个有趣的“归纳偏置（inductive
-bias）”，它通常与目标函数和主干网络（model
-backbones）混淆。归纳偏置的有用性在不同的计算区域会有所不同，并且可能对不同计算区域的缩放曲线产生不同的影响。也就是说，在更大的规模上，双向注意力机制可能不像在更小的规模上那么重要，或者对不同的任务或模态有不同的影响。例如，<a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2407.07726v1">PaliGemma</a>
-使用了 PrefixLM 架构。</p>
-<p>正如 Hyung Won 在他的<a
-href="https://link.zhihu.com/?target=https%3A//x.com/hwchung27/status/1800676312916656592">讲座</a>中指出的那样，PrefixLM
-模型（具有双向注意力的解码器模型）也存在缓存问题，这是这种架构的内在缺陷。但是，我认为有很多方法可以解决这个问题，但这超出了本文的范围。</p>
+<p>双向注意力机制是语言模型的一个有趣的“归纳偏置（inductive bias）”，它通常与目标函数和主干网络（model backbones）混淆。归纳偏置的有用性在不同的计算区域会有所不同，并且可能对不同计算区域的缩放曲线产生不同的影响。也就是说，在更大的规模上，双向注意力机制可能不像在更小的规模上那么重要，或者对不同的任务或模态有不同的影响。例如，<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2407.07726v1">PaliGemma</a> 使用了 PrefixLM 架构。</p>
+<p>正如 Hyung Won 在他的<a href="https://link.zhihu.com/?target=https%3A//x.com/hwchung27/status/1800676312916656592">讲座</a>中指出的那样，PrefixLM 模型（具有双向注意力的解码器模型）也存在缓存问题，这是这种架构的内在缺陷。但是，我认为有很多方法可以解决这个问题，但这超出了本文的范围。</p>
 <h2 id="编码器-解码器架构的优缺点">编码器-解码器架构的优缺点</h2>
 <p>编码器-解码器架构相较于单纯的解码器模型，确实有一些优势。首先，编码器一侧不受因果掩码的限制。在一定程度上，你可以尽情使用注意力层，进行激进的池化或任何形式的线性注意力，而无需担心自回归设计限制。这是一种将不太重要的“上下文”卸载到编码器的好方法。你还可以使编码器更小，这也很不错。</p>
-<p>编码器-解码器架构的必要性，一个例子就是 <a
-href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2106.12672">Charformer</a>，它允许我们在编码器上尽情发挥，并减轻字节级模型的速度缺陷。编码器端的创新，可以在不担心因果掩码主要重构的情况下，快速取得成果。</p>
-<p>另一方面，编码器-解码器架构相较于 PrefixLM
-的一个缺点是，输入和目标必须具有固定的分配预算。例如，如果输入预算为
-1024 个
-token，则编码器一侧必须填充到该值，这会导致大量的潜在计算浪费。相反，在
-PrefixLM 中，输入和目标可以直接串联，从而减轻了这个问题。</p>
+<p>编码器-解码器架构的必要性，一个例子就是 <a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2106.12672">Charformer</a>，它允许我们在编码器上尽情发挥，并减轻字节级模型的速度缺陷。编码器端的创新，可以在不担心因果掩码主要重构的情况下，快速取得成果。</p>
+<p>另一方面，编码器-解码器架构相较于 PrefixLM 的一个缺点是，输入和目标必须具有固定的分配预算。例如，如果输入预算为 1024 个 token，则编码器一侧必须填充到该值，这会导致大量的潜在计算浪费。相反，在 PrefixLM 中，输入和目标可以直接串联，从而减轻了这个问题。</p>
 <h2 id="与当下模型的相关性及关键要点">与当下模型的相关性及关键要点</h2>
-<p>在当今的 LLM
-研究和实践中，能够从架构和预训练的角度理解归纳偏差是至关重要的一点。理解这些基本差异有助于我们推断并不断创新。
-以下是一些关键要点：</p>
+<p>在当今的 LLM 研究和实践中，能够从架构和预训练的角度理解归纳偏差是至关重要的一点。理解这些基本差异有助于我们推断并不断创新。 以下是一些关键要点：</p>
 <ul>
-<li>编码器-解码器模型和仅解码器模型都是自回归模型，它们在实现层面存在差异，并各有优缺点。它们体现了细微的归纳偏差差异。最佳使用方式实际上取决于下游应用场景和应用约束。另一方面，除了大多数
-LLM 使用场景和一些利基应用场景外，BERT
-风格的编码器模型通常被认为已经过时。</li>
-<li>去噪目标通常与 CLM
-相互补充。它们只是在预训练中作为“辅助目标”出现。使用去噪目标训练 CLM
-通常会有所帮助。虽然这种情况在代码模型中非常常见（例如，代码填充），但对于当今的通用模型来说，在使用
-CLM 进行预训练时，加入一些去噪目标也并非罕见（但并非强制性）。</li>
-<li>双向注意力在较小规模下效果显著，但在较大规模下通常是可选的。这主要是一种经验性结论。我认为双向注意力是一种归纳偏差的形式，就像对
-Transformer 模型的许多其他修改一样。</li>
-<li>我们没有看到任何规模化的 <a
-target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=xBERT%20模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">xBERT
-模型</a>在运行：BERT 模型被更灵活的去噪（自回归）T5
-模型所取代。这主要归因于范式统一，人们希望用一个通用模型（而不是特定任务模型）来执行任何任务。与此同时，自回归去噪有时会被作为辅助目标添加到因果语言模型中。</li>
+<li>编码器-解码器模型和仅解码器模型都是自回归模型，它们在实现层面存在差异，并各有优缺点。它们体现了细微的归纳偏差差异。最佳使用方式实际上取决于下游应用场景和应用约束。另一方面，除了大多数 LLM 使用场景和一些利基应用场景外，BERT 风格的编码器模型通常被认为已经过时。</li>
+<li>去噪目标通常与 CLM 相互补充。它们只是在预训练中作为“辅助目标”出现。使用去噪目标训练 CLM 通常会有所帮助。虽然这种情况在代码模型中非常常见（例如，代码填充），但对于当今的通用模型来说，在使用 CLM 进行预训练时，加入一些去噪目标也并非罕见（但并非强制性）。</li>
+<li>双向注意力在较小规模下效果显著，但在较大规模下通常是可选的。这主要是一种经验性结论。我认为双向注意力是一种归纳偏差的形式，就像对 Transformer 模型的许多其他修改一样。</li>
+<li>我们没有看到任何规模化的 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=xBERT%20模型&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3565729240%7D">xBERT 模型</a>在运行：BERT 模型被更灵活的去噪（自回归）T5 模型所取代。这主要归因于范式统一，人们希望用一个通用模型（而不是特定任务模型）来执行任何任务。与此同时，自回归去噪有时会被作为辅助目标添加到因果语言模型中。</li>
 </ul>
 
                 

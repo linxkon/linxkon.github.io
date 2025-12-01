@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="image-20240725101545036  LLaMA 3.1的模型结构如上图所示，它代表了目前主流的大型语言模型架构，也被称为Dense LLM。它应用了经典Transformer的Decoder部分并加以改造。 与之相对的是混合专家模型（Mixture of Experts，MOE）。MOE模型的主要特点是：将前馈网络（FFN）模块中的单一SwiGLU替换为个并行的S">
+    <meta name="description" content="image-20240725101545036  LLaMA 3.1的模型结构如上图所示，它代表了目前主流的大型语言模型架构，也被称为Dense LLM。它应用了经典Transformer的Decoder部分并加以改造。 与之相对的是混合专家模型（Mixture of Experts，MOE）。MOE模型的主要特点是：将前馈网络（FFN）模块中的单一SwiGLU替换为个并行的SwiGLU模">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LLaMA 3.1 模型架构技术解析及代码实现">
 <meta property="og:url" content="https://linxkon.github.io/lamma3.1%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="image-20240725101545036  LLaMA 3.1的模型结构如上图所示，它代表了目前主流的大型语言模型架构，也被称为Dense LLM。它应用了经典Transformer的Decoder部分并加以改造。 与之相对的是混合专家模型（Mixture of Experts，MOE）。MOE模型的主要特点是：将前馈网络（FFN）模块中的单一SwiGLU替换为个并行的S">
+<meta property="og:description" content="image-20240725101545036  LLaMA 3.1的模型结构如上图所示，它代表了目前主流的大型语言模型架构，也被称为Dense LLM。它应用了经典Transformer的Decoder部分并加以改造。 与之相对的是混合专家模型（Mixture of Experts，MOE）。MOE模型的主要特点是：将前馈网络（FFN）模块中的单一SwiGLU替换为个并行的SwiGLU模">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/llama31.webp">
 <meta property="article:published_time" content="2024-07-24T15:21:13.000Z">
@@ -315,15 +315,9 @@
               <div class="markdown-body">
                 
                 <figure>
-<img src="/images/llama3模型架构/image-20240725101545036.png" srcset="/img/loading.gif" lazyload
-alt="image-20240725101545036" />
-<figcaption aria-hidden="true">image-20240725101545036</figcaption>
+<img src="/images/llama3模型架构/image-20240725101545036.png" srcset="/img/loading.gif" lazyload alt="image-20240725101545036" /><figcaption aria-hidden="true">image-20240725101545036</figcaption>
 </figure>
-<p>LLaMA
-3.1的模型结构如上图所示，它代表了目前主流的大型语言模型架构，也被称为Dense
-LLM。它应用了经典Transformer的Decoder部分并加以改造。
-与之相对的是混合专家模型（Mixture of
-Experts，MOE）。MOE模型的主要特点是：将前馈网络（FFN）模块中的单一SwiGLU替换为个并行的SwiGLU模块，每个模块被称为"专家"。增加了一个路由网络，用于为每个输入token选择最合适的"专家"。</p>
+<p>LLaMA 3.1的模型结构如上图所示，它代表了目前主流的大型语言模型架构，也被称为Dense LLM。它应用了经典Transformer的Decoder部分并加以改造。 与之相对的是混合专家模型（Mixture of Experts，MOE）。MOE模型的主要特点是：将前馈网络（FFN）模块中的单一SwiGLU替换为个并行的SwiGLU模块，每个模块被称为"专家"。增加了一个路由网络，用于为每个输入token选择最合适的"专家"。</p>
 <blockquote>
 <p><strong>小课堂: Dense LLM与 MOE LLM</strong></p>
 <p>Dense LLM（密集大语言模型）：</p>
@@ -339,43 +333,22 @@ Experts，MOE）。MOE模型的主要特点是：将前馈网络（FFN）模块�
 <li>在处理每个输入时，只激活部分专家，而不是全部参数。</li>
 </ul>
 </blockquote>
-<h3 id="llama-3.1的模型架构的8个技术点一览">LLaMA
-3.1的模型架构的8个技术点一览</h3>
+<h3 id="llama-3.1的模型架构的8个技术点一览">LLaMA 3.1的模型架构的8个技术点一览</h3>
 <ol type="1">
-<li><p><strong>Transformer Block × L</strong>：这个模块表示整个
-Transformer 由多个重复的 Transformer 块组成，这里的 (L) 指的是
-Transformer 块的层数。</p></li>
-<li><p><strong>Token
-Embedding</strong>：输入的词（token）被嵌入到一个高维向量空间中，作为
-Transformer 的输入。</p></li>
-<li><p><strong>RMSNorm</strong>：每个 Transformer 块使用 RMSNorm（Root
-Mean Square Layer Normalization）来进行正则化。它与传统的 LayerNorm
-不同，RMSNorm 使用的是均方根来进行归一化操作。</p></li>
+<li><p><strong>Transformer Block × L</strong>：这个模块表示整个 Transformer 由多个重复的 Transformer 块组成，这里的 (L) 指的是 Transformer 块的层数。</p></li>
+<li><p><strong>Token Embedding</strong>：输入的词（token）被嵌入到一个高维向量空间中，作为 Transformer 的输入。</p></li>
+<li><p><strong>RMSNorm</strong>：每个 Transformer 块使用 RMSNorm（Root Mean Square Layer Normalization）来进行正则化。它与传统的 LayerNorm 不同，RMSNorm 使用的是均方根来进行归一化操作。</p></li>
 <li><p><strong>Pre-Norm</strong>：正则化的位置是在主计算路径之前，这种做法可以提高模型的稳定性和收敛速度。</p></li>
-<li><p><strong>Grouped Query Attention
-(GQA)</strong>：这个模块表示使用了一种称为“分组查询注意力”的自注意力机制。GQA
-是一种改进的注意力机制，通过对查询进行分组，可以提高模型的效率和性能。</p></li>
-<li><p><strong>ROPE（Rotary Positional
-Encoding）</strong>：一种位置编码机制，用于在模型中注入位置信息。ROPE
-通过旋转变换为位置提供相对位置信息，使模型可以更好地理解序列中的位置关系。</p></li>
-<li><p><strong>SwiGLU</strong>：这是 Feed-Forward Network (FFN)
-的结构，SwiGLU 是一种使用 Gate Linear
-Units（GLU）的变体，通过引入非线性激活函数来增强模型的表达能力。</p></li>
-<li><p><strong>Skip Connection</strong>：在 Transformer
-中，使用跳跃连接（Skip
-Connection）来促进梯度流动和模型训练的稳定性。</p></li>
+<li><p><strong>Grouped Query Attention (GQA)</strong>：这个模块表示使用了一种称为“分组查询注意力”的自注意力机制。GQA 是一种改进的注意力机制，通过对查询进行分组，可以提高模型的效率和性能。</p></li>
+<li><p><strong>ROPE（Rotary Positional Encoding）</strong>：一种位置编码机制，用于在模型中注入位置信息。ROPE 通过旋转变换为位置提供相对位置信息，使模型可以更好地理解序列中的位置关系。</p></li>
+<li><p><strong>SwiGLU</strong>：这是 Feed-Forward Network (FFN) 的结构，SwiGLU 是一种使用 Gate Linear Units（GLU）的变体，通过引入非线性激活函数来增强模型的表达能力。</p></li>
+<li><p><strong>Skip Connection</strong>：在 Transformer 中，使用跳跃连接（Skip Connection）来促进梯度流动和模型训练的稳定性。</p></li>
 </ol>
-<p>LLaMA 3.1
-的架构结合了最新的正则化、注意力机制和位置编码技术，旨在提高 Transformer
-模型的效率和性能。</p>
+<p>LLaMA 3.1 的架构结合了最新的正则化、注意力机制和位置编码技术，旨在提高 Transformer 模型的效率和性能。</p>
 <h2 id="一.-transformer-block-l">一. Transformer Block× L</h2>
-<p>Transformer
-Block是模型构成的基本单元,它基本可以分为两部分构成:自注意层和前馈全连接层(FFN),通过将以上Transformer单元组合L次,即可得到LLaMA
-3.1的整体架构,L即layers的具体数值与模型的参数量有关.</p>
+<p>Transformer Block是模型构成的基本单元,它基本可以分为两部分构成:自注意层和前馈全连接层(FFN),通过将以上Transformer单元组合L次,即可得到LLaMA 3.1的整体架构,L即layers的具体数值与模型的参数量有关.</p>
 <figure>
-<img src="/images/llama3模型架构/image-20240725103022368.png" srcset="/img/loading.gif" lazyload
-alt="image-20240725103022368" />
-<figcaption aria-hidden="true">image-20240725103022368</figcaption>
+<img src="/images/llama3模型架构/image-20240725103022368.png" srcset="/img/loading.gif" lazyload alt="image-20240725103022368" /><figcaption aria-hidden="true">image-20240725103022368</figcaption>
 </figure>
 <p>不同参数量模型的详细参数如下</p>
 <table>
@@ -446,19 +419,13 @@ alt="image-20240725103022368" />
 </tbody>
 </table>
 <h2 id="二.-token-embedding">二. Token Embedding</h2>
-<p>在 LLaMA模型中，<strong>Token Embedding</strong>
-是第二个关键模块。其主要功能是将输入的词（token）转换为高维向量，以便后续的
-Transformer
-层可以有效地处理这些数据。具体来说,模型首先从词汇表中获取输入词的索引,然后利用嵌入矩阵将每个词映射到一个唯一的高维向量。这个过程将离散的词语转化为连续的向量表示,能够捕捉词语的语义和上下文信息。</p>
-<p>Token
-Embedding的设计有几个重要优势。首先,它能够有效地捕捉和表示词语的语义信息,使模型更好地理解词语之间的关系。其次,将词语转换为向量表示降低了输入数据的复杂度,便于后续计算。最后,这种设计增强了模型的表达能力,使其能够学习和处理复杂的语言模式和结构,从而在各种自然语言处理任务中表现出色。</p>
-<p>Token
-Embedding在NLP领域已经是主流的技术手段,pytroch中也已经封装好它的实现:</p>
+<p>在 LLaMA模型中，<strong>Token Embedding</strong> 是第二个关键模块。其主要功能是将输入的词（token）转换为高维向量，以便后续的 Transformer 层可以有效地处理这些数据。具体来说,模型首先从词汇表中获取输入词的索引,然后利用嵌入矩阵将每个词映射到一个唯一的高维向量。这个过程将离散的词语转化为连续的向量表示,能够捕捉词语的语义和上下文信息。</p>
+<p>Token Embedding的设计有几个重要优势。首先,它能够有效地捕捉和表示词语的语义信息,使模型更好地理解词语之间的关系。其次,将词语转换为向量表示降低了输入数据的复杂度,便于后续计算。最后,这种设计增强了模型的表达能力,使其能够学习和处理复杂的语言模式和结构,从而在各种自然语言处理任务中表现出色。</p>
+<p>Token Embedding在NLP领域已经是主流的技术手段,pytroch中也已经封装好它的实现:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br>vocab_size = <span class="hljs-number">10000</span>  <span class="hljs-comment"># 词汇表大小</span><br>embedding_dim = <span class="hljs-number">256</span>  <span class="hljs-comment"># 嵌入向量的维度</span><br><br>embedding_layer = nn.Embedding(vocab_size, embedding_dim)<br><br><span class="hljs-comment"># 假设我们有一个批次的输入序列</span><br>input_ids = torch.LongTensor([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>]])<br><br><span class="hljs-comment"># 通过Embedding层获取嵌入向量</span><br>embedded = embedding_layer(input_ids)<br><br><span class="hljs-built_in">print</span>(embedded.shape)  <span class="hljs-comment"># 输出：torch.Size([2, 4, 256])</span><br></code></pre></td></tr></table></figure>
 <h2 id="三-.-rmsnorm">三 . RMSNorm</h2>
 <ol type="1">
-<li>基本原理: RMSNorm使用均方根(Root Mean
-Square)来对神经网络中的隐藏状态进行归一化。这种方法旨在稳定深度网络中的激活值分布,有助于<strong>加速训练过程并提高模型性能</strong>。</li>
+<li>基本原理: RMSNorm使用均方根(Root Mean Square)来对神经网络中的隐藏状态进行归一化。这种方法旨在稳定深度网络中的激活值分布,有助于<strong>加速训练过程并提高模型性能</strong>。</li>
 <li>计算过程:</li>
 </ol>
 <ul>
@@ -466,8 +433,7 @@ Square)来对神经网络中的隐藏状态进行归一化。这种方法旨在�
 <li>用这个均方根值来归一化输入向量</li>
 <li>应用可学习的缩放参数g</li>
 </ul>
-<p>数学表达式:RMSNorm(x) = x / RMS(x) * g 其中RMS(x) =
-sqrt(mean(x^2))</p>
+<p>数学表达式:RMSNorm(x) = x / RMS(x) * g 其中RMS(x) = sqrt(mean(x^2))</p>
 <ol type="1">
 <li>与LayerNorm的区别:</li>
 </ol>
@@ -492,20 +458,16 @@ sqrt(mean(x^2))</p>
 <p>注意事项：</p>
 <ol type="1">
 <li><code>eps</code> 参数用于数值稳定性，防止除以零。</li>
-<li>RMSNorm 的权重参数 <code>self.weight</code>
-是可学习的，在训练过程中会被优化。</li>
-<li>在实际应用中，您可能需要根据具体需求调整 RMSNorm
-的实现，例如考虑不同的维度或批处理情况。</li>
+<li>RMSNorm 的权重参数 <code>self.weight</code> 是可学习的，在训练过程中会被优化。</li>
+<li>在实际应用中，您可能需要根据具体需求调整 RMSNorm 的实现，例如考虑不同的维度或批处理情况。</li>
 <li>某些PyTorch版本可能已经包含了RMSNorm的实现，您可以检查最新的文档或考虑使用第三方库（如<code>transformers</code>库）中的实现。</li>
 <li>在使用RMSNorm时，可能需要调整学习率或其他超参数，因为它可能会影响模型的训练动态。</li>
 </ol>
 </blockquote>
 <h2 id="四-.-gqa分组查询注意力机制">四 . GQA(分组查询注意力机制)</h2>
 <ol type="1">
-<li><p>背景：
-传统的自注意力机制在处理长序列时会面临计算复杂度和内存消耗的问题。随着模型规模的增大，这些问题变得更加突出。</p></li>
-<li><p>GQA的基本思想：
-将查询（Query）向量分成多个组，每组共享相同的键（Key）和值（Value）矩阵。这种方法可以在保持模型表达能力的同时，显著减少参数数量和计算复杂度。</p></li>
+<li><p>背景： 传统的自注意力机制在处理长序列时会面临计算复杂度和内存消耗的问题。随着模型规模的增大，这些问题变得更加突出。</p></li>
+<li><p>GQA的基本思想： 将查询（Query）向量分成多个组，每组共享相同的键（Key）和值（Value）矩阵。这种方法可以在保持模型表达能力的同时，显著减少参数数量和计算复杂度。</p></li>
 <li><p>工作原理：</p>
 <ul>
 <li>将查询向量分成G个组。</li>
@@ -523,8 +485,7 @@ sqrt(mean(x^2))</p>
 </ul></li>
 <li><p>与其他注意力变体的比较：</p>
 <ul>
-<li>相比于多头注意力（Multi-Head
-Attention），GQA在保持类似性能的同时，具有更高的参数和计算效率。</li>
+<li>相比于多头注意力（Multi-Head Attention），GQA在保持类似性能的同时，具有更高的参数和计算效率。</li>
 <li>相比于稀疏注意力机制，GQA更容易实现和优化。</li>
 </ul></li>
 <li><p>潜在局限性：</p>
@@ -539,17 +500,14 @@ Attention），GQA在保持类似性能的同时，具有更高的参数和计�
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TransformerLayer</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim, num_heads, num_groups, ffn_dim</span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        self.attention = GroupedQueryAttention(dim, num_heads, num_groups)<br>        self.ffn = nn.Sequential(<br>            nn.Linear(dim, ffn_dim),<br>            nn.ReLU(),<br>            nn.Linear(ffn_dim, dim)<br>        )<br>        self.norm1 = nn.LayerNorm(dim)<br>        self.norm2 = nn.LayerNorm(dim)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = x + self.attention(self.norm1(x))<br>        x = x + self.ffn(self.norm2(x))<br>        <span class="hljs-keyword">return</span> x<br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>确保 <code>num_heads</code> 能被 <code>num_groups</code> 整除。</p>
-<p>这个实现假设输入的形状是
-<code>(batch_size, sequence_length, embedding_dimension)</code>。</p>
-<p><code>k_proj</code> 和 <code>v_proj</code>
-的输出维度是原始维度除以组数，这反映了 GQA 中键和值的共享特性。</p>
+<p>这个实现假设输入的形状是 <code>(batch_size, sequence_length, embedding_dimension)</code>。</p>
+<p><code>k_proj</code> 和 <code>v_proj</code> 的输出维度是原始维度除以组数，这反映了 GQA 中键和值的共享特性。</p>
 <p>在实际应用中，你可能需要根据具体需求调整实现，比如添加dropout、层归一化等。</p>
 <p>这个实现没有考虑掩码（mask）。如果你需要处理可变长度的序列，你需要添加掩码支持。</p>
 </blockquote></li>
 </ol>
 <h2 id="五-.-rope">五 . ROPE</h2>
-<p>ROPE（Rotary Positional
-Embedding）是一种位置编码技术，旨在为Transformer模型注入相对位置信息。传统的Transformer模型使用位置编码来弥补自注意力机制在处理序列数据时缺乏位置信息的不足。ROPE通过旋转变换提供了一种更灵活和有效的方式来编码位置信息。以下是对ROPE的详细介绍：</p>
+<p>ROPE（Rotary Positional Embedding）是一种位置编码技术，旨在为Transformer模型注入相对位置信息。传统的Transformer模型使用位置编码来弥补自注意力机制在处理序列数据时缺乏位置信息的不足。ROPE通过旋转变换提供了一种更灵活和有效的方式来编码位置信息。以下是对ROPE的详细介绍：</p>
 <ol type="1">
 <li><strong>背景</strong></li>
 </ol>
@@ -578,9 +536,7 @@ Embedding）是一种位置编码技术，旨在为Transformer模型注入相对
 <p>[ (x, p) = x R(p) ]</p>
 <p>其中，( R(p) ) 是一个旋转矩阵或复数旋转算子，表示为：</p>
 [ R(p) = (
-<span class="math display">\[\begin{array}{cc} \cos(\theta_p) &amp;
--\sin(\theta_p) \\ \sin(\theta_p) &amp; \cos(\theta_p)
-\end{array}\]</span>
+<span class="math display">\[\begin{array}{cc} \cos(\theta_p) &amp; -\sin(\theta_p) \\ \sin(\theta_p) &amp; \cos(\theta_p) \end{array}\]</span>
 <p>) ]</p>
 <p>或者在复数形式下：</p>
 <p>[ R(p) = e^{i_p} ]</p>
@@ -597,33 +553,22 @@ Embedding）是一种位置编码技术，旨在为Transformer模型注入相对
 <p>ROPE在处理长文本和其他需要捕获复杂相对位置信息的任务中表现优异，特别是在语言模型、翻译和序列预测任务中具有显著优势。</p>
 <p>通过使用ROPE，模型可以更好地理解和生成自然语言文本，尤其在需要复杂上下文关系建模的场景中表现突出。</p>
 <h2 id="六.-swiglu">六. swiGLU</h2>
-<p><strong>结构</strong>:
-SwiGLU是对标准FFN的改进。它的主要组成部分包括两个线性变换和一个门控机制。</p>
-<p><strong>公式</strong>: SwiGLU的基本公式可以表示为: SwiGLU(x) =
-swish(xW) ⊙ (xV)
-其中,x是输入,W和V是权重矩阵,swish是激活函数,⊙表示逐元素相乘。</p>
-<p><strong>Swish激活函数</strong>:
-SwiGLU使用Swish作为激活函数,而不是传统的ReLU。Swish函数定义为f(x) = x *
-sigmoid(βx),其中β是一个可学习的参数。</p>
+<p><strong>结构</strong>: SwiGLU是对标准FFN的改进。它的主要组成部分包括两个线性变换和一个门控机制。</p>
+<p><strong>公式</strong>: SwiGLU的基本公式可以表示为: SwiGLU(x) = swish(xW) ⊙ (xV) 其中,x是输入,W和V是权重矩阵,swish是激活函数,⊙表示逐元素相乘。</p>
+<p><strong>Swish激活函数</strong>: SwiGLU使用Swish作为激活函数,而不是传统的ReLU。Swish函数定义为f(x) = x * sigmoid(βx),其中β是一个可学习的参数。</p>
 <p><strong>优势</strong>:</p>
 <ul>
-<li>增强非线性:
-SwiGLU通过引入更复杂的非线性变换,提高了模型的表达能力。</li>
+<li>增强非线性: SwiGLU通过引入更复杂的非线性变换,提高了模型的表达能力。</li>
 <li>改善梯度流: Swish函数的平滑特性有助于更好的梯度传播。</li>
 <li>自适应门控: 门控机制允许模型动态调整信息流。</li>
 </ul>
-<p><strong>应用</strong>:
-SwiGLU在多个大型语言模型中得到应用,如PaLM和GPT-4,显著提升了模型性能。</p>
-<p><strong>计算效率</strong>:
-尽管SwiGLU的计算复杂度略高于标准FFN,但其性能提升通常可以抵消这一成本。</p>
-<p><strong>与其他变体的比较</strong>:
-相比于GLU或GeGLU等其他变体,SwiGLU在多项任务中表现更为出色。</p>
+<p><strong>应用</strong>: SwiGLU在多个大型语言模型中得到应用,如PaLM和GPT-4,显著提升了模型性能。</p>
+<p><strong>计算效率</strong>: 尽管SwiGLU的计算复杂度略高于标准FFN,但其性能提升通常可以抵消这一成本。</p>
+<p><strong>与其他变体的比较</strong>: 相比于GLU或GeGLU等其他变体,SwiGLU在多项任务中表现更为出色。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#创建SwiGLU类</span><br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.nn.functional <span class="hljs-keyword">as</span> F<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SwiGLU</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, in_features, hidden_features=<span class="hljs-literal">None</span>, out_features=<span class="hljs-literal">None</span>, bias=<span class="hljs-literal">True</span></span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        out_features = out_features <span class="hljs-keyword">or</span> in_features<br>        hidden_features = hidden_features <span class="hljs-keyword">or</span> in_features<br>        self.w1 = nn.Linear(in_features, hidden_features, bias=bias)<br>        self.w2 = nn.Linear(in_features, hidden_features, bias=bias)<br>        self.w3 = nn.Linear(hidden_features, out_features, bias=bias)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x1 = self.w1(x)<br>        x2 = self.w2(x)<br>        x1 = F.silu(x1)  <span class="hljs-comment"># SiLU is equivalent to Swish with beta=1</span><br>        out = x1 * x2<br>        out = self.w3(out)<br>        <span class="hljs-keyword">return</span> out<br><br><span class="hljs-comment"># 使用示例</span><br>in_features = <span class="hljs-number">512</span><br>hidden_features = <span class="hljs-number">2048</span><br>out_features = <span class="hljs-number">512</span><br><br>swiglu = SwiGLU(in_features, hidden_features, out_features)<br><br><span class="hljs-comment"># 假设我们有一个输入张量</span><br>input_tensor = torch.randn(<span class="hljs-number">32</span>, <span class="hljs-number">512</span>)  <span class="hljs-comment"># batch_size=32, sequence_length=512</span><br><br>output = swiglu(input_tensor)<br><span class="hljs-built_in">print</span>(output.shape)  <span class="hljs-comment"># 应该输出 torch.Size([32, 512])</span><br></code></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#模型的调用</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyModel</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        self.swiglu = SwiGLU(<span class="hljs-number">512</span>, <span class="hljs-number">2048</span>, <span class="hljs-number">512</span>)<br>        <span class="hljs-comment"># 其他层...</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.swiglu(x)<br>        <span class="hljs-comment"># 其他操作...</span><br>        <span class="hljs-keyword">return</span> x<br></code></pre></td></tr></table></figure>
 <p>全文完</p>
-<p>更详细的实现过程见<a
-href="https://linxkon.github.io/从零实现llama3.html">从头开始实现llama3
-- AI·你所爱 (linxkon.github.io)</a></p>
+<p>更详细的实现过程见<a href="https://linxkon.github.io/从零实现llama3.html">从头开始实现llama3 - AI·你所爱 (linxkon.github.io)</a></p>
 
                 
               </div>

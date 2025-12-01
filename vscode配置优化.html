@@ -319,20 +319,14 @@
 <h3 id="插件推荐">插件推荐</h3>
 <h4 id="本地插件">本地插件</h4>
 <figure>
-<img src="/images/vscode配置/image-20241013113519490.png" srcset="/img/loading.gif" lazyload
-alt="image-20241013113519490" />
-<figcaption aria-hidden="true">image-20241013113519490</figcaption>
+<img src="/images/vscode配置/image-20241013113519490.png" srcset="/img/loading.gif" lazyload alt="image-20241013113519490" /><figcaption aria-hidden="true">image-20241013113519490</figcaption>
 </figure>
 <figure>
-<img src="/images/vscode配置/image-20241013114159272.png" srcset="/img/loading.gif" lazyload
-alt="image-20241013114159272" />
-<figcaption aria-hidden="true">image-20241013114159272</figcaption>
+<img src="/images/vscode配置/image-20241013114159272.png" srcset="/img/loading.gif" lazyload alt="image-20241013114159272" /><figcaption aria-hidden="true">image-20241013114159272</figcaption>
 </figure>
 <h4 id="远程插件">远程插件</h4>
 <figure>
-<img src="/images/vscode配置/image-20241013113620302.png" srcset="/img/loading.gif" lazyload
-alt="image-20241013113620302" />
-<figcaption aria-hidden="true">image-20241013113620302</figcaption>
+<img src="/images/vscode配置/image-20241013113620302.png" srcset="/img/loading.gif" lazyload alt="image-20241013113620302" /><figcaption aria-hidden="true">image-20241013113620302</figcaption>
 </figure>
 <h3 id="ssh配置">SSH配置</h3>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#step 1 : 通过账号密码及地址ssh连接远程服务器</span><br>ssh -p 22 username@IP地址<br><br><span class="hljs-comment">#step 2 : 生成id_rsa本地公钥 </span><br>openssl genrsa -out private.key 2048<br><br><span class="hljs-comment">#step 3 : 通过git或wsl将公钥复制到远程服务器</span><br>ssh-copy-id ubuntu@100.82.226.69<br><br><span class="hljs-comment">#step 4 : 配置config文件方便调用</span><br>Host cyou<br>    HostName 100.82.226.69<br>    User ubuntu<br>    IdentityFile ~/.ssh/id_rsa<br><br><span class="hljs-comment">#step 5 :连接远程电脑</span><br>ssh cyou <br></code></pre></td></tr></table></figure>

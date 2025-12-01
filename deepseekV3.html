@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="近年来，LLM 经历了快速迭代和演进，逐步缩小了与通用人工智能（AGI）的差距。除了闭源模型外,开源模型阵营也在取得重大进展,包括 DeepSeek 系列、LLaMA 系列、Qwen 系列和 Mistral 系列，这些模型正在努力缩小与闭源模型的性能差距。 为了进一步突破开源模型的能力边界,研究团队开发了 DeepSeek-V3，这是一个基于 MoE 架构的大模型，总参数量达到 671B">
+    <meta name="description" content="近年来，LLM 经历了快速迭代和演进，逐步缩小了与通用人工智能（AGI）的差距。除了闭源模型外,开源模型阵营也在取得重大进展,包括 DeepSeek 系列、LLaMA 系列、Qwen 系列和 Mistral 系列，这些模型正在努力缩小与闭源模型的性能差距。 为了进一步突破开源模型的能力边界,研究团队开发了 DeepSeek-V3，这是一个基于 MoE 架构的大模型，总参数量达到 671B，其中每">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DeepSeek-V3技术报告">
 <meta property="og:url" content="https://linxkon.github.io/deepseekV3.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="近年来，LLM 经历了快速迭代和演进，逐步缩小了与通用人工智能（AGI）的差距。除了闭源模型外,开源模型阵营也在取得重大进展,包括 DeepSeek 系列、LLaMA 系列、Qwen 系列和 Mistral 系列，这些模型正在努力缩小与闭源模型的性能差距。 为了进一步突破开源模型的能力边界,研究团队开发了 DeepSeek-V3，这是一个基于 MoE 架构的大模型，总参数量达到 671B">
+<meta property="og:description" content="近年来，LLM 经历了快速迭代和演进，逐步缩小了与通用人工智能（AGI）的差距。除了闭源模型外,开源模型阵营也在取得重大进展,包括 DeepSeek 系列、LLaMA 系列、Qwen 系列和 Mistral 系列，这些模型正在努力缩小与闭源模型的性能差距。 为了进一步突破开源模型的能力边界,研究团队开发了 DeepSeek-V3，这是一个基于 MoE 架构的大模型，总参数量达到 671B，其中每">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/deepseek.jpg">
 <meta property="article:published_time" content="2025-02-06T02:21:13.000Z">
@@ -313,110 +313,47 @@
             
               <div class="markdown-body">
                 
-                <p>近年来，LLM
-经历了快速迭代和演进，逐步缩小了与<strong>通用人工智能（AGI）</strong>的差距。除了闭源模型外,开源模型阵营也在取得重大进展,包括
-DeepSeek 系列、LLaMA 系列、Qwen 系列和 Mistral
-系列，这些模型正在努力缩小与闭源模型的性能差距。</p>
-<p>为了进一步突破开源模型的能力边界,研究团队开发了
-DeepSeek-V3，这是一个基于 MoE 架构的大模型，总参数量达到 671B，其中每个
-token 会激活 37B 个参数。 <span id="more"></span></p>
+                <p>近年来，LLM 经历了快速迭代和演进，逐步缩小了与<strong>通用人工智能（AGI）</strong>的差距。除了闭源模型外,开源模型阵营也在取得重大进展,包括 DeepSeek 系列、LLaMA 系列、Qwen 系列和 Mistral 系列，这些模型正在努力缩小与闭源模型的性能差距。</p>
+<p>为了进一步突破开源模型的能力边界,研究团队开发了 DeepSeek-V3，这是一个基于 MoE 架构的大模型，总参数量达到 671B，其中每个 token 会激活 37B 个参数。 <span id="more"></span></p>
 <h2 id="引言">引言</h2>
-<p>基于提升性能和降低成本的双重目标，在架构设计方面，DeepSeek-V3
-采用了<strong>MLA</strong>来确保推理效率，并使用
-<strong>DeepSeekMoE</strong>来实现经济高效的训练。这两种架构在
-DeepSeek-V2
-中已经得到验证，证实了它们能够在保持模型性能的同时实现高效的训练和推理。</p>
+<p>基于提升性能和降低成本的双重目标，在架构设计方面，DeepSeek-V3 采用了<strong>MLA</strong>来确保推理效率，并使用 <strong>DeepSeekMoE</strong>来实现经济高效的训练。这两种架构在 DeepSeek-V2 中已经得到验证，证实了它们能够在保持模型性能的同时实现高效的训练和推理。</p>
 <p>除了延续这些基础架构外，研究团队还引入了两项创新策略来进一步提升模型性能。</p>
-<p>首先，DeepSeek-V3
-首创了<strong>无辅助损失的负载均衡</strong>策略，有效降低了负载均衡对模型性能的负面影响。另外，DeepSeek-V3
-采用了<strong>多 token
-预测训练目标，</strong>这种方法在评估基准测试中展现出了显著的性能提升。</p>
-<p>为了提高训练效率，该研究采用了 <strong>FP8
-[混合精度训练技术]</strong>并对训练框架进行了全面优化。[低精度训练]作为一种高效的训练方案，其发展与硬件性能的提升密切相关。本研究首次在超大规模模型上成功验证了
-FP8 混合精度训练框架的有效性。通过采用 FP8
-计算和存储技术，显著提升了训练速度并降低了 GPU 内存占用。</p>
-<p>在训练框架方面，研究团队开发的 <strong>[DualPipe]
-算法</strong>实现了高效的流水线并行处理，减少了流水线停滞，并通过计算和通信并行处理的方式降低了训练过程中的通信开销。这种优化确保了即使在模型规模进一步扩大的情况下，只要维持适当的计算通信比例，就能在不同节点间实现细粒度专家分配，同时将全节点间的通信开销降至接近于零。</p>
-<p>此外,研究团队<strong>优化了跨节点的全节点通信内核，</strong>充分利用了
-<strong>InfiniBand)</strong> 和 <strong>[NVLink]</strong>
-的带宽性能。通过精细的内存优化，使得 DeepSeek-V3
-的训练<strong>无需依赖成本高昂的张量并行技术</strong>。</p>
+<p>首先，DeepSeek-V3 首创了<strong>无辅助损失的负载均衡</strong>策略，有效降低了负载均衡对模型性能的负面影响。另外，DeepSeek-V3 采用了<strong>多 token 预测训练目标，</strong>这种方法在评估基准测试中展现出了显著的性能提升。</p>
+<p>为了提高训练效率，该研究采用了 <strong>FP8 [混合精度训练技术]</strong>并对训练框架进行了全面优化。[低精度训练]作为一种高效的训练方案，其发展与硬件性能的提升密切相关。本研究首次在超大规模模型上成功验证了 FP8 混合精度训练框架的有效性。通过采用 FP8 计算和存储技术，显著提升了训练速度并降低了 GPU 内存占用。</p>
+<p>在训练框架方面，研究团队开发的 <strong>[DualPipe] 算法</strong>实现了高效的流水线并行处理，减少了流水线停滞，并通过计算和通信并行处理的方式降低了训练过程中的通信开销。这种优化确保了即使在模型规模进一步扩大的情况下，只要维持适当的计算通信比例，就能在不同节点间实现细粒度专家分配，同时将全节点间的通信开销降至接近于零。</p>
+<p>此外,研究团队<strong>优化了跨节点的全节点通信内核，</strong>充分利用了 <strong>InfiniBand)</strong> 和 <strong>[NVLink]</strong> 的带宽性能。通过精细的内存优化，使得 DeepSeek-V3 的训练<strong>无需依赖成本高昂的张量并行技术</strong>。</p>
 <p>这些技术改进的综合运用实现了极高的训练效率。</p>
-<p>在<strong>预训练阶段</strong>，DeepSeek-V3 使用了 14.8T
-高质量且多样化的 token
-进行训练。整个预训练过程表现出了出人意料的稳定性，不仅没有出现不可恢复的损失突增，也未发生需要回滚的情况。</p>
-<p>随后，模型进行了<strong>两个阶段的上下文长度扩展</strong>：第一阶段将最大上下文长度提升至
-<strong>32K，</strong>第二阶段进一步扩展至 <strong>128K</strong>。</p>
-<p>接着，研究团队对 DeepSeek-V3
-基础模型进行了<strong>后训练</strong>，包括 SFT 和
-RL，以增强模型对人类偏好的理解并进一步提升其性能。在后训练阶段，通过从
-[DeepSeek R1]
-系列模型中提取推理能力，同时精确控制模型的输出质量和长度比例。</p>
-<p>DeepSeek-V3
-在全面的基准测试评估中表现突出。尽管其训练成本较低，但综合评估结果显示，<strong>DeepSeek-V3-Base
-已成为当前性能最强的开源基础模型</strong>，尤其在<strong>代码</strong>和<strong>数学</strong>领域表现卓越。其对话版本不仅超越了其他开源模型，还在多个标准和开放式基准测试中展现出与领先闭源模型（如
-GPT-4o 和 Claude-3.5-Sonnet）相匹敌的性能。</p>
-<p>值得注意的是，DeepSeek-V3
-实现了极具竞争力的训练成本（详见表1），这得益于在算法、框架和硬件层面的整体优化设计。</p>
+<p>在<strong>预训练阶段</strong>，DeepSeek-V3 使用了 14.8T 高质量且多样化的 token 进行训练。整个预训练过程表现出了出人意料的稳定性，不仅没有出现不可恢复的损失突增，也未发生需要回滚的情况。</p>
+<p>随后，模型进行了<strong>两个阶段的上下文长度扩展</strong>：第一阶段将最大上下文长度提升至 <strong>32K，</strong>第二阶段进一步扩展至 <strong>128K</strong>。</p>
+<p>接着，研究团队对 DeepSeek-V3 基础模型进行了<strong>后训练</strong>，包括 SFT 和 RL，以增强模型对人类偏好的理解并进一步提升其性能。在后训练阶段，通过从 [DeepSeek R1] 系列模型中提取推理能力，同时精确控制模型的输出质量和长度比例。</p>
+<p>DeepSeek-V3 在全面的基准测试评估中表现突出。尽管其训练成本较低，但综合评估结果显示，<strong>DeepSeek-V3-Base 已成为当前性能最强的开源基础模型</strong>，尤其在<strong>代码</strong>和<strong>数学</strong>领域表现卓越。其对话版本不仅超越了其他开源模型，还在多个标准和开放式基准测试中展现出与领先闭源模型（如 GPT-4o 和 Claude-3.5-Sonnet）相匹敌的性能。</p>
+<p>值得注意的是，DeepSeek-V3 实现了极具竞争力的训练成本（详见表1），这得益于在算法、框架和硬件层面的整体优化设计。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-61e1cc1e43427d2e77f2489a8067446b_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-61e1cc1e43427d2e77f2489a8067446b_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>表 1：DeepSeek-V3 的训练成本，假设 H800 的租赁价格为$2/GPU小时</p>
-<p>在预训练阶段，每处理1T token 仅需 180K H800 GPU 小时，即在配备 2048
-个 H800 GPU 的集群上仅需 3.7
-天。因此，整个预训练阶段在<strong>不到两个月内</strong>完成，总计使用了
-2664K GPU 小时。</p>
-<p>加上上下文长度扩展所需的 119K GPU 小时和后训练阶段的 5K GPU
-小时，DeepSeek-V3 的完整训练总共消耗了 2.788M GPU 小时。按照每 GPU 小时
-2 美元的 H800 GPU 租用价格计算，总训练成本仅为 <strong>557.6
-万美元</strong>。需要说明的是，这些成本仅包含 DeepSeek-V3
-的正式训练环节，不包括前期架构研究、算法验证和数据实验等相关支出。</p>
+<p>在预训练阶段，每处理1T token 仅需 180K H800 GPU 小时，即在配备 2048 个 H800 GPU 的集群上仅需 3.7 天。因此，整个预训练阶段在<strong>不到两个月内</strong>完成，总计使用了 2664K GPU 小时。</p>
+<p>加上上下文长度扩展所需的 119K GPU 小时和后训练阶段的 5K GPU 小时，DeepSeek-V3 的完整训练总共消耗了 2.788M GPU 小时。按照每 GPU 小时 2 美元的 H800 GPU 租用价格计算，总训练成本仅为 <strong>557.6 万美元</strong>。需要说明的是，这些成本仅包含 DeepSeek-V3 的正式训练环节，不包括前期架构研究、算法验证和数据实验等相关支出。</p>
 <p>本研究的主要创新点包括：</p>
 <p><strong>架构创新</strong></p>
-<p>在 DeepSeek-V2
-高效架构的基础上，创新性地提出了<strong>无辅助损失的负载均衡策略</strong>，有效降低了负载均衡过程对模型性能的影响。</p>
-<p>开发并验证了<strong>多 token
-预测(MTP)</strong>训练目标，证实了其对模型性能的提升作用，该技术还可用于推测解码来加速推理过程。</p>
+<p>在 DeepSeek-V2 高效架构的基础上，创新性地提出了<strong>无辅助损失的负载均衡策略</strong>，有效降低了负载均衡过程对模型性能的影响。</p>
+<p>开发并验证了<strong>多 token 预测(MTP)</strong>训练目标，证实了其对模型性能的提升作用，该技术还可用于推测解码来加速推理过程。</p>
 <p><strong>高效预训练</strong></p>
-<p>开发了 <strong>FP8
-混合精度训练框架</strong>，首次在超大规模模型上验证了 FP8
-训练的可行性和效果。</p>
-<p>通过算法、框架和硬件的综合优化，突破了<strong>跨节点 MoE
-训练中的通信瓶颈</strong>，实现了计算与通信的高度重叠。这种优化大幅提升了训练效率，降低了训练成本，同时支持了更大规模模型的训练而无需额外开销。</p>
-<p>仅用 2.664M H800 GPU 小时就完成了 DeepSeek-V3 在 14.8T token
-上的预训练，打造出当前最强大的开源基础模型。预训练后的其他训练阶段仅需
-0.1M GPU 小时。</p>
+<p>开发了 <strong>FP8 混合精度训练框架</strong>，首次在超大规模模型上验证了 FP8 训练的可行性和效果。</p>
+<p>通过算法、框架和硬件的综合优化，突破了<strong>跨节点 MoE 训练中的通信瓶颈</strong>，实现了计算与通信的高度重叠。这种优化大幅提升了训练效率，降低了训练成本，同时支持了更大规模模型的训练而无需额外开销。</p>
+<p>仅用 2.664M H800 GPU 小时就完成了 DeepSeek-V3 在 14.8T token 上的预训练，打造出当前最强大的开源基础模型。预训练后的其他训练阶段仅需 0.1M GPU 小时。</p>
 <p><strong>后训练——DeepSeek-R1 知识蒸馏</strong></p>
-<p>该研究提出了一种创新的知识蒸馏方法，将<strong>思维链 ) 模型（特别是
-DeepSeek R1 系列）的推理能力转移到标准 LLM 中</strong>，尤其是
-DeepSeek-V3。这一方法成功地将 R1 的验证和反思机制整合到 DeepSeek-V3
-中，显著提升了其推理能力，同时有效控制了输出的风格和长度。</p>
+<p>该研究提出了一种创新的知识蒸馏方法，将<strong>思维链 ) 模型（特别是 DeepSeek R1 系列）的推理能力转移到标准 LLM 中</strong>，尤其是 DeepSeek-V3。这一方法成功地将 R1 的验证和反思机制整合到 DeepSeek-V3 中，显著提升了其推理能力，同时有效控制了输出的风格和长度。</p>
 <p><strong>核心评估成果</strong></p>
 <p>知识领域评估：</p>
 <ul>
-<li>在<strong>教育类基准测试</strong>中，DeepSeek-V3
-的表现<strong>超越了所有开源模型</strong>，在 MMLU、MMLU-Pro 和 [GPQA]
-测试中分别获得了 88.5、75.9 和 59.1
-的优异成绩。这一性能水平已与领先闭源模型 GPT-4o 和 Claude-Sonnet-3.5
-相当，显著缩小了开源与闭源模型的性能差距。</li>
-<li>在<strong>事实性知识评测</strong>中，DeepSeek-V3 在 SimpleQA 和中文
-SimpleQA
-测试中都展现出领先于其他开源模型的优势。特别值得注意的是，虽然其英语事实知识（SimpleQA）略逊于
-GPT-4o 和 Claude-Sonnet-3.5，但在中文事实知识（中文
-SimpleQA）方面却超越了这些模型，凸显了其<strong>在中文知识领域的特殊优势</strong>。</li>
+<li>在<strong>教育类基准测试</strong>中，DeepSeek-V3 的表现<strong>超越了所有开源模型</strong>，在 MMLU、MMLU-Pro 和 [GPQA] 测试中分别获得了 88.5、75.9 和 59.1 的优异成绩。这一性能水平已与领先闭源模型 GPT-4o 和 Claude-Sonnet-3.5 相当，显著缩小了开源与闭源模型的性能差距。</li>
+<li>在<strong>事实性知识评测</strong>中，DeepSeek-V3 在 SimpleQA 和中文 SimpleQA 测试中都展现出领先于其他开源模型的优势。特别值得注意的是，虽然其英语事实知识（SimpleQA）略逊于 GPT-4o 和 Claude-Sonnet-3.5，但在中文事实知识（中文 SimpleQA）方面却超越了这些模型，凸显了其<strong>在中文知识领域的特殊优势</strong>。</li>
 </ul>
 <p>技术能力评估：</p>
 <ul>
-<li>在<strong>数学</strong>领域，DeepSeek-V3 在所有<strong>非 CoT
-模型（包括开源和闭源）中取得了最优性能</strong>。值得注意的是，在
-MATH-500 等特定测试中，其表现甚至超越了
-GPT-4o，充分展示了其出色的数学推理能力。</li>
-<li>在<strong>编程</strong>领域，DeepSeek-V3 <strong>在 LiveCodeBench
-等编程竞赛基准测试中表现最为突出</strong>，确立了其在该领域的领先地位。在软件工程相关任务中，尽管略低于
-Claude-Sonnet-3.5，但仍大幅领先于其他模型，展示了其在各类技术评测中的综合实力。</li>
+<li>在<strong>数学</strong>领域，DeepSeek-V3 在所有<strong>非 CoT 模型（包括开源和闭源）中取得了最优性能</strong>。值得注意的是，在 MATH-500 等特定测试中，其表现甚至超越了 GPT-4o，充分展示了其出色的数学推理能力。</li>
+<li>在<strong>编程</strong>领域，DeepSeek-V3 <strong>在 LiveCodeBench 等编程竞赛基准测试中表现最为突出</strong>，确立了其在该领域的领先地位。在软件工程相关任务中，尽管略低于 Claude-Sonnet-3.5，但仍大幅领先于其他模型，展示了其在各类技术评测中的综合实力。</li>
 </ul>
 <h2 id="架构">架构</h2>
 <p>DeepSeek-V3 的基本架构具有两个核心特征：</p>
@@ -425,760 +362,321 @@ Claude-Sonnet-3.5，但仍大幅领先于其他模型，展示了其在各类技
 <li>使用 <strong>DeepSeekMoE</strong> 实现经济高效的训练。</li>
 </ol>
 <p>此外，该研究还开发了MTP训练目标，这一创新在评估基准测试中展现出显著的性能提升。</p>
-<p>在其他未特别说明的架构细节方面，DeepSeek-V3 延续了 DeepSeek-V2
-的设计方案。</p>
+<p>在其他未特别说明的架构细节方面，DeepSeek-V3 延续了 DeepSeek-V2 的设计方案。</p>
 <h3 id="基本架构">基本架构</h3>
-<p>DeepSeek-V3 的基础架构建立在 Transformer
-框架之上。为实现高效推理和降低训练成本，该模型采用了经 DeepSeek-V2
-验证的 MLA 和 DeepSeekMoE 技术。相比 DeepSeek-V2，本研究在 DeepSeekMoE
-中创新性地引入了无辅助损失负载均衡策略，有效降低了负载均衡过程对模型性能的影响。</p>
-<p>图2展示了 DeepSeek-V3 的基本架构，本节将简要介绍 MLA 和 DeepSeekMoE
-的技术细节。</p>
+<p>DeepSeek-V3 的基础架构建立在 Transformer 框架之上。为实现高效推理和降低训练成本，该模型采用了经 DeepSeek-V2 验证的 MLA 和 DeepSeekMoE 技术。相比 DeepSeek-V2，本研究在 DeepSeekMoE 中创新性地引入了无辅助损失负载均衡策略，有效降低了负载均衡过程对模型性能的影响。</p>
+<p>图2展示了 DeepSeek-V3 的基本架构，本节将简要介绍 MLA 和 DeepSeekMoE 的技术细节。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-304e3d19dab63765fcca44a8ad515b87_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-304e3d19dab63765fcca44a8ad515b87_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>图2：DeepSeek-V3 基本架构示意图。基于
-DeepSeek-V2，团队采用了多头潜在注意力（MLA）和 DeepSeekMoE
-架构，以实现高效推理和经济的训练。</p>
+<p>图2：DeepSeek-V3 基本架构示意图。基于 DeepSeek-V2，团队采用了多头潜在注意力（MLA）和 DeepSeekMoE 架构，以实现高效推理和经济的训练。</p>
 <p><strong>[多头潜在注意力机制]</strong></p>
-<p>DeepSeek-V3 在注意力机制方面采用了 MLA 架构。设向量维度为
-d，注意力头数为 n_h ，每个头的维度为 d_h ，在特定注意力层中第 t 个 token
-的注意力输入表示为 h_t^d 。MLA
-的核心创新在于对注意力键和值进行低秩联合压缩，以降低推理过程中的<strong>键值(KV)</strong>缓存开销：</p>
+<p>DeepSeek-V3 在注意力机制方面采用了 MLA 架构。设向量维度为 d，注意力头数为 n_h ，每个头的维度为 d_h ，在特定注意力层中第 t 个 token 的注意力输入表示为 h_t^d 。MLA 的核心创新在于对注意力键和值进行低秩联合压缩，以降低推理过程中的<strong>键值(KV)</strong>缓存开销：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-6adb95f7401b0cc8bdf09fd11618c702_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-6adb95f7401b0cc8bdf09fd11618c702_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>其中：</p>
 <figure>
-<img src="/images/deepseekV3/PixPin_2025-02-06_14-49-01.png" srcset="/img/loading.gif" lazyload
-alt="PixPin_2025-02-06_14-49-01" />
-<figcaption aria-hidden="true">PixPin_2025-02-06_14-49-01</figcaption>
+<img src="/images/deepseekV3/PixPin_2025-02-06_14-49-01.png" srcset="/img/loading.gif" lazyload alt="PixPin_2025-02-06_14-49-01" /><figcaption aria-hidden="true">PixPin_2025-02-06_14-49-01</figcaption>
 </figure>
-<p>在 MLA 中，生成过程仅需缓存高亮标记的向量（ c^{KV}_t 和 k^R_t
-），这种设计显著降低了 KV
-缓存空间，同时保持了与标准MHA相当的性能水平。</p>
+<p>在 MLA 中，生成过程仅需缓存高亮标记的向量（ c^{KV}_t 和 k^R_t ），这种设计显著降低了 KV 缓存空间，同时保持了与标准MHA相当的性能水平。</p>
 <p>对于注意力查询(Query)部分，模型同样采用[低秩压缩技术]，这种设计有效降低了训练过程中的激活值内存占用：</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206143823270.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206143823270" />
-<figcaption aria-hidden="true">image-20250206143823270</figcaption>
+<img src="/images/deepseekV3/image-20250206143823270.png" srcset="/img/loading.gif" lazyload alt="image-20250206143823270" /><figcaption aria-hidden="true">image-20250206143823270</figcaption>
 </figure>
 <p>其中：</p>
 <ul>
 <li>c^Q_t ^{d'_c} 表示查询的压缩潜在向量</li>
 <li>d'_c(d_hn_h) 表示查询压缩维度</li>
-<li>W^{DQ} ^{d'_c d} 和 W^{UQ} ^{d_hn_h d'_c}
-分别为查询的维度降维和升维变换矩阵</li>
-<li>W^{QR} <sup>{d</sup>R_hn_h d'_c}
-用于生成携带旋转位置编码的解耦查询矩阵</li>
+<li>W^{DQ} ^{d'_c d} 和 W^{UQ} ^{d_hn_h d'_c} 分别为查询的维度降维和升维变换矩阵</li>
+<li>W^{QR} <sup>{d</sup>R_hn_h d'_c} 用于生成携带旋转位置编码的解耦查询矩阵</li>
 </ul>
-<p>最终，通过组合注意力查询( q_{t,i} )、键( k_{j,i} )和值( v^C_{j,i}
-)，得到注意力机制的最终输出 U_t ：</p>
+<p>最终，通过组合注意力查询( q_{t,i} )、键( k_{j,i} )和值( v^C_{j,i} )，得到注意力机制的最终输出 U_t ：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-f520389c5783c9623ec73d6f6d031eb5_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-f520389c5783c9623ec73d6f6d031eb5_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>其中 W^O ^{d d_hn_h} 为输出维度变换矩阵。</p>
 <p><strong>DeepSeekMoE 及其无辅助损失负载均衡机制</strong></p>
-<p><strong>DeepSeekMoE的基础架构：</strong> 在<strong><a
-href="Feed-Forward%20Networks,%20FFN">前馈网络</a></strong>部分，DeepSeek-V3
-采用了 DeepSeekMoE 架构。相比传统的 MoE 架构（如 [GShard]），DeepSeekMoE
-采用了更细粒度的专家分配机制，并创新性地将部分专家设置为共享专家。假设第
-t 个 token 的 FFN 输入为 u_t ，其输出 h'_t 的计算过程如下：</p>
+<p><strong>DeepSeekMoE的基础架构：</strong> 在<strong><a href="Feed-Forward%20Networks,%20FFN">前馈网络</a></strong>部分，DeepSeek-V3 采用了 DeepSeekMoE 架构。相比传统的 MoE 架构（如 [GShard]），DeepSeekMoE 采用了更细粒度的专家分配机制，并创新性地将部分专家设置为共享专家。假设第 t 个 token 的 FFN 输入为 u_t ，其输出 h'_t 的计算过程如下：</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206143914855.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206143914855" />
-<figcaption aria-hidden="true">image-20250206143914855</figcaption>
+<img src="/images/deepseekV3/image-20250206143914855.png" srcset="/img/loading.gif" lazyload alt="image-20250206143914855" /><figcaption aria-hidden="true">image-20250206143914855</figcaption>
 </figure>
 <p>其中：</p>
 <ul>
 <li>N_s 和 N_r 分别表示共享专家和路由专家的数量</li>
-<li>FFN^{(s)}_i 和 FFN^{(r)}_i(·) 分别代表第 i
-个共享专家和路由专家的处理函数</li>
+<li>FFN^{(s)}_i 和 FFN^{(r)}_i(·) 分别代表第 i 个共享专家和路由专家的处理函数</li>
 <li>K_r 表示被激活的路由专家数量</li>
 <li>_{ , } 代表第 i 个专家的权重系数</li>
 <li>s_{i,t} 表示 token 与专家间的相关度</li>
 <li>e_i 代表第 i 个路由专家的特征向量</li>
-<li>Topk(·,K) 函数返回第 t 个 token
-与所有路由专家计算得到的相关度分数中最高的 K 个值。</li>
+<li>Topk(·,K) 函数返回第 t 个 token 与所有路由专家计算得到的相关度分数中最高的 K 个值。</li>
 </ul>
-<p><strong>无辅助损失负载均衡：</strong> 对于 [MoE
-模型]，不平衡的专家负载将导致路由崩溃，并在专家并行场景中降低计算效率。传统解决方案通常依赖辅助损失来避免不平衡负载。然而，过大的辅助损失会损害模型性能。为了在负载平衡和模型性能之间实现更好的权衡，研究团队开创了一种无辅助损失负载均衡策略来确保负载平衡。</p>
-<p>具体而言，研究团队为每个专家引入了一个<strong>偏置项</strong> b_i
-，并将其添加到相应的<strong>亲和度分数</strong> s_{i,t} 中以确定 top-K
-路由：</p>
+<p><strong>无辅助损失负载均衡：</strong> 对于 [MoE 模型]，不平衡的专家负载将导致路由崩溃，并在专家并行场景中降低计算效率。传统解决方案通常依赖辅助损失来避免不平衡负载。然而，过大的辅助损失会损害模型性能。为了在负载平衡和模型性能之间实现更好的权衡，研究团队开创了一种无辅助损失负载均衡策略来确保负载平衡。</p>
+<p>具体而言，研究团队为每个专家引入了一个<strong>偏置项</strong> b_i ，并将其添加到相应的<strong>亲和度分数</strong> s_{i,t} 中以确定 top-K 路由：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-bfdd66bebfc2183b2a6483623f03cabd_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-bfdd66bebfc2183b2a6483623f03cabd_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>在这种设计中，偏置项仅用于路由选择，而门控值（用于与 FFN
-输出相乘）仍基于原始相关度分数 s_{i,t}
-计算。训练过程中，系统会实时监控每个训练步骤中所有批次的专家负载分布。在每个步骤结束时，对于负载过高的专家，其偏置项会减少
-；对于负载不足的专家，其偏置项会增加 ，其中
-是控制偏置更新速率的超参数。</p>
-<p>通过这种动态调整机制，DeepSeek-V3
-在训练过程中实现了专家负载的均衡分布，其性能优于传统仅依靠辅助损失来实现负载均衡的模型。</p>
-<p><strong>序列级辅助损失补充机制：</strong> 虽然 DeepSeek-V3
-主要采用无辅助损失策略来实现负载均衡，但为了防止单个序列中出现显著的负载不均衡现象，模型还引入了补充性的序列级平衡损失：</p>
+<p>在这种设计中，偏置项仅用于路由选择，而门控值（用于与 FFN 输出相乘）仍基于原始相关度分数 s_{i,t} 计算。训练过程中，系统会实时监控每个训练步骤中所有批次的专家负载分布。在每个步骤结束时，对于负载过高的专家，其偏置项会减少 ；对于负载不足的专家，其偏置项会增加 ，其中 是控制偏置更新速率的超参数。</p>
+<p>通过这种动态调整机制，DeepSeek-V3 在训练过程中实现了专家负载的均衡分布，其性能优于传统仅依靠辅助损失来实现负载均衡的模型。</p>
+<p><strong>序列级辅助损失补充机制：</strong> 虽然 DeepSeek-V3 主要采用无辅助损失策略来实现负载均衡，但为了防止单个序列中出现显著的负载不均衡现象，模型还引入了补充性的序列级平衡损失：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-5dda5b4c31f1a4a3819c0cdd2aded6c9_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-5dda5b4c31f1a4a3819c0cdd2aded6c9_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>其中平衡因子 是一个超参数，在 DeepSeek-V3 中被设置为极小值； (·)
-表示[指示函数]； T 代表序列中的 token
-总数。这种序列级平衡损失机制有助于保持单个序列内专家负载的均衡性。</p>
-<p><strong>节点约束路由机制：</strong> 类似于 DeepSeek-V2
-的设备限制[路由策略]，DeepSeek-V3
-采用了受控路由机制来优化训练过程中的通信开销。具体而言，系统限制每个
-token 最多只能分配给 M
-个计算节点，这些节点的选择基于每个节点上专家的最高 相关度分数总和。</p>
-<p>在这种约束下，<strong>MoE
-训练框架能够实现计算与通信的近乎完全并行处理</strong>。</p>
-<p><strong>完整的 Token 保留机制：</strong>
-得益于高效的负载均衡策略，DeepSeek-V3
-在整个训练过程中都保持着良好的负载平衡状态。因此，训练过程中不存在 token
-丢弃现象。同时，通过特定的推理部署策略，DeepSeek-V3
-在推理阶段同样实现了完整的 token 保留。</p>
-<h3 id="多-token-预测机制-multi-token-prediction-mtp">多 token 预测机制
-(Multi-Token Prediction, MTP)</h3>
-<p>DeepSeek-V3 创新性地采用了 MTP
-目标，将预测范围<strong>扩展到每个位置的多个后续 token</strong>。</p>
+<p>其中平衡因子 是一个超参数，在 DeepSeek-V3 中被设置为极小值； (·) 表示[指示函数]； T 代表序列中的 token 总数。这种序列级平衡损失机制有助于保持单个序列内专家负载的均衡性。</p>
+<p><strong>节点约束路由机制：</strong> 类似于 DeepSeek-V2 的设备限制[路由策略]，DeepSeek-V3 采用了受控路由机制来优化训练过程中的通信开销。具体而言，系统限制每个 token 最多只能分配给 M 个计算节点，这些节点的选择基于每个节点上专家的最高  相关度分数总和。</p>
+<p>在这种约束下，<strong>MoE 训练框架能够实现计算与通信的近乎完全并行处理</strong>。</p>
+<p><strong>完整的 Token 保留机制：</strong> 得益于高效的负载均衡策略，DeepSeek-V3 在整个训练过程中都保持着良好的负载平衡状态。因此，训练过程中不存在 token 丢弃现象。同时，通过特定的推理部署策略，DeepSeek-V3 在推理阶段同样实现了完整的 token 保留。</p>
+<h3 id="多-token-预测机制-multi-token-prediction-mtp">多 token 预测机制 (Multi-Token Prediction, MTP)</h3>
+<p>DeepSeek-V3 创新性地采用了 MTP 目标，将预测范围<strong>扩展到每个位置的多个后续 token</strong>。</p>
 <p>这种设计具有双重优势：</p>
-<p>首先，MTP
-目标通过增加训练信号的密度可能提高数据利用效率；其次，它使模型能够提前规划表征，从而更准确地预测后续
-token。</p>
-<p>如图3所示，该实现方案与先前研究的方法有所不同：前者使用独立输出头并行预测
-D 个额外 token，而 DeepSeek-V3
-采用顺序预测方式，并在每个预测层级保持完整的因果关系链。</p>
+<p>首先，MTP 目标通过增加训练信号的密度可能提高数据利用效率；其次，它使模型能够提前规划表征，从而更准确地预测后续 token。</p>
+<p>如图3所示，该实现方案与先前研究的方法有所不同：前者使用独立输出头并行预测 D 个额外 token，而 DeepSeek-V3 采用顺序预测方式，并在每个预测层级保持完整的因果关系链。</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206143949776.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206143949776" />
-<figcaption aria-hidden="true">image-20250206143949776</figcaption>
+<img src="/images/deepseekV3/image-20250206143949776.png" srcset="/img/loading.gif" lazyload alt="image-20250206143949776" /><figcaption aria-hidden="true">image-20250206143949776</figcaption>
 </figure>
-<p>图3：MTP实现示意图。V3在每个深度上保持每个 token
-预测过程中的完整因果依赖链。</p>
-<p><strong>MTP 模块架构：</strong> 具体实现中，模型采用 D
-个串联模块来预测 D 个额外的 token。每个 MTP
-模块（第k个）包含以下组件：</p>
+<p>图3：MTP实现示意图。V3在每个深度上保持每个 token 预测过程中的完整因果依赖链。</p>
+<p><strong>MTP 模块架构：</strong> 具体实现中，模型采用 D 个串联模块来预测 D 个额外的 token。每个 MTP 模块（第k个）包含以下组件：</p>
 <ul>
 <li>共享向量层 Emb(·)</li>
 <li>共享输出头 OutHead(·)</li>
 <li>Transformer 处理单元 TRM_ (·)</li>
 <li>维度映射矩阵 M_k ^{d 2d}</li>
 </ul>
-<p>对于输入序列中的第 i 个 token t_i ，在第 k
-层预测时，模型首先将两个向量进行组合：该 token 在第 (k-1) 层的特征表示
-h^{k-1}<em>i ^d 和第 (i+k) 个 token 的向量 Emb(t</em>{i+k}) ^d
-，通过线性变换进行融合：</p>
+<p>对于输入序列中的第 i 个 token t_i ，在第 k 层预测时，模型首先将两个向量进行组合：该 token 在第 (k-1) 层的特征表示 h^{k-1}<em>i ^d 和第 (i+k) 个 token 的向量 Emb(t</em>{i+k}) ^d ，通过线性变换进行融合：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-0ea713fd90875865785c2013e4dcae4c_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-0ea713fd90875865785c2013e4dcae4c_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>其中<strong>[·;·]</strong>表示向量拼接操作。需要特别说明的是，在 k=1
-时，h^{k-1}_i 代表主模型输出的特征表示。值得注意的是，每个 MTP
-模块都与主模型共享同一个向量层。经过组合的特征向量 h'^{k}_i 随后输入到第
-k 层的 Transformer 处理单元，生成该层的输出特征表示 h^{k}_i ：</p>
+<p>其中<strong>[·;·]</strong>表示向量拼接操作。需要特别说明的是，在 k=1 时，h^{k-1}_i 代表主模型输出的特征表示。值得注意的是，每个 MTP 模块都与主模型共享同一个向量层。经过组合的特征向量 h'^{k}_i 随后输入到第 k 层的 Transformer 处理单元，生成该层的输出特征表示 h^{k}_i ：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-769260d2a18a0a127ae99b655574b9be_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-769260d2a18a0a127ae99b655574b9be_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>其中 T 代表输入序列的长度， _{i:j}
-表示包含两端的切片操作。接着，系统将h^{k}<em>i输入到共享输出层，计算第 k
-个预测 token 的概率分布 P^k</em>{i+1+k} ^V （V 为词表大小）：</p>
+<p>其中 T 代表输入序列的长度， _{i:j} 表示包含两端的切片操作。接着，系统将h^{k}<em>i输入到共享输出层，计算第 k 个预测 token 的概率分布 P^k</em>{i+1+k} ^V （V 为词表大小）：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-fcc5bc9617b9a1ced05c5bbacd36ae89_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-fcc5bc9617b9a1ced05c5bbacd36ae89_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>输出层 <strong>OutHead(·)</strong> 首先通过线性变换将特征表示转换为
-logits，然后使用 <strong>Softmax(·)</strong> 函数计算第 k 个预测 token
-的概率分布。与向量层类似，每个 MTP
-模块的输出层也与主模型共享。这种保持预测因果链的设计思路与
-<strong>EAGLE</strong> 相近，但两者目标不同：EAGLE
-主要用于推测解码，而本研究中的 MTP 主要用于优化训练效果。</p>
-<p><strong>MTP 训练目标优化：</strong> 系统为每个预测层级计算交叉熵损失
-^k_{MTP} ：</p>
+<p>输出层 <strong>OutHead(·)</strong> 首先通过线性变换将特征表示转换为 logits，然后使用 <strong>Softmax(·)</strong> 函数计算第 k 个预测 token 的概率分布。与向量层类似，每个 MTP 模块的输出层也与主模型共享。这种保持预测因果链的设计思路与 <strong>EAGLE</strong> 相近，但两者目标不同：EAGLE 主要用于推测解码，而本研究中的 MTP 主要用于优化训练效果。</p>
+<p><strong>MTP 训练目标优化：</strong> 系统为每个预测层级计算交叉熵损失 ^k_{MTP} ：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-d40d3258087127cacb82e1fc4bb7c661_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-d40d3258087127cacb82e1fc4bb7c661_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>其中，T 表示输入序列长度，t_i 代表第 i 个位置的目标 token， ^k_i[t_i]
-表示第 k 个 MTP 模块对 t_i 的预测概率。最终，通过计算所有层级 MTP
-损失的平均值并乘以权重系数 ，得到总体 MTP 损失 _{MTP} ，作为 DeepSeek-V3
-的补充训练目标：</p>
+<p>其中，T 表示输入序列长度，t_i 代表第 i 个位置的目标 token， ^k_i[t_i] 表示第 k 个 MTP 模块对 t_i 的预测概率。最终，通过计算所有层级 MTP 损失的平均值并乘以权重系数 ，得到总体 MTP 损失 _{MTP} ，作为 DeepSeek-V3 的补充训练目标：</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-fde35ef9d2beb452de5ba9cb4c1508f9_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-fde35ef9d2beb452de5ba9cb4c1508f9_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p><strong>推理阶段的MTP：</strong>应用 MTP
-机制的主要目的是提升基础模型的性能，因此在实际推理阶段可以不使用 MTP
-模块，基础模型能够独立完成正常推理。此外，这些 MTP
-模块也可以被重新配置用于推测解码，从而降低模型生成的时间延迟。</p>
+<p><strong>推理阶段的MTP：</strong>应用 MTP 机制的主要目的是提升基础模型的性能，因此在实际推理阶段可以不使用 MTP 模块，基础模型能够独立完成正常推理。此外，这些 MTP 模块也可以被重新配置用于推测解码，从而降低模型生成的时间延迟。</p>
 <h2 id="基础设施">基础设施</h2>
 <h3 id="计算集群架构">计算集群架构</h3>
-<p>DeepSeek-V3 的训练环境是一个配备 <strong>2048 个 [NVIDIA H800
-GPU]</strong> 的大规模计算集群。</p>
-<p>该集群中的每个计算节点包含 <strong>8 个 GPU</strong>，这些 GPU
-通过节点内的 <strong>NVLink</strong> 和 <strong>NVSwitch</strong>
-实现高速互连。节点之间则采用 <strong>InfiniBand (IB)</strong>
-技术进行高效通信。</p>
+<p>DeepSeek-V3 的训练环境是一个配备 <strong>2048 个 [NVIDIA H800 GPU]</strong> 的大规模计算集群。</p>
+<p>该集群中的每个计算节点包含 <strong>8 个 GPU</strong>，这些 GPU 通过节点内的 <strong>NVLink</strong> 和 <strong>NVSwitch</strong> 实现高速互连。节点之间则采用 <strong>InfiniBand (IB)</strong> 技术进行高效通信。</p>
 <h3 id="训练框架设计">训练框架设计</h3>
-<p>模型训练基于自主研发的 <strong>HAI-LLM</strong>
-框架，这是一个经过优化的高效轻量级训练系统。DeepSeek-V3
-的并行策略包含三个层面：16 路<strong>流水线并行, PP)</strong>、跨 8
-个节点的 64 路<strong>专家并行, EP)</strong>，以及 ZeRO-1
-<strong>数据并行(Data Parallelism, DP)</strong>。</p>
+<p>模型训练基于自主研发的 <strong>HAI-LLM</strong> 框架，这是一个经过优化的高效轻量级训练系统。DeepSeek-V3 的并行策略包含三个层面：16 路<strong>流水线并行, PP)</strong>、跨 8 个节点的 64 路<strong>专家并行, EP)</strong>，以及 ZeRO-1 <strong>数据并行(Data Parallelism, DP)</strong>。</p>
 <p>为实现高效训练，该框架进行了多方面的工程优化：</p>
 <ol type="1">
-<li>开发了 <strong>DualPipe</strong> 流水线并行算法，相比现有 PP
-方法，该算法<strong>显著减少了流水线停滞</strong>现象。更重要的是，它实现了<strong>前向和后向过程中计算与通信阶段的重叠</strong>，有效解决了跨节点专家并行带来的通信负载问题。</li>
-<li>优化了<strong>跨节点全对全通信内核</strong>，充分利用 IB 和 NVLink
-带宽，同时减少了通信所需的<strong>流式多处理器(SMs)</strong>资源占用。</li>
-<li>通过精细的内存管理优化，使得模型训练无需依赖开销较大的<strong>张量并行(Tensor
-Parallelism, TP)</strong>技术。</li>
+<li>开发了 <strong>DualPipe</strong> 流水线并行算法，相比现有 PP 方法，该算法<strong>显著减少了流水线停滞</strong>现象。更重要的是，它实现了<strong>前向和后向过程中计算与通信阶段的重叠</strong>，有效解决了跨节点专家并行带来的通信负载问题。</li>
+<li>优化了<strong>跨节点全对全通信内核</strong>，充分利用 IB 和 NVLink 带宽，同时减少了通信所需的<strong>流式多处理器(SMs)</strong>资源占用。</li>
+<li>通过精细的内存管理优化，使得模型训练无需依赖开销较大的<strong>张量并行(Tensor Parallelism, TP)</strong>技术。</li>
 </ol>
 <p><strong>DualPipe 技术与计算通信协同优化</strong></p>
-<p>在 DeepSeek-V3
-中，跨节点专家并行机制引入了显著的通信开销，导致计算与通信比例接近<strong>1:1</strong>，影响了训练效率。</p>
-<p>为解决这一问题，模型采用了创新性的 DualPipe
-流水线并行算法。该算法通过两个关键优化实现性能提升：有效融合前向和后向计算的通信阶段，同时减少流水线阻塞。</p>
-<p>DualPipe
-的核心创新在于实现了单个前向和后向计算块内的计算通信重叠。具体来说，每个计算块被划分为四个功能模块：</p>
+<p>在 DeepSeek-V3 中，跨节点专家并行机制引入了显著的通信开销，导致计算与通信比例接近<strong>1:1</strong>，影响了训练效率。</p>
+<p>为解决这一问题，模型采用了创新性的 DualPipe 流水线并行算法。该算法通过两个关键优化实现性能提升：有效融合前向和后向计算的通信阶段，同时减少流水线阻塞。</p>
+<p>DualPipe 的核心创新在于实现了单个前向和后向计算块内的计算通信重叠。具体来说，每个计算块被划分为四个功能模块：</p>
 <ul>
 <li><strong>注意力机制</strong></li>
 <li><strong>全节点数据分发</strong></li>
 <li><strong>MLP 处理</strong></li>
 <li><strong>全节点数据整合</strong></li>
 </ul>
-<p>特别地，在后向计算块中，注意力和 MLP
-模块都被进一步细分为<strong>输入梯度计算</strong>和<strong>权重梯度计算</strong>两个部分，这一设计借鉴了
-<strong>ZeroBubble</strong> 的思路。此外，还包含专门的 PP 通信模块。</p>
+<p>特别地，在后向计算块中，注意力和 MLP 模块都被进一步细分为<strong>输入梯度计算</strong>和<strong>权重梯度计算</strong>两个部分，这一设计借鉴了 <strong>ZeroBubble</strong> 的思路。此外，还包含专门的 PP 通信模块。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-15b42f97421517062ab3161d73daed88_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-15b42f97421517062ab3161d73daed88_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>图4：个体前向和后向块的重叠策略（Transformer
-块的边界未对齐）。橙色表示前向计算，绿色表示“输入的后向计算”，蓝色表示“权重的后向计算”，紫色表示
-PP 通信，红色表示屏障。全对全（all-to-all）通信和 PP
-通信可以完全隐藏。</p>
-<p>如图4所示，通过优化排列这些功能模块，并精确调控用于通信和计算的 GPU
-流处理器资源分配比例，系统能够在运行过程中有效隐藏全节点通信和 PP
-通信开销。</p>
-<p>完整的 DualPipe
-调度机制如图5所示。它采用创新的<strong>双向流水线调度策略</strong>，实现了从流水线两端同时输入微批次数据，使得大部分通信过程能够与计算过程完全重叠。这种设计确保了即使在模型规模进一步扩大的情况下，只要维持适当的计算通信比例，就能在节点间实现细粒度的专家分配，同时将全节点通信开销降至接近于零。</p>
+<p>图4：个体前向和后向块的重叠策略（Transformer 块的边界未对齐）。橙色表示前向计算，绿色表示“输入的后向计算”，蓝色表示“权重的后向计算”，紫色表示 PP 通信，红色表示屏障。全对全（all-to-all）通信和 PP 通信可以完全隐藏。</p>
+<p>如图4所示，通过优化排列这些功能模块，并精确调控用于通信和计算的 GPU 流处理器资源分配比例，系统能够在运行过程中有效隐藏全节点通信和 PP 通信开销。</p>
+<p>完整的 DualPipe 调度机制如图5所示。它采用创新的<strong>双向流水线调度策略</strong>，实现了从流水线两端同时输入微批次数据，使得大部分通信过程能够与计算过程完全重叠。这种设计确保了即使在模型规模进一步扩大的情况下，只要维持适当的计算通信比例，就能在节点间实现细粒度的专家分配，同时将全节点通信开销降至接近于零。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-acf8d6d9bd6beda83f3808f936b001d0_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-acf8d6d9bd6beda83f3808f936b001d0_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>图5：8 个 PP 排位和 20
-个微批次在两个方向上的双管道调度示例。反向方向的微批次与前向方向的微批次对称，因此为简化说明，省略了反向微批次的批次
-ID。两个由共享黑色边框围住的单元存在相互重叠的计算和通信。</p>
-<p>值得注意的是，即使在通信负载相对较轻的常规应用场景中，DualPipe
-仍然展现出显著的效率优势。表2对比了不同 PP
-方法在流水线阻塞和内存使用方面的表现。</p>
+<p>图5：8 个 PP 排位和 20 个微批次在两个方向上的双管道调度示例。反向方向的微批次与前向方向的微批次对称，因此为简化说明，省略了反向微批次的批次 ID。两个由共享黑色边框围住的单元存在相互重叠的计算和通信。</p>
+<p>值得注意的是，即使在通信负载相对较轻的常规应用场景中，DualPipe 仍然展现出显著的效率优势。表2对比了不同 PP 方法在流水线阻塞和内存使用方面的表现。</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206144043770.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206144043770" />
-<figcaption aria-hidden="true">image-20250206144043770</figcaption>
+<img src="/images/deepseekV3/image-20250206144043770.png" srcset="/img/loading.gif" lazyload alt="image-20250206144043770" /><figcaption aria-hidden="true">image-20250206144043770</figcaption>
 </figure>
-<p>数据显示，相比 <strong>ZB1P</strong> 和
-<strong>1F1B</strong>，DualPipe
-大幅减少了流水线阻塞，而峰值活性内存仅增加了 。虽然 DualPipe
-需要维护两份模型参数副本，但由于训练过程采用了大规模
-EP，这一冗余并未导致显著的内存开销增加。</p>
-<p>与 <strong>Chimera</strong> 相比，DualPipe
-的实现要求更为灵活，仅需要流水线阶段数和微批次数能被 2
-整除，而不要求微批次数必须能被流水线阶段数整除。</p>
-<p>此外，DualPipe
-的一个重要特性是，<strong>随着微批次数量的增加，其流水线阻塞和激活内存占用都不会相应增加</strong>。</p>
+<p>数据显示，相比 <strong>ZB1P</strong> 和 <strong>1F1B</strong>，DualPipe 大幅减少了流水线阻塞，而峰值活性内存仅增加了  。虽然 DualPipe 需要维护两份模型参数副本，但由于训练过程采用了大规模 EP，这一冗余并未导致显著的内存开销增加。</p>
+<p>与 <strong>Chimera</strong> 相比，DualPipe 的实现要求更为灵活，仅需要流水线阶段数和微批次数能被 2 整除，而不要求微批次数必须能被流水线阶段数整除。</p>
+<p>此外，DualPipe 的一个重要特性是，<strong>随着微批次数量的增加，其流水线阻塞和激活内存占用都不会相应增加</strong>。</p>
 <p><strong>跨节点all-to-all通信的高效实现</strong></p>
-<p>为了确保 DualPipe
-具有充足的计算性能，系统采用了定制化的高效跨节点全对全通信内核（包括分发和组合功能），以节省用于通信的
-SMs 数量。</p>
-<p>这些内核的实现与 MoE
-门控算法和集群的[网络拓扑结构]进行了协同设计。具体而言，在该集群中，跨节点
-GPU 通过 IB 实现全连接，节点内通信则通过 NVLink 处理。NVLink 提供
-<strong>160GB/s</strong> 的带宽，约为 IB（50GB/s）的 3.2
-倍。为了有效利用 IB 和 NVLink 的不同带宽特性，系统限制每个 token
-最多分发到 4 个节点，从而减少 IB 流量。对于每个
-token，当确定其路由决策后，首先通过 IB
-传输到目标节点上具有相同节点内索引的
-GPU。一旦到达目标节点，系统确保其通过 NVLink
-即时转发到承载目标专家的特定 GPU，避免被后续到达的 token 阻塞。</p>
-<p>通过这种方式，IB 和 NVLink 的通信实现完全重叠，每个 token
-能够在不产生 NVLink 额外开销的情况下，在每个节点上平均高效选择 3.2
-个专家。这意味着，<strong>虽然 DeepSeek-V3 实际只选择 8
-个路由专家，但它可以将这个数字扩展到最多 13 个专家（4 个节点 × 3.2
-个专家/节点），同时保持相同的通信成本</strong>。</p>
-<p>总体而言，在这种通信策略下，仅需 20 个 SMs 就足以充分利用 IB 和
-NVLink 的带宽。具体而言，系统采用了线程专门化技术，将 20 个 SMs 划分为
-10 个通信信道。</p>
-<p>在分发过程中，(1)IB 发送、(2) IB 到 NVLink 转发和(3) NVLink
-接收由各自的线程组处理。分配给每个通信任务的线程组数量根据所有 SMs
-的实际工作负载动态调整。</p>
-<p>类似地，在组合过程中，(1) NVLink 发送、(2) NVLink 到 IB
-转发和累积，以及(3) IB
-接收和累积也由动态调整的线程组处理。此外，分发和组合内核与计算流重叠，因此还考虑了它们对其他
-SM 计算内核的影响。具体而言，系统采用了<strong>定制的 PTX
-指令</strong>并<strong>自动调整通信块大小</strong>，这显著降低了 L2
-缓存的使用和对其他 SMs 的干扰。</p>
+<p>为了确保 DualPipe 具有充足的计算性能，系统采用了定制化的高效跨节点全对全通信内核（包括分发和组合功能），以节省用于通信的 SMs 数量。</p>
+<p>这些内核的实现与 MoE 门控算法和集群的[网络拓扑结构]进行了协同设计。具体而言，在该集群中，跨节点 GPU 通过 IB 实现全连接，节点内通信则通过 NVLink 处理。NVLink 提供 <strong>160GB/s</strong> 的带宽，约为 IB（50GB/s）的 3.2 倍。为了有效利用 IB 和 NVLink 的不同带宽特性，系统限制每个 token 最多分发到 4 个节点，从而减少 IB 流量。对于每个 token，当确定其路由决策后，首先通过 IB 传输到目标节点上具有相同节点内索引的 GPU。一旦到达目标节点，系统确保其通过 NVLink 即时转发到承载目标专家的特定 GPU，避免被后续到达的 token 阻塞。</p>
+<p>通过这种方式，IB 和 NVLink 的通信实现完全重叠，每个 token 能够在不产生 NVLink 额外开销的情况下，在每个节点上平均高效选择 3.2 个专家。这意味着，<strong>虽然 DeepSeek-V3 实际只选择 8 个路由专家，但它可以将这个数字扩展到最多 13 个专家（4 个节点 × 3.2 个专家/节点），同时保持相同的通信成本</strong>。</p>
+<p>总体而言，在这种通信策略下，仅需 20 个 SMs 就足以充分利用 IB 和 NVLink 的带宽。具体而言，系统采用了线程专门化技术，将 20 个 SMs 划分为 10 个通信信道。</p>
+<p>在分发过程中，(1)IB 发送、(2) IB 到 NVLink 转发和(3) NVLink 接收由各自的线程组处理。分配给每个通信任务的线程组数量根据所有 SMs 的实际工作负载动态调整。</p>
+<p>类似地，在组合过程中，(1) NVLink 发送、(2) NVLink 到 IB 转发和累积，以及(3) IB 接收和累积也由动态调整的线程组处理。此外，分发和组合内核与计算流重叠，因此还考虑了它们对其他 SM 计算内核的影响。具体而言，系统采用了<strong>定制的 PTX 指令</strong>并<strong>自动调整通信块大小</strong>，这显著降低了 L2 缓存的使用和对其他 SMs 的干扰。</p>
 <p><strong>极致的内存节省与最小开销</strong></p>
 <p>为了减少训练期间的内存占用，系统采用了以下技术：</p>
-<p><strong>[RMSNorm] 和 MLA
-上投影的重计算</strong>。在反向传播期间重新计算所有 RMSNorm 操作和 MLA
-上投影，从而避免了持久存储其输出激活的需求。这种策略虽带来少量开销，但显著减少了存储激活所需的内存。</p>
-<p><strong>CPU 中的指数移动平均)</strong>。在训练期间，系统在 CPU
-内存中保留模型参数的EMA，用于学习率衰减后对模型性能的早期估计。EMA
-参数存储在 CPU 内存中，并在每个训练步骤后异步更新。这种方法使维护 EMA
-参数不会产生额外的内存或时间开销。</p>
-<p><strong>MTP的共享向量和输出头</strong>。采用 DualPipe
-策略，将模型的最浅层（包括向量层）和最深层（包括输出头）部署在相同的PP等级上。这种安排使
-MTP
-模块和主模型之间能够物理共享参数和梯度，实现共享向量和输出头。这种物理共享机制进一步提高了内存使用效率。</p>
+<p><strong>[RMSNorm] 和 MLA 上投影的重计算</strong>。在反向传播期间重新计算所有 RMSNorm 操作和 MLA 上投影，从而避免了持久存储其输出激活的需求。这种策略虽带来少量开销，但显著减少了存储激活所需的内存。</p>
+<p><strong>CPU 中的指数移动平均)</strong>。在训练期间，系统在 CPU 内存中保留模型参数的EMA，用于学习率衰减后对模型性能的早期估计。EMA 参数存储在 CPU 内存中，并在每个训练步骤后异步更新。这种方法使维护 EMA 参数不会产生额外的内存或时间开销。</p>
+<p><strong>MTP的共享向量和输出头</strong>。采用 DualPipe 策略，将模型的最浅层（包括向量层）和最深层（包括输出头）部署在相同的PP等级上。这种安排使 MTP 模块和主模型之间能够物理共享参数和梯度，实现共享向量和输出头。这种物理共享机制进一步提高了内存使用效率。</p>
 <h3 id="fp8-训练">FP8 训练</h3>
-<p>基于低精度训练领域的最新进展，本研究开发了一种细粒度混合精度框架，采用
-FP8 数据格式训练 DeepSeek-V3。</p>
+<p>基于低精度训练领域的最新进展，本研究开发了一种细粒度混合精度框架，采用 FP8 数据格式训练 DeepSeek-V3。</p>
 <p>尽管低精度训练技术展现出巨大潜力，但其实际应用常受到激活值、权重和梯度中异常值的制约。虽然推理量化技术取得重要突破，但在大规模语言模型预训练中成功应用低精度技术的案例仍然有限。</p>
-<p>为了应对这一挑战并有效扩展 FP8
-格式的动态范围，本研究采用了细粒度量化策略：</p>
+<p>为了应对这一挑战并有效扩展 FP8 格式的动态范围，本研究采用了细粒度量化策略：</p>
 <p>采用 1N_c 元素的条状分组或N_c N_c 元素的块状分组。</p>
-<p>通过提高精度累积过程，大幅降低了[反量化]带来的计算开销，这对实现高精度
-FP8 <strong>通用矩阵乘法(GEMM)</strong>至关重要。此外，为降低 MoE
-训练中的内存和通信开销，系统采用 FP8
-格式进行激活值的缓存和分发，同时使用 BF16 格式存储低精度优化器状态。</p>
-<p>该框架在与 DeepSeek-V2-Lite 和 DeepSeek-V2
-规模相近的两个模型上进行了验证，训练数据量约为 1T
-token（详见原文附录B.1）。结果表明，与 BF16 基准相比，<strong>FP8
-训练模型的相对损失误差始终保持在 0.25%
-以下</strong>，这完全在训练随机性的可接受范围内。</p>
+<p>通过提高精度累积过程，大幅降低了[反量化]带来的计算开销，这对实现高精度 FP8 <strong>通用矩阵乘法(GEMM)</strong>至关重要。此外，为降低 MoE 训练中的内存和通信开销，系统采用 FP8 格式进行激活值的缓存和分发，同时使用 BF16 格式存储低精度优化器状态。</p>
+<p>该框架在与 DeepSeek-V2-Lite 和 DeepSeek-V2 规模相近的两个模型上进行了验证，训练数据量约为 1T token（详见原文附录B.1）。结果表明，与 BF16 基准相比，<strong>FP8 训练模型的相对损失误差始终保持在 0.25% 以下</strong>，这完全在训练随机性的可接受范围内。</p>
 <p><strong>混合精度框架</strong></p>
-<p>本研究在已有低精度训练技术的基础上，设计了专门的 FP8
-训练混合精度框架。在这一框架中，大部分计算密集型操作采用 FP8
-执行，而关键操作则保持原有数据格式，以实现训练效率和数值稳定性的最优平衡。</p>
+<p>本研究在已有低精度训练技术的基础上，设计了专门的 FP8 训练混合精度框架。在这一框架中，大部分计算密集型操作采用 FP8 执行，而关键操作则保持原有数据格式，以实现训练效率和数值稳定性的最优平衡。</p>
 <p>整体框架结构如图6所示。</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206144144211.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206144144211" />
-<figcaption aria-hidden="true">image-20250206144144211</figcaption>
+<img src="/images/deepseekV3/image-20250206144144211.png" srcset="/img/loading.gif" lazyload alt="image-20250206144144211" /><figcaption aria-hidden="true">image-20250206144144211</figcaption>
 </figure>
-<p>图6：带有 FP8
-数据格式的整体混合精度框架。为清晰起见，仅展示了线性算子。</p>
-<p>首先，为提高模型训练速度，大部分核心计算操作（尤其是 GEMM
-运算），均采用 FP8 精度实现。这些 GEMM 运算接收 FP8 格式的张量输入，输出
-BF16 或 [FP32] 格式的结果。如图6所示，线性运算相关的三个 GEMM 操作，包括
-<strong>Fprop（前向传播）</strong>、<strong>Dgrad（激活值反向传播）</strong>和
-<strong>Wgrad（权重反向传播）</strong>，均采用 FP8
-执行。这种设计策略<strong>理论上将计算速度提升至原有 BF16
-方法的两倍</strong>。同时，FP8 格式的 Wgrad GEMM 使得激活值能够以 FP8
-格式存储用于反向传播，<strong>显著降低了内存使用量</strong>。</p>
-<p>虽然 FP8
-格式在效率方面具有优势，但某些运算由于对计算精度较为敏感，仍需要更高精度的支持。另外，部分计算开销较小的运算可以采用更高精度而不会显著影响整体训练效率。</p>
-<p>因此，经过详细评估，系统对以下模块保持原有精度（BF16 或
-FP32）：<strong>向量层</strong>、<strong>输出层</strong>、<strong>MoE
-门控模块</strong>、<strong>标准化运算</strong>和<strong>注意力运算模块</strong>。这种针对性的高精度保留策略确保了
-DeepSeek-V3
-训练过程的动态稳定性。为进一步保障数值计算的稳定性，主要权重参数、权重梯度和优化器状态均采用更高精度存储。虽然这些高精度组件会带来一定的内存开销，但通过在分布式训练系统中<strong>跨多个
-DP 层级进行高效数据分割</strong>，这些额外开销得到了有效控制。</p>
+<p>图6：带有 FP8 数据格式的整体混合精度框架。为清晰起见，仅展示了线性算子。</p>
+<p>首先，为提高模型训练速度，大部分核心计算操作（尤其是 GEMM 运算），均采用 FP8 精度实现。这些 GEMM 运算接收 FP8 格式的张量输入，输出 BF16 或 [FP32] 格式的结果。如图6所示，线性运算相关的三个 GEMM 操作，包括 <strong>Fprop（前向传播）</strong>、<strong>Dgrad（激活值反向传播）</strong>和 <strong>Wgrad（权重反向传播）</strong>，均采用 FP8 执行。这种设计策略<strong>理论上将计算速度提升至原有 BF16 方法的两倍</strong>。同时，FP8 格式的 Wgrad GEMM 使得激活值能够以 FP8 格式存储用于反向传播，<strong>显著降低了内存使用量</strong>。</p>
+<p>虽然 FP8 格式在效率方面具有优势，但某些运算由于对计算精度较为敏感，仍需要更高精度的支持。另外，部分计算开销较小的运算可以采用更高精度而不会显著影响整体训练效率。</p>
+<p>因此，经过详细评估，系统对以下模块保持原有精度（BF16 或 FP32）：<strong>向量层</strong>、<strong>输出层</strong>、<strong>MoE 门控模块</strong>、<strong>标准化运算</strong>和<strong>注意力运算模块</strong>。这种针对性的高精度保留策略确保了 DeepSeek-V3 训练过程的动态稳定性。为进一步保障数值计算的稳定性，主要权重参数、权重梯度和优化器状态均采用更高精度存储。虽然这些高精度组件会带来一定的内存开销，但通过在分布式训练系统中<strong>跨多个 DP 层级进行高效数据分割</strong>，这些额外开销得到了有效控制。</p>
 <p><strong>量化和乘法精度优化</strong></p>
-<p>基于混合精度 FP8
-框架，研究团队开发了多种策略来提升低精度训练的准确性，主要从量化方法和乘法计算两个方面进行优化。</p>
-<p><strong>细粒度量化技术：</strong> 在低精度训练框架中，由于 FP8
-格式的指数位较少导致其动态范围受限，经常出现数值溢出和下溢的问题。传统方法是将输入张量的最大绝对值映射到
-FP8
-格式的最大可表示值，将输入分布对齐到可表示范围内。然而，这种方法使得低精度训练对激活值中的极端值特别敏感，可能导致量化精度显著下降。</p>
+<p>基于混合精度 FP8 框架，研究团队开发了多种策略来提升低精度训练的准确性，主要从量化方法和乘法计算两个方面进行优化。</p>
+<p><strong>细粒度量化技术：</strong> 在低精度训练框架中，由于 FP8 格式的指数位较少导致其动态范围受限，经常出现数值溢出和下溢的问题。传统方法是将输入张量的最大绝对值映射到 FP8 格式的最大可表示值，将输入分布对齐到可表示范围内。然而，这种方法使得低精度训练对激活值中的极端值特别敏感，可能导致量化精度显著下降。</p>
 <p>为解决这一问题，该研究提出了一种更细粒度的量化方法。如图7(a)所示，该方法采用两种不同的分组策略：</p>
 <ol type="1">
 <li>激活值采用 1x128 条状分组和缩放（每个 token 的每 128 个通道）</li>
-<li>权重采用 128x128 块状分组和缩放（每 128 个输入通道对应 128
-个输出通道）</li>
+<li>权重采用 128x128 块状分组和缩放（每 128 个输入通道对应 128 个输出通道）</li>
 </ol>
 <figure>
-<img
-src="/images/deepseekV3/v2-7c8bfd558635246a0e971ca605dd3d2d_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-7c8bfd558635246a0e971ca605dd3d2d_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>图7(a)：
-研究提出了一种细粒度量化方法，用于减轻由特征异常值引起的量化误差；为简化说明，仅展示了前向传播（Fprop）。(b)：
-配合量化策略，团队通过以间隔 NC = 128 元素的 MMA 提升到 CUDA
-核心，从而提高 FP8 GEMM 的精度，以进行高精度累加。</p>
-<p>这种方法通过在更小范围内调整[缩放因子]，显著提高了量化过程对极端值的适应能力。原文附录B.2
-中详细分析了在块状基础上对激活值进行分组和缩放时可能出现的训练不稳定现象。</p>
-<p>该方法的一项重要创新是<strong>在 GEMM
-操作的内部维度引入组级缩放因子</strong>。虽然标准 FP8 GEMM
-不直接支持这一功能，但通过与精确 FP32
-累积策略的结合，实现了高效的执行。值得注意的是，这种细粒度量化策略与微缩放格式的理念高度契合，而
-NVIDIA 新一代 GPU（Blackwell 系列）的 Tensor Cores
-已宣布将支持更细粒度的微缩放格式。这一设计为适配最新 GPU
-架构的未来研究提供了重要参考。</p>
-<p><strong>累积精度优化：</strong> 低精度 GEMM
-运算常见的下溢问题主要通过高精度累积来解决，通常采用 FP32 精度。然而，在
-NVIDIA H800 GPU 上，FP8 GEMM 的累积精度仅能保持约 14 位有效数字，远低于
-FP32 的累积精度。这个问题在内部维度 K
-较大时尤为显著，这正是大规模模型训练中的常见情况，因为批量规模和模型宽度都有所增加。例如，在
-K = 4096 的两个随机矩阵 GEMM 运算测试中，Tensor Cores
-的有限累积精度导致最大相对误差接近 2%。尽管存在这些问题，部分 FP8
-框架仍将有限累积精度作为默认选项，这严重制约了训练精度的提升。</p>
-<p>为解决这一问题，系统采用了 CUDA Cores
-提升策略来获得更高的计算精度。如图7(b)所示，在 Tensor Cores 执行
-<strong>MMA（矩阵乘法累加）</strong>时，中间结果先使用有限位宽累加。当达到
-N_C 间隔时，这些部分结果会转移到 CUDA Cores 的 FP32
-寄存器中进行全精度累加。结合细粒度量化在内部维度 K
-上的组级缩放因子，系统能够在 CUDA Cores
-上高效完成反量化过程，仅带来极少的额外计算开销。</p>
-<p>这种设计虽然降低了单个线程组的 <strong>WGMMA</strong>
-指令发出率，但在 H800 架构上通过并发执行两个 WGMMA
-得到了优化：一个线程组执行提升操作的同时，另一个可以执行 MMA
-操作。这种重叠执行机制保证了 Tensor Cores 的高效利用。实验证明，将 N_C
-设为 128 个元素（即 4 个
-WGMMA）是在不引入显著开销的前提下，能够有效提升精度的最小累积间隔。</p>
-<p>在数值表示方面，不同于先前工作采用的混合 FP8 格式（Fprop 使用
-E4M3，Dgrad 和 Wgrad 使用
-E5M2），本研究在<strong>所有张量计算中统一采用</strong> <strong>E4M3
-格式</strong>以提高精度。这种设计的可行性源于细粒度量化策略（平铺和块状缩放），通过在较小元素组内共享指数位来有效缓解有限动态范围的影响。</p>
-<p>为确保量化精度并简化框架设计，系统采用<strong>在线量化</strong>方法，而不是像其他张量级量化框架那样使用基于历史记录的延迟量化。系统对每个
-1 激活平铺或 128 权重块实时计算最大绝对值，据此确定缩放因子并完成 FP8
-格式的在线量化。</p>
+<p>图7(a)： 研究提出了一种细粒度量化方法，用于减轻由特征异常值引起的量化误差；为简化说明，仅展示了前向传播（Fprop）。(b)： 配合量化策略，团队通过以间隔 NC = 128 元素的 MMA 提升到 CUDA 核心，从而提高 FP8 GEMM 的精度，以进行高精度累加。</p>
+<p>这种方法通过在更小范围内调整[缩放因子]，显著提高了量化过程对极端值的适应能力。原文附录B.2 中详细分析了在块状基础上对激活值进行分组和缩放时可能出现的训练不稳定现象。</p>
+<p>该方法的一项重要创新是<strong>在 GEMM 操作的内部维度引入组级缩放因子</strong>。虽然标准 FP8 GEMM 不直接支持这一功能，但通过与精确 FP32 累积策略的结合，实现了高效的执行。值得注意的是，这种细粒度量化策略与微缩放格式的理念高度契合，而 NVIDIA 新一代 GPU（Blackwell 系列）的 Tensor Cores 已宣布将支持更细粒度的微缩放格式。这一设计为适配最新 GPU 架构的未来研究提供了重要参考。</p>
+<p><strong>累积精度优化：</strong> 低精度 GEMM 运算常见的下溢问题主要通过高精度累积来解决，通常采用 FP32 精度。然而，在 NVIDIA H800 GPU 上，FP8 GEMM 的累积精度仅能保持约 14 位有效数字，远低于 FP32 的累积精度。这个问题在内部维度 K 较大时尤为显著，这正是大规模模型训练中的常见情况，因为批量规模和模型宽度都有所增加。例如，在 K = 4096 的两个随机矩阵 GEMM 运算测试中，Tensor Cores 的有限累积精度导致最大相对误差接近 2%。尽管存在这些问题，部分 FP8 框架仍将有限累积精度作为默认选项，这严重制约了训练精度的提升。</p>
+<p>为解决这一问题，系统采用了 CUDA Cores 提升策略来获得更高的计算精度。如图7(b)所示，在 Tensor Cores 执行 <strong>MMA（矩阵乘法累加）</strong>时，中间结果先使用有限位宽累加。当达到 N_C 间隔时，这些部分结果会转移到 CUDA Cores 的 FP32 寄存器中进行全精度累加。结合细粒度量化在内部维度 K 上的组级缩放因子，系统能够在 CUDA Cores 上高效完成反量化过程，仅带来极少的额外计算开销。</p>
+<p>这种设计虽然降低了单个线程组的 <strong>WGMMA</strong> 指令发出率，但在 H800 架构上通过并发执行两个 WGMMA 得到了优化：一个线程组执行提升操作的同时，另一个可以执行 MMA 操作。这种重叠执行机制保证了 Tensor Cores 的高效利用。实验证明，将 N_C 设为 128 个元素（即 4 个 WGMMA）是在不引入显著开销的前提下，能够有效提升精度的最小累积间隔。</p>
+<p>在数值表示方面，不同于先前工作采用的混合 FP8 格式（Fprop 使用 E4M3，Dgrad 和 Wgrad 使用 E5M2），本研究在<strong>所有张量计算中统一采用</strong> <strong>E4M3 格式</strong>以提高精度。这种设计的可行性源于细粒度量化策略（平铺和块状缩放），通过在较小元素组内共享指数位来有效缓解有限动态范围的影响。</p>
+<p>为确保量化精度并简化框架设计，系统采用<strong>在线量化</strong>方法，而不是像其他张量级量化框架那样使用基于历史记录的延迟量化。系统对每个 1  激活平铺或 128  权重块实时计算最大绝对值，据此确定缩放因子并完成 FP8 格式的在线量化。</p>
 <p><strong>低精度存储与通信优化</strong></p>
-<p>在 FP8
-训练框架的基础上，通过将缓存的激活值和优化器状态转换为更低精度格式，系统进一步优化了内存占用和通信开销。</p>
-<p><strong>优化器状态的精度优化：</strong> 系统在 <strong>AdamW</strong>
-优化器中使用 BF16 代替 FP32
-格式来记录一阶和二阶动量，这种改变并未带来明显的性能损失。同时，为确保训练过程的数值稳定性，主要权重参数（优化器存储）和梯度值（用于批量累积）仍保持
-FP32 格式。</p>
-<p><strong>激活值精度优化：</strong> 如图6所示，Wgrad 运算采用 FP8
-执行。为降低内存占用，系统在线性运算的反向传播中使用 FP8
-格式缓存激活值。但在实现低成本高精度训练时，以下运算需要特殊处理：</p>
+<p>在 FP8 训练框架的基础上，通过将缓存的激活值和优化器状态转换为更低精度格式，系统进一步优化了内存占用和通信开销。</p>
+<p><strong>优化器状态的精度优化：</strong> 系统在 <strong>AdamW</strong> 优化器中使用 BF16 代替 FP32 格式来记录一阶和二阶动量，这种改变并未带来明显的性能损失。同时，为确保训练过程的数值稳定性，主要权重参数（优化器存储）和梯度值（用于批量累积）仍保持 FP32 格式。</p>
+<p><strong>激活值精度优化：</strong> 如图6所示，Wgrad 运算采用 FP8 执行。为降低内存占用，系统在线性运算的反向传播中使用 FP8 格式缓存激活值。但在实现低成本高精度训练时，以下运算需要特殊处理：</p>
 <ol type="1">
-<li><strong>注意力层后的线性层输入</strong>：这些激活值同时用于注意力运算的反向传播，因此对精度特别敏感。系统为这些激活值专门设计了
-E5M6 数据格式。在反向传播时，这些激活值的量化模式从 1 转换为 128
-。为避免引入额外的量化误差，所有缩放因子都采用 2 的整数次幂。</li>
-<li><strong>MoE 中 SwiGLU
-运算的输入</strong>：为优化内存使用，系统仅缓存 SwiGLU
-运算的输入，在反向传播时重新计算输出。这些激活值采用 FP8
-格式存储，并通过细粒度量化方法实现内存效率和计算精度的最优平衡。</li>
+<li><strong>注意力层后的线性层输入</strong>：这些激活值同时用于注意力运算的反向传播，因此对精度特别敏感。系统为这些激活值专门设计了 E5M6 数据格式。在反向传播时，这些激活值的量化模式从 1  转换为 128  。为避免引入额外的量化误差，所有缩放因子都采用 2 的整数次幂。</li>
+<li><strong>MoE 中 SwiGLU 运算的输入</strong>：为优化内存使用，系统仅缓存 SwiGLU 运算的输入，在反向传播时重新计算输出。这些激活值采用 FP8 格式存储，并通过细粒度量化方法实现内存效率和计算精度的最优平衡。</li>
 </ol>
-<p><strong>低精度通信优化：</strong> 通信带宽限制是 MoE
-模型训练中的主要性能瓶颈。为解决这一问题，系统在执行 MoE
-上投影前将激活值转换为 FP8 格式，再进行数据分发，这种方式与 MoE
-上投影中的 FP8
-前向传播保持兼容。与注意力层后的线性层输入处理方式相同，这里的激活值缩放因子也采用
-2 的整数次幂。同样的处理方式也应用于 MoE
-下投影前的激活值梯度计算。考虑到训练精度的重要性，前向和反向传播中的组合运算环节都保持
-BF16 格式，以确保训练管道关键环节的计算精度。</p>
+<p><strong>低精度通信优化：</strong> 通信带宽限制是 MoE 模型训练中的主要性能瓶颈。为解决这一问题，系统在执行 MoE 上投影前将激活值转换为 FP8 格式，再进行数据分发，这种方式与 MoE 上投影中的 FP8 前向传播保持兼容。与注意力层后的线性层输入处理方式相同，这里的激活值缩放因子也采用 2 的整数次幂。同样的处理方式也应用于 MoE 下投影前的激活值梯度计算。考虑到训练精度的重要性，前向和反向传播中的组合运算环节都保持 BF16 格式，以确保训练管道关键环节的计算精度。</p>
 <h3 id="推理和部署">推理和部署</h3>
-<p>DeepSeek-V3 部署在 H800 集群上，集群中每个节点内的 GPU 通过 NVLink
-互连，集群内所有 GPU 通过 IB
-实现全连接。为同时确保在线服务质量(SLO)和高吞吐量，该系统采用了将预填充和解码阶段分离的部署策略。</p>
+<p>DeepSeek-V3 部署在 H800 集群上，集群中每个节点内的 GPU 通过 NVLink 互连，集群内所有 GPU 通过 IB 实现全连接。为同时确保在线服务质量(SLO)和高吞吐量，该系统采用了将预填充和解码阶段分离的部署策略。</p>
 <p><strong>预填充</strong></p>
 <p>预填充阶段的最小部署单元配置为 4 个节点 32 个 GPU。</p>
-<p>注意力机制部分采用 <strong>4
-路张量并行(TP4)</strong>配合<strong>序列并行(SP)</strong>，结合
-<strong>8 路数据并行(DP8)</strong>。较小的 TP
-规模有效控制了通信开销。</p>
-<p>MoE 部分采用 <strong>32
-路专家并行(EP32)</strong>，确保每个专家能处理足够规模的批量数据，提升计算效率。MoE
-的全节点通信采用与训练阶段相同的方式：先通过 IB 在节点间传输
-token，再通过 NVLink 在节点内 GPU 间传递。特别地，浅层的密集 MLP
-采用单路张量并行以降低 TP 通信开销。</p>
-<p>为实现 MoE 部分各专家间的负载平衡，系统需要确保每个 GPU
-处理相近数量的
-token。为此，采用了<strong>冗余专家部署策略</strong>，对高负载专家进行复制和冗余部署。</p>
-<p>系统基于在线部署时收集的统计数据识别高负载专家，并定期调整（如每 10
-分钟）。确定冗余专家后，基于负载观测数据在节点内 GPU
-间重新分配专家，在不增加跨节点通信开销的前提下，尽可能实现 GPU
-间的负载均衡。</p>
-<p>DeepSeek-V3 在预填充阶段配置了 32 个冗余专家，每个 GPU 除原有的 8
-个专家外，还分配一个额外的冗余专家。此外，为提升吞吐量并降低全对全和 TP
-通信开销，系统同时处理两个计算负载相近的微批次，将一个批次的注意力和 MoE
-计算与另一个批次的数据分发和聚合重叠。</p>
-<p>目前正在探索<strong>专家动态冗余机制</strong>，使每个 GPU
-分配更多专家（如 16 个），但每次推理仅激活其中 9
-个。在每层全对全操作开始前，系统实时计算全局最优路由方案。由于预填充阶段本身计算量较大，计算路由方案的额外开销几乎可以忽略。</p>
+<p>注意力机制部分采用 <strong>4 路张量并行(TP4)</strong>配合<strong>序列并行(SP)</strong>，结合 <strong>8 路数据并行(DP8)</strong>。较小的 TP 规模有效控制了通信开销。</p>
+<p>MoE 部分采用 <strong>32 路专家并行(EP32)</strong>，确保每个专家能处理足够规模的批量数据，提升计算效率。MoE 的全节点通信采用与训练阶段相同的方式：先通过 IB 在节点间传输 token，再通过 NVLink 在节点内 GPU 间传递。特别地，浅层的密集 MLP 采用单路张量并行以降低 TP 通信开销。</p>
+<p>为实现 MoE 部分各专家间的负载平衡，系统需要确保每个 GPU 处理相近数量的 token。为此，采用了<strong>冗余专家部署策略</strong>，对高负载专家进行复制和冗余部署。</p>
+<p>系统基于在线部署时收集的统计数据识别高负载专家，并定期调整（如每 10 分钟）。确定冗余专家后，基于负载观测数据在节点内 GPU 间重新分配专家，在不增加跨节点通信开销的前提下，尽可能实现 GPU 间的负载均衡。</p>
+<p>DeepSeek-V3 在预填充阶段配置了 32 个冗余专家，每个 GPU 除原有的 8 个专家外，还分配一个额外的冗余专家。此外，为提升吞吐量并降低全对全和 TP 通信开销，系统同时处理两个计算负载相近的微批次，将一个批次的注意力和 MoE 计算与另一个批次的数据分发和聚合重叠。</p>
+<p>目前正在探索<strong>专家动态冗余机制</strong>，使每个 GPU 分配更多专家（如 16 个），但每次推理仅激活其中 9 个。在每层全对全操作开始前，系统实时计算全局最优路由方案。由于预填充阶段本身计算量较大，计算路由方案的额外开销几乎可以忽略。</p>
 <p><strong>解码</strong></p>
-<p>在解码阶段，系统将共享专家作为一种路由专家处理。这意味着每个 token
-在路由时会选择 9
-个专家，其中共享专家被视为一个必然选择的高负载专家。</p>
-<p>解码阶段的最小部署单元由 40 个节点 320 个 GPU
-构成。<strong>注意力部分</strong>采用 TP4 配合 SP，结合 DP80，而 MoE
-部分使用 EP320。<strong>MoE 部分</strong>，每个 GPU 仅分配一个专家，其中
-64 个 GPU 专门负责冗余专家和共享专家。分发和聚合环节的全节点通信通过 IB
-直接点对点传输实现低延迟。同时，系统引入 <strong>IBGDA</strong>
-技术进一步降低延迟并提升通信效率。</p>
-<p>与预填充阶段类似，系统基于在线服务的专家负载统计数据，定期确定冗余专家配置。由于每个
-GPU
-仅分配一个专家，无需进行专家重新分配。系统也在研究解码阶段的动态冗余策略，但这需要对全局最优路由方案的计算算法进行更细致的优化，并与分发内核进行融合以减少开销。</p>
-<p>此外，为提升吞吐量并降低全节点通信开销，系统正在探索在解码阶段同时处理两个计算负载相近的微批次。与预填充不同的是，在解码阶段注意力机制占用更多时间，因此系统将一个批次的注意力计算与另一个批次的分发、MoE
-处理和数据聚合进行重叠。</p>
-<p>在解码阶段，每个专家处理的批量规模相对较小（通常不超过 256 个
-token），<strong>系统瓶颈在于内存访问而非计算能力</strong>。由于 MoE
-部分只需加载单个专家的参数，内存访问开销较小，因此即使分配较少的 SMs
-也不会显著影响整体性能。基于这一特点，系统只需分配少量 SMs 用于分发、MoE
-处理和数据聚合，避免影响注意力部分的计算速度。</p>
+<p>在解码阶段，系统将共享专家作为一种路由专家处理。这意味着每个 token 在路由时会选择 9 个专家，其中共享专家被视为一个必然选择的高负载专家。</p>
+<p>解码阶段的最小部署单元由 40 个节点 320 个 GPU 构成。<strong>注意力部分</strong>采用 TP4 配合 SP，结合 DP80，而 MoE 部分使用 EP320。<strong>MoE 部分</strong>，每个 GPU 仅分配一个专家，其中 64 个 GPU 专门负责冗余专家和共享专家。分发和聚合环节的全节点通信通过 IB 直接点对点传输实现低延迟。同时，系统引入 <strong>IBGDA</strong> 技术进一步降低延迟并提升通信效率。</p>
+<p>与预填充阶段类似，系统基于在线服务的专家负载统计数据，定期确定冗余专家配置。由于每个 GPU 仅分配一个专家，无需进行专家重新分配。系统也在研究解码阶段的动态冗余策略，但这需要对全局最优路由方案的计算算法进行更细致的优化，并与分发内核进行融合以减少开销。</p>
+<p>此外，为提升吞吐量并降低全节点通信开销，系统正在探索在解码阶段同时处理两个计算负载相近的微批次。与预填充不同的是，在解码阶段注意力机制占用更多时间，因此系统将一个批次的注意力计算与另一个批次的分发、MoE 处理和数据聚合进行重叠。</p>
+<p>在解码阶段，每个专家处理的批量规模相对较小（通常不超过 256 个 token），<strong>系统瓶颈在于内存访问而非计算能力</strong>。由于 MoE 部分只需加载单个专家的参数，内存访问开销较小，因此即使分配较少的 SMs 也不会显著影响整体性能。基于这一特点，系统只需分配少量 SMs 用于分发、MoE 处理和数据聚合，避免影响注意力部分的计算速度。</p>
 <h3 id="硬件设计建议">硬件设计建议</h3>
-<p>基于全对全通信和 FP8 训练方案的实践经验，研究团队对 AI
-硬件厂商提出以下芯片设计建议。</p>
-<p>通信硬件 DeepSeek-V3
-通过实现计算与通信的并行处理，在计算过程中有效隐藏了通信延迟。这种设计相比串行计算和通信方式，显著降低了对通信带宽的要求。然而，目前的通信实现需要占用大量宝贵的
-SMs 资源（如在 H800 GPU 的 132 个 SMs 中占用 20
-个），这限制了计算吞吐能力。</p>
-<p>另外，将 SMs 用于通信导致张量核心资源的严重浪费。目前，SMs
-在全对全通信中主要承担以下任务：</p>
+<p>基于全对全通信和 FP8 训练方案的实践经验，研究团队对 AI 硬件厂商提出以下芯片设计建议。</p>
+<p>通信硬件 DeepSeek-V3 通过实现计算与通信的并行处理，在计算过程中有效隐藏了通信延迟。这种设计相比串行计算和通信方式，显著降低了对通信带宽的要求。然而，目前的通信实现需要占用大量宝贵的 SMs 资源（如在 H800 GPU 的 132 个 SMs 中占用 20 个），这限制了计算吞吐能力。</p>
+<p>另外，将 SMs 用于通信导致张量核心资源的严重浪费。目前，SMs 在全对全通信中主要承担以下任务：</p>
 <ul>
-<li>在 IB 和 NVLink 网络间转发数据，同时汇聚来自单个 GPU
-发往同一节点内多个 GPU 的 IB 数据流。</li>
-<li>在 [RDMA] 缓冲区（注册的 GPU
-内存区域）与输入/输出缓冲区间传输数据。</li>
+<li>在 IB 和 NVLink 网络间转发数据，同时汇聚来自单个 GPU 发往同一节点内多个 GPU 的 IB 数据流。</li>
+<li>在 [RDMA] 缓冲区（注册的 GPU 内存区域）与输入/输出缓冲区间传输数据。</li>
 <li>执行全对全组合的归约运算。</li>
-<li>在跨 IB 和 NVLink
-网络向多个专家传输分块数据时管理细粒度内存布局。</li>
+<li>在跨 IB 和 NVLink 网络向多个专家传输分块数据时管理细粒度内存布局。</li>
 </ul>
-<p>期望未来硬件厂商能开发专门的硬件，将这些通信任务从计算核心 SM
-中分离出来，设计成类似 NVIDIA SHARP 的 GPU
-协处理器或网络协处理器。同时，为降低应用开发难度，希望这种硬件能从计算单元的角度统一管理
-IB（横向扩展）和
-NVLink（纵向扩展）网络。通过这种统一接口，计算单元只需提交简单的通信请求，就能在整个
-IB-NVLink 统一网络中轻松实现读取、写入、多播和归约等操作。</p>
+<p>期望未来硬件厂商能开发专门的硬件，将这些通信任务从计算核心 SM 中分离出来，设计成类似 NVIDIA SHARP 的 GPU 协处理器或网络协处理器。同时，为降低应用开发难度，希望这种硬件能从计算单元的角度统一管理 IB（横向扩展）和 NVLink（纵向扩展）网络。通过这种统一接口，计算单元只需提交简单的通信请求，就能在整个 IB-NVLink 统一网络中轻松实现读取、写入、多播和归约等操作。</p>
 <p><strong>计算硬件</strong></p>
-<p><strong>张量核心中的 FP8 GEMM 累积精度提升：</strong> 当前 NVIDIA
-Hopper 架构的张量核心在实现 FP8 GEMM
-时采用定点累积方式，通过基于最大指数的右移操作对尾数积进行对齐后再相加。实验显示，该设计在符号填充右移后仅使用每个尾数积的最高
-14 位，并舍弃超出范围的位。然而，例如要从 32 个 FP8 FP8
-乘法的累积中获得精确的 FP32 结果，至少需要 34
-位精度。因此，建议未来芯片设计提高张量核心的累积精度以支持全精度累积，或根据具体训练和推理算法的精度需求选择合适的累积位宽，以在保证计算效率的同时将误差控制在可接受范围内。</p>
-<p><strong>支持平铺和块状量化：</strong>现有 GPU
-仅支持整体张量量化，缺乏对平铺和块状等细粒度量化的硬件支持。当前实现中，达到N_C间隔时需要将部分结果从张量核心复制到
-CUDA 核心，进行缩放因子乘法运算，再添加到 CUDA 核心的 FP32
-寄存器中。虽然结合精确 FP32 累积策略显著降低了反量化开销，但张量核心和
-CUDA
-核心间频繁的数据移动仍然制约了计算效率。因此，建议未来芯片支持细粒度量化，使张量核心能够直接接收缩放因子并实现组级缩放的
-MMA
-操作。这样可以直接在张量核心内完成全部的部分和累积与反量化计算，直到生成最终结果，避免频繁的数据迁移。</p>
-<p><strong>支持在线量化：</strong>尽管研究证实了在线量化的有效性，但当前硬件难以有效支持这一技术。现有流程中需要从
-[HBM] 读取 128 个 BF16 激活值（上一步的计算结果）进行量化，将量化后的
-FP8 值写回 HBM，然后再次读取用于 MMA
-操作。为解决这一低效问题，建议未来芯片将 FP8 格式转换与 [TMA]
-访问集成为单一融合操作，实现在激活值从全局内存传输到共享内存过程中完成量化，避免频繁的内存读写。同时建议支持线程束级格式转换指令以提升性能，促进层标准化与
-FP8 转换的更好融合。另一种方案是采用近内存计算方法，将计算逻辑放置在 HBM
-附近，使 BF16 元素在从 HBM 读入 GPU 时直接转换为
-FP8，从而将片外内存访问减少约 50%。</p>
-<p><strong>支持转置GEMM操作：</strong> 现有架构难以实现矩阵转置与 GEMM
-操作的有效融合。目前的工作流中，前向传播阶段的激活值需要先量化为 1x128
-FP8
-平铺格式并存储。在反向传播时，系统必须读取矩阵，执行反量化，进行转置操作，再重新量化为
-128x1 平铺格式，最后存入
-HBM。为优化内存操作效率，建议未来芯片设计中，对训练和推理中常用的精度格式，支持在
-MMA 操作前直接从共享内存进行转置读取。这一改进配合 FP8 格式转换和 TMA
-访问的融合机制，将大幅优化量化处理流程。</p>
+<p><strong>张量核心中的 FP8 GEMM 累积精度提升：</strong> 当前 NVIDIA Hopper 架构的张量核心在实现 FP8 GEMM 时采用定点累积方式，通过基于最大指数的右移操作对尾数积进行对齐后再相加。实验显示，该设计在符号填充右移后仅使用每个尾数积的最高 14 位，并舍弃超出范围的位。然而，例如要从 32 个 FP8 FP8 乘法的累积中获得精确的 FP32 结果，至少需要 34 位精度。因此，建议未来芯片设计提高张量核心的累积精度以支持全精度累积，或根据具体训练和推理算法的精度需求选择合适的累积位宽，以在保证计算效率的同时将误差控制在可接受范围内。</p>
+<p><strong>支持平铺和块状量化：</strong>现有 GPU 仅支持整体张量量化，缺乏对平铺和块状等细粒度量化的硬件支持。当前实现中，达到N_C间隔时需要将部分结果从张量核心复制到 CUDA 核心，进行缩放因子乘法运算，再添加到 CUDA 核心的 FP32 寄存器中。虽然结合精确 FP32 累积策略显著降低了反量化开销，但张量核心和 CUDA 核心间频繁的数据移动仍然制约了计算效率。因此，建议未来芯片支持细粒度量化，使张量核心能够直接接收缩放因子并实现组级缩放的 MMA 操作。这样可以直接在张量核心内完成全部的部分和累积与反量化计算，直到生成最终结果，避免频繁的数据迁移。</p>
+<p><strong>支持在线量化：</strong>尽管研究证实了在线量化的有效性，但当前硬件难以有效支持这一技术。现有流程中需要从 [HBM] 读取 128 个 BF16 激活值（上一步的计算结果）进行量化，将量化后的 FP8 值写回 HBM，然后再次读取用于 MMA 操作。为解决这一低效问题，建议未来芯片将 FP8 格式转换与 [TMA] 访问集成为单一融合操作，实现在激活值从全局内存传输到共享内存过程中完成量化，避免频繁的内存读写。同时建议支持线程束级格式转换指令以提升性能，促进层标准化与 FP8 转换的更好融合。另一种方案是采用近内存计算方法，将计算逻辑放置在 HBM 附近，使 BF16 元素在从 HBM 读入 GPU 时直接转换为 FP8，从而将片外内存访问减少约 50%。</p>
+<p><strong>支持转置GEMM操作：</strong> 现有架构难以实现矩阵转置与 GEMM 操作的有效融合。目前的工作流中，前向传播阶段的激活值需要先量化为 1x128 FP8 平铺格式并存储。在反向传播时，系统必须读取矩阵，执行反量化，进行转置操作，再重新量化为 128x1 平铺格式，最后存入 HBM。为优化内存操作效率，建议未来芯片设计中，对训练和推理中常用的精度格式，支持在 MMA 操作前直接从共享内存进行转置读取。这一改进配合 FP8 格式转换和 TMA 访问的融合机制，将大幅优化量化处理流程。</p>
 <h2 id="预训练">预训练</h2>
 <h3 id="数据构建">数据构建</h3>
-<p>相比
-DeepSeek-V2，本次预训练语料库在提升<strong>数学</strong>和<strong>编程</strong>样本占比的同时，扩大了英语和中文之外的<strong>多语言</strong>覆盖范围。</p>
-<p>数据处理流程也经过改进，在保持语料多样性的同时降低了数据冗余。系统采用文档打包方法维持数据完整性，但训练过程中不使用跨样本注意力掩码。最终训练语料库包含
-<strong>14.8T</strong> 经 tokenizer 处理的高质量多样化 token。</p>
-<p>在 DeepSeekCoder-V2
-的训练中发现，<strong>填充中间（FIM）</strong>策略在保持下一个 token
-预测能力的同时，还能让模型基于上下文准确预测中间文本。因此 DeepSeek-V3
-的预训练也采用了这一策略。具体实现上，使用<strong>前缀-后缀-中间（PSM）</strong>框架构建如下数据结构：</p>
+<p>相比 DeepSeek-V2，本次预训练语料库在提升<strong>数学</strong>和<strong>编程</strong>样本占比的同时，扩大了英语和中文之外的<strong>多语言</strong>覆盖范围。</p>
+<p>数据处理流程也经过改进，在保持语料多样性的同时降低了数据冗余。系统采用文档打包方法维持数据完整性，但训练过程中不使用跨样本注意力掩码。最终训练语料库包含 <strong>14.8T</strong> 经 tokenizer 处理的高质量多样化 token。</p>
+<p>在 DeepSeekCoder-V2 的训练中发现，<strong>填充中间（FIM）</strong>策略在保持下一个 token 预测能力的同时，还能让模型基于上下文准确预测中间文本。因此 DeepSeek-V3 的预训练也采用了这一策略。具体实现上，使用<strong>前缀-后缀-中间（PSM）</strong>框架构建如下数据结构：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">&lt;|fim_begin|&gt; pre&lt;|fim_hole|&gt; suf&lt;|fim_end|&gt; middle&lt;|eos_token|&gt;。<br></code></pre></td></tr></table></figure>
-<p>该结构在预打包阶段应用于文档级别，FIM 策略的应用比率为 0.1，与 PSM
-框架保持一致。</p>
-<p>DeepSeek-V3 采用词表大小为 128K 的字节级 <strong>BPE
-tokenizer</strong>
-。为提高多语言压缩效率，对预分词器和训练数据进行了相应调整。与
-DeepSeek-V2 相比，新的预分词器<strong>引入了标点符号和换行符的组合
-token</strong>。然而这种设计在处理无终端换行符的多行提示词时可能产生
-token 边界偏差，尤其是在少样本评估场景。为此，训练时对一定比例的组合
-token 进行随机分割，使模型接触更多特殊情况来减轻这种偏差。</p>
+<p>该结构在预打包阶段应用于文档级别，FIM 策略的应用比率为 0.1，与 PSM 框架保持一致。</p>
+<p>DeepSeek-V3 采用词表大小为 128K 的字节级 <strong>BPE tokenizer</strong> 。为提高多语言压缩效率，对预分词器和训练数据进行了相应调整。与 DeepSeek-V2 相比，新的预分词器<strong>引入了标点符号和换行符的组合 token</strong>。然而这种设计在处理无终端换行符的多行提示词时可能产生 token 边界偏差，尤其是在少样本评估场景。为此，训练时对一定比例的组合 token 进行随机分割，使模型接触更多特殊情况来减轻这种偏差。</p>
 <h3 id="超参数设置">超参数设置</h3>
 <p><strong>模型架构参数</strong></p>
-<p>系统采用 61 层 Transformer 结构，隐藏维度为
-7168。所有可学习参数采用标准差 0.006 的随机初始化。</p>
-<p>在 MLA 结构中，注意力头数量 n_h 设为 128，每个头的维度 d_h 为 128。KV
-压缩维度 d_c 为 512，查询压缩维度 d'_c 为
-1536。解耦的查询和键部分，每个头的维度 d^R_h 设为 64。</p>
-<p>除前三层外，所有 FFN 层都替换为 MoE 层，每个 MoE 层配置 1
-个共享专家和 256 个路由专家，专家的中间隐藏维度为 2048。</p>
-<p>在路由专家中，每个 token 激活 8 个专家，且最多分配到 4 个节点。多
-token 预测深度 D 设为 1，即每个 token 除预测下一个精确 token
-外，还需预测一个额外 token。</p>
-<p>与 DeepSeek-V2 类似，DeepSeek-V3 在压缩潜在向量后添加了 RMSNorm
-层，并在宽度瓶颈处引入额外缩放因子。在此配置下，<strong>模型总参数量达到
-671B，其中每个 token 激活 37B 参数</strong>。</p>
+<p>系统采用 61 层 Transformer 结构，隐藏维度为 7168。所有可学习参数采用标准差 0.006 的随机初始化。</p>
+<p>在 MLA 结构中，注意力头数量 n_h 设为 128，每个头的维度 d_h 为 128。KV 压缩维度 d_c 为 512，查询压缩维度 d'_c 为 1536。解耦的查询和键部分，每个头的维度 d^R_h 设为 64。</p>
+<p>除前三层外，所有 FFN 层都替换为 MoE 层，每个 MoE 层配置 1 个共享专家和 256 个路由专家，专家的中间隐藏维度为 2048。</p>
+<p>在路由专家中，每个 token 激活 8 个专家，且最多分配到 4 个节点。多 token 预测深度 D 设为 1，即每个 token 除预测下一个精确 token 外，还需预测一个额外 token。</p>
+<p>与 DeepSeek-V2 类似，DeepSeek-V3 在压缩潜在向量后添加了 RMSNorm 层，并在宽度瓶颈处引入额外缩放因子。在此配置下，<strong>模型总参数量达到 671B，其中每个 token 激活 37B 参数</strong>。</p>
 <p><strong>训练参数</strong></p>
-<p>模型采用 [AdamW 优化器]，参数设置为： _1 = 0.9 ， _2 = 0.95
-，权重衰减为 0.1。预训练阶段最大序列长度为 4K，在 14.8T token
-上进行训练。</p>
-<p>学习率调度采用以下策略：首先在前 2K 步内从 0 线性增加至 2.2^{-4}
-；保持该学习率直至处理完 10T 训练 token；随后在 4.3T token
-区间内按余弦衰减曲线降至 2.2^{-5} 。在最后 500B token 的训练中，先用
-2.2^{-5} 的固定学习率训练 333B token，再以 7.3^{-6} 的学习率完成剩余
-167B token。</p>
-<p>梯度裁剪范数设为 1.0。批量大小采用动态调整策略，在前 469B token
-训练过程中从 3072 逐步增加至
-15360，此后保持不变。模型采用流水线并行将不同层分配到不同
-GPU，每层的路由专家均匀分布在 8 个节点的 64 个 GPU
-上。节点限制路由中，每个 token 最多分配至 4 个节点（ M=4 ）。</p>
-<p>在无辅助损失负载均衡方面，前 14.3T token 的偏置更新速度 设为
-0.001，剩余 500B token 设为 0。平衡损失参数 设为
-0.0001，仅用于防止单个序列内出现极端不平衡。MTP 损失权重 在前 10T token
-中为 0.3，剩余 4.8T token 中降至 0.1。</p>
+<p>模型采用 [AdamW 优化器]，参数设置为： _1 = 0.9 ， _2 = 0.95 ，权重衰减为 0.1。预训练阶段最大序列长度为 4K，在 14.8T token 上进行训练。</p>
+<p>学习率调度采用以下策略：首先在前 2K 步内从 0 线性增加至 2.2^{-4} ；保持该学习率直至处理完 10T 训练 token；随后在 4.3T token 区间内按余弦衰减曲线降至 2.2^{-5} 。在最后 500B token 的训练中，先用 2.2^{-5} 的固定学习率训练 333B token，再以 7.3^{-6} 的学习率完成剩余 167B token。</p>
+<p>梯度裁剪范数设为 1.0。批量大小采用动态调整策略，在前 469B token 训练过程中从 3072 逐步增加至 15360，此后保持不变。模型采用流水线并行将不同层分配到不同 GPU，每层的路由专家均匀分布在 8 个节点的 64 个 GPU 上。节点限制路由中，每个 token 最多分配至 4 个节点（ M=4 ）。</p>
+<p>在无辅助损失负载均衡方面，前 14.3T token 的偏置更新速度 设为 0.001，剩余 500B token 设为 0。平衡损失参数 设为 0.0001，仅用于防止单个序列内出现极端不平衡。MTP 损失权重 在前 10T token 中为 0.3，剩余 4.8T token 中降至 0.1。</p>
 <h3 id="长上下文扩展">长上下文扩展</h3>
-<p>DeepSeek-V3 采用与 DeepSeek-V2
-相似的方法实现长上下文处理能力。预训练完成后，系统使用
-<strong>[YaRN]</strong> 进行上下文扩展，通过两个各包含 1000
-步的额外训练阶段，将上下文窗口从 4K 依次扩展至 32K 和 128K。系统沿用了
-DeepSeek-V2 的 YaRN 配置，仅将其应用于解耦的共享键 k^R_t
-。两个阶段采用相同的超参数设置：尺度 s=40 ， ， ，缩放因子 =0.1ln s+1
-。</p>
-<p>第一阶段将序列长度设为 32K，批量大小为 1920。第二阶段将序列长度提升至
-128K，相应地将批量大小调整为 480。两个阶段均采用与预训练末期相同的学习率
-7.3^{-6} 。</p>
-<p>经过这两阶段的扩展训练，DeepSeek-V3 成功实现了对最长 128K
-输入序列的高效处理。如图8所示，在完成监督微调后，模型在<strong>"大海捞针"(NIAH)</strong>测试中表现出色，在整个
-128K 的上下文范围内均保持稳定的性能表现。</p>
+<p>DeepSeek-V3 采用与 DeepSeek-V2 相似的方法实现长上下文处理能力。预训练完成后，系统使用 <strong>[YaRN]</strong> 进行上下文扩展，通过两个各包含 1000 步的额外训练阶段，将上下文窗口从 4K 依次扩展至 32K 和 128K。系统沿用了 DeepSeek-V2 的 YaRN 配置，仅将其应用于解耦的共享键 k^R_t 。两个阶段采用相同的超参数设置：尺度 s=40 ，  ，  ，缩放因子 =0.1ln s+1 。</p>
+<p>第一阶段将序列长度设为 32K，批量大小为 1920。第二阶段将序列长度提升至 128K，相应地将批量大小调整为 480。两个阶段均采用与预训练末期相同的学习率 7.3^{-6} 。</p>
+<p>经过这两阶段的扩展训练，DeepSeek-V3 成功实现了对最长 128K 输入序列的高效处理。如图8所示，在完成监督微调后，模型在<strong>"大海捞针"(NIAH)</strong>测试中表现出色，在整个 128K 的上下文范围内均保持稳定的性能表现。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-dd988275374c5171d07489333ad876ff_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-dd988275374c5171d07489333ad876ff_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>图 8：在 NIAH 中的评估结果显示，DeepSeek-V3
-在所有上下文窗口长度（最长可达 128K）上均表现优异。</p>
+<p>图 8：在 NIAH 中的评估结果显示，DeepSeek-V3 在所有上下文窗口长度（最长可达 128K）上均表现优异。</p>
 <h3 id="评估">评估</h3>
 <p><strong>评估基准</strong></p>
-<p>DeepSeek-V3
-基座模型在以英语和中文为主的多语言语料库上完成预训练，因此评估工作主要针对英语、中文及多语言基准。</p>
-<p>评估采用集成于 <strong>HAI-LLM</strong>
-框架的内部评估系统，涵盖以下类别（下划线表示中文基准，双下划线表示多语言基准）：</p>
+<p>DeepSeek-V3 基座模型在以英语和中文为主的多语言语料库上完成预训练，因此评估工作主要针对英语、中文及多语言基准。</p>
+<p>评估采用集成于 <strong>HAI-LLM</strong> 框架的内部评估系统，涵盖以下类别（下划线表示中文基准，双下划线表示多语言基准）：</p>
 <ul>
-<li><strong>多学科选择题评估</strong>：MMLU、MMLU
-Redux、MMLU-Pro、MMMLU、C-Eval 和 CMMLU</li>
-<li><strong>语言理解与推理能力</strong>：HellaSwag、PIQA、ARC 和
-BigBench Hard (BBH)</li>
+<li><strong>多学科选择题评估</strong>：MMLU、MMLU Redux、MMLU-Pro、MMMLU、C-Eval 和 CMMLU</li>
+<li><strong>语言理解与推理能力</strong>：HellaSwag、PIQA、ARC 和 BigBench Hard (BBH)</li>
 <li><strong>知识问答评估</strong>：TriviaQA 和 NaturalQuestions</li>
 <li><strong>阅读理解测试</strong>：RACE、DROP、C3 和 CMRC</li>
 <li><strong>指代消歧任务</strong>：CLUEWSC 和 WinoGrande</li>
 <li><strong>语言建模评估</strong>：Pile 中文理解与文化认知：CCPM</li>
 <li><strong>数学能力测试</strong>：GSM8K、MATH、MGSM 和 CMath</li>
-<li><strong>编程能力评估</strong>：[HumanEval]、LiveCodeBench-Base(0801-1101)、[MBPP]
-和 CRUXEval</li>
+<li><strong>编程能力评估</strong>：[HumanEval]、LiveCodeBench-Base(0801-1101)、[MBPP] 和 CRUXEval</li>
 <li><strong>综合能力测试</strong>：AGIEval（包含英语和中文两个子集）</li>
 </ul>
-<p>作为前期工作的延续，评估采用多种方法：部分[数据集]使用<strong>困惑度指标</strong>，包括
-HellaSwag、PIQA、WinoGrande 等；部分采用<strong>生成式评估</strong>，如
-TriviaQA、NaturalQuestions、DROP 等。对 Pile-test
-采用语言建模评估方法，使用<strong>每字节比特数（BPB）</strong>作为统一度量标准，确保不同分词器模型间的公平比较。</p>
+<p>作为前期工作的延续，评估采用多种方法：部分[数据集]使用<strong>困惑度指标</strong>，包括 HellaSwag、PIQA、WinoGrande 等；部分采用<strong>生成式评估</strong>，如 TriviaQA、NaturalQuestions、DROP 等。对 Pile-test 采用语言建模评估方法，使用<strong>每字节比特数（BPB）</strong>作为统一度量标准，确保不同分词器模型间的公平比较。</p>
 <p><strong>评估结果</strong></p>
-<p>表3展示了 DeepSeek-V3 基座模型与主流开源基座模型的性能对比，包括
-<strong>DeepSeek-V2-Base、Qwen2.5-72B- Base</strong> 和
-<strong>LLaMA-3.1-405B-Base</strong>。所有模型均使用统一的内部评估框架和评估标准。需要说明的是，由于近几个月评估框架的更新，DeepSeek-V2-Base
-的部分性能指标与此前报告略有差异。</p>
+<p>表3展示了 DeepSeek-V3 基座模型与主流开源基座模型的性能对比，包括 <strong>DeepSeek-V2-Base、Qwen2.5-72B- Base</strong> 和 <strong>LLaMA-3.1-405B-Base</strong>。所有模型均使用统一的内部评估框架和评估标准。需要说明的是，由于近几个月评估框架的更新，DeepSeek-V2-Base 的部分性能指标与此前报告略有差异。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-263386574721e03b70c982df9853f4c6_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-263386574721e03b70c982df9853f4c6_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>表3：DeepSeek-V3-Base
-与其他具有代表性的开源基础模型的性能对比。所有模型均在内部评估框架下进行了测试，并采用了统一的评估设置。得分差距在
-0.3 以内的模型被视为表现相当。评估结果表明，DeepSeek-V3-Base
-在大多数基准测试中表现出色，尤其是在数学和代码任务上表现尤为突出。</p>
-<p>综合评估显示，DeepSeek-V3-Base 全面超越 DeepSeek-V2-Base 和
-Qwen2.5-72B-Base，并在绝大多数基准测试中领先
-LLaMA-3.1-405B-Base，<strong>成为当前性能最强的开源基座模型</strong>。</p>
+<p>表3：DeepSeek-V3-Base 与其他具有代表性的开源基础模型的性能对比。所有模型均在内部评估框架下进行了测试，并采用了统一的评估设置。得分差距在 0.3 以内的模型被视为表现相当。评估结果表明，DeepSeek-V3-Base 在大多数基准测试中表现出色，尤其是在数学和代码任务上表现尤为突出。</p>
+<p>综合评估显示，DeepSeek-V3-Base 全面超越 DeepSeek-V2-Base 和 Qwen2.5-72B-Base，并在绝大多数基准测试中领先 LLaMA-3.1-405B-Base，<strong>成为当前性能最强的开源基座模型</strong>。</p>
 <p>具体性能对比如下：</p>
 <ol type="1">
-<li>相比
-DeepSeek-V2-Base：通过模型架构优化、规模扩展和数据质量提升，DeepSeek-V3-Base
-实现了显著性能提升。</li>
-<li>相比 Qwen2.5-72B-Base：尽管仅使用一半的激活参数，DeepSeek-V3-Base
-在英语、多语言、代码和数学领域均展现出明显优势。在中文评测中，除 CMMLU
-外的其他测试也优于 Qwen-2.5-72B。</li>
-<li>相比 LLaMA-3.1-405B-Base：即便对方拥有 11
-倍的激活参数量，DeepSeek-V3-Base
-在多语言、代码和数学领域仍表现更优。在英语和中文语言能力评测中表现相当或更佳，特别是在
-BBH、MMLU 系列、DROP、C-Eval、CMMLU 和 CCPM 等测试中表现突出。</li>
+<li>相比 DeepSeek-V2-Base：通过模型架构优化、规模扩展和数据质量提升，DeepSeek-V3-Base 实现了显著性能提升。</li>
+<li>相比 Qwen2.5-72B-Base：尽管仅使用一半的激活参数，DeepSeek-V3-Base 在英语、多语言、代码和数学领域均展现出明显优势。在中文评测中，除 CMMLU 外的其他测试也优于 Qwen-2.5-72B。</li>
+<li>相比 LLaMA-3.1-405B-Base：即便对方拥有 11 倍的激活参数量，DeepSeek-V3-Base 在多语言、代码和数学领域仍表现更优。在英语和中文语言能力评测中表现相当或更佳，特别是在 BBH、MMLU 系列、DROP、C-Eval、CMMLU 和 CCPM 等测试中表现突出。</li>
 </ol>
-<p>得益于高效的架构设计和全面的工程优化，DeepSeek-V3
-实现了极高的训练效率。在现有训练框架和基础设施下，每处理1T token 仅需
-180K H800 GPU 小时，远低于 72B 或 405B 密集模型的训练成本。</p>
+<p>得益于高效的架构设计和全面的工程优化，DeepSeek-V3 实现了极高的训练效率。在现有训练框架和基础设施下，每处理1T token 仅需 180K H800 GPU 小时，远低于 72B 或 405B 密集模型的训练成本。</p>
 <h3 id="讨论">讨论</h3>
 <p><strong>MTP策略的效果分析</strong></p>
 <p>表4显示了 MTP 策略的详细分析结果。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-ce3dc59db590b6ecad4407a2ed544fed_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-ce3dc59db590b6ecad4407a2ed544fed_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>表 4：MTP
-策略的消融实验结果表明，该策略在大多数评估基准测试中均能显著提升模型性能。</p>
-<p>研究分别在两种规模的基准模型上验证了该策略的效果。小规模实验采用了总参数量为
-15.7B 的基线 MoE 模型，使用 1.33T token
-进行训练；大规模实验则采用总参数量为 228.7B 的基线 MoE 模型，使用 540B
-token 训练。在保持训练数据和其他架构不变的情况下，为基准模型增加深度为 1
-的 MTP 模块进行对比实验。值得注意的是，由于在推理阶段会移除 MTP
-模块，因此比较模型的推理开销完全相同。</p>
+<p>表 4：MTP 策略的消融实验结果表明，该策略在大多数评估基准测试中均能显著提升模型性能。</p>
+<p>研究分别在两种规模的基准模型上验证了该策略的效果。小规模实验采用了总参数量为 15.7B 的基线 MoE 模型，使用 1.33T token 进行训练；大规模实验则采用总参数量为 228.7B 的基线 MoE 模型，使用 540B token 训练。在保持训练数据和其他架构不变的情况下，为基准模型增加深度为 1 的 MTP 模块进行对比实验。值得注意的是，由于在推理阶段会移除 MTP 模块，因此比较模型的推理开销完全相同。</p>
 <p>结果表明，MTP 策略在绝大多数评估指标上都带来了持续的性能提升。</p>
 <p><strong>无辅助损失平衡策略的效果分析</strong></p>
 <p>表5展示了无辅助损失平衡策略的分析结果。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-e44b2f66e9273489070d0c8f01b3f373_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-e44b2f66e9273489070d0c8f01b3f373_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>表5：无辅助损失负载均衡策略的消融实验结果显示，与完全基于辅助损失的方法相比，无辅助损失策略在大多数评估基准测试中表现出更优的模型性能。</p>
-<p>研究同样在两种规模的基线模型上进行了验证。小规模模型总参数量为
-15.7B，使用 1.33T token 训练；大规模模型总参数量为 228.7B，使用 578B
-token 训练。这两个基准模型都采用纯辅助损失来实现负载平衡，使用带有 top-K
-相关度归一化的 sigmoid 门控函数，其辅助损失强度的超参数分别与
-DeepSeek-V2-Lite 和 DeepSeek-V2 保持一致。</p>
+<p>研究同样在两种规模的基线模型上进行了验证。小规模模型总参数量为 15.7B，使用 1.33T token 训练；大规模模型总参数量为 228.7B，使用 578B token 训练。这两个基准模型都采用纯辅助损失来实现负载平衡，使用带有 top-K 相关度归一化的 sigmoid 门控函数，其辅助损失强度的超参数分别与 DeepSeek-V2-Lite 和 DeepSeek-V2 保持一致。</p>
 <p>研究在保持其他条件不变的情况下，移除所有辅助损失并引入无辅助损失平衡策略进行对比。结果显示，无辅助损失策略在大多数评估指标上都实现了更好的性能表现。</p>
 <p><strong>批次级与序列级负载平衡对比</strong></p>
 <p>无辅助损失平衡与序列级辅助损失的核心区别在于平衡范围：前者是批次级，后者是序列级。</p>
-<p><strong>批次级平衡</strong>提供了更灵活的约束条件，不要求每个序列内部实现领域平衡，这种灵活性使专家能够更好地适应不同领域的特点。为验证这一观点，研究分别记录和分析了一个
-16B 的基于辅助损失模型和一个 16B 的无辅助损失模型在 Pile
-测试集各领域的专家负载情况。如图9所示，无辅助损失模型确实展现出更明显的专家专业化特征。</p>
+<p><strong>批次级平衡</strong>提供了更灵活的约束条件，不要求每个序列内部实现领域平衡，这种灵活性使专家能够更好地适应不同领域的特点。为验证这一观点，研究分别记录和分析了一个 16B 的基于辅助损失模型和一个 16B 的无辅助损失模型在 Pile 测试集各领域的专家负载情况。如图9所示，无辅助损失模型确实展现出更明显的专家专业化特征。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-54110265d0a1087492a1a4ff72b34271_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-54110265d0a1087492a1a4ff72b34271_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>图9：Pile
-测试集三个领域中，无辅助损失模型与基于辅助损失模型的专家负载分布对比。结果显示，无辅助损失模型展现出更强的专家特化能力。相对专家负载定义为实际专家负载与理论平衡负载的比值。由于篇幅限制，仅展示两个层的结果，完整数据可参见原文附录C。</p>
+<p>图9：Pile 测试集三个领域中，无辅助损失模型与基于辅助损失模型的专家负载分布对比。结果显示，无辅助损失模型展现出更强的专家特化能力。相对专家负载定义为实际专家负载与理论平衡负载的比值。由于篇幅限制，仅展示两个层的结果，完整数据可参见原文附录C。</p>
 <p>为深入探究这种灵活性与性能提升之间的关联，研究还设计并验证了一种批次级辅助损失方法，该方法在训练批次而非序列层面实现负载平衡。实验表明，在达到相似的批次级负载平衡程度时，批次级辅助损失能够实现与无辅助损失方法相当的性能。</p>
-<p>具体而言，在 1B MoE 模型上的验证损失分别为：序列级辅助损失
-2.258，无辅助损失方法 2.253，批次级辅助损失 2.253。3B MoE
-模型的实验也显示类似结果：序列级辅助损失模型的验证损失为
-2.085，而无辅助损失方法和批次级辅助损失方法均达到 2.080。</p>
+<p>具体而言，在 1B MoE 模型上的验证损失分别为：序列级辅助损失 2.258，无辅助损失方法 2.253，批次级辅助损失 2.253。3B MoE 模型的实验也显示类似结果：序列级辅助损失模型的验证损失为 2.085，而无辅助损失方法和批次级辅助损失方法均达到 2.080。</p>
 <p>尽管批次级负载平衡方法展现出稳定的性能优势，但在实际应用中仍面临两个效率挑战：</p>
 <ol type="1">
 <li>个别序列或小批量数据可能出现负载不均衡；</li>
@@ -1187,226 +685,103 @@ alt="img" />
 <p>对于第一个挑战，通过采用<strong>大规模专家并行和数据并行的训练框架</strong>得到了有效解决，这确保了每个微批量都具有足够规模。对于第二个挑战，研究设计了<strong>带有冗余专家部署的高效推理框架</strong>来应对。</p>
 <h2 id="后训练">后训练</h2>
 <h3 id="监督微调sft">监督微调（SFT）</h3>
-<p>研究构建了包含 150
-万个多领域实例的指令调优数据集，针对不同领域特点采用了相应的数据创建方法。</p>
-<p><strong>推理数据处理：</strong>
-在数学、代码竞赛和逻辑谜题等推理类任务中，系统采用内部 DeepSeek-R1
-模型生成数据。虽然 R1
-生成的数据具有较高的准确性，但同时存在推理冗长、格式不规范和输出过长等问题。因此，研究的核心目标是在保持
-R1 模型高准确性的同时，实现输出的清晰简洁。</p>
-<p>具体实施方法如下：首先针对特定领域（如代码、数学或通用推理）开发专家模型，采用
-SFT 和 RL 相结合的训练流程。该专家模型随后作为最终模型的数据生成器。</p>
-<p>对每个训练实例，系统生成两类 SFT
-样本：一类是问题与原始答案的直接配对，另一类则引入系统提示词，将其与问题和
-R1
-答案组合。系统提示经过优化设计，包含了引导模型生成具有自我反思和验证机制响应的指令。</p>
-<p>在RL阶段，模型通过高温采样生成响应，即使在没有明确系统提示的情况下，也能有效融合
-R1 生成数据和原始数据的特征。经过数百轮RL迭代，中间模型成功整合了 R1
-的响应模式，显著提升了整体性能。随后，研究采用拒绝采样方法，利用专家模型作为数据源，为最终模型筛选高质量的
-SFT 数据。这种方法既保持了 DeepSeek-R1
-的高准确性，又确保了输出的简洁性和有效性。</p>
-<p><strong>非推理数据处理：</strong>
-对于创意写作、角色扮演和基础问答等非推理任务，系统利用 DeepSeek-V2.5
-生成响应，并通过人工标注确保数据质量。</p>
-<p><strong>SFT 训练配置：</strong> 研究对 DeepSeek-V3-Base 进行了两轮
-SFT 数据集训练，采用余弦衰减的学习率调度策略，初始学习率为
-5^{-6}，逐步降低至
-1^{-6}。训练过程中采用多样本序列打包技术，同时通过样本掩码机制确保各样本间的独立性。</p>
+<p>研究构建了包含 150 万个多领域实例的指令调优数据集，针对不同领域特点采用了相应的数据创建方法。</p>
+<p><strong>推理数据处理：</strong> 在数学、代码竞赛和逻辑谜题等推理类任务中，系统采用内部 DeepSeek-R1 模型生成数据。虽然 R1 生成的数据具有较高的准确性，但同时存在推理冗长、格式不规范和输出过长等问题。因此，研究的核心目标是在保持 R1 模型高准确性的同时，实现输出的清晰简洁。</p>
+<p>具体实施方法如下：首先针对特定领域（如代码、数学或通用推理）开发专家模型，采用 SFT 和 RL 相结合的训练流程。该专家模型随后作为最终模型的数据生成器。</p>
+<p>对每个训练实例，系统生成两类 SFT 样本：一类是问题与原始答案的直接配对，另一类则引入系统提示词，将其与问题和 R1 答案组合。系统提示经过优化设计，包含了引导模型生成具有自我反思和验证机制响应的指令。</p>
+<p>在RL阶段，模型通过高温采样生成响应，即使在没有明确系统提示的情况下，也能有效融合 R1 生成数据和原始数据的特征。经过数百轮RL迭代，中间模型成功整合了 R1 的响应模式，显著提升了整体性能。随后，研究采用拒绝采样方法，利用专家模型作为数据源，为最终模型筛选高质量的 SFT 数据。这种方法既保持了 DeepSeek-R1 的高准确性，又确保了输出的简洁性和有效性。</p>
+<p><strong>非推理数据处理：</strong> 对于创意写作、角色扮演和基础问答等非推理任务，系统利用 DeepSeek-V2.5 生成响应，并通过人工标注确保数据质量。</p>
+<p><strong>SFT 训练配置：</strong> 研究对 DeepSeek-V3-Base 进行了两轮 SFT 数据集训练，采用余弦衰减的学习率调度策略，初始学习率为 5^{-6}，逐步降低至 1^{-6}。训练过程中采用多样本序列打包技术，同时通过样本掩码机制确保各样本间的独立性。</p>
 <h3 id="强化学习rl">强化学习（RL）</h3>
 <p><strong>奖励模型设计</strong></p>
-<p>在强化学习过程中，系统同时采用<strong>规则型</strong>和<strong>模型型</strong>两种<strong>奖励模型(Reward
-Model, RM)</strong>。</p>
-<p><strong>规则型奖励模型：</strong>对于可通过明确规则验证的任务，系统采用规则型奖励机制进行反馈评估。例如，在处理具有确定性答案的数学问题时，要求模型在特定格式（如方框内）给出最终答案，从而可以通过规则进行自动验证。同样，在处理
-[LeetCode]
-编程题时，系统可通过编译器执行测试用例生成客观反馈。这种基于规则的验证方法具有较高的可靠性，能有效防止模型的投机行为。</p>
-<p><strong>模型型奖励模型：</strong>对于具有标准答案但形式灵活的问题，系统使用奖励模型评估输出与标准答案的匹配程度。而对于创意写作等缺乏标准答案的任务，奖励模型则基于问题和回答的整体性给出评估反馈。该奖励模型基于
-DeepSeek-V3 的 SFT checkpoint
-进行训练。为增强模型可靠性，系统构建的偏好数据不仅包含最终评分，还包含推导评分的完整推理过程，这种设计有效降低了特定任务中的奖励扭曲风险。</p>
-<p><strong>群组相对策略优化(Group Relative Policy Optimization,
-GRPO)</strong></p>
-<p>系统采用与 DeepSeek-V2
-相似的GRPO方法。这种方法不需要与策略模型规模相当的评论家模型，而是通过群组评分估计基线。具体实现中，对每个问题
-q ，GRPO 从原策略模型theta_{old} 采样一组输出{o_1,o_2,···,o_G}
-，并通过最大化以下目标函数优化策略模型 _：</p>
+<p>在强化学习过程中，系统同时采用<strong>规则型</strong>和<strong>模型型</strong>两种<strong>奖励模型(Reward Model, RM)</strong>。</p>
+<p><strong>规则型奖励模型：</strong>对于可通过明确规则验证的任务，系统采用规则型奖励机制进行反馈评估。例如，在处理具有确定性答案的数学问题时，要求模型在特定格式（如方框内）给出最终答案，从而可以通过规则进行自动验证。同样，在处理 [LeetCode] 编程题时，系统可通过编译器执行测试用例生成客观反馈。这种基于规则的验证方法具有较高的可靠性，能有效防止模型的投机行为。</p>
+<p><strong>模型型奖励模型：</strong>对于具有标准答案但形式灵活的问题，系统使用奖励模型评估输出与标准答案的匹配程度。而对于创意写作等缺乏标准答案的任务，奖励模型则基于问题和回答的整体性给出评估反馈。该奖励模型基于 DeepSeek-V3 的 SFT checkpoint 进行训练。为增强模型可靠性，系统构建的偏好数据不仅包含最终评分，还包含推导评分的完整推理过程，这种设计有效降低了特定任务中的奖励扭曲风险。</p>
+<p><strong>群组相对策略优化(Group Relative Policy Optimization, GRPO)</strong></p>
+<p>系统采用与 DeepSeek-V2 相似的GRPO方法。这种方法不需要与策略模型规模相当的评论家模型，而是通过群组评分估计基线。具体实现中，对每个问题 q ，GRPO 从原策略模型theta_{old} 采样一组输出{o_1,o_2,···,o_G} ，并通过最大化以下目标函数优化策略模型 _：</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206144325083.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206144325083" />
-<figcaption aria-hidden="true">image-20250206144325083</figcaption>
+<img src="/images/deepseekV3/image-20250206144325083.png" srcset="/img/loading.gif" lazyload alt="image-20250206144325083" /><figcaption aria-hidden="true">image-20250206144325083</figcaption>
 </figure>
-<p>其中和 表示超参数；_{ref} 代表参考模型；A_i
-表示优势函数，其计算基于每组内输出所对应的奖励序列
-{r_1,r_2,...,r_G}。</p>
+<p>其中和 表示超参数；_{ref} 代表参考模型；A_i 表示优势函数，其计算基于每组内输出所对应的奖励序列 {r_1,r_2,...,r_G}。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-b93919057fd9d86ab8d9135e611de828_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-b93919057fd9d86ab8d9135e611de828_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>在RL过程中，系统融合了编程、数学、写作、角色扮演和问答等多领域的提示词任务。这种多样化的训练策略不仅提高了模型对人类偏好的适应性，还在基准测试中取得了显著提升，特别是在监督微调数据有限的场景下表现出色。</p>
 <h3 id="评估-1">评估</h3>
 <p><strong>评估方法设置</strong></p>
-<p><strong>评估基准</strong>：除基础模型测试所用的基准外，系统还在下列基准上评估了指令调优模型的表现：[IFEval]、FRAMES
-、LongBench v2、GPQA、SimpleQA、C SimpleQA、SWE-Bench
-Verified、Aider、LiveCodeBench（选取 2024 年 8-11
-月题目）、[Codeforces]、2024 年中国高中数学奥林匹克（CNMO）和 2024
-年美国数学邀请赛（[AIME]）。</p>
-<p><strong>基准模型对比：</strong>系统选取了多个代表性模型作为性能对照基准，包括
-DeepSeek-V2-0506、DeepSeek-V2.5-0905、Qwen2.5 72B Instruct、LLaMA-3.1
-405B Instruct、Claude-Sonnet-3.5-1022 和 GPT-4o-0513。其中 DeepSeek-V2
-系列选取最具代表性的版本，闭源模型则通过其官方 API 进行评估。</p>
-<p><strong>评估具体配置：</strong>在标准基准评估中，MMLU、DROP、GPQA 和
-SimpleQA 采用 simple-evals 框架的标准提示词模板。MMLU-Redux
-的零样本测试采用 Zero-Eval
-提示词格式。其他数据集则遵循原始评估方案，使用数据集开发者提供的默认提示词模板。</p>
+<p><strong>评估基准</strong>：除基础模型测试所用的基准外，系统还在下列基准上评估了指令调优模型的表现：[IFEval]、FRAMES 、LongBench v2、GPQA、SimpleQA、C SimpleQA、SWE-Bench Verified、Aider、LiveCodeBench（选取 2024 年 8-11 月题目）、[Codeforces]、2024 年中国高中数学奥林匹克（CNMO）和 2024 年美国数学邀请赛（[AIME]）。</p>
+<p><strong>基准模型对比：</strong>系统选取了多个代表性模型作为性能对照基准，包括 DeepSeek-V2-0506、DeepSeek-V2.5-0905、Qwen2.5 72B Instruct、LLaMA-3.1 405B Instruct、Claude-Sonnet-3.5-1022 和 GPT-4o-0513。其中 DeepSeek-V2 系列选取最具代表性的版本，闭源模型则通过其官方 API 进行评估。</p>
+<p><strong>评估具体配置：</strong>在标准基准评估中，MMLU、DROP、GPQA 和 SimpleQA 采用 simple-evals 框架的标准提示词模板。MMLU-Redux 的零样本测试采用 Zero-Eval 提示词格式。其他数据集则遵循原始评估方案，使用数据集开发者提供的默认提示词模板。</p>
 <p>在代码和数学能力评估方面</p>
 <ul>
-<li>HumanEval-Mul 数据集覆盖
-Python、Java、[Cpp]、C#、JavaScript、TypeScript、PHP 和 Bash 共 8
-种主流编程语言。</li>
-<li>LiveCodeBench（使用 2024 年 8-11
-月数据）的评估同时采用CoT和直接输出两种方式。</li>
+<li>HumanEval-Mul 数据集覆盖 Python、Java、[Cpp]、C#、JavaScript、TypeScript、PHP 和 Bash 共 8 种主流编程语言。</li>
+<li>LiveCodeBench（使用 2024 年 8-11 月数据）的评估同时采用CoT和直接输出两种方式。</li>
 <li>Codeforces 评估采用参赛者百分位数作为衡量标准。</li>
 <li>SWE-Bench verified 采用无代理框架进行评估。</li>
 <li>Aider 相关测试采用"diff"格式评估。</li>
 </ul>
-<p>在数学能力测试中，AIME 和 CNMO 2024 使用采样温度 0.7，结果取 16
-次运行的平均值，而 MATH-500 则采用贪婪解码策略。</p>
+<p>在数学能力测试中，AIME 和 CNMO 2024 使用采样温度 0.7，结果取 16 次运行的平均值，而 MATH-500 则采用贪婪解码策略。</p>
 <p>所有评估中，模型的最大输出长度限制为 8192 个 token。</p>
 <h3 id="标准评估">标准评估</h3>
-<p>表6的评估结果显示，DeepSeek-V3 在开源模型中表现最佳，且与 GPT-4o 和
-Claude-3.5-Sonnet 等顶级闭源模型相比具有竞争力。</p>
+<p>表6的评估结果显示，DeepSeek-V3 在开源模型中表现最佳，且与 GPT-4o 和 Claude-3.5-Sonnet 等顶级闭源模型相比具有竞争力。</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206144454360.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206144454360" />
-<figcaption aria-hidden="true">image-20250206144454360</figcaption>
+<img src="/images/deepseekV3/image-20250206144454360.png" srcset="/img/loading.gif" lazyload alt="image-20250206144454360" /><figcaption aria-hidden="true">image-20250206144454360</figcaption>
 </figure>
-<p>表 6 | DeepSeek-V3
-与其他具有代表性的聊天模型的比较。所有模型均在限制输出长度为 8K
-的配置下进行评估。包含少于 1000
-个样本的基准测试会通过多次不同温度设置的测试来得出稳健的最终结果。DeepSeek-V3
-是表现最佳的开源模型，同时在与前沿闭源模型的对比中也展现出强大的竞争力。</p>
-<p><strong>英语能力评估</strong>：在
-MMLU（评估大语言模型多领域知识和任务能力的标准基准）中，DeepSeek-V3 与
-LLaMA 3.1-405B、GPT-4o 和 Claude-Sonnet 3.5 等顶级模型表现相当，明显超越
-Qwen2.5-72B。</p>
-<p>在更具挑战性的 MMLU-Pro 教育知识评测中，DeepSeek-V3 的表现仅次于
-Claude-Sonnet 3.5。</p>
-<p>在经过标签修正的 MMLU-Redux 测试中，DeepSeek-V3
-的表现领先其他模型。</p>
-<p>在博士级评测 GPQA-Diamond 中，DeepSeek-V3 仅落后于 Claude 3.5
-Sonnet，但大幅领先其他竞争模型。</p>
-<p>在长文本理解方面，DeepSeek-V3 继续保持顶级水平。在 DROP
-的少样本测试中达到 91.6 的 F1 分数，领先所有对比模型。在需要处理 10 万
-token 上下文的 FRAMES 问答测试中，仅次于 GPT-4o
-但显著优于其他模型，充分展示了其处理超长文本的能力。在最新发布的
-LongBench v2 测试中的最优表现，进一步证实了这一能力。</p>
-<p>在 SimpleQA 事实性知识测试中，DeepSeek-V3 虽然落后于 GPT-4o 和
-Claude-Sonnet，但这主要源于其资源分配策略——更多训练资源用于中文知识学习，因此在
-C-SimpleQA 中表现优异。在指令遵循能力评估中，相比前代 DeepSeek-V2
-系列有显著提升，特别是在理解和执行特定格式要求方面。</p>
-<p><strong>代码与数学能力评估：</strong>在编程领域，DeepSeek-V3
-的评估涵盖<strong>工程实践（SWE-Bench-Verified）</strong>和<strong>算法编程（HumanEval、LiveCodeBench）</strong>两个维度。</p>
-<p>在工程类任务中，虽然未能超越
-Claude-Sonnet-3.5-1022，但明显优于其他开源模型。作为开源模型，DeepSeek-V3
-的强大能力将推动软件工程和算法开发领域的创新，帮助开发者和研究人员拓展开源模型在编程领域的应用边界。</p>
-<p>在算法编程任务上，借助先进的知识蒸馏技术，DeepSeek-V3 在
-HumanEval-Mul 和 LiveCodeBench 等测试中超越所有基线模型。</p>
-<p>在数学能力测试中，DeepSeek-V3 为非 o1 类模型树立了新标准。在
-AIME、MATH-500 和 CNMO 2024 等具有挑战性的测试中，其得分比第二名 Qwen2.5
-72B 高出约 10 个百分点，这种显著优势充分验证了 DeepSeek-R1
-知识蒸馏技术的有效性。</p>
-<p><strong>中文能力评估：</strong>在中英双语支持方面，Qwen 和 DeepSeek
-是两个代表性的模型系列。</p>
-<p>在中文 SimpleQA 事实性知识测试中，尽管 Qwen2.5 的训练数据量更大（18T
-token，超出 DeepSeek-V3 的 14.8T token 约 20%），DeepSeek-V3 仍领先 16.4
-个百分点。</p>
-<p>在 <strong>C-Eval（中文教育知识评估）</strong>和
-<strong>CLUEWSC（中文指代消歧挑战）</strong>等测试中，两个模型表现相当，表明它们在中文推理和教育任务方面都达到了较高水平。</p>
+<p>表 6 | DeepSeek-V3 与其他具有代表性的聊天模型的比较。所有模型均在限制输出长度为 8K 的配置下进行评估。包含少于 1000 个样本的基准测试会通过多次不同温度设置的测试来得出稳健的最终结果。DeepSeek-V3 是表现最佳的开源模型，同时在与前沿闭源模型的对比中也展现出强大的竞争力。</p>
+<p><strong>英语能力评估</strong>：在 MMLU（评估大语言模型多领域知识和任务能力的标准基准）中，DeepSeek-V3 与 LLaMA 3.1-405B、GPT-4o 和 Claude-Sonnet 3.5 等顶级模型表现相当，明显超越 Qwen2.5-72B。</p>
+<p>在更具挑战性的 MMLU-Pro 教育知识评测中，DeepSeek-V3 的表现仅次于 Claude-Sonnet 3.5。</p>
+<p>在经过标签修正的 MMLU-Redux 测试中，DeepSeek-V3 的表现领先其他模型。</p>
+<p>在博士级评测 GPQA-Diamond 中，DeepSeek-V3 仅落后于 Claude 3.5 Sonnet，但大幅领先其他竞争模型。</p>
+<p>在长文本理解方面，DeepSeek-V3 继续保持顶级水平。在 DROP 的少样本测试中达到 91.6 的 F1 分数，领先所有对比模型。在需要处理 10 万 token 上下文的 FRAMES 问答测试中，仅次于 GPT-4o 但显著优于其他模型，充分展示了其处理超长文本的能力。在最新发布的 LongBench v2 测试中的最优表现，进一步证实了这一能力。</p>
+<p>在 SimpleQA 事实性知识测试中，DeepSeek-V3 虽然落后于 GPT-4o 和 Claude-Sonnet，但这主要源于其资源分配策略——更多训练资源用于中文知识学习，因此在 C-SimpleQA 中表现优异。在指令遵循能力评估中，相比前代 DeepSeek-V2 系列有显著提升，特别是在理解和执行特定格式要求方面。</p>
+<p><strong>代码与数学能力评估：</strong>在编程领域，DeepSeek-V3 的评估涵盖<strong>工程实践（SWE-Bench-Verified）</strong>和<strong>算法编程（HumanEval、LiveCodeBench）</strong>两个维度。</p>
+<p>在工程类任务中，虽然未能超越 Claude-Sonnet-3.5-1022，但明显优于其他开源模型。作为开源模型，DeepSeek-V3 的强大能力将推动软件工程和算法开发领域的创新，帮助开发者和研究人员拓展开源模型在编程领域的应用边界。</p>
+<p>在算法编程任务上，借助先进的知识蒸馏技术，DeepSeek-V3 在 HumanEval-Mul 和 LiveCodeBench 等测试中超越所有基线模型。</p>
+<p>在数学能力测试中，DeepSeek-V3 为非 o1 类模型树立了新标准。在 AIME、MATH-500 和 CNMO 2024 等具有挑战性的测试中，其得分比第二名 Qwen2.5 72B 高出约 10 个百分点，这种显著优势充分验证了 DeepSeek-R1 知识蒸馏技术的有效性。</p>
+<p><strong>中文能力评估：</strong>在中英双语支持方面，Qwen 和 DeepSeek 是两个代表性的模型系列。</p>
+<p>在中文 SimpleQA 事实性知识测试中，尽管 Qwen2.5 的训练数据量更大（18T token，超出 DeepSeek-V3 的 14.8T token 约 20%），DeepSeek-V3 仍领先 16.4 个百分点。</p>
+<p>在 <strong>C-Eval（中文教育知识评估）</strong>和 <strong>CLUEWSC（中文指代消歧挑战）</strong>等测试中，两个模型表现相当，表明它们在中文推理和教育任务方面都达到了较高水平。</p>
 <p><strong>开放式评估</strong></p>
-<p>除标准基准测试外，系统还采用 LLM
-作为评估者对模型的开放式生成能力进行评估，结果见表7。</p>
+<p>除标准基准测试外，系统还采用 LLM 作为评估者对模型的开放式生成能力进行评估，结果见表7。</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206144542133.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206144542133" />
-<figcaption aria-hidden="true">image-20250206144542133</figcaption>
+<img src="/images/deepseekV3/image-20250206144542133.png" srcset="/img/loading.gif" lazyload alt="image-20250206144542133" /><figcaption aria-hidden="true">image-20250206144542133</figcaption>
 </figure>
-<p>表 7：英文开放式对话评估。在 AlpacaEval 2.0
-中，V3使用“长度控制胜率”作为核心评估指标，以衡量模型在对话生成中的表现。</p>
-<p>评估严格遵循 AlpacaEval 2.0 和 Arena-Hard 的标准规范，使用
-GPT-4-Turbo-1106 进行配对评估。</p>
-<p>在 Arena-Hard 测试中，DeepSeek-V3 相对于 GPT-4-0314 基准取得了 86%
-以上的优胜率，与 Claude-Sonnet-3.5-1022
-等顶级模型表现相当，充分展示了其在处理复杂任务（包括编程和调试）方面的卓越能力。<strong>作为首个在
-Arena-Hard 测试中突破 85% 的开源模型</strong>，DeepSeek-V3
-显著缩小了与闭源模型的差距，为开源模型在高难度任务领域树立了新标准。</p>
-<p>在 AlpacaEval 2.0 评测中，DeepSeek-V3
-同样表现出色，超越了所有参评的开源和闭源模型，展示了其在写作和问答方面的优秀能力。特别是相比
-DeepSeek-V2.5-0905 提升了
-20%，证明了模型在基础任务处理能力上的显著进步。</p>
+<p>表 7：英文开放式对话评估。在 AlpacaEval 2.0 中，V3使用“长度控制胜率”作为核心评估指标，以衡量模型在对话生成中的表现。</p>
+<p>评估严格遵循 AlpacaEval 2.0 和 Arena-Hard 的标准规范，使用 GPT-4-Turbo-1106 进行配对评估。</p>
+<p>在 Arena-Hard 测试中，DeepSeek-V3 相对于 GPT-4-0314 基准取得了 86% 以上的优胜率，与 Claude-Sonnet-3.5-1022 等顶级模型表现相当，充分展示了其在处理复杂任务（包括编程和调试）方面的卓越能力。<strong>作为首个在 Arena-Hard 测试中突破 85% 的开源模型</strong>，DeepSeek-V3 显著缩小了与闭源模型的差距，为开源模型在高难度任务领域树立了新标准。</p>
+<p>在 AlpacaEval 2.0 评测中，DeepSeek-V3 同样表现出色，超越了所有参评的开源和闭源模型，展示了其在写作和问答方面的优秀能力。特别是相比 DeepSeek-V2.5-0905 提升了 20%，证明了模型在基础任务处理能力上的显著进步。</p>
 <p><strong>生成式奖励模型性能</strong></p>
-<p>研究将 DeepSeek-V3 的评判能力与领先模型 GPT-4o 和 Claude-3.5
-进行对比。如表8所示，在 RewardBench 评测中，DeepSeek-V3 达到了
-GPT-4o-0806 和 Claude-3.5-Sonnet-1022
-最优版本的水平，并超越了其他版本。</p>
+<p>研究将 DeepSeek-V3 的评判能力与领先模型 GPT-4o 和 Claude-3.5 进行对比。如表8所示，在 RewardBench 评测中，DeepSeek-V3 达到了 GPT-4o-0806 和 Claude-3.5-Sonnet-1022 最优版本的水平，并超越了其他版本。</p>
 <figure>
-<img
-src="/images/deepseekV3/v2-90ad8e0279e152ccdc8448c818f000a6_1440w.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/deepseekV3/v2-90ad8e0279e152ccdc8448c818f000a6_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>表 8：GPT-4o、Claude-3.5-sonnet 和 DeepSeek-V3 在 RewardBench
-基准测试中的性能对比。</p>
-<p>通过引入投票机制，DeepSeek-V3
-的评判能力得到进一步提升。基于此，系统采用 DeepSeek-V3
-配合投票机制对开放式问题进行评估反馈，有效提高了模型对齐过程的可靠性和稳定性。</p>
+<p>表 8：GPT-4o、Claude-3.5-sonnet 和 DeepSeek-V3 在 RewardBench 基准测试中的性能对比。</p>
+<p>通过引入投票机制，DeepSeek-V3 的评判能力得到进一步提升。基于此，系统采用 DeepSeek-V3 配合投票机制对开放式问题进行评估反馈，有效提高了模型对齐过程的可靠性和稳定性。</p>
 <h2 id="讨论-1">讨论</h2>
 <h3 id="deepseek-r1-知识蒸馏分析">DeepSeek-R1 知识蒸馏分析</h3>
-<p>研究基于 DeepSeek-V2.5 模型评估了 DeepSeek-R1
-知识蒸馏的效果。对比实验中，基准模型使用短链式思维数据训练，而对照组使用专家检查点生成的数据。</p>
-<p>表9的结果显示，蒸馏数据在 LiveCodeBench 和 MATH-500
-基准测试中都带来了明显提升。</p>
+<p>研究基于 DeepSeek-V2.5 模型评估了 DeepSeek-R1 知识蒸馏的效果。对比实验中，基准模型使用短链式思维数据训练，而对照组使用专家检查点生成的数据。</p>
+<p>表9的结果显示，蒸馏数据在 LiveCodeBench 和 MATH-500 基准测试中都带来了明显提升。</p>
 <figure>
-<img src="/images/deepseekV3/image-20250206144638306.png" srcset="/img/loading.gif" lazyload
-alt="image-20250206144638306" />
-<figcaption aria-hidden="true">image-20250206144638306</figcaption>
+<img src="/images/deepseekV3/image-20250206144638306.png" srcset="/img/loading.gif" lazyload alt="image-20250206144638306" /><figcaption aria-hidden="true">image-20250206144638306</figcaption>
 </figure>
-<p>表9：DeepSeek-R1 蒸馏对模型性能的贡献分析。在 LiveCodeBench 和
-MATH-500 基准测试中的评估设置与表6相同，旨在确保结果的可比性。</p>
-<p>研究发现了一个重要的平衡点：<strong>知识蒸馏能提高性能，但同时会显著增加输出长度</strong>。为此，DeepSeek-V3
-在蒸馏过程中采用了经过优化的参数配置，以平衡模型准确性和计算效率。</p>
+<p>表9：DeepSeek-R1 蒸馏对模型性能的贡献分析。在 LiveCodeBench 和 MATH-500 基准测试中的评估设置与表6相同，旨在确保结果的可比性。</p>
+<p>研究发现了一个重要的平衡点：<strong>知识蒸馏能提高性能，但同时会显著增加输出长度</strong>。为此，DeepSeek-V3 在蒸馏过程中采用了经过优化的参数配置，以平衡模型准确性和计算效率。</p>
 <p>研究表明，从推理模型进行知识蒸馏是提升模型后期性能的有效方法。当前研究虽然主要关注数学和编程领域的知识蒸馏，但这种方法在其他领域也展现出广阔前景。其在特定领域的成功表明，长链式思维蒸馏技术有望提升模型在其他需要复杂推理的认知任务中的表现。未来研究将继续探索该方法在不同领域的应用。</p>
 <h3 id="自我奖励机制">自我奖励机制</h3>
-<p>奖励机制是强化学习中的核心要素，决定着优化方向。在编程或数学等可通过外部工具直接验证的领域，强化学习展现出显著效果。但在更一般场景中，直接通过规则编码构建反馈机制并不可行。因此，在开发
-DeepSeek-V3 时，针对这类广泛场景，采用了<strong>宪制 AI
-方法</strong>，使用模型自身的投票评估结果作为反馈。这种方法在对齐效果上取得显著成效，大幅提升了模型在主观评估中的表现。</p>
-<p>通过引入额外的宪制规则，DeepSeek-V3
-能够向预期方向优化。研究认为，将补充信息与语言模型结合作为反馈来源的范式具有重要意义。大语言模型能够将各类场景中的非结构化信息转化为有效奖励信号，促进模型的持续优化。除自我奖励外，研究团队也在探索其他通用且可扩展的奖励方法，以持续提升模型在通用场景中的能力。</p>
+<p>奖励机制是强化学习中的核心要素，决定着优化方向。在编程或数学等可通过外部工具直接验证的领域，强化学习展现出显著效果。但在更一般场景中，直接通过规则编码构建反馈机制并不可行。因此，在开发 DeepSeek-V3 时，针对这类广泛场景，采用了<strong>宪制 AI 方法</strong>，使用模型自身的投票评估结果作为反馈。这种方法在对齐效果上取得显著成效，大幅提升了模型在主观评估中的表现。</p>
+<p>通过引入额外的宪制规则，DeepSeek-V3 能够向预期方向优化。研究认为，将补充信息与语言模型结合作为反馈来源的范式具有重要意义。大语言模型能够将各类场景中的非结构化信息转化为有效奖励信号，促进模型的持续优化。除自我奖励外，研究团队也在探索其他通用且可扩展的奖励方法，以持续提升模型在通用场景中的能力。</p>
 <p><strong>MTP性能</strong></p>
-<p>DeepSeek-V3 通过 MTP 技术实现同时预测两个
-token，结合推测解码框架显著提升了解码效率。关键问题是第二个预测 token
-的可用性，评估显示在不同生成任务中，第二个 token
-的<strong>接受率稳定保持在 85%-90%</strong>，表现出较高的可靠性。</p>
-<p>这种高接受率使 DeepSeek-V3 的<strong>解码速度提升至原来的 1.8
-倍</strong>（以每秒生成 token 数衡量）。</p>
+<p>DeepSeek-V3 通过 MTP 技术实现同时预测两个 token，结合推测解码框架显著提升了解码效率。关键问题是第二个预测 token 的可用性，评估显示在不同生成任务中，第二个 token 的<strong>接受率稳定保持在 85%-90%</strong>，表现出较高的可靠性。</p>
+<p>这种高接受率使 DeepSeek-V3 的<strong>解码速度提升至原来的 1.8 倍</strong>（以每秒生成 token 数衡量）。</p>
 <h2 id="结论局限性和未来发展方向">结论、局限性和未来发展方向</h2>
-<p>本研究介绍了 DeepSeek-V3 大规模混合专家语言模型，该模型总参数量达到
-671B，每次处理激活 37B 参数，训练数据规模达 14.8T token。</p>
-<p>模型在延续 MLA 和 DeepSeekMoE
-架构优势的基础上，创新性地提出了无辅助损失负载均衡策略，并引入多 token
-预测训练目标以提升性能。</p>
-<p>通过采用 FP8
-训练技术和精细的工程优化，模型实现了高效的训练过程。在后训练阶段，成功将
-DeepSeek-R1 系列模型的推理能力迁移至新模型。</p>
-<p>综合评估显示，DeepSeek-V3 不仅成为当前性能最强的开源模型，还达到了与
-GPT-4o 和 Claude-3.5-Sonnet
-等顶级闭源模型相当的水平。同时，模型维持了极具竞争力的训练成本，完整训练过程（包括预训练、上下文长度扩展和后训练）仅需
-2.788M H800 GPU 小时。</p>
+<p>本研究介绍了 DeepSeek-V3 大规模混合专家语言模型，该模型总参数量达到 671B，每次处理激活 37B 参数，训练数据规模达 14.8T token。</p>
+<p>模型在延续 MLA 和 DeepSeekMoE 架构优势的基础上，创新性地提出了无辅助损失负载均衡策略，并引入多 token 预测训练目标以提升性能。</p>
+<p>通过采用 FP8 训练技术和精细的工程优化，模型实现了高效的训练过程。在后训练阶段，成功将 DeepSeek-R1 系列模型的推理能力迁移至新模型。</p>
+<p>综合评估显示，DeepSeek-V3 不仅成为当前性能最强的开源模型，还达到了与 GPT-4o 和 Claude-3.5-Sonnet 等顶级闭源模型相当的水平。同时，模型维持了极具竞争力的训练成本，完整训练过程（包括预训练、上下文长度扩展和后训练）仅需 2.788M H800 GPU 小时。</p>
 <p>尽管模型在性能和训练效率上表现出色，但仍存在一些局限性，特别是在部署方面：首先，为保证推理效率，模型的最小部署单元规模较大，可能超出小型团队的资源能力；其次，虽然当前部署方案使模型的端到端生成速度比上一代提升了两倍以上，但仍有优化空间。这些局限性有望随着硬件技术的进步得到自然解决。</p>
-<p>秉持长期发展理念，DeepSeek
-将继续坚持开源路线，稳步推进通用人工智能的研究。未来研究将重点关注以下方向：</p>
+<p>秉持长期发展理念，DeepSeek 将继续坚持开源路线，稳步推进通用人工智能的研究。未来研究将重点关注以下方向：</p>
 <ul>
-<li>持续优化模型架构，提升训练和推理效率，探索支持无限上下文长度的高效方案。同时突破
-Transformer 架构的固有局限，拓展模型的建模能力边界。</li>
+<li>持续优化模型架构，提升训练和推理效率，探索支持无限上下文长度的高效方案。同时突破 Transformer 架构的固有局限，拓展模型的建模能力边界。</li>
 <li>深化训练数据的质量提升和规模扩展，探索新的训练信号来源，实现数据在多个维度的全面扩展。</li>
 <li>加强模型的深层推理能力，通过扩展推理的广度和深度，提升模型的智能水平和问题解决能力。</li>
 <li>建立更全面的多维度评估体系，避免过度优化特定基准测试集而产生的能力误判，确保模型评估的科学性和全面性。</li>

@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
+    <meta name="description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一文读懂Celery与RabbitMQ分布式任务调度系统">
 <meta property="og:url" content="https://linxkon.github.io/%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82Celery%E4%B8%8ERabbitMQ%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
+<meta property="og:description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/celery.jpg">
 <meta property="article:published_time" content="2025-03-01T12:21:13.000Z">
@@ -314,10 +314,7 @@
             
               <div class="markdown-body">
                 
-                <p>Celery结合RabbitMQ，可用于AI任务的<strong>异步处理、分布式计算、任务调度</strong>，广泛应用于<strong>模型推理、训练管理、数据预处理</strong>等场景。RabbitMQ
-负责任务分发，Celery Worker
-并行执行，提高系统吞吐量，支持<strong>负载均衡、任务重试、定时调度</strong>，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。
-<span id="more"></span></p>
+                <p>Celery结合RabbitMQ，可用于AI任务的<strong>异步处理、分布式计算、任务调度</strong>，广泛应用于<strong>模型推理、训练管理、数据预处理</strong>等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持<strong>负载均衡、任务重试、定时调度</strong>，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。 <span id="more"></span></p>
 <h1 id="一clerey的核心组件">一、Clerey的核心组件</h1>
 <p>Celery是一个异步任务队列/作业队列，基于分布式消息传递。它专注于实时操作，但也支持任务调度。作为一个任务队列，Celery的主要功能是将工作分配到多个工作节点，实现任务的异步执行。</p>
 <ol type="1">
@@ -381,11 +378,9 @@
 <li><strong>Amazon SQS</strong></li>
 <li><strong>RabbitMQ</strong>：Celery 默认推荐</li>
 <li><strong>Kafka</strong>（支持 Celery，但不如 RabbitMQ 原生）</li>
-<li><strong>数据库（如</strong>
-<strong>MySQL/PostgreSQL）</strong>（效率较低，不推荐）</li>
+<li><strong>数据库（如</strong> <strong>MySQL/PostgreSQL）</strong>（效率较低，不推荐）</li>
 </ul>
 <table>
-
 <thead>
 <tr class="header">
 <th><strong>功能</strong></th>
@@ -421,24 +416,15 @@
 </tr>
 </tbody>
 </table>
-<h4 id="结论-一般生产环境使用-celery-rabbitmq-的搭配比较多">结论：
-一般生产环境使用 <strong>Celery + RabbitMQ</strong> 的搭配比较多</h4>
-<h1 id="三rabbitmq-在-celery-中的角色">三、<strong>RabbitMQ</strong>
-<strong>在</strong> <strong>Celery</strong>
-<strong>中的角色</strong></h1>
-<h3 id="rabbitmq-充当-消息代理broker主要用于">RabbitMQ 充当
-<strong>消息代理（Broker）</strong>，主要用于：</h3>
+<h4 id="结论-一般生产环境使用-celery-rabbitmq-的搭配比较多">结论： 一般生产环境使用 <strong>Celery + RabbitMQ</strong> 的搭配比较多</h4>
+<h1 id="三rabbitmq-在-celery-中的角色">三、<strong>RabbitMQ</strong> <strong>在</strong> <strong>Celery</strong> <strong>中的角色</strong></h1>
+<h3 id="rabbitmq-充当-消息代理broker主要用于">RabbitMQ 充当 <strong>消息代理（Broker）</strong>，主要用于：</h3>
 <ul>
-<li><strong>任务队列</strong>：Celery 把任务发布到 RabbitMQ
-的队列中，等待 worker 处理。</li>
-<li><strong>任务分发</strong>：RabbitMQ 负责将任务消息分发给 Celery
-worker 进程，实现异步任务执行。</li>
-<li><strong>任务重试</strong>：如果 worker 失败，RabbitMQ
-可以重新投递任务，确保可靠性。</li>
+<li><strong>任务队列</strong>：Celery 把任务发布到 RabbitMQ 的队列中，等待 worker 处理。</li>
+<li><strong>任务分发</strong>：RabbitMQ 负责将任务消息分发给 Celery worker 进程，实现异步任务执行。</li>
+<li><strong>任务重试</strong>：如果 worker 失败，RabbitMQ 可以重新投递任务，确保可靠性。</li>
 </ul>
-<h3 id="celery-任务执行流程rabbitmq-作为-broker">Celery
-<strong>任务执行流程（RabbitMQ</strong> <strong>作为</strong>
-<strong>Broker）</strong></h3>
+<h3 id="celery-任务执行流程rabbitmq-作为-broker">Celery <strong>任务执行流程（RabbitMQ</strong> <strong>作为</strong> <strong>Broker）</strong></h3>
 <ol type="1">
 <li><strong>任务发布</strong>：
 <ul>
@@ -455,30 +441,24 @@ worker 进程，实现异步任务执行。</li>
 <li>任务执行结果可以存入 Redis、数据库等，方便查询。</li>
 </ul></li>
 </ol>
-<h3 id="使用-rabbitmq-作为broker优势">使用 RabbitMQ
-作为Broker优势：</h3>
+<h3 id="使用-rabbitmq-作为broker优势">使用 RabbitMQ 作为Broker优势：</h3>
 <h3 id="解耦">1. <strong>解耦</strong></h3>
 <ul>
-<li>生产者和消费者不需要直接交互，而是通过 RabbitMQ
-进行通信，降低了模块之间的耦合度，提高了系统的可维护性和可扩展性。</li>
+<li>生产者和消费者不需要直接交互，而是通过 RabbitMQ 进行通信，降低了模块之间的耦合度，提高了系统的可维护性和可扩展性。</li>
 </ul>
-<h3 id="异步处理-提高吞吐量">2. <strong>异步处理 &amp;
-提高吞吐量</strong></h3>
+<h3 id="异步处理-提高吞吐量">2. <strong>异步处理 &amp; 提高吞吐量</strong></h3>
 <ul>
 <li>生产者可以快速将消息发送到队列，消费者可以异步处理，避免阻塞，提高系统整体吞吐能力。</li>
 </ul>
 <h3 id="流量削峰-限流">3. <strong>流量削峰 &amp; 限流</strong></h3>
 <ul>
-<li>在高并发场景下，RabbitMQ
-可以作为缓冲层，避免数据库或下游系统被瞬时流量压垮。</li>
+<li>在高并发场景下，RabbitMQ 可以作为缓冲层，避免数据库或下游系统被瞬时流量压垮。</li>
 </ul>
 <h3 id="可靠性-持久化">4. <strong>可靠性 &amp; 持久化</strong></h3>
 <ul>
-<li>通过 <strong>消息确认（ACK）、持久化存储、死信队列（DLX）</strong>
-等机制，RabbitMQ 可以防止消息丢失，提高系统可靠性。</li>
+<li>通过 <strong>消息确认（ACK）、持久化存储、死信队列（DLX）</strong> 等机制，RabbitMQ 可以防止消息丢失，提高系统可靠性。</li>
 </ul>
-<h3 id="支持多种消息路由模式">5.
-<strong>支持多种消息路由模式</strong></h3>
+<h3 id="支持多种消息路由模式">5. <strong>支持多种消息路由模式</strong></h3>
 <ul>
 <li><strong>简单队列模式</strong>（点对点）<br />
 </li>
@@ -492,21 +472,17 @@ worker 进程，实现异步任务执行。</li>
 </ul>
 <h3 id="多语言支持">6. <strong>多语言支持</strong></h3>
 <ul>
-<li>兼容多种编程语言（Python、Java、Go、C++
-等），易于集成到不同技术栈的系统中。</li>
+<li>兼容多种编程语言（Python、Java、Go、C++ 等），易于集成到不同技术栈的系统中。</li>
 </ul>
 <h3 id="分布式-高可用">7. <strong>分布式 &amp; 高可用</strong></h3>
 <ul>
-<li>支持
-<strong>集群部署、主从复制、镜像队列</strong>，保证服务高可用。</li>
+<li>支持 <strong>集群部署、主从复制、镜像队列</strong>，保证服务高可用。</li>
 </ul>
 <h3 id="消息优先级-ttl">8. <strong>消息优先级 &amp; TTL</strong></h3>
 <ul>
-<li>可以设置
-<strong>消息的优先级</strong>，让高优先级的消息先被消费。<br />
+<li>可以设置 <strong>消息的优先级</strong>，让高优先级的消息先被消费。<br />
 </li>
-<li>可以设置
-<strong>消息TTL</strong>（过期时间），避免无用的消息占用队列资源。</li>
+<li>可以设置 <strong>消息TTL</strong>（过期时间），避免无用的消息占用队列资源。</li>
 </ul>
 <h3 id="插件生态丰富">9. <strong>插件生态丰富</strong></h3>
 <ul>
@@ -514,20 +490,16 @@ worker 进程，实现异步任务执行。</li>
 </ul>
 <h3 id="轻量级-易部署">10. <strong>轻量级 &amp; 易部署</strong></h3>
 <ul>
-<li>RabbitMQ 基于 Erlang
-开发，性能强劲，同时占用资源较少，易于部署和维护。</li>
+<li>RabbitMQ 基于 Erlang 开发，性能强劲，同时占用资源较少，易于部署和维护。</li>
 </ul>
-<p><strong>高吞吐、异步处理、消息可靠性</strong>，RabbitMQ
-是一个不错的选择。当场景需要
-<strong>超高吞吐（百万级QPS）</strong>，Kafka 会更适合。</p>
+<p><strong>高吞吐、异步处理、消息可靠性</strong>，RabbitMQ 是一个不错的选择。当场景需要 <strong>超高吞吐（百万级QPS）</strong>，Kafka 会更适合。</p>
 <p># 四、安装Celery、RabbitMQ</p>
 <h3 id="第0步先安装celery">第0步：先安装celery</h3>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> celery<br></code></pre></td></tr></table></figure>
 <h3 id="第一步更新包列表">第一步：更新包列表</h3>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> update<br>sudo apt-<span class="hljs-built_in">get</span> upgrade<br></code></pre></td></tr></table></figure>
 <h3 id="第二步安装erlang">第二步：安装Erlang</h3>
-<p>RabbitMQ是基于Erlang语言开发的，所以首先需要安装Erlang：
-添加Erlang仓库</p>
+<p>RabbitMQ是基于Erlang语言开发的，所以首先需要安装Erlang： 添加Erlang仓库</p>
 <figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs smali">sudo apt-get install software-properties-common apt-transport-https<br>wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key<span class="hljs-built_in"> add </span>-<br>sudo<span class="hljs-built_in"> add-apt-repository </span><span class="hljs-string">&quot;deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib&quot;</span><br></code></pre></td></tr></table></figure>
 <h4 id="更新包列表">更新包列表</h4>
 <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>

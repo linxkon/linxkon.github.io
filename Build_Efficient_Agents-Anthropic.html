@@ -16,20 +16,20 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="在过去的一年里，Anthropic团队（后面简称“团队”）与来自各行各业的团队合作，开发了基于LLM的智能体。结果显示，最成功的实现方式并非依赖复杂的框架或专门的库，而是采用简单、可组合的模式进行构建。 团队将通过这篇文章分享从客户合作和自身智能体构建中获得的经验，并为开发者提供构建高效智能体的实用建议。 原文链接:Building effective agents  Anthropic">
+    <meta name="description" content="在过去的一年里，Anthropic团队（后面简称“团队”）与来自各行各业的团队合作，开发了基于LLM的智能体。结果显示，最成功的实现方式并非依赖复杂的框架或专门的库，而是采用简单、可组合的模式进行构建。 团队将通过这篇文章分享从客户合作和自身智能体构建中获得的经验，并为开发者提供构建高效智能体的实用建议。 原文链接:Building effective agents  Anthropic">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Build Efficient Agents——Anthropic团队">
 <meta property="og:url" content="https://linxkon.github.io/Build_Efficient_Agents-Anthropic.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="在过去的一年里，Anthropic团队（后面简称“团队”）与来自各行各业的团队合作，开发了基于LLM的智能体。结果显示，最成功的实现方式并非依赖复杂的框架或专门的库，而是采用简单、可组合的模式进行构建。 团队将通过这篇文章分享从客户合作和自身智能体构建中获得的经验，并为开发者提供构建高效智能体的实用建议。 原文链接:Building effective agents  Anthropic">
+<meta property="og:description" content="在过去的一年里，Anthropic团队（后面简称“团队”）与来自各行各业的团队合作，开发了基于LLM的智能体。结果显示，最成功的实现方式并非依赖复杂的框架或专门的库，而是采用简单、可组合的模式进行构建。 团队将通过这篇文章分享从客户合作和自身智能体构建中获得的经验，并为开发者提供构建高效智能体的实用建议。 原文链接:Building effective agents  Anthropic">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/llm-agent.png">
 <meta property="article:published_time" content="2024-12-21T11:22:13.000Z">
 <meta property="article:modified_time" content="2025-01-01T15:18:30.660Z">
 <meta property="article:author" content="linxkon">
+<meta property="article:tag" content="agent">
 <meta property="article:tag" content="精选">
 <meta property="article:tag" content="llm">
-<meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/llm-agent.png">
   
@@ -317,9 +317,7 @@
                 <blockquote>
 <p>在过去的一年里，Anthropic团队（后面简称“团队”）与来自各行各业的团队合作，开发了基于LLM的智能体。结果显示，最成功的实现方式并非依赖复杂的框架或专门的库，而是采用简单、可组合的模式进行构建。</p>
 <p>团队将通过这篇文章分享从客户合作和自身智能体构建中获得的经验，并为开发者提供构建高效智能体的实用建议。</p>
-<p>原文链接:<a
-target="_blank" rel="noopener" href="https://www.anthropic.com/research/building-effective-agents">Building
-effective agents  Anthropic</a></p>
+<p>原文链接:<a target="_blank" rel="noopener" href="https://www.anthropic.com/research/building-effective-agents">Building effective agents  Anthropic</a></p>
 </blockquote>
 <span id="more"></span>
 <h2 id="什么是智能体agent">什么是智能体（Agent）？</h2>
@@ -351,20 +349,16 @@ effective agents  Anthropic</a></p>
 <h3 id="构建模块增强型llm">构建模块：增强型LLM</h3>
 <p>智能体系统的核心构建模块是增强型LLM，它结合了<strong>检索（Retrieval）</strong>、<strong>工具使用(Tools)</strong>以及<strong>记忆（Memory）</strong>等功能。目前的模型能够主动利用这些能力，例如生成搜索查询、选择适合的工具以及确定需要保存的重要信息。</p>
 <figure>
-<img src="/images/agent-anthropic/1.webp" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/1.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图1：增强型LLM</p>
 <p>在实际应用中，应重点关注两个方面：一是根据具体的业务场景对这些功能进行定制化；二是确保为LLM提供一个简洁且文档完善的接口。</p>
-<p>实现这些增强功能的方法有多种，其中之一是利用最新发布的<strong>模型上下文协议（Model
-Context
-Protocol）</strong>，通过这一协议，开发者可以使用简单的客户端集成到不断扩展的第三方工具生态系统中。</p>
+<p>实现这些增强功能的方法有多种，其中之一是利用最新发布的<strong>模型上下文协议（Model Context Protocol）</strong>，通过这一协议，开发者可以使用简单的客户端集成到不断扩展的第三方工具生态系统中。</p>
 <p>在后续内容中，将默认每次LLM调用都可访问上述增强功能。</p>
 <h3 id="工作流提示词链式调用">工作流：提示词链式调用</h3>
 <p>提示词链式调用是一种将任务分解为一系列步骤的流程，其中每次LLM调用都会基于上一步的输出进行处理。在流程的任意中间步骤，可以加入程序化检查（如图2中的“门控”所示），以确保流程按照预期顺利推进。</p>
 <figure>
-<img src="/images/agent-anthropic/2.webp" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/2.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图2：提示词链式调用的工作流</p>
 <p><strong>适用场景</strong>：这种工作流适合那些可以被清晰分解为固定子任务的场景。其核心目标是在延迟与更高的准确性之间找到平衡，通过简化每次LLM调用的复杂度来提升整体效果。</p>
@@ -376,17 +370,14 @@ Protocol）</strong>，通过这一协议，开发者可以使用简单的客户
 <h3 id="工作流路由">工作流：路由</h3>
 <p>路由是一种将输入分类并引导到特定后续任务的工作流。这种方法能够有效地分离关注点，便于针对不同输入类型设计更专业的提示词。如果不使用路由，优化某一类型输入时可能会影响其他输入的性能。</p>
 <figure>
-<img src="/images/agent-anthropic/3.webp" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/3.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图3：路由工作流</p>
 <p><strong>适用场景</strong>：路由适合处理复杂任务，尤其是当任务包含可分别处理的不同类别，并且可以通过LLM或传统[分类模型]/算法准确完成分类时。</p>
 <p><strong>路由的典型应用示例</strong>：</p>
 <ul>
 <li>将不同类型的客户服务请求（如常规问题、退款申请、技术支持）分别引导至对应的下游流程、提示词或工具。</li>
-<li>将简单或常见问题分配给较小的模型（如[Claude] 3.5
-Haiku），将复杂或罕见问题分配给更强大的模型（如Claude 3.5
-Sonnet），从而平衡成本与响应速度。</li>
+<li>将简单或常见问题分配给较小的模型（如[Claude] 3.5 Haiku），将复杂或罕见问题分配给更强大的模型（如Claude 3.5 Sonnet），从而平衡成本与响应速度。</li>
 </ul>
 <h3 id="工作流并行化">工作流：并行化</h3>
 <p>并行化是一种让LLM同时处理任务并通过程序汇总输出的工作流。这种方式通常有两种实现形式：</p>
@@ -395,8 +386,7 @@ Sonnet），从而平衡成本与响应速度。</li>
 <li><strong>投票</strong>：对同一任务运行多次，以获得多样化的视角或结果。</li>
 </ul>
 <figure>
-<img src="/images/agent-anthropic/4.webp" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/4.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图4：并行化工作流</p>
 <p><strong>适用场景</strong>：当任务能够被分解成独立子任务以提升速度，或者需要通过多次尝试来增强结果[置信度]时，并行化是一种高效的工作流。对于涉及多个考量的复杂任务，让LLM分别处理每个考量，可以更专注地关注各自的具体内容，从而提升整体性能。</p>
@@ -416,8 +406,7 @@ Sonnet），从而平衡成本与响应速度。</li>
 <h3 id="工作流协调器-工作者">工作流：协调器-工作者</h3>
 <p>协调器-工作者工作流由一个中心LLM负责，它根据任务动态分解子任务，分派给多个工作者LLM处理，并最终整合所有工作者的结果。</p>
 <figure>
-<img src="/images/agent-anthropic/5.webp" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/5.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图5：协调器-工作者工作流</p>
 <p><strong>适用场景</strong>：这种工作流非常适合处理无法预先确定子任务的复杂场景。例如，在编程任务中，需修改的文件数量及其具体修改内容通常取决于任务的具体要求。与并行化工作流类似，协调器-工作者的区别在于灵活性：子任务不是事先规划好的，而是由协调器根据输入动态生成。</p>
@@ -429,8 +418,7 @@ Sonnet），从而平衡成本与响应速度。</li>
 <h3 id="工作流评估器-优化器">工作流：评估器-优化器</h3>
 <p>评估器-优化器工作流通过一个LLM生成响应，另一个LLM对其进行评估并提供反馈，形成一个迭代循环。</p>
 <figure>
-<img src="/images/agent-anthropic/6.webp" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/6.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图6：评估器-优化器工作流</p>
 <p><strong>适用场景</strong>：当任务有明确的评估标准且迭代优化能够显著提高质量时，这种工作流效果尤为突出。两个关键特征是：第一，LLM生成的响应在获得明确反馈后能够显著改进；第二，LLM可以自动生成这样的反馈。这种流程类似于人类作家通过多次修改完善文档的过程。</p>
@@ -443,8 +431,7 @@ Sonnet），从而平衡成本与响应速度。</li>
 <p>随着LLM在理解复杂输入、推理与规划、工具使用的可靠性以及错误恢复能力方面不断进步，智能体在实际应用中逐渐普及。智能体的工作通常从用户指令或交互式讨论开始。在任务明确后，智能体独立规划并执行任务，并可能在执行过程中再次向用户寻求信息或判断支持。在运行过程中，智能体需要在每一步从环境中获取“真实情况”（如工具调用或代码执行的结果）来评估进展。在某些节点或遇到阻碍时，智能体可以暂停并等待用户的反馈。任务的终止条件可以是完成任务目标，也可以通过设置最大迭代次数等机制来确保运行受控。</p>
 <p>尽管智能体能够处理复杂任务，其实现方式通常较为简单，主要通过LLM基于环境反馈循环调用工具。因此，清晰设计并精心文档化的工具集对于智能体的成功运行至关重要。有关工具开发的详细建议，请参阅附录2（“工具的提示词工程”）。</p>
 <figure>
-<img src="/images/agent-anthropic/7.png" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/7.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图7：自主智能体</p>
 <p><strong>适用场景</strong>：自主智能体适合<strong>处理开放式问题</strong>，尤其是那些<strong>难以预测所需步骤或无法通过硬编码预设路径的任务</strong>。在这些场景中，LLM可能需要经过多轮交互完成任务，因此需要对其决策能力有足够的信任。自主智能体非常适合在可信环境中扩展任务。</p>
@@ -455,8 +442,7 @@ Sonnet），从而平衡成本与响应速度。</li>
 <li><strong>“计算机使用”参考实现</strong>：智能体（如Claude）通过与计算机交互完成复杂任务，如数据处理或信息检索。</li>
 </ul>
 <figure>
-<img src="/images/agent-anthropic/8.webp" srcset="/img/loading.gif" lazyload alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/agent-anthropic/8.webp" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>图8：编码智能体的High-Level工作流</p>
 <h2 id="结合与定制这些模式">结合与定制这些模式</h2>
@@ -491,8 +477,7 @@ Sonnet），从而平衡成本与响应速度。</li>
 <li>编程问题通常具有清晰的定义和结构化特征；</li>
 <li>输出质量可以通过客观的标准（如测试通过率）进行评价。</li>
 </ul>
-<p>在团队的实现中，智能体能够基于拉取请求描述，在[SWE-bench
-Verified]基准测试中解决实际的[GitHub]问题。然而，尽管自动化测试能够验证功能实现，确保解决方案与系统的整体需求一致仍需要人类审查的参与，以提升质量控制。</p>
+<p>在团队的实现中，智能体能够基于拉取请求描述，在[SWE-bench Verified]基准测试中解决实际的[GitHub]问题。然而，尽管自动化测试能够验证功能实现，确保解决方案与系统的整体需求一致仍需要人类审查的参与，以提升质量控制。</p>
 <h2 id="附录2工具的提示词工程">附录2：工具的提示词工程</h2>
 <p>在智能体系统的构建中，工具往往是关键组成部分之一。通过API定义的工具使Claude能够与外部服务交互。当Claude需要调用工具时，API响应中会包含一个特定的工具调用部分。因此，工具的定义与规范设计应像整体提示词工程一样受到重视。以下是提示词工程在工具设计中的一些要点。</p>
 <p>通常，同一操作可以有多种定义方式。例如，文件编辑既可以通过编写差异来实现，也可以通过重写整个文件完成。而对于结构化输出，代码既可以嵌入markdown中，也可以用JSON格式返回。虽然这些在软件工程中属于可互相转换的格式，但对LLM而言，某些格式生成起来更加复杂。例如，编写差异需要在生成代码前准确计算变化的行数；而将代码嵌入JSON则需要对换行符和引号进行额外的转义。</p>
@@ -502,18 +487,13 @@ Verified]基准测试中解决实际的[GitHub]问题。然而，尽管自动化
 <li><strong>贴近自然</strong>：选择与模型在互联网上常见的格式相似的形式。</li>
 <li><strong>简化负担</strong>：避免让模型处理额外的格式复杂度，例如大规模行计数或代码转义。</li>
 </ul>
-<h3
-id="智能体与计算机接口aci的优化建议">智能体与计算机接口（[ACI]）的优化建议</h3>
+<h3 id="智能体与计算机接口aci的优化建议">智能体与计算机接口（[ACI]）的优化建议</h3>
 <p>与设计<strong>人机交互（HCI）</strong>同样重要，ACI的设计也需要足够的投入。以下是具体优化方法：</p>
 <ol type="1">
-<li><strong>站在模型的角度思考</strong>
-确保工具描述和参数定义清晰易懂。一个优秀的工具定义应包括使用示例、特殊情况说明、输入格式要求，以及与其他工具的明确界限。</li>
-<li><strong>优化参数设计</strong>
-参数名称和描述应清晰直观，便于理解。可以将其视为为团队中的新手开发者撰写注释文档，尤其是在多个类似工具共存时，这一点尤为重要。</li>
-<li><strong>测试并迭代</strong>
-使用工作台运行大量示例输入，观察模型的错误表现，并逐步优化工具设计，确保可靠性。</li>
-<li><strong>防错设计（Poka-yoke）</strong>
-通过调整参数或设计限制，降低模型犯错的可能性。例如，将工具参数限制为绝对路径而非相对路径，可有效避免路径错误。</li>
+<li><strong>站在模型的角度思考</strong> 确保工具描述和参数定义清晰易懂。一个优秀的工具定义应包括使用示例、特殊情况说明、输入格式要求，以及与其他工具的明确界限。</li>
+<li><strong>优化参数设计</strong> 参数名称和描述应清晰直观，便于理解。可以将其视为为团队中的新手开发者撰写注释文档，尤其是在多个类似工具共存时，这一点尤为重要。</li>
+<li><strong>测试并迭代</strong> 使用工作台运行大量示例输入，观察模型的错误表现，并逐步优化工具设计，确保可靠性。</li>
+<li><strong>防错设计（Poka-yoke）</strong> 通过调整参数或设计限制，降低模型犯错的可能性。例如，将工具参数限制为绝对路径而非相对路径，可有效避免路径错误。</li>
 </ol>
 <p>在为[SWE-bench]构建智能体时，团队发现优化工具的重要性甚至超过了整体提示词。例如，他们发现模型在使用相对路径的工具时容易出错，特别是智能体从[根目录]切换到其他目录后。通过调整工具以要求使用绝对路径，模型显著提高了任务完成的准确性。</p>
 
@@ -549,11 +529,11 @@ id="智能体与计算机接口aci的优化建议">智能体与计算机接口�
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
         <a href="/tags/%E7%B2%BE%E9%80%89/" class="print-no-link">#精选</a>
       
         <a href="/tags/llm/" class="print-no-link">#llm</a>
-      
-        <a href="/tags/agent/" class="print-no-link">#agent</a>
       
     </div>
   

@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：   神经网络核心知识点梳理  1.网络结构 1.1 输入层  1x2矩阵的输入数据X1和X2 Bias(偏置)项作为额外输入,增强模型表达能力  1.2 隐藏层  6维度的神经元结构 每个神经元包含加权求和(Σ)和激活函数(f) 常用激活函数:  Sigmoid:">
+    <meta name="description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：  神经网络核心知识点梳理  1.网络结构 1.1 输入层  1x2矩阵的输入数据X1和X2 Bias(偏置)项作为额外输入,增强模型表达能力  1.2 隐藏层  6维度的神经元结构 每个神经元包含加权求和(Σ)和激活函数(f) 常用激活函数:  Sigmoid: σ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="神经网络核心知识点梳理--一图了然">
 <meta property="og:url" content="https://linxkon.github.io/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%A7%A3.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：   神经网络核心知识点梳理  1.网络结构 1.1 输入层  1x2矩阵的输入数据X1和X2 Bias(偏置)项作为额外输入,增强模型表达能力  1.2 隐藏层  6维度的神经元结构 每个神经元包含加权求和(Σ)和激活函数(f) 常用激活函数:  Sigmoid:">
+<meta property="og:description" content="基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：  神经网络核心知识点梳理  1.网络结构 1.1 输入层  1x2矩阵的输入数据X1和X2 Bias(偏置)项作为额外输入,增强模型表达能力  1.2 隐藏层  6维度的神经元结构 每个神经元包含加权求和(Σ)和激活函数(f) 常用激活函数:  Sigmoid: σ">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C.png">
 <meta property="article:published_time" content="2023-05-01T10:21:13.000Z">
@@ -316,9 +316,7 @@
                 
                 <p>基于上篇文章的简单入门，这里重点梳理了一下神经网络的核心知识点，并以图片的方式呈现（点击放大哦~）：</p>
 <figure>
-<img src="/images/神经网络图解/神经网络核心知识图解.png" srcset="/img/loading.gif" lazyload
-alt="神经网络核心知识点梳理" />
-<figcaption aria-hidden="true">神经网络核心知识点梳理</figcaption>
+<img src="/images/神经网络图解/神经网络核心知识图解.png" srcset="/img/loading.gif" lazyload alt="神经网络核心知识点梳理" /><figcaption aria-hidden="true">神经网络核心知识点梳理</figcaption>
 </figure>
 <h2 id="网络结构">1.网络结构</h2>
 <h3 id="输入层">1.1 输入层</h3>
@@ -330,12 +328,10 @@ alt="神经网络核心知识点梳理" />
 <ul>
 <li>6维度的神经元结构</li>
 <li>每个神经元包含加权求和(Σ)和激活函数(f)</li>
-<li><a
-href="https://linxkon.github.io/%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.html">常用激活函数:</a>
+<li><a href="https://linxkon.github.io/%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.html">常用激活函数:</a>
 <ul>
 <li><strong>Sigmoid</strong>: σ(x) = 1 / (1 + e^(-x))</li>
-<li><strong>Tanh</strong>: tanh(x) = (e^x - e^(-x)) / (e^x +
-e^(-x))</li>
+<li><strong>Tanh</strong>: tanh(x) = (e^x - e^(-x)) / (e^x + e^(-x))</li>
 <li><strong>ReLU</strong>: f(x) = max(0, x)</li>
 <li><strong>Leaky ReLU</strong>: f(x) = max(αx, x), 其中α是小正数</li>
 </ul></li>
@@ -372,12 +368,10 @@ e^(-x))</li>
 <h3 id="损失计算">2.3 损失计算</h3>
 <p>损失计算可以分为分类损失和回归损失两种,</p>
 <ul>
-<li><p><label><input type="checkbox" /><a
-href="https://linxkon.github.io/分类问题与回归问题的损失函数.html">详见本文</a></label></p></li>
-<li><p>多分类交叉熵损失(Cross Entropy Loss): L = -Σ(yi * log(ŷi))
-其中yi为真实标签,ŷi为预测概率</p></li>
-<li><p>对于二分类问题,可使用二元交叉熵: L = -(y * log(ŷ) + (1-y) *
-log(1-ŷ))</p></li>
+<li><p><input type="checkbox" disabled="" />
+<a href="https://linxkon.github.io/分类问题与回归问题的损失函数.html">详见本文</a></p></li>
+<li><p>多分类交叉熵损失(Cross Entropy Loss): L = -Σ(yi * log(ŷi)) 其中yi为真实标签,ŷi为预测概率</p></li>
+<li><p>对于二分类问题,可使用二元交叉熵: L = -(y * log(ŷ) + (1-y) * log(1-ŷ))</p></li>
 <li><p>损失函数用于量化模型预测与真实标签的差异,惩罚与真实标签差异大的</p></li>
 </ul>
 <h3 id="反向传播">2.4 反向传播</h3>
@@ -393,9 +387,7 @@ log(1-ŷ))</p></li>
 <li>因损失函数皆为凸函数(碗的形状),即寻找令损失函数的导数为0的w</li>
 <li>并不是所有损失函数都能直接求导找到这个点,所以我们通过反向传播+梯度下降的方式迭代去求该w</li>
 <li>我们知道函数的导数方向(即梯度)是函数增长最快的方向,我们想要得到令损失函数导数为0的w,就要找到损失函数的负梯度方向</li>
-<li>基于以上思路,假设我们当前的w是W_old,我们求此刻损失函数的偏导值,增加符号以得到它的负梯度方向,并乘以系数η控制其前进的步伐大小,得到
-η * ∂L/∂W,再用W_old- η *
-∂L/∂W得到W_new,新的w可以让损失函数的取值更小,以此类推,便可以通过多次迭代求得令损失函数取得最小值的w</li>
+<li>基于以上思路,假设我们当前的w是W_old,我们求此刻损失函数的偏导值,增加符号以得到它的负梯度方向,并乘以系数η控制其前进的步伐大小,得到 η * ∂L/∂W,再用W_old- η * ∂L/∂W得到W_new,新的w可以让损失函数的取值更小,以此类推,便可以通过多次迭代求得令损失函数取得最小值的w</li>
 </ul>
 <p>综上,梯度下降的公式为:</p>
 <p><strong>W = W - η * ∂L/∂W</strong></p>
@@ -403,13 +395,11 @@ log(1-ŷ))</p></li>
 <p><strong>W</strong>：表示模型的参数（或权重），这些是我们希望优化的值。</p>
 <p><strong>η</strong>（学习率）：这是一个超参数，控制每次更新步伐的大小。较大的学习率会导致更大的步伐，较小的学习率则会导致较小的步伐。选择合适的学习率非常重要，太大可能导致不稳定的收敛，太小可能导致收敛速度太慢。</p>
 <p><strong>L</strong>（损失函数）：这是我们希望最小化的函数，它衡量了模型预测值与实际值之间的差距。</p>
-<p><strong>∂L/∂W</strong>（损失函数对参数的梯度）：这是损失函数相对于参数的导数，表示了在当前参数值下，损失函数的变化率。通过计算这个梯度，我们可以知道如何调整参数
-W来减少损失函数的值。</p>
+<p><strong>∂L/∂W</strong>（损失函数对参数的梯度）：这是损失函数相对于参数的导数，表示了在当前参数值下，损失函数的变化率。通过计算这个梯度，我们可以知道如何调整参数 W来减少损失函数的值。</p>
 </blockquote>
 <p><strong>根据梯度下降时batchsize的不同,梯度下降的方法可以划分为</strong></p>
 <blockquote>
-<p><strong>BGD批量梯度下降:</strong>全量样本all
-in训练,大型数据集基本不可行</p>
+<p><strong>BGD批量梯度下降:</strong>全量样本all in训练,大型数据集基本不可行</p>
 <p><strong>SGD随机梯度下降:</strong>随机抽取单样本放入模型训练,受异常值影响,梯度更新时波动较大,训练时间长</p>
 <p><strong>MiniBatch小批量梯度下降:</strong>根据需求自由定义batchsize,兼具BGD和SGD的优点,收敛相对较快,最为常用</p>
 </blockquote>
@@ -418,16 +408,13 @@ in训练,大型数据集基本不可行</p>
 <h5 id="动量momentum">动量(Momentum):</h5>
 <p>v = γv - η * ∂L/∂W W = W + v γ为动量系数,通常取0.9</p>
 <h5 id="adam优化器">Adam优化器:</h5>
-<p><strong>结合动量和自适应学习率</strong> mt = β1<em>mt-1 +
-(1-β1)</em>gt vt = β2<em>vt-1 + (1-β2)</em>gt^2 W = W - η * mt /
-(sqrt(vt) + ε) 其中β1, β2为超参数,通常取0.9和0.999</p>
+<p><strong>结合动量和自适应学习率</strong> mt = β1<em>mt-1 + (1-β1)</em>gt vt = β2<em>vt-1 + (1-β2)</em>gt^2 W = W - η * mt / (sqrt(vt) + ε) 其中β1, β2为超参数,通常取0.9和0.999</p>
 <h3 id="正则化技术">2.6 正则化技术</h3>
 <ul>
 <li>L1正则化: 添加|W|项到损失函数,促进稀疏性</li>
 <li>L2正则化: 添加||W||^2项,防止权重过大</li>
 <li>Dropout: 训练时随机"丢弃"一部分神经元,防止过拟合</li>
-<li>批量归一化(Batch Normalization):
-对每一层的输入进行标准化,加速训练收敛</li>
+<li>批量归一化(Batch Normalization): 对每一层的输入进行标准化,加速训练收敛</li>
 </ul>
 <h2 id="高级训练技巧">3.高级训练技巧</h2>
 <h3 id="参数初始化">3.1 参数初始化</h3>

@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="基于 Retrieval Augmented Generation (RAG) 技术的效果取决于两个关键因素:  文本嵌入及语义提取的性能:  这个环节负责将输入文本转换为有意义的语义表示向量。 嵌入算法的准确性和鲁棒性直接影响后续的搜索和排序效果。  重排序模块的性能:  这个环节负责根据语义相似度对检索到的相关文本进行排序。 排序算法的效果直接决定了包含正确答案的文本是否">
+    <meta name="description" content="基于 Retrieval Augmented Generation (RAG) 技术的效果取决于两个关键因素:  文本嵌入及语义提取的性能:  这个环节负责将输入文本转换为有意义的语义表示向量。 嵌入算法的准确性和鲁棒性直接影响后续的搜索和排序效果。  重排序模块的性能:  这个环节负责根据语义相似度对检索到的相关文本进行排序。 排序算法的效果直接决定了包含正确答案的文本是否能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RAG加分神器:embedding与rerank">
 <meta property="og:url" content="https://linxkon.github.io/RAG%E5%8A%A0%E5%88%86%E7%A5%9E%E5%99%A8embedding%E4%B8%8Ererank.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="基于 Retrieval Augmented Generation (RAG) 技术的效果取决于两个关键因素:  文本嵌入及语义提取的性能:  这个环节负责将输入文本转换为有意义的语义表示向量。 嵌入算法的准确性和鲁棒性直接影响后续的搜索和排序效果。  重排序模块的性能:  这个环节负责根据语义相似度对检索到的相关文本进行排序。 排序算法的效果直接决定了包含正确答案的文本是否">
+<meta property="og:description" content="基于 Retrieval Augmented Generation (RAG) 技术的效果取决于两个关键因素:  文本嵌入及语义提取的性能:  这个环节负责将输入文本转换为有意义的语义表示向量。 嵌入算法的准确性和鲁棒性直接影响后续的搜索和排序效果。  重排序模块的性能:  这个环节负责根据语义相似度对检索到的相关文本进行排序。 排序算法的效果直接决定了包含正确答案的文本是否能">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E6%90%9C%E7%B4%A2.png">
 <meta property="article:published_time" content="2024-06-10T12:21:13.000Z">
@@ -313,8 +313,7 @@
             
               <div class="markdown-body">
                 
-                <p>基于 Retrieval Augmented Generation (<strong>RAG</strong>)
-技术的效果取决于两个关键因素:</p>
+                <p>基于 Retrieval Augmented Generation (<strong>RAG</strong>) 技术的效果取决于两个关键因素:</p>
 <ol type="1">
 <li>文本嵌入及语义提取的性能:
 <ul>
@@ -327,83 +326,42 @@
 <li>排序算法的效果直接决定了包含正确答案的文本是否能够排在前列。</li>
 </ul></li>
 </ol>
-<p>总的来说, RAG
-模型的整体性能高低取决于上述两个关键环节的表现。只有当语义提取和重排序两者均达到较高水平,RAG
-模型才能发挥出应有的优势,为用户提供准确可靠的信息检索和生成服务。各自使用的环节如下：</p>
-<p>​ <img
-src="/images/RAG中的embedding与rerank/2052730-20240629105924854-837516240.png" srcset="/img/loading.gif" lazyload
-alt="img" /></p>
+<p>总的来说, RAG 模型的整体性能高低取决于上述两个关键环节的表现。只有当语义提取和重排序两者均达到较高水平,RAG 模型才能发挥出应有的优势,为用户提供准确可靠的信息检索和生成服务。各自使用的环节如下：</p>
+<p>​ <img src="/images/RAG中的embedding与rerank/2052730-20240629105924854-837516240.png" srcset="/img/loading.gif" lazyload alt="img" /></p>
 <p>1、文本embedding的提取：理论上讲，任何transformer架构的encoder部分都可用于生成token的embedding，然后采用合适的pooling方式把整个setence中所有token的embedding融合成一个embedding。截止目前，哪个现成的LLM的encoder更适合提取整段句子的embedding了？</p>
 <p>　　　要想效果好，以下是必要条件：</p>
 <ul>
-<li>模型不能太小，否则对训练预料的“”消化、承载“”能力不够，无法精准理解语义；模型也不能太大，否则过于耗费计算资源，同时还需要大量训练预料，否则会欠拟合（模型参数大小和所需token数详见scaling
-law）！</li>
+<li>模型不能太小，否则对训练预料的“”消化、承载“”能力不够，无法精准理解语义；模型也不能太大，否则过于耗费计算资源，同时还需要大量训练预料，否则会欠拟合（模型参数大小和所需token数详见scaling law）！</li>
 <li>训练预料要足够，涵盖各行业、各领域；也要涵盖各种不同的类型、风格的文本(中英文、说明文、议论文、陈述文、小说、散文、诗歌)等</li>
 <li>最好能提供微调的接口，利于用户使用自己特定领域的数据</li>
 </ul>
 <p>　　截止目前，业界公认效果比较好的就是moka-ai/m3e了！以下是官方的介绍：</p>
 <ul>
-<li>Moka，此模型由 MokaAI 训练，开源和评测，训练脚本使用 <a
-target="_blank" rel="noopener" href="https://github.com/wangyuxinwhy/uniem/blob/main/scripts/train_m3e.py">uniem</a>
-，评测 BenchMark 使用 <a
-target="_blank" rel="noopener" href="https://github.com/wangyuxinwhy/uniem/tree/main/mteb-zh">MTEB-zh</a></li>
-<li>Massive，此模型通过千万级 (2200w+)
-的中文<strong>句对</strong>数据集进行训练</li>
+<li>Moka，此模型由 MokaAI 训练，开源和评测，训练脚本使用 <a target="_blank" rel="noopener" href="https://github.com/wangyuxinwhy/uniem/blob/main/scripts/train_m3e.py">uniem</a> ，评测 BenchMark 使用 <a target="_blank" rel="noopener" href="https://github.com/wangyuxinwhy/uniem/tree/main/mteb-zh">MTEB-zh</a></li>
+<li>Massive，此模型通过千万级 (2200w+) 的中文<strong>句对</strong>数据集进行训练</li>
 <li>Mixed，此模型支持中英双语的<strong>同质文本相似度计算，异质文本检索</strong>等功能，未来还会支持代码检索</li>
 </ul>
 <p>　　<strong>最核心的还是训练数据</strong>了，如下：</p>
 <ul>
-<li>中文训练集，M3E
-在大规模句对数据集上的训练，包含中文百科，金融，医疗，法律，新闻，学术等多个领域共计
-2200W 句对样本，数据集详见 <a
-target="_blank" rel="noopener" href="https://huggingface.co/moka-ai/m3e-base#M3E数据集">M3E
-数据集</a></li>
-<li>英文训练集，M3E 使用 MEDI 145W 英文三元组数据集进行训练，数据集详见
-<a
-target="_blank" rel="noopener" href="https://drive.google.com/file/d/1vZ5c2oJNonGOvXzppNg5mHz24O6jcc52/view">MEDI
-数据集</a>，此数据集由 <a
-target="_blank" rel="noopener" href="https://github.com/HKUNLP/instructor-embedding">instructor
-team</a> 提供</li>
-<li>指令数据集，M3E 使用了 300W + 的指令微调数据集，这使得 M3E
-对文本编码的时候可以遵从指令，这部分的工作主要被启发于 <a
-target="_blank" rel="noopener" href="https://github.com/HKUNLP/instructor-embedding">instructor-embedding</a>
-（这点很牛逼，<strong>同样的sentence，可以根据不同的instruct生成不同的embedding，充分理解语义，比普通的bert模型强多了</strong>）</li>
+<li>中文训练集，M3E 在大规模句对数据集上的训练，包含中文百科，金融，医疗，法律，新闻，学术等多个领域共计 2200W 句对样本，数据集详见 <a target="_blank" rel="noopener" href="https://huggingface.co/moka-ai/m3e-base#M3E数据集">M3E 数据集</a></li>
+<li>英文训练集，M3E 使用 MEDI 145W 英文三元组数据集进行训练，数据集详见 <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1vZ5c2oJNonGOvXzppNg5mHz24O6jcc52/view">MEDI 数据集</a>，此数据集由 <a target="_blank" rel="noopener" href="https://github.com/HKUNLP/instructor-embedding">instructor team</a> 提供</li>
+<li>指令数据集，M3E 使用了 300W + 的指令微调数据集，这使得 M3E 对文本编码的时候可以遵从指令，这部分的工作主要被启发于 <a target="_blank" rel="noopener" href="https://github.com/HKUNLP/instructor-embedding">instructor-embedding</a> （这点很牛逼，<strong>同样的sentence，可以根据不同的instruct生成不同的embedding，充分理解语义，比普通的bert模型强多了</strong>）</li>
 </ul>
 <p>　　基础模型，还是基于bert架构：</p>
 <ul>
-<li>基础模型，M3E 使用 hfl 实验室的 <a
-target="_blank" rel="noopener" href="https://huggingface.co/hfl/chinese-roberta-wwm-ext">Roberta</a>
-系列模型进行训练，目前提供 small 、base和large
-三个版本；<strong>只要是embedding，就离不开bert架构！</strong></li>
+<li>基础模型，M3E 使用 hfl 实验室的 <a target="_blank" rel="noopener" href="https://huggingface.co/hfl/chinese-roberta-wwm-ext">Roberta</a> 系列模型进行训练，目前提供 small 、base和large 三个版本；<strong>只要是embedding，就离不开bert架构！</strong></li>
 </ul>
-<p>　　最终的效果就是：ALL IN
-ONE，不仅支持<strong>同质句子相似度判断</strong>，还支持<strong>异质文本检索</strong>，只需要一个模型就可以覆盖全部的应用场景，各个指标对比如下：</p>
-<p>​ <img
-src="/images/RAG中的embedding与rerank/2052730-20240628225842866-1015035741.png" srcset="/img/loading.gif" lazyload
-alt="img" />　　</p>
-<p>　　看着还是很牛逼的！ M3E的配置文件
-1_Pooling/config.json，有pooling的方式和embedding的dimension：这里可以看出M3E默认采用的是每个token取均值的pooling方式！</p>
+<p>　　最终的效果就是：ALL IN ONE，不仅支持<strong>同质句子相似度判断</strong>，还支持<strong>异质文本检索</strong>，只需要一个模型就可以覆盖全部的应用场景，各个指标对比如下：</p>
+<p>​ <img src="/images/RAG中的embedding与rerank/2052730-20240628225842866-1015035741.png" srcset="/img/loading.gif" lazyload alt="img" />　　</p>
+<p>　　看着还是很牛逼的！ M3E的配置文件 1_Pooling/config.json，有pooling的方式和embedding的dimension：这里可以看出M3E默认采用的是每个token取均值的pooling方式！</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;word_embedding_dimension&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">768</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_cls_token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_mean_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_max_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;pooling_mode_mean_sqrt_len_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
-<p>　　2、rerank： 经过第一步使用cosin余弦相似度从密集向量数据库 +
-keyword search（稀疏向量召回）初步召回top
-K相似度的文本，按理来说就可以让LLM根据用户的query +
-召回的context生成最终答案了，还要这个rerank干啥了？实际操作时，还是会发现一些问题：包含正确答案的文本在context中的排名可能并不靠前。比如query
-= “清华大学在哪座城市？”
-。正确答案肯定是“北京”啦！但实际召回的context中包含北京的文本不一定排在前面，可能在中间甚至后面，给最后一个LLM输入的context会很大，直接导致LLM需要处理很长的文本，推理效率低不说，还容易出错，核心问题还是在于：初步召回的context还是有进一步压缩提炼的空间！造成这种现象的原因是啥了？</p>
-<p>　　利用cosin求两个向量的相似度，本质是看两个向量的距离。<strong>比如“北京”、“上海”、“深圳”这些都是中国的一线大城市，这3个词的embedding的cosin会很近，所以使用cosin召回的时候也可能把“上海”、“深圳”这些不是正确答案的sentence召回，所以要用tf-idf这类稀疏向量补充召回部分向量，整个过程称为
-hybrid search。经过hybird
-search后，召回的context变多，给最后一步的LLM生成最终答案带来了麻烦，所以需要进一步从context中继续提炼，优中选优</strong>！比如初步召回20条，需要通过rerank选择更接近的3~5条，这个过程就是rerank！整个流程图示如下：</p>
+<p>　　2、rerank： 经过第一步使用cosin余弦相似度从密集向量数据库 + keyword search（稀疏向量召回）初步召回top K相似度的文本，按理来说就可以让LLM根据用户的query + 召回的context生成最终答案了，还要这个rerank干啥了？实际操作时，还是会发现一些问题：包含正确答案的文本在context中的排名可能并不靠前。比如query = “清华大学在哪座城市？” 。正确答案肯定是“北京”啦！但实际召回的context中包含北京的文本不一定排在前面，可能在中间甚至后面，给最后一个LLM输入的context会很大，直接导致LLM需要处理很长的文本，推理效率低不说，还容易出错，核心问题还是在于：初步召回的context还是有进一步压缩提炼的空间！造成这种现象的原因是啥了？</p>
+<p>　　利用cosin求两个向量的相似度，本质是看两个向量的距离。<strong>比如“北京”、“上海”、“深圳”这些都是中国的一线大城市，这3个词的embedding的cosin会很近，所以使用cosin召回的时候也可能把“上海”、“深圳”这些不是正确答案的sentence召回，所以要用tf-idf这类稀疏向量补充召回部分向量，整个过程称为 hybrid search。经过hybird search后，召回的context变多，给最后一步的LLM生成最终答案带来了麻烦，所以需要进一步从context中继续提炼，优中选优</strong>！比如初步召回20条，需要通过rerank选择更接近的3~5条，这个过程就是rerank！整个流程图示如下：</p>
 <figure>
-<img
-src="/images/RAG中的embedding与rerank/2052730-20240629173627392-1724851624.png" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的embedding与rerank/2052730-20240629173627392-1724851624.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>　确定要做rerank后，怎么做才能达到既定的目的？要想明白这个问题，还要回到最初的动机：<strong>cosin计算的是两个向量的距离，只考虑语义相似，不考虑字面符号是否一致；而稀疏检索tf-idf只考虑字面的符号，
-不考虑语义</strong>，怎么整合这两种retrieve的优势，摒弃其劣势了？这就需要用到传统NLP常见的手段了：classifier！</p>
-<p>​ <img
-src="/images/RAG中的embedding与rerank/2052730-20240629190955087-450259949.png" srcset="/img/loading.gif" lazyload
-alt="img" /></p>
+<p>　确定要做rerank后，怎么做才能达到既定的目的？要想明白这个问题，还要回到最初的动机：<strong>cosin计算的是两个向量的距离，只考虑语义相似，不考虑字面符号是否一致；而稀疏检索tf-idf只考虑字面的符号， 不考虑语义</strong>，怎么整合这两种retrieve的优势，摒弃其劣势了？这就需要用到传统NLP常见的手段了：classifier！</p>
+<p>​ <img src="/images/RAG中的embedding与rerank/2052730-20240629190955087-450259949.png" srcset="/img/loading.gif" lazyload alt="img" /></p>
 <p>　如上图右边所示：两个sentence先进入同一个bert，lm_head用一个二分类来判断这两个sentence是否匹配！右边这种classifier判断是否匹配比左边这种cosin判断是否相似更准确，原因又是啥了？两个sentence首尾拼接进入bert后：</p>
 <ul>
 <li>先要计算attention计算token之间的相似度，再进入FFN<strong>生成非线性特征</strong>，更利于lm_head的分类</li>
@@ -412,89 +370,49 @@ alt="img" /></p>
 </ul>
 <p>　 上面两个角度是从特征维度考虑的，从模型维度看，还有以下优点：</p>
 <ul>
-<li>cosin是没有参数可调节的，但classifier可以<strong>通过调节参数，让模型的目标函数主动适配特定的任务和数据分布。具体到这里，可以让模型生成的答案主动适配query；可以简单理解为answer对query的1v1
-有针对性的VIP服务！</strong></li>
+<li>cosin是没有参数可调节的，但classifier可以<strong>通过调节参数，让模型的目标函数主动适配特定的任务和数据分布。具体到这里，可以让模型生成的答案主动适配query；可以简单理解为answer对query的1v1 有针对性的VIP服务！</strong></li>
 </ul>
 <p>　　当然，既然classifier的准确性提高了，为啥不从一开始就用这种classifier来召回生成context了？还用cosin计算相似度干嘛了？这里就是计算量的问题了！<strong>cosin的计算量远比classifier小，并且可以事先离线计算embedding存入向量数据库，所以适合第一步从大量数据中初步召回数十条；classifier精准度高，但计算量大，适合从初步召回的数十条context中进一步精选出几条包含或最接正确答案的context</strong>；</p>
 <p>　　原理搞清楚了，接下来看代码：</p>
 <p>　　getitem方法要对query、pos、neg三个不同的答案按照一定的逻辑配对，后续的loss才知道是0还是1；</p>
 <figure>
-<img
-src="/images/RAG中的embedding与rerank/2052730-20240629230203323-1507745790.png" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的embedding与rerank/2052730-20240629230203323-1507745790.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>　看看吧：loss用的是常规的cross
-entropy；classifier也是常规的SequenceClassifierOutput，没啥特别的！</p>
+<p>　看看吧：loss用的是常规的cross entropy；classifier也是常规的SequenceClassifierOutput，没啥特别的！</p>
 <figure>
-<img
-src="/images/RAG中的embedding与rerank/2052730-20240629230348085-1080851308.png" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的embedding与rerank/2052730-20240629230348085-1080851308.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>总结：</p>
-<p>1、RAG整个流程有3个地方涉及到LLM：<strong>文本embedding、rerank和根据context生成最终的答案</strong>
-2、moka官方的建议：</p>
+<p>1、RAG整个流程有3个地方涉及到LLM：<strong>文本embedding、rerank和根据context生成最终的答案</strong> 2、moka官方的建议：</p>
 <ul>
 <li>使用场景主要是中文，少量英文的情况，建议使用 m3e 系列的模型</li>
-<li>多语言使用场景，并且不介意数据隐私的话，我建议使用 openai
-text-embedding-ada-002</li>
+<li>多语言使用场景，并且不介意数据隐私的话，我建议使用 openai text-embedding-ada-002</li>
 <li>代码检索场景，推荐使用 openai text-embedding-ada-002</li>
-<li>文本检索场景，请使用具备文本检索能力的模型，只在 Sentence 2 Sentence
-上训练的文本嵌入模型，没有办法完成文本检索任务</li>
+<li>文本检索场景，请使用具备文本检索能力的模型，只在 Sentence 2 Sentence 上训练的文本嵌入模型，没有办法完成文本检索任务</li>
 </ul>
-<p>3、 FlagEmbedding也有 Embedding Model: <a
-target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/visual">Visualized-BGE</a>,
-<a
-target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/BGE_M3">BGE-M3</a>,
-<a
-target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/llm_embedder">LLM
-Embedder</a>, <a
-target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/baai_general_embedding">BGE
-Embedding</a>，感兴趣的小伙伴也可以尝试一下！</p>
+<p>3、 FlagEmbedding也有 Embedding Model: <a target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/visual">Visualized-BGE</a>, <a target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/BGE_M3">BGE-M3</a>, <a target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/llm_embedder">LLM Embedder</a>, <a target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/baai_general_embedding">BGE Embedding</a>，感兴趣的小伙伴也可以尝试一下！</p>
 <figure>
-<img
-src="/images/RAG中的embedding与rerank/2052730-20240630171649397-1130484406.png" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的embedding与rerank/2052730-20240630171649397-1130484406.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>4、RAG整个流程中关键节点和涉及到的现成包列举如下：<strong>不同节点可以根据用户需求和实际情况选择，节点之间的选择可以排列组合</strong>！</p>
 <figure>
-<img
-src="/images/RAG中的embedding与rerank/2052730-20240701172423551-368104928.png" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的embedding与rerank/2052730-20240701172423551-368104928.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <p>参考：</p>
-<p>1、https://huggingface.co/moka-ai/m3e-base
-https://github.com/wangyingdong/m3e-base</p>
+<p>1、https://huggingface.co/moka-ai/m3e-base https://github.com/wangyingdong/m3e-base</p>
 <p>2、https://github.com/coffeebean6/retrieval_augmented_generation</p>
 <p>3、https://blog.csdn.net/lovechris00/article/details/138378828</p>
 <p>4、https://github.com/wangyuxinwhy/uniem/blob/main/examples/finetune.ipynb</p>
-<p>5、https://www.bilibili.com/video/BV1h142197Fm/?spm_id_from=333.788.recommend_more_video.0&amp;vd_source=241a5bcb1c13e6828e519dd1f78f35b2
-https://techdiylife.github.io/blog/blog.html?category1=c02&amp;blogid=0047
-如何选择embedding模型</p>
-<p>6、https://huggingface.co/spaces/mteb/leaderboard Massive Text
-Embedding Benchmark (MTEB) Leaderboard</p>
+<p>5、https://www.bilibili.com/video/BV1h142197Fm/?spm_id_from=333.788.recommend_more_video.0&amp;vd_source=241a5bcb1c13e6828e519dd1f78f35b2 https://techdiylife.github.io/blog/blog.html?category1=c02&amp;blogid=0047 如何选择embedding模型</p>
+<p>6、https://huggingface.co/spaces/mteb/leaderboard Massive Text Embedding Benchmark (MTEB) Leaderboard</p>
 <figure>
-<img
-src="/images/RAG中的embedding与rerank/2052730-20240701090619852-2066428401.png" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的embedding与rerank/2052730-20240701090619852-2066428401.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>7、https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDIyMzI0Mw==&amp;action=getalbum&amp;album_id=3377833073308024836
-RAG实战</p>
-<p>8、https://www.pinecone.io/learn/series/rag/rerankers/
-https://www.bilibili.com/video/BV1r1421R77Y/?spm_id_from=333.788.recommend_more_video.2&amp;vd_source=241a5bcb1c13e6828e519dd1f78f35b2
-为什么要用rerank</p>
-<p>9、https://qanything.ai/docs/architecture embedding和rerank测评
-https://github.com/netease-youdao/BCEmbedding/blob/master/Docs/EvaluationSummary/embedding_eval_summary.md
-https://github.com/netease-youdao/BCEmbedding/blob/master/Docs/EvaluationSummary/reranker_eval_summary.md</p>
+<p>7、https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDIyMzI0Mw==&amp;action=getalbum&amp;album_id=3377833073308024836 RAG实战</p>
+<p>8、https://www.pinecone.io/learn/series/rag/rerankers/ https://www.bilibili.com/video/BV1r1421R77Y/?spm_id_from=333.788.recommend_more_video.2&amp;vd_source=241a5bcb1c13e6828e519dd1f78f35b2 为什么要用rerank</p>
+<p>9、https://qanything.ai/docs/architecture embedding和rerank测评 https://github.com/netease-youdao/BCEmbedding/blob/master/Docs/EvaluationSummary/embedding_eval_summary.md https://github.com/netease-youdao/BCEmbedding/blob/master/Docs/EvaluationSummary/reranker_eval_summary.md</p>
 <figure>
-<img
-src="/images/RAG中的embedding与rerank/2052730-20240702233033921-228329500.png" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+<img src="/images/RAG中的embedding与rerank/2052730-20240702233033921-228329500.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 
                 

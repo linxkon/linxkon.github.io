@@ -16,12 +16,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="在机器学习和深度学习中，向量和矩阵运算是核心的数学操作。PyTorch作为一个流行的深度学习框架，提供了高效的张量操作接口，包括点乘、点积和矩阵乘法。下面详细讲解这些概念及其在PyTorch中的实现和应用。 点乘 (Element-wise Product) 概念: - 点乘是指两个相同形状的向量或矩阵对应元素逐个相乘，得到一个相同形状的向量或矩阵。 - 也称为哈达玛积（Hadamard">
+    <meta name="description" content="在机器学习和深度学习中，向量和矩阵运算是核心的数学操作。PyTorch作为一个流行的深度学习框架，提供了高效的张量操作接口，包括点乘、点积和矩阵乘法。下面详细讲解这些概念及其在PyTorch中的实现和应用。 点乘 (Element-wise Product) 概念: - 点乘是指两个相同形状的向量或矩阵对应元素逐个相乘，得到一个相同形状的向量或矩阵。 - 也称为哈达玛积（Hadamard Pr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="矩阵乘法、点乘、点积与bmm">
 <meta property="og:url" content="https://linxkon.github.io/%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95%E3%80%81%E7%82%B9%E4%B9%98%E3%80%81%E7%82%B9%E7%A7%AF%E4%B8%8Ebmm.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="在机器学习和深度学习中，向量和矩阵运算是核心的数学操作。PyTorch作为一个流行的深度学习框架，提供了高效的张量操作接口，包括点乘、点积和矩阵乘法。下面详细讲解这些概念及其在PyTorch中的实现和应用。 点乘 (Element-wise Product) 概念: - 点乘是指两个相同形状的向量或矩阵对应元素逐个相乘，得到一个相同形状的向量或矩阵。 - 也称为哈达玛积（Hadamard">
+<meta property="og:description" content="在机器学习和深度学习中，向量和矩阵运算是核心的数学操作。PyTorch作为一个流行的深度学习框架，提供了高效的张量操作接口，包括点乘、点积和矩阵乘法。下面详细讲解这些概念及其在PyTorch中的实现和应用。 点乘 (Element-wise Product) 概念: - 点乘是指两个相同形状的向量或矩阵对应元素逐个相乘，得到一个相同形状的向量或矩阵。 - 也称为哈达玛积（Hadamard Pr">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD.png">
 <meta property="article:published_time" content="2021-05-08T12:21:13.000Z">
@@ -315,56 +315,33 @@
                 
                 <p>在机器学习和深度学习中，向量和矩阵运算是核心的数学操作。PyTorch作为一个流行的深度学习框架，提供了高效的张量操作接口，包括点乘、点积和矩阵乘法。下面详细讲解这些概念及其在PyTorch中的实现和应用。</p>
 <h3 id="点乘-element-wise-product">点乘 (Element-wise Product)</h3>
-<p><strong>概念</strong>: -
-点乘是指两个相同形状的向量或矩阵对应元素逐个相乘，得到一个相同形状的向量或矩阵。
-- 也称为哈达玛积（Hadamard Product）。</p>
-<p><strong>公式</strong>: - 如果 ( ) 和 ( )
-是形状相同的矩阵（或向量），则点乘的结果是一个矩阵 ( )，其中 ( C_{ij} =
-A_{ij} B_{ij} )。</p>
+<p><strong>概念</strong>: - 点乘是指两个相同形状的向量或矩阵对应元素逐个相乘，得到一个相同形状的向量或矩阵。 - 也称为哈达玛积（Hadamard Product）。</p>
+<p><strong>公式</strong>: - 如果 (  ) 和 (  ) 是形状相同的矩阵（或向量），则点乘的结果是一个矩阵 (  )，其中 ( C_{ij} = A_{ij} B_{ij} )。</p>
 <p><strong>PyTorch实现</strong>: <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-comment"># 创建两个相同形状的张量</span><br>a = torch.tensor([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])<br>b = torch.tensor([<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>])<br><br><span class="hljs-comment"># 进行点乘（元素级别相乘）</span><br>elementwise_product = a * b<br><span class="hljs-built_in">print</span>(elementwise_product)  <span class="hljs-comment"># 输出: tensor([4, 10, 18])</span><br></code></pre></td></tr></table></figure></p>
 <h3 id="点积-dot-product">点积 (Dot Product)</h3>
-<p><strong>概念</strong>: -
-点积是两个相同长度的向量间的运算，结果是一个标量。 -
-在几何上，点积可以用于计算两个向量的夹角和相似度。</p>
-<p><strong>公式</strong>: - 如果 ( ) 和 ( ) 是两个向量，点积 ( ) 为： [
-= _{i=1}^{n} a_i b_i ]</p>
+<p><strong>概念</strong>: - 点积是两个相同长度的向量间的运算，结果是一个标量。 - 在几何上，点积可以用于计算两个向量的夹角和相似度。</p>
+<p><strong>公式</strong>: - 如果 (  ) 和 (  ) 是两个向量，点积 (   ) 为： [   = _{i=1}^{n} a_i b_i ]</p>
 <p><strong>PyTorch实现</strong>: <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 创建两个相同长度的向量</span><br>a = torch.tensor([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])<br>b = torch.tensor([<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>])<br><br><span class="hljs-comment"># 计算点积</span><br>dot_product = torch.dot(a, b)<br><span class="hljs-built_in">print</span>(dot_product)  <span class="hljs-comment"># 输出: tensor(32)</span><br></code></pre></td></tr></table></figure></p>
-<h3 id="矩阵乘法-matrix-multiplication">矩阵乘法 (Matrix
-Multiplication)</h3>
-<p><strong>概念</strong>: -
-矩阵乘法是线性代数中的基本运算，将两个矩阵相乘以得到一个新矩阵。 - 矩阵
-( ) 的列数必须等于矩阵 ( ) 的行数。 -
-在机器学习中，矩阵乘法用于计算神经网络的加权和。</p>
-<p><strong>公式</strong>: - 如果 ( ) 是一个 ( m n ) 矩阵，( ) 是一个 ( n
-p ) 矩阵，则乘积矩阵 ( ) 是一个 ( m p ) 矩阵，且 [ C_{ij} =
-<em>{k=1}^{n} A</em>{ik} B_{kj} ]</p>
+<h3 id="矩阵乘法-matrix-multiplication">矩阵乘法 (Matrix Multiplication)</h3>
+<p><strong>概念</strong>: - 矩阵乘法是线性代数中的基本运算，将两个矩阵相乘以得到一个新矩阵。 - 矩阵 (  ) 的列数必须等于矩阵 (  ) 的行数。 - 在机器学习中，矩阵乘法用于计算神经网络的加权和。</p>
+<p><strong>公式</strong>: - 如果 (  ) 是一个 ( m n ) 矩阵，(  ) 是一个 ( n p ) 矩阵，则乘积矩阵 (  ) 是一个 ( m p ) 矩阵，且 [ C_{ij} = <em>{k=1}^{n} A</em>{ik} B_{kj} ]</p>
 <p><strong>PyTorch实现</strong>: <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 创建两个可相乘的矩阵</span><br>A = torch.tensor([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>]])<br>B = torch.tensor([[<span class="hljs-number">5</span>, <span class="hljs-number">6</span>], [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>]])<br><br><span class="hljs-comment"># 进行矩阵乘法</span><br>matrix_product = torch.mm(A, B)<br><span class="hljs-built_in">print</span>(matrix_product)<br><span class="hljs-comment"># 输出: tensor([[19, 22],</span><br><span class="hljs-comment">#               [43, 50]])</span><br></code></pre></td></tr></table></figure></p>
 <h3 id="bmm计算">bmm计算</h3>
-<p>在PyTorch中，<code>bmm</code>是用于执行批量矩阵乘法的函数。方法是<code>torch.bmm</code>，适用于形状为
-<code>(b, n, m)</code> 和 <code>(b, m, p)</code>
-的张量的批量矩阵乘法运算，输出为 <code>(b, n, p)</code>
-形状的张量。其中，<code>b</code>
-是批次大小，<code>n</code>、<code>m</code>、<code>p</code>
-是矩阵的维度。</p>
-<p><code>torch.bmm</code> 主要用于对一批 2D
-矩阵进行乘法操作，这对需要在多个样本上同时进行线性代数运算的情况特别有用。</p>
+<p>在PyTorch中，<code>bmm</code>是用于执行批量矩阵乘法的函数。方法是<code>torch.bmm</code>，适用于形状为 <code>(b, n, m)</code> 和 <code>(b, m, p)</code> 的张量的批量矩阵乘法运算，输出为 <code>(b, n, p)</code> 形状的张量。其中，<code>b</code> 是批次大小，<code>n</code>、<code>m</code>、<code>p</code> 是矩阵的维度。</p>
+<p><code>torch.bmm</code> 主要用于对一批 2D 矩阵进行乘法操作，这对需要在多个样本上同时进行线性代数运算的情况特别有用。</p>
 <blockquote>
 <p><code>torch.bmm</code> 在以下场景中特别有用：</p>
 <ol type="1">
-<li><strong>神经网络的批处理操作</strong>：在神经网络中，处理多个样本的批量数据时，使用
-<code>bmm</code> 可以高效地进行矩阵乘法。</li>
-<li><strong>时间序列数据的处理</strong>：处理时间序列数据时，常常需要对时间步长上的数据进行操作，这也可以通过
-<code>bmm</code> 来实现。</li>
-<li><strong>多元线性代数计算</strong>：在对多对矩阵进行线性代数运算时，<code>bmm</code>
-提供了一种简洁而高效的实现方式。</li>
+<li><strong>神经网络的批处理操作</strong>：在神经网络中，处理多个样本的批量数据时，使用 <code>bmm</code> 可以高效地进行矩阵乘法。</li>
+<li><strong>时间序列数据的处理</strong>：处理时间序列数据时，常常需要对时间步长上的数据进行操作，这也可以通过 <code>bmm</code> 来实现。</li>
+<li><strong>多元线性代数计算</strong>：在对多对矩阵进行线性代数运算时，<code>bmm</code> 提供了一种简洁而高效的实现方式。</li>
 </ol>
 </blockquote>
 <h3 id="应用场景">应用场景</h3>
 <ol type="1">
 <li><strong>神经网络中的线性变换</strong>:
 <ul>
-<li>在神经网络的全连接层（Fully Connected
-Layer）中，输入和权重矩阵的乘法用于线性变换。</li>
+<li>在神经网络的全连接层（Fully Connected Layer）中，输入和权重矩阵的乘法用于线性变换。</li>
 </ul></li>
 <li><strong>损失函数的计算</strong>:
 <ul>
