@@ -1,0 +1,1192 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="当然，下面是按你给出的那种“像真正在一线踩坑的人在复盘，而不是在写说明书”的风格，重写后的版本。  从 Subagent 到 Agent OS：我越来越不相信“一个 Agent 搞定一切”这件事 我最近一段时间基本都在做 AI coding 相关的东西，也持续在用和拆各种编程 Agent，像 Claude Code、Codex CLI、Roo Code，这类东西碰得很多。 刚开始的时候">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 设计模式 - 目录总览">
+<meta property="og:url" content="https://linxkon.github.io/%E4%BB%8E%20Subagent%20%E5%88%B0%20Agent%20OS%EF%BC%9A%E6%88%91%E8%B6%8A%E6%9D%A5%E8%B6%8A%E4%B8%8D%E7%9B%B8%E4%BF%A1%E2%80%9C%E4%B8%80%E4%B8%AA%20Agent%20%E6%90%9E%E5%AE%9A%E4%B8%80%E5%88%87%E2%80%9D%E8%BF%99%E4%BB%B6%E4%BA%8B.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="当然，下面是按你给出的那种“像真正在一线踩坑的人在复盘，而不是在写说明书”的风格，重写后的版本。  从 Subagent 到 Agent OS：我越来越不相信“一个 Agent 搞定一切”这件事 我最近一段时间基本都在做 AI coding 相关的东西，也持续在用和拆各种编程 Agent，像 Claude Code、Codex CLI、Roo Code，这类东西碰得很多。 刚开始的时候">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/agentos.png">
+<meta property="article:published_time" content="2026-03-07T06:22:13.000Z">
+<meta property="article:modified_time" content="2026-03-07T09:42:41.291Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="笔记整理">
+<meta property="article:tag" content="agent">
+<meta property="article:tag" content="大模型">
+<meta property="article:tag" content="大模型应用">
+<meta property="article:tag" content="coding">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/agentos.png">
+  
+  
+  
+  <title>Agent 设计模式 - 目录总览 - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent 设计模式 - 目录总览"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-07 14:22" pubdate>
+          2026年3月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          44 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent 设计模式 - 目录总览</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>当然，下面是按你给出的那种“像真正在一线踩坑的人在复盘，而不是在写说明书”的风格，重写后的版本。</p>
+<hr />
+<h1
+id="从-subagent-到-agent-os我越来越不相信一个-agent-搞定一切这件事">从
+Subagent 到 Agent OS：我越来越不相信“一个 Agent 搞定一切”这件事</h1>
+<p>我最近一段时间基本都在做 AI coding 相关的东西，也持续在用和拆各种编程
+Agent，像 Claude Code、Codex CLI、Roo Code，这类东西碰得很多。</p>
+<p>刚开始的时候，我其实也挺容易被一种叙事带跑：模型越来越强，工具越来越全，给它文件系统、shell、git、测试能力，它迟早会变成一个能独立开发的软件工程师。</p>
+<p>理论上很美。</p>
+<p>但真的上手做复杂任务之后，你会发现这事没那么简单。甚至可以说，很多时候不是“不够强”，而是“根本撑不住”。</p>
+<p>尤其是任务一长、代码库一大、依赖一多，单个 Agent
+很快就开始飘：前面刚定好的计划，后面自己改了；本来只想修个
+API，最后把半个模块重写了；测试没过，它也不是不会修，而是会一路修到你不认识仓库。</p>
+<p>这种情况我遇到过不止一次。</p>
+<p>所以这篇文章我不想写成教程，也不想写成某种“未来已经到来”的行业判断。我更想把自己这段时间的一个真实感受说清楚：</p>
+<p><strong>软件开发里的 Agent，确实在从 IDE Assistant 往 Autonomous
+Developer
+走，但真正决定上限的，越来越不是模型本身，而是系统架构。</strong></p>
+<p>我现在看到的一条很明显的演进路径，大概是这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">Single Agent<br>   ↓<br>Planner + Executor<br>   ↓<br>Subagent / Delegation<br>   ↓<br>Multi-Agent System<br>   ↓<br>Agent Runtime / Agent OS<br></code></pre></td></tr></table></figure>
+<p>下面我主要想聊三件事：</p>
+<ol type="1">
+<li><p>为什么编程 Agent 迟早会走到 Subagent / Multi-Agent</p></li>
+<li><p>为什么大部分 Agent Framework 最后都死在 orchestration 上</p></li>
+<li><p>为什么我越来越觉得，后面会冒出来的不是“超级 Agent”，而是某种
+Agent OS</p></li>
+</ol>
+<hr />
+<h1
+id="一开始大家都想简单点但简单架构真的有天花板">一开始大家都想简单点，但简单架构真的有天花板</h1>
+<p>先说结论：<strong>单 Agent
+架构不是没用，而是只适合中短任务。</strong></p>
+<p>这一点很多人其实都知道，但真做久了，体感会比结论更强。</p>
+<hr />
+<h2 id="一个-agent-干到底确实省事但也最容易崩">1. 一个 Agent
+干到底，确实省事，但也最容易崩</h2>
+<p>现在很多主流编程 Agent，本质上都还在这个模式里：</p>
+<ul>
+<li><p>Codex CLI</p></li>
+<li><p>Copilot Agent</p></li>
+<li><p>Cursor Agent</p></li>
+</ul>
+<p>大概结构就是这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">User<br>  ↓<br>Agent<br>  ↓<br>Agent Loop<br>  ↓<br>Tools<br> ├ filesystem<br> ├ shell<br> ├ git<br> └ tests<br></code></pre></td></tr></table></figure>
+<p>执行循环也很熟：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">think<br>→ run tool<br>→ observe<br>→ think<br></code></pre></td></tr></table></figure>
+<p>这种架构的优点非常直接：</p>
+<ul>
+<li><p>简单</p></li>
+<li><p>稳</p></li>
+<li><p>调试容易</p></li>
+<li><p>出问题也好定位</p></li>
+</ul>
+<p>所以它为什么流行，我完全理解。因为工程上它就是便宜，能跑，能上线。</p>
+<p>但问题也非常明确：</p>
+<ul>
+<li><p>上下文很快变脏</p></li>
+<li><p>长任务很容易失控</p></li>
+<li><p>推理链一长，行为就不再可预测</p></li>
+</ul>
+<p>我一开始也挺喜欢这种系统，因为它看起来最像“真正的 autonomous
+coding”。你把权限给够，它就一直干。</p>
+<p>可真跑复杂仓库的时候，问题特别明显：<strong>它不是不能做，而是做着做着会忘。</strong></p>
+<p>忘之前为什么这么改，忘当前子任务是什么，忘哪些 warning
+可以忽略，忘哪条报错只是副作用。</p>
+<p>最后你会发现，整个系统表面上很智能，实际上内部状态管理跟垃圾堆差不多。</p>
+<p>说难听点，就是越来越乱。</p>
+<hr />
+<h2 id="subagent-这套东西火起来不是因为酷是因为单-agent-装不下了">2.
+Subagent 这套东西火起来，不是因为酷，是因为单 Agent 装不下了</h2>
+<p>后来很多系统开始搞 delegation，也就是主 Agent 带一堆 Subagent。</p>
+<p>典型例子像：</p>
+<ul>
+<li><p>Claude Code Subagents</p></li>
+<li><p>Roo Code Subagents</p></li>
+</ul>
+<p>结构一般是这种：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">Main Agent<br>   ├ Subagent A<br>   ├ Subagent B<br>   └ Subagent C<br></code></pre></td></tr></table></figure>
+<p>主 Agent 负责分任务，Subagent 去做局部工作，比如：</p>
+<ul>
+<li><p>搜代码</p></li>
+<li><p>看依赖</p></li>
+<li><p>跑测试</p></li>
+<li><p>查某个模块的行为</p></li>
+</ul>
+<p>流程一般是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">main agent<br>   ↓<br>spawn subagent<br>   ↓<br>subagent run task<br>   ↓<br>return summary<br></code></pre></td></tr></table></figure>
+<p>这套东西表面上看像“多智能体协作”，但我自己越用越觉得，它最核心的价值其实就四个字：</p>
+<p><strong>上下文隔离。</strong></p>
+<p>这点非常关键。</p>
+<p>很多人一开始会把 Subagent
+理解成“能力增强”，我反而觉得它更像“污染控制”。</p>
+<p>因为一个主 Agent 一旦在长链路里待久了，context
+真的会变得很脏。里面混着：</p>
+<ul>
+<li><p>旧计划</p></li>
+<li><p>中间日志</p></li>
+<li><p>失败尝试</p></li>
+<li><p>无效观察</p></li>
+<li><p>已经过时的结论</p></li>
+</ul>
+<p>这些东西全塞在一个上下文里，模型后面还能推理得稳，那才奇怪。</p>
+<p>我自己遇到过一种很典型的情况：主 Agent
+已经在前面试了三轮错误修复，脑子里全是旧结论。这个时候你让它继续定位一个新问题，它会非常容易被自己前面的错误路径带偏。</p>
+<p>换个新开的 Subagent 去看，反而一下子就看明白了。</p>
+<p>这不是玄学，这就是上下文干净。</p>
+<hr />
+<h2 id="再往后走就是-multi-agent但这东西开始像团队不像工具了">3.
+再往后走，就是 Multi-Agent，但这东西开始像团队，不像工具了</h2>
+<p>再进一步，就是 Multi-Agent Collaboration。</p>
+<p>这类系统你会看到更强的角色分工，比如：</p>
+<ul>
+<li><p>Claude Code Agent Teams</p></li>
+<li><p>Devin</p></li>
+<li><p>OpenDevin 这类尝试</p></li>
+</ul>
+<p>结构大概会变成这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text">Lead Agent<br>   │<br>Team Workspace<br>   │<br> ├ Architect<br> ├ Developer<br> ├ Reviewer<br> └ Tester<br></code></pre></td></tr></table></figure>
+<p>这时候系统就不再只是“一个 Agent 调几个
+helper”，而是开始模拟软件团队：</p>
+<ul>
+<li><p>Architect 关心结构</p></li>
+<li><p>Developer 关心实现</p></li>
+<li><p>Reviewer 关心改动质量</p></li>
+<li><p>Tester 关心边界和回归</p></li>
+</ul>
+<p>从抽象上讲，这当然更合理。因为软件开发本来就不是一个单一认知任务。</p>
+<p>但这里也有个现实问题：<strong>它越像团队，协调成本就越像团队。</strong></p>
+<p>这个后面讲 orchestration 的时候会更明显。因为 Multi-Agent
+不是免费午餐，它不是你多开几个窗口就自动变强了。很多时候，它只是把单
+Agent 的混乱，升级成了多 Agent 的混乱。</p>
+<p>人数一多，锅也多。</p>
+<hr />
+<h1
+id="为什么复杂编程任务最后一定会走到-subagent">为什么复杂编程任务最后一定会走到
+Subagent</h1>
+<p>这个问题我现在的答案很明确：</p>
+<blockquote>
+<p><strong>不是大家喜欢把系统做复杂，而是单个 LLM Agent
+没法稳定管理复杂软件任务。</strong></p>
+</blockquote>
+<p>重点是“稳定”两个字。</p>
+<p>不是偶尔做不出来，而是你没法相信它每次都能做对。</p>
+<hr />
+<h2 id="上下文窗口再大也不等于你真的能理解整个仓库">1.
+上下文窗口再大，也不等于你真的能理解整个仓库</h2>
+<p>很多人喜欢把希望寄托在 context window 上，觉得窗口够大，把整个 repo
+塞进去就行。</p>
+<p>但实际不是这么回事。</p>
+<p>一个真实点的项目，随便就是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">repo<br>├── 2000+ files<br>├── 100k+ lines<br>├── build system<br>├── tests<br></code></pre></td></tr></table></figure>
+<p>一个看似普通的 feature 修改，可能同时动到：</p>
+<ul>
+<li><p>API</p></li>
+<li><p>数据库</p></li>
+<li><p>配置</p></li>
+<li><p>测试</p></li>
+<li><p>CI 逻辑</p></li>
+</ul>
+<p>你把这些全塞到一个 prompt
+里，结果往往不是“理解更完整”，而是“噪音越来越多”。</p>
+<p>最后就会变成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">context noise ↑<br>signal ↓<br></code></pre></td></tr></table></figure>
+<p>这事我自己感受特别明显。context
+一大，模型不是马上变傻，而是开始“看起来还在思考，实际上抓不到重点”。</p>
+<p>有时候最致命的不是它不会，而是它会忽略。</p>
+<p>尤其是中间信息，特别容易丢。这就是很多人说的 Lost-in-the-Middle
+问题。理论上大家都知道，实践里你会被它反复教育。</p>
+<p>中间那段最关键，它偏偏看漏了。</p>
+<p>很烦。</p>
+<hr />
+<h2 id="规划和执行本来就不是一类脑力活">2.
+规划和执行，本来就不是一类脑力活</h2>
+<p>软件开发里有两种完全不同的认知模式：</p>
+<p><strong>Planning：</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">architecture design<br>module boundary<br>dependency analysis<br></code></pre></td></tr></table></figure>
+<p><strong>Execution：</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">edit files<br>fix compile errors<br>run tests<br></code></pre></td></tr></table></figure>
+<p>这两件事放在人类团队里，很多时候都不是同一个人在同一个时间片里做的。因为一个偏抽象、偏全局；另一个偏局部、偏操作。</p>
+<p>但单 Agent 架构经常要求它既做架构师，又做打工仔。</p>
+<p>然后问题就来了：<strong>计划漂移。</strong></p>
+<p>本来计划是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">原计划：修改API<br></code></pre></td></tr></table></figure>
+<p>结果执行过程中变成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">重写模块<br></code></pre></td></tr></table></figure>
+<p>最后系统结构都被它顺手改了。</p>
+<p>这种事特别常见。因为模型在执行时会不断根据局部观察更新判断，而这种更新很多时候不是“修正计划”，而是“直接忘了原计划”。</p>
+<p>我后来越来越认同把系统拆成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">planner agent<br>executor agent<br></code></pre></td></tr></table></figure>
+<p>不是因为这样更高级，而是因为这样更像工程。</p>
+<p>至少谁负责想，谁负责干，边界清楚一点。</p>
+<p>不然很容易边干边改主意，越改越离谱。</p>
+<hr />
+<h2 id="真正毁掉长任务的不是任务难而是-context-被污染了">3.
+真正毁掉长任务的，不是任务难，而是 context 被污染了</h2>
+<p>这是我现在非常在意的一个点。</p>
+<p>Agent 在长任务里会积累一大堆历史信息：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">旧计划<br>tool output<br>logs<br>中间推理<br>失败尝试<br></code></pre></td></tr></table></figure>
+<p>前面十轮还好，二十轮之后基本就开始脏了。再往后，你会明显感觉它的判断质量下降，不是线性下降，是突然塌。</p>
+<p>所以 Subagent 最实际的作用是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">spawn subagent<br>clean context<br>run task<br>return summary<br></code></pre></td></tr></table></figure>
+<p>就是把一个脏上下文切开，把局部问题丢到一个干净工作区里处理，然后只把摘要带回来。</p>
+<p>这个设计非常朴素，但真的有效。</p>
+<p>我有次让主 Agent
+直接排查一个测试失败，转了很多轮都在旧错误上打转；后来拆成三个小任务分别扔给
+Subagent，一个看配置，一个看依赖，一个看逻辑，结果逻辑那个几轮就定位到了。</p>
+<p>不是因为它更聪明。</p>
+<p>是因为它没背着一车历史垃圾。</p>
+<hr />
+<h2 id="很多工程问题本质上不是推理问题是搜索问题">4.
+很多工程问题，本质上不是推理问题，是搜索问题</h2>
+<p>比如一个 test fail，背后原因可能有很多：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">config<br>dependency<br>logic bug<br>environment<br></code></pre></td></tr></table></figure>
+<p>单 Agent 的工作方式通常是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">假设A → 测试<br>假设B → 测试<br></code></pre></td></tr></table></figure>
+<p>一个个串着试。</p>
+<p>这当然能跑，但效率很差，而且特别容易因为前一个假设失败而把后面思路也带偏。</p>
+<p>多 Agent 的优势在这时候就很明显：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">agent A → config<br>agent B → dependency<br>agent C → logic<br></code></pre></td></tr></table></figure>
+<p>大家并行查。</p>
+<p>这更接近真实工程团队，也更接近真实排障流程。因为现实里很多问题根本不是“谁能一眼看穿”，而是谁能更快排除错误方向。</p>
+<p>很多时候不是智商问题，是搜索宽度问题。</p>
+<hr />
+<h2 id="软件工程天生就是多角色系统硬塞成一个-agent-其实很别扭">5.
+软件工程天生就是多角色系统，硬塞成一个 Agent 其实很别扭</h2>
+<p>真实开发里，本来就有不同角色：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">architect<br>developer<br>reviewer<br>tester<br></code></pre></td></tr></table></figure>
+<p>他们关注的点完全不一样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">architect → 结构设计<br>developer → 具体实现<br>tester → 边界情况<br>reviewer → 风险与质量<br></code></pre></td></tr></table></figure>
+<p>所以你让一个 Agent
+同时承担所有视角，它不是做不到，而是很容易顾此失彼。</p>
+<p>我自己很早就有这个感觉：<strong>单 Agent
+更像“超级实习生”，Multi-Agent 才开始有点像“团队”。</strong></p>
+<p>但像团队，不代表就能跑得顺。这事真正难的部分，其实不在角色设计，而在
+orchestration。</p>
+<p>说白了，难点不是“分工”，难点是“怎么不打架”。</p>
+<hr />
+<h1 id="大部分-agent-framework最后都死在-orchestration-上">大部分 Agent
+Framework，最后都死在 orchestration 上</h1>
+<p>这是我这段时间感受最深的一件事。</p>
+<p>很多 Agent Demo
+看起来都挺强，规划、执行、反思、协作，什么都有；但真放进持续的软件工程任务里，问题会集中暴露在
+orchestration，也就是调度与协同层。</p>
+<p>不是模型不够大，也不是 prompt 不够花。</p>
+<p>是系统层没兜住。</p>
+<hr />
+<h2 id="第一种死法plan-drift计划写得很好执行时直接跑偏">1.
+第一种死法：plan drift，计划写得很好，执行时直接跑偏</h2>
+<p>LLM 的推理不是程序执行，它是概率过程。</p>
+<p>所以你给它一个看上去很合理的计划：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">Step1: 设计缓存<br>Step2: 修改API<br>Step3: 写测试<br></code></pre></td></tr></table></figure>
+<p>执行着执行着，它可能突然决定：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">重写整个模块<br></code></pre></td></tr></table></figure>
+<p>这事在 demo 里不一定明显，因为 demo 很短，几轮就收工了。</p>
+<p>但在长任务里，plan drift 简直是常态。</p>
+<p>我自己见过最离谱的一种情况，是它本来只需要 patch
+一个局部逻辑，结果因为某个中间错误，开始对整个目录结构做“顺手优化”。最后你回头一看，原任务没做完，副作用做了一堆。</p>
+<p>这时候你会特别清楚一件事：<strong>没有强约束的计划，不叫计划，只能叫建议。</strong></p>
+<p>模型经常不把建议当回事。</p>
+<hr />
+<h2 id="第二种死法状态根本没真的管理只是塞在-prompt-里假装管理">2.
+第二种死法：状态根本没真的管理，只是塞在 prompt 里假装管理</h2>
+<p>复杂任务至少需要维护这些状态：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">当前任务<br>完成步骤<br>修改文件<br>测试结果<br>已知约束<br>关键决策<br></code></pre></td></tr></table></figure>
+<p>但很多 Agent Framework 的状态管理，本质上只有一个东西：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">prompt context<br></code></pre></td></tr></table></figure>
+<p>这其实很脆。</p>
+<p>因为 prompt
+不是状态机，它只是文本缓存。你把状态全寄托在文本里，迟早会出现：</p>
+<ul>
+<li><p>重复做同一步</p></li>
+<li><p>忘记之前的决定</p></li>
+<li><p>把过期信息当成当前事实</p></li>
+</ul>
+<p>这类问题我碰到特别多，尤其是多轮修复任务里。前面明明已经决定“不改这个接口”，后面转几轮，它又把接口改了。不是因为它故意叛逆，而是因为系统没有把这个决策变成真正受约束的状态。</p>
+<p>全靠模型“记得住”，那基本等于没管理。</p>
+<p>很虚。</p>
+<hr />
+<h2 id="第三种死法错误恢复能力太差一出错就进入死循环">3.
+第三种死法：错误恢复能力太差，一出错就进入死循环</h2>
+<p>真实开发里，失败才是常态：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">编译失败<br>测试失败<br>依赖冲突<br>环境异常<br></code></pre></td></tr></table></figure>
+<p>问题不在于失败，而在于失败后怎么恢复。</p>
+<p>很多 Agent 的典型路径是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">修复A → 引入B<br>修复B → 引入C<br>修复C → 回到A<br></code></pre></td></tr></table></figure>
+<p>直接进入 error loop。</p>
+<p>我真见过这种场面：它在一个 import
+错误上修了十几轮，每次都像有点进展，实际上只是换了不同方式把仓库继续搞坏。</p>
+<p>你站在旁边看，会有一种非常强烈的感觉：</p>
+<p><strong>它不是在解决问题，它是在制造更多需要解决的问题。</strong></p>
+<p>这时候如果系统层没有明确的
+rollback、checkpoint、失败分类、重试边界，这个 Agent
+基本就会一路崩下去。</p>
+<p>而且它还挺自信。</p>
+<p>这就更麻烦了。</p>
+<hr />
+<h2 id="第四种死法工具调用不稳定模型对工具输出的理解也不稳定">4.
+第四种死法：工具调用不稳定，模型对工具输出的理解也不稳定</h2>
+<p>Agent 真正落地，一定要接工具：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">shell<br>git<br>filesystem<br>API<br>test runner<br></code></pre></td></tr></table></figure>
+<p>而只要接工具，就一定会遇到一个特别脏的现实：<strong>工具输出根本不总是干净、规范、可预测的。</strong></p>
+<p>比如：</p>
+<ul>
+<li><p>shell 输出混着 warning 和 error</p></li>
+<li><p>test runner 日志格式变化</p></li>
+<li><p>某个 CLI 升级后返回字段变了</p></li>
+<li><p>同一个错误在不同环境下长得完全不一样</p></li>
+</ul>
+<p>然后模型就会误判。</p>
+<p>最常见的一种就是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">warning<br></code></pre></td></tr></table></figure>
+<p>被它理解成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">error<br></code></pre></td></tr></table></figure>
+<p>或者反过来，真正的失败被它当成“可以忽略的信息”。</p>
+<p>这类问题单看很小，但放到长链路里非常致命。因为 orchestration
+假设“上一步返回的状态是可靠的”，而工具层一旦不稳定，整个调度逻辑都会跟着乱。</p>
+<p>底层信号脏，上层判断一定会飘。</p>
+<p>这个基本逃不掉。</p>
+<hr />
+<h2 id="第五种死法multi-agent-不是乘法很多时候是复杂度爆炸">5.
+第五种死法：Multi-Agent 不是乘法，很多时候是复杂度爆炸</h2>
+<p>很多人对 Multi-Agent
+的想象太乐观了，总觉得多几个角色就能并行提效。</p>
+<p>但真实情况往往是，你多开几个 Agent，也顺手多开了这些问题：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">任务冲突<br>责任不清<br>通信开销<br>状态不一致<br>重复劳动<br></code></pre></td></tr></table></figure>
+<p>最典型的例子就是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">两个 agent 修改同一文件<br></code></pre></td></tr></table></figure>
+<p>你以为是在协作，实际上是在互踩。</p>
+<p>还有一种特别烦的情况：每个 Agent
+都各自做了“局部最优”决策，单看都对，拼起来就是一坨。Architect
+改了边界，Developer 沿旧接口继续写，Reviewer
+又基于另一版状态给意见。</p>
+<p>最后不是团队，是群聊。</p>
+<p>所以我现在对 Multi-Agent
+的看法有点保守：<strong>它不是天然更强，只是给了系统更多组织复杂任务的可能性。能不能变强，全看
+orchestration 层能不能兜住。</strong></p>
+<p>兜不住就完蛋。</p>
+<hr />
+<h1
+id="我为什么越来越觉得未来更像-agent-os而不是更大的-agent">我为什么越来越觉得，未来更像
+Agent OS，而不是更大的 Agent</h1>
+<p>这部分是我最近一个越来越强的判断。</p>
+<p>很多人讨论未来的时候，直觉还是“换个更大的模型，一切都会好起来”。我现在没那么信。</p>
+<p>因为 LLM 本质上还是这个东西：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">next_token = f(context)<br></code></pre></td></tr></table></figure>
+<p>它再强，底层也还是基于上下文做局部决策。</p>
+<p>但一个复杂的软件系统要稳定跑起来，靠的不只是“会想”，还得有这些东西：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">长期状态<br>任务调度<br>资源管理<br>错误恢复<br>执行隔离<br></code></pre></td></tr></table></figure>
+<p>这些能力，明显更像系统层能力，不像模型层能力。</p>
+<p>所以我现在越来越倾向于一个方向：</p>
+<blockquote>
+<p><strong>未来真正有竞争力的，不是“一个更大的编程 Agent”，而是“LLM +
+Agent Runtime + Agent OS”。</strong></p>
+</blockquote>
+<p>模型是脑子，但系统才是骨架。</p>
+<p>没有骨架，脑子再大也容易摔。</p>
+<hr />
+<h2 id="agent-os-这玩意听着玄其实一点都不玄">Agent OS
+这玩意，听着玄，其实一点都不玄</h2>
+<p>很多人第一次听到 Agent
+OS，会觉得像概念包装。但如果你真做过长任务编排，你会发现这个方向其实非常自然。</p>
+<p>一个比较像样的结构，大概会是这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">User<br> │<br>Task Manager<br> │<br>Planner Agent<br> │<br>Task Graph<br> │<br>Executor Agents<br> │<br>Tools<br></code></pre></td></tr></table></figure>
+<p>再展开一点，可能像这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs text">              ┌──────────────┐<br>              │ Task Manager │<br>              └──────┬───────┘<br>                     │<br>              ┌──────▼──────┐<br>              │ Planner     │<br>              └──────┬──────┘<br>                     │<br>            ┌────────▼────────┐<br>            │ Task Graph      │<br>            └────────┬────────┘<br>                     │<br>      ┌──────────────┼──────────────┐<br>      │              │              │<br>Executor A     Executor B     Executor C<br></code></pre></td></tr></table></figure>
+<p>这时候系统的关键点就不再是“某个 Agent 有多聪明”，而是：</p>
+<ul>
+<li><p>任务怎么拆</p></li>
+<li><p>状态怎么存</p></li>
+<li><p>谁能并行</p></li>
+<li><p>谁能回滚</p></li>
+<li><p>出错后谁接管</p></li>
+<li><p>哪些上下文该保留，哪些该丢弃</p></li>
+</ul>
+<p>说白了，这已经很像操作系统在干的事了。</p>
+<p>是不是这种感觉还挺好玩的。</p>
+<hr />
+<h2 id="一个成熟的-agent-系统迟早会长出这些部件">一个成熟的 Agent
+系统，迟早会长出这些部件</h2>
+<p>我现在觉得，后面凡是能真正落到生产里的 Agent
+系统，大概率都会往这些组件上长：</p>
+<p><strong>Task Graph</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">任务 DAG<br></code></pre></td></tr></table></figure>
+<p>不是所有事都串行，也不是所有事都能并行。任务关系必须显式化，不然调度全靠模型脑补，迟早翻车。</p>
+<p><strong>Planner</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">任务分解<br>任务排序<br></code></pre></td></tr></table></figure>
+<p>规划必须从执行里剥出来，不然计划永远会被执行细节污染。</p>
+<p><strong>Executor Agents</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">执行具体操作<br></code></pre></td></tr></table></figure>
+<p>执行单元要足够小、足够专注，别让一个 Agent 又想又干又复盘又背锅。</p>
+<p><strong>Memory System</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">short-term memory<br>long-term memory<br>vector memory<br></code></pre></td></tr></table></figure>
+<p>很多人现在一提 memory
+就开始讲检索增强，但我自己更关心的是：哪些状态是运行时强约束，哪些只是参考记忆。这两者混在一起，系统一定乱。</p>
+<p><strong>Tool Runtime</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">filesystem<br>git<br>shell<br>browser<br>database<br></code></pre></td></tr></table></figure>
+<p>工具不是附件，工具就是执行环境本身。没有稳定 runtime，Agent
+再聪明也只能当聊天机器人。</p>
+<hr />
+<h1
+id="这条路看起来很像早期计算机系统的发展">这条路看起来很像早期计算机系统的发展</h1>
+<p>这一点我最近也越想越觉得像。</p>
+<p>AI
+系统的演进，可能不会只是模型参数越来越大，而更像计算机系统早期的演化过程：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">LLM<br>↓<br>Agent Framework<br>↓<br>Agent Runtime<br>↓<br>Agent OS<br></code></pre></td></tr></table></figure>
+<p>也就是说，前面大家在拼“怎么让模型会做事”，后面真正拉开差距的，可能是“怎么让整套系统可持续地做事”。</p>
+<p>未来的软件开发环境，我觉得很可能会长成这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">User<br> │<br>AI Shell<br> │<br>Agent OS<br> │<br>Agent Runtime<br> │<br>LLM cluster<br> │<br>Tools<br></code></pre></td></tr></table></figure>
+<p>到那一步，AI coding 可能就不再只是“IDE
+里多了个助手”，而是变成一种新的计算环境。</p>
+<p>这件事我现在不敢说一定会这么走，但我对这个方向的信心，已经比“单个超级
+Agent 通吃一切”高多了。</p>
+<p>后者我真的被坑过太多次了。</p>
+<hr />
+<h1
+id="这段时间我最大的认知变化不是模型有多强而是我开始更重视系统">这段时间我最大的认知变化，不是模型有多强，而是我开始更重视系统</h1>
+<p>如果一定要说这篇文章最后想表达什么，那不是“Subagent
+很重要”，也不是“Multi-Agent 是未来”。</p>
+<p>我真正的认知转变是：</p>
+<blockquote>
+<p><strong>编程 Agent
+的核心瓶颈，越来越不像模型能力问题，而像系统工程问题。</strong></p>
+</blockquote>
+<p>单 Agent
+做不好复杂任务，不一定是因为模型弱，很多时候只是因为它没有一个能长期稳定运行的系统外壳。</p>
+<p>所以我现在对这件事的几个判断基本是：</p>
+<ol type="1">
+<li><p>单 Agent 能解决很多问题，但很难稳定解决复杂问题</p></li>
+<li><p>Subagent 和 Multi-Agent 本质上是在解决 context scaling
+和任务分解问题</p></li>
+<li><p>orchestration 才是整个 Agent
+系统里最难、也最容易被低估的一层</p></li>
+<li><p>真正成熟的 AI 开发系统，最后很可能会往 Agent OS
+这种形态走</p></li>
+</ol>
+<p>换句话说：</p>
+<p><strong>复杂任务最终拼的不是“模型够不够大”，而是“系统能不能把复杂性接住”。</strong></p>
+<p>这也是我最近越来越信的一件事。</p>
+<p>接下来几年，这个方向应该会非常有意思。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" class="print-no-link">#笔记整理</a>
+      
+        <a href="/tags/agent/" class="print-no-link">#agent</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8/" class="print-no-link">#大模型应用</a>
+      
+        <a href="/tags/coding/" class="print-no-link">#coding</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent 设计模式 - 目录总览</div>
+      <div>https://linxkon.github.io/从 Subagent 到 Agent OS：我越来越不相信“一个 Agent 搞定一切”这件事.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Agent%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1.html" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E9%99%84%E5%BD%95G-%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0Agent.html" title="Agent 设计模式 - 附录G 编程实现Agent">
+                        <span class="hidden-mobile">Agent 设计模式 - 附录G 编程实现Agent</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'c520999b034d063cb659388f0b1f607f'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
