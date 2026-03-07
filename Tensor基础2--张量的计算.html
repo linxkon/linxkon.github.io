@@ -7,8 +7,11 @@
 
 <head>
   <meta charset="UTF-8">
+
   <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
   <link rel="icon" href="/img/linxkon_blog.png">
+  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -51,7 +54,7 @@
 <!-- 主题依赖的图标库，不要自行修改 -->
 <!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
 
 
 
@@ -72,7 +75,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -83,22 +86,6 @@
   <script  src="/js/color-schema.js" ></script>
   
 
-  
-
-  
-    <!-- Google tag (gtag.js) -->
-    <script async>
-      if (!Fluid.ctx.dnt) {
-        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-          gtag('js', new Date());
-          gtag('config', '');
-        });
-      }
-    </script>
   
 
   
@@ -114,7 +101,7 @@
 
 
   
-<meta name="generator" content="Hexo 7.1.1"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -277,6 +264,7 @@
         </span>
         
       
+      
     
   </div>
 
@@ -323,17 +311,22 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs python">data = torch.randint(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>])<br><span class="hljs-built_in">print</span>(data)<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">3</span>, <span class="hljs-number">7</span>, <span class="hljs-number">4</span>],<br>            [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>]])<br><br><span class="hljs-comment"># 1. 不修改原数据</span><br>new_data = data.add(<span class="hljs-number">10</span>)  <span class="hljs-comment"># 等价 new_data = data + 10</span><br><span class="hljs-built_in">print</span>(new_data)<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">13</span>, <span class="hljs-number">17</span>, <span class="hljs-number">14</span>],<br>            [<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">16</span>]])<br><br><span class="hljs-comment"># 2. 直接修改原数据 注意: 带下划线的函数为修改原数据本身</span><br>data.add_(<span class="hljs-number">10</span>)  <span class="hljs-comment"># 等价 data += 10</span><br><span class="hljs-built_in">print</span>(data)<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">13</span>, <span class="hljs-number">17</span>, <span class="hljs-number">14</span>],<br>            [<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">16</span>]])<br><br><span class="hljs-comment"># 3. 其他函数</span><br><span class="hljs-built_in">print</span>(data.sub(<span class="hljs-number">100</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[-<span class="hljs-number">87</span>, -<span class="hljs-number">83</span>, -<span class="hljs-number">86</span>],<br>            [-<span class="hljs-number">90</span>, -<span class="hljs-number">90</span>, -<span class="hljs-number">84</span>]])<br><br><span class="hljs-built_in">print</span>(data.mul(<span class="hljs-number">100</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">1300</span>, <span class="hljs-number">1700</span>, <span class="hljs-number">1400</span>],<br>            [<span class="hljs-number">1000</span>, <span class="hljs-number">1000</span>, <span class="hljs-number">1600</span>]])<br><br><span class="hljs-built_in">print</span>(data.div(<span class="hljs-number">100</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">0.1300</span>, <span class="hljs-number">0.1700</span>, <span class="hljs-number">0.1400</span>],<br>            [<span class="hljs-number">0.1000</span>, <span class="hljs-number">0.1000</span>, <span class="hljs-number">0.1600</span>]])<br><br><span class="hljs-built_in">print</span>(data.neg())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[-<span class="hljs-number">13</span>, -<span class="hljs-number">17</span>, -<span class="hljs-number">14</span>],<br>            [-<span class="hljs-number">10</span>, -<span class="hljs-number">10</span>, -<span class="hljs-number">16</span>]])<br></code></pre></td></tr></table></figure>
 <h5 id="张量点乘运算">2）张量点乘运算</h5>
 <ul>
-<li>点乘指（Hadamard）的是两个同维矩阵对应位置的元素相乘，使用mul 和运算符 * 实现。</li>
+<li>点乘指（Hadamard）的是两个同维矩阵对应位置的元素相乘，使用mul
+和运算符 * 实现。</li>
 </ul>
 <figure>
-<img src="assets/image-20240528102236446.png" srcset="/img/loading.gif" lazyload alt="image-20240528102236446" /><figcaption aria-hidden="true">image-20240528102236446</figcaption>
+<img src="assets/image-20240528102236446.png" srcset="/img/loading.gif" lazyload
+alt="image-20240528102236446" />
+<figcaption aria-hidden="true">image-20240528102236446</figcaption>
 </figure>
 <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs lua">data1 = torch.tensor(<span class="hljs-string">[[1, 2], [3, 4]]</span>)<br>data2 = torch.tensor(<span class="hljs-string">[[5, 6], [7, 8]]</span>)<br># 第一种方式<br>data = torch.mul(data1, data2)<br><span class="hljs-built_in">print</span>(data)<br>&gt;&gt;&gt; tensor(<span class="hljs-string">[[ 5, 12],</span><br><span class="hljs-string">            [21, 32]]</span>)<br><br># 第二种方式<br>data = data1 * data2<br><span class="hljs-built_in">print</span>(data)<br>&gt;&gt;&gt; tensor(<span class="hljs-string">[[ 5, 12],</span><br><span class="hljs-string">            [21, 32]]</span>)<br></code></pre></td></tr></table></figure>
 <h5 id="张量矩阵乘法运算">3）张量矩阵乘法运算</h5>
 <ul>
-<li>矩阵乘法运算要求第一个矩阵 shape: (n, m)，第二个矩阵 shape: (m, p), 两个矩阵点积运算 shape 为: (n, p)。</li>
+<li>矩阵乘法运算要求第一个矩阵 shape: (n, m)，第二个矩阵 shape: (m, p),
+两个矩阵点积运算 shape 为: (n, p)。</li>
 <li>运算符 @ 用于进行两个矩阵的乘积运算</li>
-<li>torch.matmul 对进行乘积运算的两矩阵形状没有限定.对数输入的 shape 不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
+<li>torch.matmul 对进行乘积运算的两矩阵形状没有限定.对数输入的 shape
+不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 点积运算</span><br>data1 = torch.tensor([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>], [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>]])<br>data2 = torch.tensor([[<span class="hljs-number">5</span>, <span class="hljs-number">6</span>], [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>]])<br><span class="hljs-comment"># 方式一:</span><br>data3 = data1 @ data2<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;data3--&gt;&quot;</span>, data3)<br><span class="hljs-meta">&gt;&gt;&gt; </span>data3--&gt; tensor([[<span class="hljs-number">19</span>, <span class="hljs-number">22</span>],<br>                     [<span class="hljs-number">43</span>, <span class="hljs-number">50</span>],<br>                     [<span class="hljs-number">67</span>, <span class="hljs-number">78</span>]])<br><br><span class="hljs-comment"># 方式二:</span><br>data4 = torch.matmul(data1, data2)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;data4--&gt;&quot;</span>, data4)<br><span class="hljs-meta">&gt;&gt;&gt; </span>data4--&gt; tensor([[<span class="hljs-number">19</span>, <span class="hljs-number">22</span>],<br>                     [<span class="hljs-number">43</span>, <span class="hljs-number">50</span>],<br>                     [<span class="hljs-number">67</span>, <span class="hljs-number">78</span>]])<br></code></pre></td></tr></table></figure>
 <h5 id="总结">4）总结</h5>
@@ -349,7 +342,8 @@
 <p><strong>&lt;3&gt; 点积运算</strong></p>
 <ul>
 <li>运算符@用于进行两个矩阵的点乘运算</li>
-<li>torch.matmul 对进行点乘运算的两矩阵形状没有限定，对数输入的 shape 不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
+<li>torch.matmul 对进行点乘运算的两矩阵形状没有限定，对数输入的 shape
+不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
 </ul>
 <h4 id="张量的运算函数">2. 张量的运算函数</h4>
 <p>PyTorch 为每个张量封装很多实用的计算函数：</p>
@@ -434,7 +428,7 @@
               
                 <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
                   <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
+                    <i class="iconfont icon-cc-by"></i>
                   </span>
                 </a>
               
@@ -620,9 +614,9 @@
     
 
   
+
 </div>
 
-  
   
   
 </div>
@@ -799,9 +793,6 @@
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
-</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

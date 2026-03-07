@@ -7,8 +7,11 @@
 
 <head>
   <meta charset="UTF-8">
+
   <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
   <link rel="icon" href="/img/linxkon_blog.png">
+  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -51,7 +54,7 @@
 <!-- 主题依赖的图标库，不要自行修改 -->
 <!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
 
 
 
@@ -72,7 +75,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -83,22 +86,6 @@
   <script  src="/js/color-schema.js" ></script>
   
 
-  
-
-  
-    <!-- Google tag (gtag.js) -->
-    <script async>
-      if (!Fluid.ctx.dnt) {
-        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-          gtag('js', new Date());
-          gtag('config', '');
-        });
-      }
-    </script>
   
 
   
@@ -114,7 +101,7 @@
 
 
   
-<meta name="generator" content="Hexo 7.1.1"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -277,6 +264,7 @@
         </span>
         
       
+      
     
   </div>
 
@@ -315,7 +303,10 @@
                 
                 <p>在此补充一下之前公式不显示的问题。</p>
 <span id="more"></span>
-<p>虽然<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/">Fluid</a>主题支持<strong>LaTeX 数学公式</strong>，但是需要手动操作，而且我按照<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/guide/#latex-数学公式">教程</a>开启本功能<code>mathjax</code>没有成功，即公式在网页里并没有被渲染和转换。通过网上查找，发现解决这类问题的思路主要是换渲染引擎，例如<code>pandoc</code>、<code>mathjax</code>、<code>katex</code>。我目前使用<code>mathjax</code>，操作如下：</p>
+<p>虽然<a
+target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/">Fluid</a>主题支持<strong>LaTeX
+数学公式</strong>，但是需要手动操作，而且我按照<a
+target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/guide/#latex-数学公式">教程</a>开启本功能<code>mathjax</code>没有成功，即公式在网页里并没有被渲染和转换。通过网上查找，发现解决这类问题的思路主要是换渲染引擎，例如<code>pandoc</code>、<code>mathjax</code>、<code>katex</code>。我目前使用<code>mathjax</code>，操作如下：</p>
 <ul>
 <li><p><strong>卸载</strong>默认引擎，并<strong>安装</strong>这个新的渲染引擎</p>
 <figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ada">$ npm uninstall hexo-renderer-marked <span class="hljs-comment">--save </span><br>$ npm install hexo-renderer-kramed <span class="hljs-comment">--saveCopy</span><br></code></pre></td></tr></table></figure></li>
@@ -323,9 +314,11 @@
 <figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-comment">// Change inline math rule</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">formatText</span>(<span class="hljs-params">text</span>) &#123;<br>  <span class="hljs-comment">// Fit kramed&#x27;s rule: $$ + \1 + $$</span><br>  <span class="hljs-comment">// 直接返回text</span><br>  <span class="hljs-comment">// return text.replace(/`\$(.*?)\$`/g, &#x27;$$$$$1$$$$&#x27;);</span><br>  <span class="hljs-keyword">return</span> <span class="hljs-built_in">text</span>;<br>&#125;Copy<br></code></pre></td></tr></table></figure></li>
 <li><p>修改hexo的渲染源码<code>/node_modules/kramed/lib/rules/inline.js</code></p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-operator">/</span><span class="hljs-operator">/</span> 去掉`\\`的额外转义，第<span class="hljs-number">11</span>行，将其修改为<br><span class="hljs-operator">/</span><span class="hljs-operator">/</span> escape<span class="hljs-operator">:</span> <span class="hljs-operator">/</span><span class="hljs-operator">^</span><span class="hljs-punctuation">\</span><span class="hljs-punctuation">\</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">[</span><span class="hljs-punctuation">\</span><span class="hljs-punctuation">\</span>`*&#123;&#125;\[\]()# +\-.!_&gt;])/, <br>escape: /^\\([`<span class="hljs-operator">*</span><span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">\</span><span class="hljs-punctuation">[</span><span class="hljs-punctuation">\</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><span class="hljs-comment"># +\-.!_&gt;])/,</span><br><span class="hljs-operator">/</span><span class="hljs-operator">/</span> 将em标签对应的符号中，去掉`_`，第<span class="hljs-number">20</span>行，将其修改为<br><span class="hljs-operator">/</span><span class="hljs-operator">/</span> em<span class="hljs-operator">:</span> <span class="hljs-operator">/</span><span class="hljs-operator">^</span><span class="hljs-punctuation">\</span>b_<span class="hljs-punctuation">(</span><span class="hljs-punctuation">(</span><span class="hljs-operator">?</span><span class="hljs-operator">:</span>__<span class="hljs-operator">|</span><span class="hljs-punctuation">[</span><span class="hljs-punctuation">\</span>s<span class="hljs-punctuation">\</span>S<span class="hljs-punctuation">]</span><span class="hljs-punctuation">)</span><span class="hljs-operator">+</span><span class="hljs-operator">?</span><span class="hljs-punctuation">)</span>_<span class="hljs-punctuation">\</span>b<span class="hljs-operator">|</span><span class="hljs-operator">^</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">(</span><span class="hljs-operator">?</span><span class="hljs-operator">:</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-operator">|</span><span class="hljs-punctuation">[</span><span class="hljs-punctuation">\</span>s<span class="hljs-punctuation">\</span>S<span class="hljs-punctuation">]</span><span class="hljs-punctuation">)</span><span class="hljs-operator">+</span><span class="hljs-operator">?</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">(</span><span class="hljs-operator">?</span><span class="hljs-operator">!</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">)</span><span class="hljs-operator">/</span><span class="hljs-punctuation">,</span>    <br>em<span class="hljs-operator">:</span> <span class="hljs-operator">/</span><span class="hljs-operator">^</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">(</span><span class="hljs-operator">?</span><span class="hljs-operator">:</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-operator">|</span><span class="hljs-punctuation">[</span><span class="hljs-punctuation">\</span>s<span class="hljs-punctuation">\</span>S<span class="hljs-punctuation">]</span><span class="hljs-punctuation">)</span><span class="hljs-operator">+</span><span class="hljs-operator">?</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">(</span><span class="hljs-operator">?</span><span class="hljs-operator">!</span><span class="hljs-punctuation">\</span><span class="hljs-operator">*</span><span class="hljs-punctuation">)</span><span class="hljs-operator">/</span><span class="hljs-punctuation">,</span>Copy<br></code></pre></td></tr></table></figure></li>
-<li><p>停止使用 <code>hexo-math</code>，安装 <code>hexo-renderer-mathjax</code></p>
+<li><p>停止使用 <code>hexo-math</code>，安装
+<code>hexo-renderer-mathjax</code></p>
 <figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-symbol">$</span> npm uninstall hexo-math --save<br><span class="hljs-comment">// 不知道是不是必要的</span><br><span class="hljs-symbol">$</span> npm install hexo-renderer-mathjax --saveCopy<br></code></pre></td></tr></table></figure></li>
-<li><p>更新 <code>Mathjax</code> 的 <code>CDN</code> 链接，打开<code>/node_modules/hexo-renderer-mathjax/mathjax.html</code>，在最后一行添加js：</p>
+<li><p>更新 <code>Mathjax</code> 的 <code>CDN</code>
+链接，打开<code>/node_modules/hexo-renderer-mathjax/mathjax.html</code>，在最后一行添加js：</p>
 <ul>
 <li>网上推荐的上面这个，但我使用失败了</li>
 </ul>
@@ -335,22 +328,32 @@
 </ul>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>Copy<br></code></pre></td></tr></table></figure>
 <ul>
-<li><strong>更新于2020年6月6日</strong>：如果有人看到这，可以注意下<code>MathJax.js</code>版本已经到3.0.5了，参照mathjax<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/mathjax#installation-and-use">文档</a>，那么现在的上面的一步可以自行修改，如果控制台报错可以到<a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/npm/mathjax@3/es5/">mathjax CDN files</a>下找到合适的js代替</li>
+<li><strong>更新于2020年6月6日</strong>：如果有人看到这，可以注意下<code>MathJax.js</code>版本已经到3.0.5了，参照mathjax<a
+target="_blank" rel="noopener" href="https://www.npmjs.com/package/mathjax#installation-and-use">文档</a>，那么现在的上面的一步可以自行修改，如果控制台报错可以到<a
+target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/npm/mathjax@3/es5/">mathjax CDN
+files</a>下找到合适的js代替</li>
 </ul>
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs applescript">&lt;<span class="hljs-keyword">script</span> <span class="hljs-built_in">id</span>=<span class="hljs-string">&quot;MathJax-script&quot;</span> async<br>  src=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js&quot;</span>&gt;<br>&lt;/<span class="hljs-keyword">script</span>&gt;Copy<br></code></pre></td></tr></table></figure>
 <ul>
 <li>当然，如果博客的<strong>内部静态</strong>文件<strong>第三方库</strong>包含了mathjax，上面的<code>MathJax.js</code>不用导入都行，导的不对甚至有冲突，虽然不影响公式的显示，但会在控制台报错。</li>
 </ul></li>
 </ul>
-<p>经过<strong><a target="_blank" rel="noopener" href="https://github.com/Ningsir">Ningsir</a></strong>提醒，删除掉hexo-renderer-mathjax就行了，简单省事。</p>
+<p>经过<strong><a
+target="_blank" rel="noopener" href="https://github.com/Ningsir">Ningsir</a></strong>提醒，删除掉hexo-renderer-mathjax就行了，简单省事。</p>
 <ul>
-<li><p>按照<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/">Fluid</a>的<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/guide/#快速开始">快速开始</a>，需要修改<strong>主题配置</strong>，打开<code>/source/_data/fluid_config.yml</code> 文件</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">post:</span><br>  <span class="hljs-attr">math:</span>  <br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span>  <br>    <span class="hljs-attr">specific:</span> <span class="hljs-literal">false</span>   <br>    <span class="hljs-attr">engine:</span> <span class="hljs-string">mathjaxCopy</span><br></code></pre></td></tr></table></figure></li>
+<li><p>按照<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/">Fluid</a>的<a
+target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/guide/#快速开始">快速开始</a>，需要修改<strong>主题配置</strong>，打开<code>/source/_data/fluid_config.yml</code>
+文件</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">post:</span><br>  <span class="hljs-params">math:</span>  <br>    <span class="hljs-params">enable:</span> <span class="hljs-literal">true</span>  <br>    <span class="hljs-params">specific:</span> <span class="hljs-literal">false</span>   <br>    <span class="hljs-params">engine:</span> mathjaxCopy<br></code></pre></td></tr></table></figure></li>
 <li><p>在根目录下修改<code>_config.yml</code>，添加</p>
 <figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">mathjax: <span class="hljs-literal">true</span>Copy<br></code></pre></td></tr></table></figure></li>
 <li><p>在<code>Front-matter</code>中打开<code>MathJax</code></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br>  <span class="hljs-attr">layout:</span> <span class="hljs-string">post</span><br>  <span class="hljs-attr">title:</span> <span class="hljs-string">title</span><br>  <span class="hljs-attr">date:</span> <span class="hljs-string">date</span><br>  <span class="hljs-attr">categories:</span> <br>  <span class="hljs-bullet">-</span> <span class="hljs-string">categories</span><br>  <span class="hljs-attr">tags:</span> <br>  <span class="hljs-bullet">-</span> <span class="hljs-string">tags1</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">tags2</span><br>  <span class="hljs-attr">mathjax:</span> <span class="hljs-literal">true</span><br><span class="hljs-string">---Copy</span><br></code></pre></td></tr></table></figure></li>
-<li><p>显示数学公式 <span class="math display">\[\Sigma({n} ; {p})=\left\{\left(\zeta_{1}, \ldots, \zeta_{r}\right) \in \mathbb{C}^{n_{1}} \times \cdots \times \mathbb{C}^{n_{r}}: \sum_{k=1}^{r}\left\|{\zeta}_{k}\right\|^{2 p_{k}} &lt; 1\right\}\]</span></p></li>
+<li><p>显示数学公式 <span class="math display">\[\Sigma({n} ;
+{p})=\left\{\left(\zeta_{1}, \ldots, \zeta_{r}\right) \in
+\mathbb{C}^{n_{1}} \times \cdots \times \mathbb{C}^{n_{r}}:
+\sum_{k=1}^{r}\left\|{\zeta}_{k}\right\|^{2 p_{k}} &lt;
+1\right\}\]</span></p></li>
 </ul>
 <p>最后如果公式还是乱码可以尝试重启电脑，然后先尝试部署一下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hexo clean&amp;&amp;hexo g&amp;&amp;hexo d&amp;&amp;hexo s<br></code></pre></td></tr></table></figure>
@@ -427,7 +430,7 @@
               
                 <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
                   <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
+                    <i class="iconfont icon-cc-by"></i>
                   </span>
                 </a>
               
@@ -613,9 +616,9 @@
     
 
   
+
 </div>
 
-  
   
   
 </div>
@@ -792,9 +795,6 @@
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
-</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

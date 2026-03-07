@@ -7,8 +7,11 @@
 
 <head>
   <meta charset="UTF-8">
+
   <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
   <link rel="icon" href="/img/linxkon_blog.png">
+  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -40,7 +43,7 @@
 <!-- 主题依赖的图标库，不要自行修改 -->
 <!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
 
 
 
@@ -61,7 +64,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -72,22 +75,6 @@
   <script  src="/js/color-schema.js" ></script>
   
 
-  
-
-  
-    <!-- Google tag (gtag.js) -->
-    <script async>
-      if (!Fluid.ctx.dnt) {
-        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-          gtag('js', new Date());
-          gtag('config', '');
-        });
-      }
-    </script>
   
 
   
@@ -103,7 +90,7 @@
 
 
   
-<meta name="generator" content="Hexo 7.1.1"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -254,6 +241,75 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/%E7%AC%AC20%E7%AB%A0-%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86.html" target="_self">
+          <img src="/images/index_pic/llm-agent1.png" srcset="/img/loading.gif" lazyload alt="Agent 设计模式 - 20 优先级管理">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/%E7%AC%AC20%E7%AB%A0-%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86.html" target="_self">
+          Agent 设计模式 - 20 优先级管理
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/%E7%AC%AC20%E7%AB%A0-%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86.html" target="_self">
+        <div>
+          第 20 章：优先级排序 在复杂、动态的环境中，Agent 常常面临大量潜在行动、相互冲突的目标以及有限的资源。如果没有明确的流程来确定后续行动，Agent 可能会遇到效率低下、操作延迟或无法实现关键目标的问题。优先级排序模式通过使 Agent 能够根据重要性、紧迫性、依赖关系和既定标准来评估和排序任务、目标或行动，从而解决这一挑战。这确保了 Agent 将精力集中在最关键的任务上，从
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-11-30 19:48" pubdate>
+              2025-11-30
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/">#笔记摘抄</a>
+            
+              <a href="/tags/agent/">#agent</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/%E7%AC%AC19%E7%AB%A0-%E8%AF%84%E4%BC%B0%E4%B8%8E%E7%9B%91%E6%8E%A7.html" target="_self">
           <img src="/images/index_pic/llm-agent1.png" srcset="/img/loading.gif" lazyload alt="Agent 设计模式 - 19 评估与监控">
         </a>
@@ -270,7 +326,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC19%E7%AB%A0-%E8%AF%84%E4%BC%B0%E4%B8%8E%E7%9B%91%E6%8E%A7.html" target="_self">
         <div>
-          第 19 章：评估和监控 本章探讨了使智能 Agent 能够系统地评估其性能、监控目标进展以及检测操作异常的方法论。虽然第 11 章概述了目标设定和监控，第 17 章讨论了推理机制，但本章侧重于持续的、通常是外部的、对 Agent 有效性、效率和合规性要求的测量。这包括定义指标、建立反馈循环以及实施报告系统，以确保 Agent 性能在操作环境中与期望保持一致（见图 1）。  图 1：评估和监
+          第 19 章：评估和监控 本章探讨了使智能 Agent 能够系统地评估其性能、监控目标进展以及检测操作异常的方法论。虽然第 11 章概述了目标设定和监控，第 17 章讨论了推理机制，但本章侧重于持续的、通常是外部的、对 Agent 有效性、效率和合规性要求的测量。这包括定义指标、建立反馈循环以及实施报告系统，以确保 Agent 性能在操作环境中与期望保持一致（见图 1）。  图 1
         </div>
       </a>
 
@@ -339,7 +395,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC18%E7%AB%A0-%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E6%A8%A1%E5%BC%8F.html" target="_self">
         <div>
-          第 18 章：Guardrails/安全模式 Guardrails（防护栏），也称为安全模式，是确保智能 Agent 安全、符合道德规范并按预期运行的关键机制，特别是在 Agent 变得更加自主并集成到关键系统中的情况下。它们作为保护层，引导 Agent 的行为和输出，防止有害、有偏见、无关或其他不良响应。这些防护栏可以在多个阶段实施，包括输入验证/清理以过滤恶意内容、输出过滤/后处理以分析生成
+          第 18 章：Guardrails/安全模式 Guardrails（防护栏），也称为安全模式，是确保智能 Agent 安全、符合道德规范并按预期运行的关键机制，特别是在 Agent 变得更加自主并集成到关键系统中的情况下。它们作为保护层，引导 Agent 的行为和输出，防止有害、有偏见、无关或其他不良响应。这些防护栏可以在多个阶段实施，包括输入验证/清理以过滤恶意内容、输出过滤/后处理以分
         </div>
       </a>
 
@@ -408,7 +464,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC17%E7%AB%A0-%E6%8E%A8%E7%90%86%E6%8A%80%E6%9C%AF.html" target="_self">
         <div>
-          第 17 章：推理技术 本章深入探讨智能 Agent 的高级推理方法，重点关注多步骤逻辑推理和复杂问题解决。这些技术超越了简单的顺序操作，使 Agent 的内部推理过程变得透明可见。通过这种方式，Agent 能够将复杂问题分解为更小的子问题、考虑中间推理步骤，并得出更加可靠和准确的结论。这些高级方法的核心原则是在推理过程中分配更多的计算资源。这意味着给予 Agent 或其底层 LLM 更多的处理
+          第 17 章：推理技术 本章深入探讨智能 Agent 的高级推理方法，重点关注多步骤逻辑推理和复杂问题解决。这些技术超越了简单的顺序操作，使 Agent 的内部推理过程变得透明可见。通过这种方式，Agent 能够将复杂问题分解为更小的子问题、考虑中间推理步骤，并得出更加可靠和准确的结论。这些高级方法的核心原则是在推理过程中分配更多的计算资源。这意味着给予 Agent 或其底层 LLM
         </div>
       </a>
 
@@ -477,7 +533,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC16%E7%AB%A0-%E8%B5%84%E6%BA%90%E6%84%9F%E7%9F%A5%E4%BC%98%E5%8C%96.html" target="_self">
         <div>
-          第 16 章：资源感知优化 资源感知优化使智能 Agent 能够在运行过程中动态监控和管理计算、时间和财务资源。这与简单的规划不同，后者主要关注动作序列的安排。资源感知优化要求 Agent 就动作执行做出决策，以在指定的资源预算内达成目标或优化效率。这涉及在更准确但昂贵的模型与更快速、成本更低的模型之间进行权衡，或者决定是否分配额外的计算资源以获得更精细的响应，还是返回更快但细节较少的答案。
+          第 16 章：资源感知优化 资源感知优化使智能 Agent 能够在运行过程中动态监控和管理计算、时间和财务资源。这与简单的规划不同，后者主要关注动作序列的安排。资源感知优化要求 Agent 就动作执行做出决策，以在指定的资源预算内达成目标或优化效率。这涉及在更准确但昂贵的模型与更快速、成本更低的模型之间进行权衡，或者决定是否分配额外的计算资源以获得更精细的响应，还是返回更快但细节较少的答案
         </div>
       </a>
 
@@ -546,7 +602,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC15%E7%AB%A0-Agent%E9%97%B4%E9%80%9A%E4%BF%A1-A2A.html" target="_self">
         <div>
-          第 15 章：Agent 间通信（A2A） 尽管单个 AI Agent 具备先进能力，但在处理复杂、多方面问题时仍然常常面临局限性。为了克服这一限制，Agent 间通信（A2A）使得不同 AI Agent（可能基于不同框架构建）能够进行有效协作。这种协作涉及无缝协调、任务委派和信息交换。 Google A2A 协议是一个旨在促进此类通用通信的开放标准。本章将探讨 A2A 的基本概念、实际应用以
+          第 15 章：Agent 间通信（A2A） 尽管单个 AI Agent 具备先进能力，但在处理复杂、多方面问题时仍然常常面临局限性。为了克服这一限制，Agent 间通信（A2A）使得不同 AI Agent（可能基于不同框架构建）能够进行有效协作。这种协作涉及无缝协调、任务委派和信息交换。 Google A2A 协议是一个旨在促进此类通用通信的开放标准。本章将探讨 A2A 的基本概念、实
         </div>
       </a>
 
@@ -615,7 +671,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC14%E7%AB%A0-%E7%9F%A5%E8%AF%86%E6%A3%80%E7%B4%A2-RAG.html" target="_self">
         <div>
-          第 14 章：知识检索（RAG） LLM 在生成类人文本方面展现出了强大的能力。然而，它们的知识库通常局限于训练时使用的数据，这限制了它们对实时信息、特定公司数据或高度专业化细节的访问。知识检索（RAG，即检索增强生成）技术正是为了解决这一局限性而设计的。RAG 使 LLM 能够访问和整合外部信息、实时数据和特定上下文内容，从而显著提高其输出的准确性、相关性和事实基础。 对于 AI Agent
+          第 14 章：知识检索（RAG） LLM 在生成类人文本方面展现出了强大的能力。然而，它们的知识库通常局限于训练时使用的数据，这限制了它们对实时信息、特定公司数据或高度专业化细节的访问。知识检索（RAG，即检索增强生成）技术正是为了解决这一局限性而设计的。RAG 使 LLM 能够访问和整合外部信息、实时数据和特定上下文内容，从而显著提高其输出的准确性、相关性和事实基础。 对于 AI Ag
         </div>
       </a>
 
@@ -684,7 +740,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC13%E7%AB%A0-%E4%BA%BA%E6%9C%BA%E5%8D%8F%E5%90%8C.html" target="_self">
         <div>
-          第 13 章：人机协同 人机协同（Human-in-the-Loop，HITL）模式在 Agent 的开发和部署中扮演着关键战略角色。它巧妙地将人类认知的独特优势——如判断力、创造力和细致入微的理解——与 AI 的计算能力和效率相结合。这种战略整合不仅是可选方案，在许多情况下更是必要之举，尤其是在 AI 系统日益深入关键决策过程的当下。 HITL 的核心原则在于确保 AI 在道德边界内运行，遵
+          第 13 章：人机协同 人机协同（Human-in-the-Loop，HITL）模式在 Agent 的开发和部署中扮演着关键战略角色。它巧妙地将人类认知的独特优势——如判断力、创造力和细致入微的理解——与 AI 的计算能力和效率相结合。这种战略整合不仅是可选方案，在许多情况下更是必要之举，尤其是在 AI 系统日益深入关键决策过程的当下。 HITL 的核心原则在于确保 AI 在道德边界
         </div>
       </a>
 
@@ -753,7 +809,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC12%E7%AB%A0-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%8E%E6%81%A2%E5%A4%8D.html" target="_self">
         <div>
-          第 12 章：异常处理和恢复 要使 AI Agent 在各种现实世界环境中可靠运行，它们必须能够管理不可预见的情况、错误和故障。正如人类能够适应意外障碍一样，智能 Agent 需要强大的系统来检测问题、启动恢复程序，或至少确保受控失败。这一基本需求构成了异常处理和恢复模式的基础。 此模式专注于开发异常耐用且有弹性的 Agent，使其能够保持不间断的功能和操作完整性，即使面临各种困难和异常情况。
+          第 12 章：异常处理和恢复 要使 AI Agent 在各种现实世界环境中可靠运行，它们必须能够管理不可预见的情况、错误和故障。正如人类能够适应意外障碍一样，智能 Agent 需要强大的系统来检测问题、启动恢复程序，或至少确保受控失败。这一基本需求构成了异常处理和恢复模式的基础。 此模式专注于开发异常耐用且有弹性的 Agent，使其能够保持不间断的功能和操作完整性，即使面临各种困难和异
         </div>
       </a>
 
@@ -822,7 +878,7 @@
       
       <a class="index-excerpt " href="/%E7%AC%AC11%E7%AB%A0-%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%AE%9A%E4%B8%8E%E7%9B%91%E6%8E%A7.html" target="_self">
         <div>
-          第 11 章：目标设定和监控 要使 AI Agent 真正有效且有目的性，它们不仅需要处理信息或使用工具的能力，还需要明确的方向感和判断自身是否真正成功的方法。这就是目标设定和监控模式发挥作用的地方。该模式的核心是为 Agent 提供具体的工作目标，并为其配备跟踪进度和确定这些目标是否已实现的手段。 目标设定和监控模式概述 设想规划一次旅行。你不会自发地出现在目的地。你需要决定想去哪里（目标
+          第 11 章：目标设定和监控 要使 AI Agent 真正有效且有目的性，它们不仅需要处理信息或使用工具的能力，还需要明确的方向感和判断自身是否真正成功的方法。这就是目标设定和监控模式发挥作用的地方。该模式的核心是为 Agent 提供具体的工作目标，并为其配备跟踪进度和确定这些目标是否已实现的手段。 目标设定和监控模式概述 设想规划一次旅行。你不会自发地出现在目的地。你需要决定想去哪里
         </div>
       </a>
 
@@ -831,75 +887,6 @@
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
             <time datetime="2025-11-30 19:39" pubdate>
-              2025-11-30
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">Agent 设计模式</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AC%94%E8%AE%B0%E6%91%98%E6%8A%84/">#笔记摘抄</a>
-            
-              <a href="/tags/agent/">#agent</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/%E7%AC%AC10%E7%AB%A0-%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE-MCP.html" target="_self">
-          <img src="/images/index_pic/llm-agent1.png" srcset="/img/loading.gif" lazyload alt="Agent 设计模式 - 10 模型上下文协议-MCP">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/%E7%AC%AC10%E7%AB%A0-%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE-MCP.html" target="_self">
-          Agent 设计模式 - 10 模型上下文协议-MCP
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/%E7%AC%AC10%E7%AB%A0-%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE-MCP.html" target="_self">
-        <div>
-          第 10 章：模型上下文协议 (MCP) 要使 LLM 作为 Agent 有效运作，其能力必须超越多模态生成。与外部环境交互不可或缺，包括访问实时数据、使用外部软件以及执行特定操作任务。模型上下文协议（MCP）通过提供标准化接口使 LLM 能与外部资源交互，是实现一致性和可预测性集成的关键机制。 MCP 模式概述 想象一个通用适配器，允许任何 LLM 连接到任何外部系统、数据库或工具，无需为
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-30 19:38" pubdate>
               2025-11-30
             </time>
           </div>
@@ -1020,9 +1007,9 @@
     
 
   
+
 </div>
 
-  
   
   
 </div>
@@ -1106,9 +1093,6 @@
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
-</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

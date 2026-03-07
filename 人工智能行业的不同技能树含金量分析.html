@@ -7,8 +7,11 @@
 
 <head>
   <meta charset="UTF-8">
+
   <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
   <link rel="icon" href="/img/linxkon_blog.png">
+  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -51,7 +54,7 @@
 <!-- 主题依赖的图标库，不要自行修改 -->
 <!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
 
 
 
@@ -72,7 +75,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -83,22 +86,6 @@
   <script  src="/js/color-schema.js" ></script>
   
 
-  
-
-  
-    <!-- Google tag (gtag.js) -->
-    <script async>
-      if (!Fluid.ctx.dnt) {
-        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-          gtag('js', new Date());
-          gtag('config', '');
-        });
-      }
-    </script>
   
 
   
@@ -114,7 +101,7 @@
 
 
   
-<meta name="generator" content="Hexo 7.1.1"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -277,6 +264,7 @@
         </span>
         
       
+      
     
   </div>
 
@@ -317,7 +305,8 @@
 话题有争议，但是数据非常客观，让我们拭目以待吧~ <span id="more"></span></p>
 <h3 id="数据说明">1.数据说明</h3>
 <p><strong>数据来源：</strong>为BOSS直聘北京地区算法工程师相关岗位,数据时间是2022年五月,有效样本总量为2200个.<br />
-<strong>数据内容：</strong> 招聘标题,薪资,福利待遇,关键词,岗位描述,公司,地址,招聘网址<br />
+<strong>数据内容：</strong>
+招聘标题,薪资,福利待遇,关键词,岗位描述,公司,地址,招聘网址<br />
 <strong>统计方法：</strong>对样本数据通过相关的岗位关键词进行筛选,并统计筛选结果的薪资均值,岗位数量等信息,汇总为下表。</p>
 <h3 id="ai技能点含金量排名">2.AI技能点含金量排名</h3>
 <div id="container0" style="height: 500px;">
@@ -381,7 +370,8 @@ if (option && typeof option === 'object') {
 window.addEventListener('resize', myChart.resize);
 </script>
 <p><strong>多模态大模型</strong>以均值439k的平均年薪拔得头筹，<strong>推荐算法</strong>以436k紧随其后，<strong>NLP自然语言处理与地图路径算法工程师</strong>以415K的薪资并列第三。说起薪资较低的，分别是<strong>AI软件开发岗、数据挖掘分析岗</strong>，将近360K，也是难能可贵了。</p>
-<h3 id="ai技能点的需求量与含金量分布">3.AI技能点的需求量与含金量分布</h3>
+<h3
+id="ai技能点的需求量与含金量分布">3.AI技能点的需求量与含金量分布</h3>
 <div id="container" style="height: 500px;">
 
 </div>
@@ -450,16 +440,26 @@ window.addEventListener('resize', myChart.resize);
 
   window.addEventListener('resize', myChart.resize);
 </script>
-<p><strong>计算机视觉CV与自然语言NLP</strong>： 视觉（CV）与图像、视频打交道，年薪约378k，岗位多；而自然语言处理（NLP）年薪诱人达415k，但岗位少。想多赚钱选NLP，想稳就业选CV。</p>
-<p><strong>多模态与大模型</strong>： 新兴的多模态与大模型领域，年薪高达439k，岗位也不少。想站风口就选它！</p>
-<p><strong>机器学习与深度学习</strong>： 机器学习年薪约397k，岗位稳定；深度学习略低但需求多。两者薪资相近，看需求选。</p>
-<p><strong>软件开发与控制算法</strong>： 软件开发年薪359k但岗位少；控制算法稍好，年薪380k。两者传统但重要。</p>
-<p><strong>推荐算法与数据挖掘</strong>： 推荐算法年薪高达436k但岗位少；数据挖掘年薪359k。喜欢数据处理就选它们。</p>
-<p><strong>地图与路径算法</strong>： 小众但高薪的地图与路径算法，年薪416k但竞争大。适合专长者挑战。</p>
-<p><strong>编程语言：Python与C++</strong> Python年薪384k岗位多，C++年薪略高且岗位更多。两者都是AI开发利器。</p>
-<p><strong>框架选择：TensorFlow与PyTorch</strong> TensorFlow年薪385k，PyTorch年薪390k。两者差距小，选谁看心情和项目需求。</p>
-<h3 id="技能点与教育程度工作经验及薪资的关系">4.技能点与教育程度，工作经验及薪资的关系</h3>
-<h4 id="技能点和教育程度对薪资的影响单位k">4.1技能点和教育程度对薪资的影响（单位：K）</h4>
+<p><strong>计算机视觉CV与自然语言NLP</strong>：
+视觉（CV）与图像、视频打交道，年薪约378k，岗位多；而自然语言处理（NLP）年薪诱人达415k，但岗位少。想多赚钱选NLP，想稳就业选CV。</p>
+<p><strong>多模态与大模型</strong>：
+新兴的多模态与大模型领域，年薪高达439k，岗位也不少。想站风口就选它！</p>
+<p><strong>机器学习与深度学习</strong>：
+机器学习年薪约397k，岗位稳定；深度学习略低但需求多。两者薪资相近，看需求选。</p>
+<p><strong>软件开发与控制算法</strong>：
+软件开发年薪359k但岗位少；控制算法稍好，年薪380k。两者传统但重要。</p>
+<p><strong>推荐算法与数据挖掘</strong>：
+推荐算法年薪高达436k但岗位少；数据挖掘年薪359k。喜欢数据处理就选它们。</p>
+<p><strong>地图与路径算法</strong>：
+小众但高薪的地图与路径算法，年薪416k但竞争大。适合专长者挑战。</p>
+<p><strong>编程语言：Python与C++</strong>
+Python年薪384k岗位多，C++年薪略高且岗位更多。两者都是AI开发利器。</p>
+<p><strong>框架选择：TensorFlow与PyTorch</strong>
+TensorFlow年薪385k，PyTorch年薪390k。两者差距小，选谁看心情和项目需求。</p>
+<h3
+id="技能点与教育程度工作经验及薪资的关系">4.技能点与教育程度，工作经验及薪资的关系</h3>
+<h4
+id="技能点和教育程度对薪资的影响单位k">4.1技能点和教育程度对薪资的影响（单位：K）</h4>
 <table>
 <thead>
 <tr class="header">
@@ -586,7 +586,8 @@ window.addEventListener('resize', myChart.resize);
 </tr>
 </tbody>
 </table>
-<h4 id="技能点和教育程度对工作岗位数量的影响单位个">4.2技能点和教育程度对工作岗位数量的影响（单位：个）</h4>
+<h4
+id="技能点和教育程度对工作岗位数量的影响单位个">4.2技能点和教育程度对工作岗位数量的影响（单位：个）</h4>
 <table>
 <thead>
 <tr class="header">
@@ -713,7 +714,8 @@ window.addEventListener('resize', myChart.resize);
 </tr>
 </tbody>
 </table>
-<h4 id="技能点和工作经验对平均年薪的影响单位k">4.3技能点和工作经验对平均年薪的影响（单位：K）</h4>
+<h4
+id="技能点和工作经验对平均年薪的影响单位k">4.3技能点和工作经验对平均年薪的影响（单位：K）</h4>
 <table>
 <thead>
 <tr class="header">
@@ -855,7 +857,8 @@ window.addEventListener('resize', myChart.resize);
 </tr>
 </tbody>
 </table>
-<h4 id="技能点和工作经验对工作岗位数量的影响单位个">4.4技能点和工作经验对工作岗位数量的影响（单位：个）</h4>
+<h4
+id="技能点和工作经验对工作岗位数量的影响单位个">4.4技能点和工作经验对工作岗位数量的影响（单位：个）</h4>
 <table>
 <thead>
 <tr class="header">
@@ -998,7 +1001,8 @@ window.addEventListener('resize', myChart.resize);
 </tbody>
 </table>
 <h3 id="高性价比工作岗位排名">5高性价比工作岗位排名</h3>
-<h4 id="加权工作经验工作岗位数量与薪资计算技能点的得分及排名情况">加权工作经验,工作岗位数量与薪资,计算技能点的得分及排名情况</h4>
+<h4
+id="加权工作经验工作岗位数量与薪资计算技能点的得分及排名情况">加权工作经验,工作岗位数量与薪资,计算技能点的得分及排名情况</h4>
 <ul>
 <li>基本原则：学历要求越低，工作经验要求越低，平均年薪越高的技能点越好，其评分会越高</li>
 <li>学历，工作经验数据划分五个等级，然后将三个特征数据归一化处理，彼此相乘，再乘上百分系数，得到最终评分</li>
@@ -1136,7 +1140,7 @@ window.addEventListener('resize', myChart.resize);
               
                 <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
                   <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
+                    <i class="iconfont icon-cc-by"></i>
                   </span>
                 </a>
               
@@ -1322,9 +1326,9 @@ window.addEventListener('resize', myChart.resize);
     
 
   
+
 </div>
 
-  
   
   
 </div>
@@ -1501,9 +1505,6 @@ window.addEventListener('resize', myChart.resize);
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
-</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

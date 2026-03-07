@@ -7,8 +7,11 @@
 
 <head>
   <meta charset="UTF-8">
+
   <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
   <link rel="icon" href="/img/linxkon_blog.png">
+  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -53,7 +56,7 @@
 <!-- 主题依赖的图标库，不要自行修改 -->
 <!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
 
 
 
@@ -74,7 +77,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"enable":true,"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -85,22 +88,6 @@
   <script  src="/js/color-schema.js" ></script>
   
 
-  
-
-  
-    <!-- Google tag (gtag.js) -->
-    <script async>
-      if (!Fluid.ctx.dnt) {
-        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-          gtag('js', new Date());
-          gtag('config', '');
-        });
-      }
-    </script>
   
 
   
@@ -116,7 +103,7 @@
 
 
   
-<meta name="generator" content="Hexo 7.1.1"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -279,6 +266,7 @@
         </span>
         
       
+      
     
   </div>
 
@@ -333,26 +321,37 @@
 <tbody>
 <tr class="odd">
 <td>Bagging随机森林</td>
-<td>1. 随机有放回的抽样产生不同的训练集(boostrap)<br>2. 基于不同抽样训练多个基学习器（如决策树）<br>3. 通过投票或平均组合预测结果</td>
-<td>优点:<br>- 泛化错误率低<br>- 易于并行训练<br>缺点:<br>-性能上限低</td>
+<td>1. 随机有放回的抽样产生不同的训练集(boostrap)<br>2.
+基于不同抽样训练多个基学习器（如决策树）<br>3.
+通过投票或平均组合预测结果</td>
+<td>优点:<br>- 泛化错误率低<br>-
+易于并行训练<br>缺点:<br>-性能上限低</td>
 <td>1. 分类问题<br>2. 回归问题</td>
 </tr>
 <tr class="even">
 <td>Adaptive Boosting</td>
-<td>1. 迭代构建弱学习器<br>2. 聚焦错误样本,每轮根据分类结果调整样本及模型权重<br>3. 组合加权弱学习器成强学习器</td>
-<td>优点:<br>- 泛化能力强<br>- 易于处理多种数据<br>缺点:<br>- 对离群点敏感<br>- 需要预处理高维或不平衡数据</td>
+<td>1. 迭代构建弱学习器<br>2.
+聚焦错误样本,每轮根据分类结果调整样本及模型权重<br>3.
+组合加权弱学习器成强学习器</td>
+<td>优点:<br>- 泛化能力强<br>- 易于处理多种数据<br>缺点:<br>-
+对离群点敏感<br>- 需要预处理高维或不平衡数据</td>
 <td>1. 分类问题<br>2. 图像识别</td>
 </tr>
 <tr class="odd">
 <td>GBDT (梯度提升树)</td>
-<td>1. 迭代构建决策树<br>2. 拟合损失函数的负梯度训练新树<br>3. 累加方式构建最终模型</td>
-<td>优点:<br>- 准确性高<br>- 可以适应多种损失函数<br>缺点:<br>- 容易过拟合<br>- 计算量大</td>
+<td>1. 迭代构建决策树<br>2. 拟合损失函数的负梯度训练新树<br>3.
+累加方式构建最终模型</td>
+<td>优点:<br>- 准确性高<br>- 可以适应多种损失函数<br>缺点:<br>-
+容易过拟合<br>- 计算量大</td>
 <td>1. 回归问题<br>2. 排名问题<br>3. 分类问题</td>
 </tr>
 <tr class="even">
 <td>XGBoost</td>
-<td>1. 基于GBDT的高效实现<br>2. 加入正则化项解决GBDT过拟合问题<br>3. 损失函数泰勒二阶近似优化拟合函数<br/>4.支持并行化和缺失值处理</td>
-<td>优点:<br>- 速度快<br>- 准确性高,防止过拟合<br>- 支持多种目标函数和评估指标<br>缺点:<br>- 参数调整复杂<br>- 可能需要更多的内存</td>
+<td>1. 基于GBDT的高效实现<br>2. 加入正则化项解决GBDT过拟合问题<br>3.
+损失函数泰勒二阶近似优化拟合函数<br/>4.支持并行化和缺失值处理</td>
+<td>优点:<br>- 速度快<br>- 准确性高,防止过拟合<br>-
+支持多种目标函数和评估指标<br>缺点:<br>- 参数调整复杂<br>-
+可能需要更多的内存</td>
 <td>1. 赢取竞赛的首选算法<br>2. 排名问题<br>3. 分类和回归问题</td>
 </tr>
 </tbody>
@@ -434,7 +433,7 @@
               
                 <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
                   <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
+                    <i class="iconfont icon-cc-by"></i>
                   </span>
                 </a>
               
@@ -620,9 +619,9 @@
     
 
   
+
 </div>
 
-  
   
   
 </div>
@@ -799,9 +798,6 @@
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
-</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
