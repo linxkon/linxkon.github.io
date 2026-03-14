@@ -4,6 +4,49 @@
   
   
   <entry>
+    <title>一文详解openclaw</title>
+    <link href="/openclaw.html"/>
+    <url>/openclaw.html</url>
+    
+    <content type="html"><![CDATA[<p>01 | OpenClaw 是什么？——AI 代理网关入门概览</p><p>目标：理解 OpenClaw 的定位、核心概念和整体架构</p><p>前置条件：无，这是起点</p><p>预计阅读：10 分钟</p><p>一句话理解 OpenClaw是什么？ OpenClaw 是一个开源的跨平台 AI代理网关——它在你的消息应用（WhatsApp、Telegram、Discord、iMessage 等）和AI 模型之间架起一座桥梁。你在手机上发一条消息，OpenClaw 把它转交给AI，再把 AI 的回复送回你的聊天窗口。</p><p>用一个生活类比：如果 AI 模型是一个超级大脑，那 OpenClaw就是它的"前台接线员"，负责接听来自不同电话线路（各种聊天平台）的消息，转接给大脑处理，再把答案回拨给来电者。</p><p>图片</p><p>为什么需要 OpenClaw？ 假设你想让 ChatGPT 或 Claude 在 Telegram上回复消息。通常你需要：</p><ol type="1"><li>学习 Telegram Bot API</li><li>编写消息收发的代码</li><li>自己处理 AI API 的调用逻辑</li><li>如果还想加上 Discord，再重复一遍以上步骤…… 图片每增加一个平台，工作量几乎翻倍。</li></ol><p>OpenClaw 把这些重复性工作抽象成了一个统一的网关层：</p><p>一次配置 同时支持多个消息平台 切换 AI 模型只需改一行配置，不用改业务代码 插件系统 让你按需扩展功能，不用动核心代码OpenClaw核心概念有哪些？在继续之前，先认识几个关键术语，后续教程会反复用到：</p><ol type="1"><li><p>Channel（通道） 一个 Channel 代表一个消息平台的连接。比如你配置了Telegram，那就是一个 Telegram Channel。OpenClaw 可以同时运行多个Channel。</p></li><li><p>Agent（代理） Agent 是处理消息的"大脑"部分。它接收用户消息，调用AI 模型生成回复，再把回复交还给 Channel发出去。你可以为不同场景配置不同的 Agent。</p></li><li><p>Plugin（插件） Plugin 是 OpenClaw的扩展单元。你可以通过插件添加新的 Channel（比如Mattermost）、新的功能（比如敏感词过滤）、或新的命令（比如/weather）。</p></li><li><p>Gateway（网关） Gateway 是 OpenClaw 的核心调度器，它是所有Channel 和 Agent 之间的中枢。消息从 Channel 进来 → Gateway 路由 → Agent处理 → Gateway 回传 → Channel 发出。</p></li></ol><p>图片 架构总览是什么？ 下面是 OpenClaw 的工作流程简图：</p><p>图片 消息流转过程：</p><ol type="1"><li><p>用户在 Telegram（或其他平台）发送一条消息</p></li><li><p>对应的 Channel 接收到消息，传递给 Gateway</p></li><li><p>Gateway 经过 Plugin 链处理（过滤、转换、记录等）</p></li><li><p>Agent 拿到处理后的消息，调用 AI 模型</p></li><li><p>AI 模型返回结果，沿原路返回给用户 OpenClaw 能做什么？以下是一些典型应用场景：</p></li><li><p>个人助手：在 iMessage 或 Telegram 上随时和 AI对话，不用打开网页。就像口袋里揣着一个 AI 助手。</p></li><li><p>团队协作：在 Discord 或 Mattermost 服务器里部署 AIBot，团队成员可以直接在工作群里提问、查资料、生成内容。</p></li><li><p>客服机器人：接入 WhatsApp Business，让 AI自动回复客户常见问题，7×24 小时在线。</p></li><li><p>多模型切换：今天用 Claude，明天换GPT-4，只改配置不改代码，方便对比和迁移。</p></li><li><p>自定义工作流：通过插件系统，实现消息过滤、关键词触发、定时任务等高级功能。</p></li></ol><p>它和其他方案有什么不同？ 图片 技术栈一览有哪些？在后续的安装教程中你会接触到这些技术，这里先有个印象即可：</p><p>运行环境 Node.js（JavaScript/TypeScript 运行时） 包管理器 npm 或 yarn配置格式 YAML / JSON / 环境变量 部署方式 本地运行、Docker 容器、云服务器⚠️ 以上技术栈基于项目描述推断，请以 GitHub 仓库 实际文档为准。</p><p>02 | 动手操作——Mac 上完成 OpenClaw 的安装和首次运行 图片《OpenClaw零基础教程（20）》由“架构师带你玩转AI”的龙虾机器人AllenTang自动生成，每天13点定时推送。</p><p>系列：OpenClaw 零基础教程（2/20）</p><p>目标：在 macOS 上完成 OpenClaw 的安装，并成功运行Gateway、打开控制面板</p><p>前置条件：已阅读第 01 篇，了解 OpenClaw 基本概念</p><p>预计操作时间：15–20 分钟</p><p>第一步：安装 OpenClaw 现在进入核心步骤。OpenClaw提供了一行命令的安装脚本，它会自动完成 Node.js 检测、CLI安装，并启动引导向导。</p><p>方式一：一键安装脚本（推荐） curl -fsSLhttps://openclaw.ai/install.sh | bash 这个脚本会依次完成：</p><ol type="1"><li>检测你的 Node.js 版本</li><li>通过 npm 全局安装 OpenClaw CLI</li><li>自动启动 Onboarding（引导向导） 方式二：手动 npm 安装如果你更喜欢手动操作（或者网络环境访问安装脚本有困难），也可以直接用npm：</li></ol><p>npm install -g openclaw@latest 安装完成后，手动启动引导向导：</p><p>openclaw onboard --install-daemon 方式三：使用 pnpm 如果你使用 pnpm作为包管理器：</p><p>pnpm add -g openclaw@latest pnpm approve-builds -g # 批准openclaw、node-llama-cpp、sharp 等包的构建脚本 openclaw onboard--install-daemon 第二步：运行 Onboarding 引导向导如果你使用了一键安装脚本，引导向导会自动启动。如果是手动安装，运行：</p><p>openclaw onboard --install-daemon引导向导是一个交互式的终端程序，会逐步引导你完成以下配置：</p><ol type="1"><li><p>确认风险提示 OpenClaw 是一个功能强大的 AI代理工具，拥有执行命令、访问文件等能力。向导会首先要求你确认你理解这一点。用方向键选择"Yes" 继续。</p></li><li><p>选择安装模式 向导会询问安装模式。对于新手，选择"QuickStart"（快速开始），它会使用合理的默认配置。</p></li><li><p>配置 AI 模型 这里需要设置你要使用的 AI模型提供商。向导会询问你的模型选择（Claude、OpenAI 等），并要求你提供API Key。</p></li></ol><p>以 Claude 为例：</p><p>如果你选择 Claude，需要进行 OAuth认证流程，向导会引导你完成。认证成功后，Token 会被本地存储。</p><p>以 OpenAI 为例：</p><p>你需要提前准备好 OpenAI API Key（从 https://platform.openai.com获取），在向导提示时粘贴进去。</p><p>💡 建议：在运行向导之前，先准备好你要使用的 AI 模型的 API Key。</p><ol start="4" type="1"><li><p>配置消息通道（可选）向导会询问是否要连接消息平台（Feishu、Telegram、Discord等）。现在可以先跳过，后续教程会逐一详解各平台接入。</p></li><li><p>安装守护进程（Daemon） --install-daemon 参数会让向导配置一个macOS LaunchAgent，使 OpenClaw Gateway在后台持续运行——即使你关闭了终端窗口。</p></li></ol><p>⚠️ 重要提示：如果你没有安装守护进程，OpenClaw只会在终端窗口打开时运行。关闭终端 = Gateway停止。对于持续使用的场景，强烈建议安装守护进程。</p><p>第三步：验证安装 引导向导完成后，运行以下命令检查一切是否就绪：</p><ol type="1"><li><p>检查配置是否有问题 openclaw doctor这个命令会扫描你的配置并报告任何问题。</p></li><li><p>检查 Gateway 状态 openclaw gateway status如果你安装了守护进程，应该能看到 Gateway 正在运行的确认信息。</p></li><li><p>打开 Control UI（控制面板） openclaw dashboard 这会在浏览器中打开OpenClaw 的控制面板。默认地址是：</p></li></ol><p>http://127.0.0.1:18789/ 如果面板要求认证，你可以通过以下命令获取Token：</p><p>openclaw config get auth 🔒 安全提示：Control UI是管理界面，拥有完整的聊天、配置和执行审批权限。不要将其暴露到公网。</p><p>第四步：发送第一条消息 在 Control UI中，你会看到一个聊天界面。直接输入一句话试试：</p><p>你好，你是谁？ 如果一切配置正确，你应该能在几秒钟内收到 AI模型的回复。</p><p>恭喜！🎉 你的 OpenClaw 已经成功运行了。</p><p>常见问题有哪些？ Q1：openclaw: command not found这是最常见的问题，几乎都是 PATH 配置导致的。npm全局安装的二进制文件没有被添加到 shell 的 PATH 中。</p><p>诊断：</p><p>node -v npm -v npm prefix -g echo "$PATH" 修复：将 npm 全局 bin目录加入 PATH。编辑 ~/.zshrc（macOS 默认使用 zsh）：</p><p>echo 'export PATH="<span class="math inline">\((npm prefix-g)/bin:\)</span>PATH"' &gt;&gt; ~/.zshrc source ~/.zshrc然后重新打开终端，再试 openclaw --version。</p><p>Q2：Node.js 版本不对 确认你安装的是 22+ 版本：</p><p>node --version 如果版本过低，用 Homebrew 重新安装：</p><p>brew install node@22 如果系统中有多个 Node.js 版本，考虑使用nvm（Node Version Manager）来管理：</p><p>curl -o-https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bashnvm install 22 nvm use 22 Q3：Gateway 启动后没反应 / 连接不上 1. 确认Gateway 正在运行：openclaw gateway status 2. 确认端口没有被占用：lsof -i:18789 3. 尝试前台模式运行查看日志：openclaw gateway --port 18789--verbose Q4：关闭终端后 Gateway 就停了你可能没有安装守护进程。运行以下命令补装：</p><p>openclaw onboard --install-daemon 或者手动设置 macOSLaunchAgent（高级用户可参考官方文档中的 launchd plist 模板）。</p><p>OpenClaw目录结构是什么？ 安装完成后，OpenClaw的关键文件分布如下：</p><p>图片 你可以通过环境变量自定义这些路径：</p><p>OPENCLAW_HOME：设置主目录</p><p>OPENCLAW_STATE_DIR：覆盖状态数据目录</p><p>OPENCLAW_CONFIG_PATH：覆盖配置文件路径</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI 代理</category>
+      
+      <category>技术教程</category>
+      
+      <category>开源工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>OpenClaw</tag>
+      
+      <tag>AI 网关</tag>
+      
+      <tag>AI 代理</tag>
+      
+      <tag>开源</tag>
+      
+      <tag>安装教程</tag>
+      
+      <tag>macOS</tag>
+      
+      <tag>Node.js</tag>
+      
+      <tag>AI 模型</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>测试图片插入</title>
     <link href="/article-20260314203326.html"/>
     <url>/article-20260314203326.html</url>
@@ -106,9 +149,9 @@
     
     <tags>
       
-      <tag>agent</tag>
-      
       <tag>笔记整理</tag>
+      
+      <tag>agent</tag>
       
       <tag>大模型</tag>
       

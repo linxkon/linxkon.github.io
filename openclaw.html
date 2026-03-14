@@ -1,0 +1,921 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="01 | OpenClaw 是什么？——AI 代理网关入门概览 目标：理解 OpenClaw 的定位、核心概念和整体架构 前置条件：无，这是起点 预计阅读：10 分钟 一句话理解 OpenClaw是什么？ OpenClaw 是一个开源的跨平台 AI 代理网关——它在你的消息应用（WhatsApp、Telegram、Discord、iMessage 等）和 AI 模型之间架起一座桥梁。你">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一文详解openclaw">
+<meta property="og:url" content="https://linxkon.github.io/openclaw.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="01 | OpenClaw 是什么？——AI 代理网关入门概览 目标：理解 OpenClaw 的定位、核心概念和整体架构 前置条件：无，这是起点 预计阅读：10 分钟 一句话理解 OpenClaw是什么？ OpenClaw 是一个开源的跨平台 AI 代理网关——它在你的消息应用（WhatsApp、Telegram、Discord、iMessage 等）和 AI 模型之间架起一座桥梁。你">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://linxkon.github.io/images/index_pic/14173.jpg">
+<meta property="article:published_time" content="2026-03-14T12:40:00.000Z">
+<meta property="article:modified_time" content="2026-03-14T13:14:38.387Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="OpenClaw">
+<meta property="article:tag" content="AI 网关">
+<meta property="article:tag" content="AI 代理">
+<meta property="article:tag" content="开源">
+<meta property="article:tag" content="安装教程">
+<meta property="article:tag" content="macOS">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="AI 模型">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://linxkon.github.io/images/index_pic/14173.jpg">
+  
+  
+  
+  <title>一文详解openclaw - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="一文详解openclaw"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-14 20:40" pubdate>
+          2026年3月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">一文详解openclaw</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>01 | OpenClaw 是什么？——AI 代理网关入门概览</p>
+<p>目标：理解 OpenClaw 的定位、核心概念和整体架构</p>
+<p>前置条件：无，这是起点</p>
+<p>预计阅读：10 分钟</p>
+<p>一句话理解 OpenClaw是什么？ OpenClaw 是一个开源的跨平台 AI
+代理网关——它在你的消息应用（WhatsApp、Telegram、Discord、iMessage 等）和
+AI 模型之间架起一座桥梁。你在手机上发一条消息，OpenClaw 把它转交给
+AI，再把 AI 的回复送回你的聊天窗口。</p>
+<p>用一个生活类比：如果 AI 模型是一个超级大脑，那 OpenClaw
+就是它的"前台接线员"，负责接听来自不同电话线路（各种聊天平台）的消息，转接给大脑处理，再把答案回拨给来电者。</p>
+<p>图片</p>
+<p>为什么需要 OpenClaw？ 假设你想让 ChatGPT 或 Claude 在 Telegram
+上回复消息。通常你需要：</p>
+<ol type="1">
+<li>学习 Telegram Bot API</li>
+<li>编写消息收发的代码</li>
+<li>自己处理 AI API 的调用逻辑</li>
+<li>如果还想加上 Discord，再重复一遍以上步骤…… 图片
+每增加一个平台，工作量几乎翻倍。</li>
+</ol>
+<p>OpenClaw 把这些重复性工作抽象成了一个统一的网关层：</p>
+<p>一次配置 同时支持多个消息平台 切换 AI 模型
+只需改一行配置，不用改业务代码 插件系统 让你按需扩展功能，不用动核心代码
+OpenClaw核心概念有哪些？
+在继续之前，先认识几个关键术语，后续教程会反复用到：</p>
+<ol type="1">
+<li><p>Channel（通道） 一个 Channel 代表一个消息平台的连接。比如你配置了
+Telegram，那就是一个 Telegram Channel。OpenClaw 可以同时运行多个
+Channel。</p></li>
+<li><p>Agent（代理） Agent 是处理消息的"大脑"部分。它接收用户消息，调用
+AI 模型生成回复，再把回复交还给 Channel
+发出去。你可以为不同场景配置不同的 Agent。</p></li>
+<li><p>Plugin（插件） Plugin 是 OpenClaw
+的扩展单元。你可以通过插件添加新的 Channel（比如
+Mattermost）、新的功能（比如敏感词过滤）、或新的命令（比如
+/weather）。</p></li>
+<li><p>Gateway（网关） Gateway 是 OpenClaw 的核心调度器，它是所有
+Channel 和 Agent 之间的中枢。消息从 Channel 进来 → Gateway 路由 → Agent
+处理 → Gateway 回传 → Channel 发出。</p></li>
+</ol>
+<p>图片 架构总览是什么？ 下面是 OpenClaw 的工作流程简图：</p>
+<p>图片 消息流转过程：</p>
+<ol type="1">
+<li><p>用户在 Telegram（或其他平台）发送一条消息</p></li>
+<li><p>对应的 Channel 接收到消息，传递给 Gateway</p></li>
+<li><p>Gateway 经过 Plugin 链处理（过滤、转换、记录等）</p></li>
+<li><p>Agent 拿到处理后的消息，调用 AI 模型</p></li>
+<li><p>AI 模型返回结果，沿原路返回给用户 OpenClaw 能做什么？
+以下是一些典型应用场景：</p></li>
+<li><p>个人助手：在 iMessage 或 Telegram 上随时和 AI
+对话，不用打开网页。就像口袋里揣着一个 AI 助手。</p></li>
+<li><p>团队协作：在 Discord 或 Mattermost 服务器里部署 AI
+Bot，团队成员可以直接在工作群里提问、查资料、生成内容。</p></li>
+<li><p>客服机器人：接入 WhatsApp Business，让 AI
+自动回复客户常见问题，7×24 小时在线。</p></li>
+<li><p>多模型切换：今天用 Claude，明天换
+GPT-4，只改配置不改代码，方便对比和迁移。</p></li>
+<li><p>自定义工作流：通过插件系统，实现消息过滤、关键词触发、定时任务等高级功能。</p></li>
+</ol>
+<p>它和其他方案有什么不同？ 图片 技术栈一览有哪些？
+在后续的安装教程中你会接触到这些技术，这里先有个印象即可：</p>
+<p>运行环境 Node.js（JavaScript/TypeScript 运行时） 包管理器 npm 或 yarn
+配置格式 YAML / JSON / 环境变量 部署方式 本地运行、Docker 容器、云服务器
+⚠️ 以上技术栈基于项目描述推断，请以 GitHub 仓库 实际文档为准。</p>
+<p>02 | 动手操作——Mac 上完成 OpenClaw 的安装和首次运行 图片
+《OpenClaw零基础教程（20）》由“架构师带你玩转AI”的龙虾机器人AllenTang自动生成，每天13点定时推送。</p>
+<p>系列：OpenClaw 零基础教程（2/20）</p>
+<p>目标：在 macOS 上完成 OpenClaw 的安装，并成功运行
+Gateway、打开控制面板</p>
+<p>前置条件：已阅读第 01 篇，了解 OpenClaw 基本概念</p>
+<p>预计操作时间：15–20 分钟</p>
+<p>第一步：安装 OpenClaw 现在进入核心步骤。OpenClaw
+提供了一行命令的安装脚本，它会自动完成 Node.js 检测、CLI
+安装，并启动引导向导。</p>
+<p>方式一：一键安装脚本（推荐） curl -fsSL
+https://openclaw.ai/install.sh | bash 这个脚本会依次完成：</p>
+<ol type="1">
+<li>检测你的 Node.js 版本</li>
+<li>通过 npm 全局安装 OpenClaw CLI</li>
+<li>自动启动 Onboarding（引导向导） 方式二：手动 npm 安装
+如果你更喜欢手动操作（或者网络环境访问安装脚本有困难），也可以直接用
+npm：</li>
+</ol>
+<p>npm install -g openclaw@latest 安装完成后，手动启动引导向导：</p>
+<p>openclaw onboard --install-daemon 方式三：使用 pnpm 如果你使用 pnpm
+作为包管理器：</p>
+<p>pnpm add -g openclaw@latest pnpm approve-builds -g # 批准
+openclaw、node-llama-cpp、sharp 等包的构建脚本 openclaw onboard
+--install-daemon 第二步：运行 Onboarding 引导向导
+如果你使用了一键安装脚本，引导向导会自动启动。如果是手动安装，运行：</p>
+<p>openclaw onboard --install-daemon
+引导向导是一个交互式的终端程序，会逐步引导你完成以下配置：</p>
+<ol type="1">
+<li><p>确认风险提示 OpenClaw 是一个功能强大的 AI
+代理工具，拥有执行命令、访问文件等能力。向导会首先要求你确认你理解这一点。用方向键选择
+"Yes" 继续。</p></li>
+<li><p>选择安装模式 向导会询问安装模式。对于新手，选择
+"QuickStart"（快速开始），它会使用合理的默认配置。</p></li>
+<li><p>配置 AI 模型 这里需要设置你要使用的 AI
+模型提供商。向导会询问你的模型选择（Claude、OpenAI 等），并要求你提供
+API Key。</p></li>
+</ol>
+<p>以 Claude 为例：</p>
+<p>如果你选择 Claude，需要进行 OAuth
+认证流程，向导会引导你完成。认证成功后，Token 会被本地存储。</p>
+<p>以 OpenAI 为例：</p>
+<p>你需要提前准备好 OpenAI API Key（从 https://platform.openai.com
+获取），在向导提示时粘贴进去。</p>
+<p>💡 建议：在运行向导之前，先准备好你要使用的 AI 模型的 API Key。</p>
+<ol start="4" type="1">
+<li><p>配置消息通道（可选）
+向导会询问是否要连接消息平台（Feishu、Telegram、Discord
+等）。现在可以先跳过，后续教程会逐一详解各平台接入。</p></li>
+<li><p>安装守护进程（Daemon） --install-daemon 参数会让向导配置一个
+macOS LaunchAgent，使 OpenClaw Gateway
+在后台持续运行——即使你关闭了终端窗口。</p></li>
+</ol>
+<p>⚠️ 重要提示：如果你没有安装守护进程，OpenClaw
+只会在终端窗口打开时运行。关闭终端 = Gateway
+停止。对于持续使用的场景，强烈建议安装守护进程。</p>
+<p>第三步：验证安装 引导向导完成后，运行以下命令检查一切是否就绪：</p>
+<ol type="1">
+<li><p>检查配置是否有问题 openclaw doctor
+这个命令会扫描你的配置并报告任何问题。</p></li>
+<li><p>检查 Gateway 状态 openclaw gateway status
+如果你安装了守护进程，应该能看到 Gateway 正在运行的确认信息。</p></li>
+<li><p>打开 Control UI（控制面板） openclaw dashboard 这会在浏览器中打开
+OpenClaw 的控制面板。默认地址是：</p></li>
+</ol>
+<p>http://127.0.0.1:18789/ 如果面板要求认证，你可以通过以下命令获取
+Token：</p>
+<p>openclaw config get auth 🔒 安全提示：Control UI
+是管理界面，拥有完整的聊天、配置和执行审批权限。不要将其暴露到公网。</p>
+<p>第四步：发送第一条消息 在 Control UI
+中，你会看到一个聊天界面。直接输入一句话试试：</p>
+<p>你好，你是谁？ 如果一切配置正确，你应该能在几秒钟内收到 AI
+模型的回复。</p>
+<p>恭喜！🎉 你的 OpenClaw 已经成功运行了。</p>
+<p>常见问题有哪些？ Q1：openclaw: command not found
+这是最常见的问题，几乎都是 PATH 配置导致的。npm
+全局安装的二进制文件没有被添加到 shell 的 PATH 中。</p>
+<p>诊断：</p>
+<p>node -v npm -v npm prefix -g echo "$PATH" 修复：将 npm 全局 bin
+目录加入 PATH。编辑 ~/.zshrc（macOS 默认使用 zsh）：</p>
+<p>echo 'export PATH="<span class="math inline">\((npm prefix
+-g)/bin:\)</span>PATH"' &gt;&gt; ~/.zshrc source ~/.zshrc
+然后重新打开终端，再试 openclaw --version。</p>
+<p>Q2：Node.js 版本不对 确认你安装的是 22+ 版本：</p>
+<p>node --version 如果版本过低，用 Homebrew 重新安装：</p>
+<p>brew install node@22 如果系统中有多个 Node.js 版本，考虑使用
+nvm（Node Version Manager）来管理：</p>
+<p>curl -o-
+https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+nvm install 22 nvm use 22 Q3：Gateway 启动后没反应 / 连接不上 1. 确认
+Gateway 正在运行：openclaw gateway status 2. 确认端口没有被占用：lsof -i
+:18789 3. 尝试前台模式运行查看日志：openclaw gateway --port 18789
+--verbose Q4：关闭终端后 Gateway 就停了
+你可能没有安装守护进程。运行以下命令补装：</p>
+<p>openclaw onboard --install-daemon 或者手动设置 macOS
+LaunchAgent（高级用户可参考官方文档中的 launchd plist 模板）。</p>
+<p>OpenClaw目录结构是什么？ 安装完成后，OpenClaw
+的关键文件分布如下：</p>
+<p>图片 你可以通过环境变量自定义这些路径：</p>
+<p>OPENCLAW_HOME：设置主目录</p>
+<p>OPENCLAW_STATE_DIR：覆盖状态数据目录</p>
+<p>OPENCLAW_CONFIG_PATH：覆盖配置文件路径</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI-%E4%BB%A3%E7%90%86/" class="category-chain-item">AI 代理</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI-%E4%BB%A3%E7%90%86/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI-%E4%BB%A3%E7%90%86/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/%E5%BC%80%E6%BA%90%E5%B7%A5%E5%85%B7/" class="category-chain-item">开源工具</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OpenClaw/" class="print-no-link">#OpenClaw</a>
+      
+        <a href="/tags/AI-%E7%BD%91%E5%85%B3/" class="print-no-link">#AI 网关</a>
+      
+        <a href="/tags/AI-%E4%BB%A3%E7%90%86/" class="print-no-link">#AI 代理</a>
+      
+        <a href="/tags/%E5%BC%80%E6%BA%90/" class="print-no-link">#开源</a>
+      
+        <a href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" class="print-no-link">#安装教程</a>
+      
+        <a href="/tags/macOS/" class="print-no-link">#macOS</a>
+      
+        <a href="/tags/Node-js/" class="print-no-link">#Node.js</a>
+      
+        <a href="/tags/AI-%E6%A8%A1%E5%9E%8B/" class="print-no-link">#AI 模型</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>一文详解openclaw</div>
+      <div>https://linxkon.github.io/openclaw.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article-20260314203326.html" title="测试图片插入">
+                        <span class="hidden-mobile">测试图片插入</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '863af75f5d2707a384dcc2762ae0f5f9'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
