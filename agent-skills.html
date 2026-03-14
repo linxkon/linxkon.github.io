@@ -1,0 +1,793 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/linxkon_blog.png">
+  <link rel="icon" href="/img/linxkon_blog.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="linxkon">
+  <meta name="keywords" content="技术分享，项目实战，生活记录">
+  
+    <meta name="description" content="我为什么放弃了Agent Skills 我一开始对Claude的Agent Skills特别上头。这玩意儿听起来太对了——把那些我每天要跟Claude重复八百遍的指令、工作流、最佳实践，打包成一个“技能”，让AI自己判断什么时候该用。这不就是解决“AI失忆”和“提示词工程疲劳”的终极方案吗？我脑子里立刻蹦出一堆应用场景：代码评审规范、内部API文档查询、甚至是我们团队那套复杂的部署流程。 但">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent Skills">
+<meta property="og:url" content="https://linxkon.github.io/agent-skills.html">
+<meta property="og:site_name" content="AI·你所爱">
+<meta property="og:description" content="我为什么放弃了Agent Skills 我一开始对Claude的Agent Skills特别上头。这玩意儿听起来太对了——把那些我每天要跟Claude重复八百遍的指令、工作流、最佳实践，打包成一个“技能”，让AI自己判断什么时候该用。这不就是解决“AI失忆”和“提示词工程疲劳”的终极方案吗？我脑子里立刻蹦出一堆应用场景：代码评审规范、内部API文档查询、甚至是我们团队那套复杂的部署流程。 但">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-14T11:32:00.000Z">
+<meta property="article:modified_time" content="2026-03-14T11:35:48.067Z">
+<meta property="article:author" content="linxkon">
+<meta property="article:tag" content="Claude">
+<meta property="article:tag" content="Agent Skills">
+<meta property="article:tag" content="AI 助手">
+<meta property="article:tag" content="提示工程">
+<meta property="article:tag" content="工作流自动化">
+<meta property="article:tag" content="技术反思">
+<meta property="article:tag" content="AI 可靠性">
+<meta property="article:tag" content="文件系统访问">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Agent Skills - AI·你所爱</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"linxkon.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"XLEbEr6BfzRRh34xJtmOEom0-MdYXbMMI","app_key":"3bwflR7evMRYC6JTohHAE31C","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>AI·你所爱 | Linxkon@gmail.com</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/pursenight.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Agent Skills"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-14 19:32" pubdate>
+          2026年3月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Agent Skills</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="我为什么放弃了agent-skills">我为什么放弃了Agent Skills</h2>
+<p>我一开始对Claude的Agent
+Skills特别上头。这玩意儿听起来太对了——把那些我每天要跟Claude重复八百遍的指令、工作流、最佳实践，打包成一个“技能”，让AI自己判断什么时候该用。这不就是解决“AI失忆”和“提示词工程疲劳”的终极方案吗？我脑子里立刻蹦出一堆应用场景：代码评审规范、内部API文档查询、甚至是我们团队那套复杂的部署流程。</p>
+<p>但用了一阵子，我发现它跟我想的完全不是一回事。问题就出在这个“自动判断”上。</p>
+<h3 id="所谓的智能触发根本靠不住">所谓的“智能触发”根本靠不住</h3>
+<p>官方说Claude会在“相关时”自动使用Skills。这个“相关”的判断标准，对我来说就是个黑盒。我写了个Skill，专门用来按照我们公司的代码规范格式化Python文档字符串。结果呢？我直接问“给这个函数加个docstring”，Claude十次里有六七次根本不会触发那个Skill。它要么自己瞎编一个格式，要么就简单写两句。</p>
+<p>我得在问题里非常明确地提到“用我们公司的Python文档规范”，或者甚至把Skill的名字打出来，它才好像“哦，你想用那个啊”，然后不情不愿地去读SKILL.md。那这跟我直接把规范贴进对话里有什么区别？还多了一层不可靠的“触发”逻辑。所谓的“自动化”成了“薛定谔的自动化”，用起来心里完全没底，每次都得猜它这次会不会听话。</p>
+<h3 id="文件系统访问是个伪命题">文件系统访问是个伪命题</h3>
+<p>Skills宣传的一个亮点是能访问VM里的文件系统，可以捆绑脚本、模板这些资源。听起来很强大对吧？我试了。</p>
+<p>我打包了一个小脚本和一个JSON模板文件进去，想着让Claude能动态生成一些配置。结果操作过程极其反直觉。Claude不会“主动”去读这些附加文件，它需要你在Skill的指令里，用明确的bash命令告诉它去读取、去执行。比如，你得在SKILL.md里写：“现在，请运行
+<code>cat ./resources/template.json</code> 来获取模板”。</p>
+<p>这感觉就特别割裂。我是在跟一个“智能体”对话，但我指挥它干活的方式，却像是在写一个自动化shell脚本。而且，一旦涉及到稍微复杂点的逻辑，比如条件判断或者循环处理多个文件，写在Markdown里的指令就会变得又臭又长，难以维护。有这功夫，我为什么不直接写个Python脚本，然后让Claude去调用这个脚本的接口？后者反而更清晰、更可控。</p>
+<h3 id="预构建的技能聊胜于无">预构建的技能？聊胜于无</h3>
+<p>Anthropic自己提供的那几个预构建Skill，像处理PPT、Excel、Word、PDF的，我大概试了试。生成一个简单的表格或者格式化一个文档，勉强能用。但一旦需求稍微复杂点，比如“分析这个Excel里的数据趋势并生成带图表和洞察的报告”，它生成的东西就非常表面，根本撑不住真实的业务场景。</p>
+<p>这些预置技能更像是一个“能力声明”，告诉你Claude理论上能碰这些文件格式了。但真要靠它完成专业工作，里头的指令和逻辑还差得远。它解决的是“从0到0.5”的问题，但用户需要的是“从0.5到10”的深度解决方案。</p>
+<h3
+id="我最终的选择回归精准的上下文">我最终的选择：回归精准的上下文</h3>
+<p>所以折腾了一圈，我后来基本放弃了用Skills来管理复杂能力。对于那种需要严格遵循、步骤固定的工作流，我现在的做法更简单粗暴：</p>
+<ol type="1">
+<li><strong>制作超级提示词模板</strong>：把所有的指令、规范、例子，做成一个结构清晰的Markdown模板，保存在我的笔记软件里。</li>
+<li><strong>需要时，精准粘贴</strong>：开始一个新对话，或者在一个关键节点，我把整个模板作为第一条消息或者一条系统指令发过去。虽然会占用不少tokens，但换来的是百分之百的确定性。我知道Claude这次看到了全部规则，没有遗漏。</li>
+</ol>
+<p>Skills那个“渐进式披露”的设计（先加载元数据，触发再加载指令，按需加载资源），本意是省token。但对我来说，<strong>可靠性远比那点token开销重要</strong>。我宁愿多花点钱，也要确保AI拿到了完整的“任务说明书”，而不是一个可能被它忽略的“目录”。</p>
+<p>我现在也不确定，这种“让AI自己判断该用什么技能”的路径是不是从根本上就有问题。也许对于极其简单、边界清晰的任务（比如“把这句话翻译成法语”）是有效的。但一旦任务变得复杂、模糊，需要人类式的理解和判断时，这种基于关键词匹配的“自动触发”机制就显得无比笨拙。</p>
+<p><strong>最后留个问题</strong>：如果“自动触发”不靠谱，那Skills剩下的核心价值，是不是就只是一个“可复用的提示词打包格式”？如果真是这样，我们为什么需要这么一个复杂的、基于文件系统的架构，而不是一个更简单的、在对话中就能管理和插入的“提示词片段”库？</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" class="category-chain-item">人工智能</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%8A%80%E6%9C%AF%E8%AF%84%E6%B5%8B/" class="category-chain-item">技术评测</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%8A%80%E6%9C%AF%E8%AF%84%E6%B5%8B/%E7%94%9F%E4%BA%A7%E5%8A%9B%E5%B7%A5%E5%85%B7/" class="category-chain-item">生产力工具</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Claude/" class="print-no-link">#Claude</a>
+      
+        <a href="/tags/Agent-Skills/" class="print-no-link">#Agent Skills</a>
+      
+        <a href="/tags/AI-%E5%8A%A9%E6%89%8B/" class="print-no-link">#AI 助手</a>
+      
+        <a href="/tags/%E6%8F%90%E7%A4%BA%E5%B7%A5%E7%A8%8B/" class="print-no-link">#提示工程</a>
+      
+        <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%87%AA%E5%8A%A8%E5%8C%96/" class="print-no-link">#工作流自动化</a>
+      
+        <a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%8D%E6%80%9D/" class="print-no-link">#技术反思</a>
+      
+        <a href="/tags/AI-%E5%8F%AF%E9%9D%A0%E6%80%A7/" class="print-no-link">#AI 可靠性</a>
+      
+        <a href="/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE/" class="print-no-link">#文件系统访问</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Agent Skills</div>
+      <div>https://linxkon.github.io/agent-skills.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>linxkon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/0314.html" title="这是个测试文档0314">
+                        <span class="hidden-mobile">这是个测试文档0314</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23licg1p15oAGiQtDC","clientSecret":"d6ca3873752e3a6eb2d21a98b92a3021fd462cbf","repo":"Waline","owner":"linxkon","admin":["linxkon"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '15dbb7a0201e35a44b073cf5184bde98'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量
+        <span id="leancloud-site-pv"></span>
+        次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客量
+        <span id="leancloud-site-uv"></span>
+        次
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
