@@ -4,6 +4,49 @@
   
   
   <entry>
+    <title>测试图片插入</title>
+    <link href="/article-20260314203326.html"/>
+    <url>/article-20260314203326.html</url>
+    
+    <content type="html"><![CDATA[<p>这是内容</p><p>上面是图</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>人工智能</category>
+      
+      <category>技术应用</category>
+      
+      <category>软件开发</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Claude</tag>
+      
+      <tag>Agent Skills</tag>
+      
+      <tag>AI 助手</tag>
+      
+      <tag>提示工程</tag>
+      
+      <tag>工作流自动化</tag>
+      
+      <tag>技术反思</tag>
+      
+      <tag>AI 可靠性</tag>
+      
+      <tag>文件系统访问</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Agent skill使用技巧</title>
     <link href="/agent-skill.html"/>
     <url>/agent-skill.html</url>
@@ -63,9 +106,9 @@
     
     <tags>
       
-      <tag>笔记整理</tag>
-      
       <tag>agent</tag>
+      
+      <tag>笔记整理</tag>
       
       <tag>大模型</tag>
       
