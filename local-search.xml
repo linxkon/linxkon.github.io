@@ -72,6 +72,49 @@
   
   
   <entry>
+    <title>real-publish-test</title>
+    <link href="/real-publish-test.html"/>
+    <url>/real-publish-test.html</url>
+    
+    <content type="html"><![CDATA[<h1 id="这是个测试内容">这是个测试内容</h1><p>测试23456 ..venv.exe main.py publish<code>--title "stage2-local-image"</code> --content-file"./resource/draft.md"<code>--cover-image-source "./resource/1.png"</code> --dry-run</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术测试</category>
+      
+      <category>软件开发</category>
+      
+      <category>博客管理</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>命令行工具</tag>
+      
+      <tag>发布流程</tag>
+      
+      <tag>测试内容</tag>
+      
+      <tag>自动化脚本</tag>
+      
+      <tag>虚拟环境</tag>
+      
+      <tag>Markdown</tag>
+      
+      <tag>本地部署</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Agent与Skills</title>
     <link href="/agentskills.html"/>
     <url>/agentskills.html</url>
