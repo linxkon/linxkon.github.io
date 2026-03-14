@@ -4,152 +4,41 @@
   
   
   <entry>
-    <title>Agent Skills</title>
-    <link href="/agent-skills.html"/>
-    <url>/agent-skills.html</url>
+    <title>Agent skill使用技巧</title>
+    <link href="/agent-skill.html"/>
+    <url>/agent-skill.html</url>
     
-    <content type="html"><![CDATA[<h2 id="我为什么放弃了agent-skills">我为什么放弃了Agent Skills</h2><p>我一开始对Claude的AgentSkills特别上头。这玩意儿听起来太对了——把那些我每天要跟Claude重复八百遍的指令、工作流、最佳实践，打包成一个“技能”，让AI自己判断什么时候该用。这不就是解决“AI失忆”和“提示词工程疲劳”的终极方案吗？我脑子里立刻蹦出一堆应用场景：代码评审规范、内部API文档查询、甚至是我们团队那套复杂的部署流程。</p><p>但用了一阵子，我发现它跟我想的完全不是一回事。问题就出在这个“自动判断”上。</p><h3 id="所谓的智能触发根本靠不住">所谓的“智能触发”根本靠不住</h3><p>官方说Claude会在“相关时”自动使用Skills。这个“相关”的判断标准，对我来说就是个黑盒。我写了个Skill，专门用来按照我们公司的代码规范格式化Python文档字符串。结果呢？我直接问“给这个函数加个docstring”，Claude十次里有六七次根本不会触发那个Skill。它要么自己瞎编一个格式，要么就简单写两句。</p><p>我得在问题里非常明确地提到“用我们公司的Python文档规范”，或者甚至把Skill的名字打出来，它才好像“哦，你想用那个啊”，然后不情不愿地去读SKILL.md。那这跟我直接把规范贴进对话里有什么区别？还多了一层不可靠的“触发”逻辑。所谓的“自动化”成了“薛定谔的自动化”，用起来心里完全没底，每次都得猜它这次会不会听话。</p><h3 id="文件系统访问是个伪命题">文件系统访问是个伪命题</h3><p>Skills宣传的一个亮点是能访问VM里的文件系统，可以捆绑脚本、模板这些资源。听起来很强大对吧？我试了。</p><p>我打包了一个小脚本和一个JSON模板文件进去，想着让Claude能动态生成一些配置。结果操作过程极其反直觉。Claude不会“主动”去读这些附加文件，它需要你在Skill的指令里，用明确的bash命令告诉它去读取、去执行。比如，你得在SKILL.md里写：“现在，请运行<code>cat ./resources/template.json</code> 来获取模板”。</p><p>这感觉就特别割裂。我是在跟一个“智能体”对话，但我指挥它干活的方式，却像是在写一个自动化shell脚本。而且，一旦涉及到稍微复杂点的逻辑，比如条件判断或者循环处理多个文件，写在Markdown里的指令就会变得又臭又长，难以维护。有这功夫，我为什么不直接写个Python脚本，然后让Claude去调用这个脚本的接口？后者反而更清晰、更可控。</p><h3 id="预构建的技能聊胜于无">预构建的技能？聊胜于无</h3><p>Anthropic自己提供的那几个预构建Skill，像处理PPT、Excel、Word、PDF的，我大概试了试。生成一个简单的表格或者格式化一个文档，勉强能用。但一旦需求稍微复杂点，比如“分析这个Excel里的数据趋势并生成带图表和洞察的报告”，它生成的东西就非常表面，根本撑不住真实的业务场景。</p><p>这些预置技能更像是一个“能力声明”，告诉你Claude理论上能碰这些文件格式了。但真要靠它完成专业工作，里头的指令和逻辑还差得远。它解决的是“从0到0.5”的问题，但用户需要的是“从0.5到10”的深度解决方案。</p><h3id="我最终的选择回归精准的上下文">我最终的选择：回归精准的上下文</h3><p>所以折腾了一圈，我后来基本放弃了用Skills来管理复杂能力。对于那种需要严格遵循、步骤固定的工作流，我现在的做法更简单粗暴：</p><ol type="1"><li><p><strong>制作超级提示词模板</strong>：把所有的指令、规范、例子，做成一个结构清晰的Markdown模板，保存在我的笔记软件里。</p></li><li><p><strong>需要时，精准粘贴</strong>：开始一个新对话，或者在一个关键节点，我把整个模板作为第一条消息或者一条系统指令发过去。虽然会占用不少tokens，但换来的是百分之百的确定性。我知道Claude这次看到了全部规则，没有遗漏。</p></li></ol><p>Skills那个“渐进式披露”的设计（先加载元数据，触发再加载指令，按需加载资源），本意是省token。但对我来说，<strong>可靠性远比那点token开销重要</strong>。我宁愿多花点钱，也要确保AI拿到了完整的“任务说明书”，而不是一个可能被它忽略的“目录”。</p><p>我现在也不确定，这种“让AI自己判断该用什么技能”的路径是不是从根本上就有问题。也许对于极其简单、边界清晰的任务（比如“把这句话翻译成法语”）是有效的。但一旦任务变得复杂、模糊，需要人类式的理解和判断时，这种基于关键词匹配的“自动触发”机制就显得无比笨拙。</p><p><strong>最后留个问题</strong>：如果“自动触发”不靠谱，那Skills剩下的核心价值，是不是就只是一个“可复用的提示词打包格式”？如果真是这样，我们为什么需要这么一个复杂的、基于文件系统的架构，而不是一个更简单的、在对话中就能管理和插入的“提示词片段”库？</p>]]></content>
-    
-    
-    <categories>
-      
-      <category>人工智能</category>
-      
-      <category>技术评测</category>
-      
-      <category>生产力工具</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>Claude</tag>
-      
-      <tag>Agent Skills</tag>
-      
-      <tag>AI 助手</tag>
-      
-      <tag>提示工程</tag>
-      
-      <tag>工作流自动化</tag>
-      
-      <tag>技术反思</tag>
-      
-      <tag>AI 可靠性</tag>
-      
-      <tag>文件系统访问</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>这是个测试文档0314</title>
-    <link href="/0314.html"/>
-    <url>/0314.html</url>
-    
-    <content type="html"><![CDATA[<h1 id="测试文档-0314">测试文档 0314</h1><p>今天天气晴朗，恰逢周六，在家吃了水饺。</p>]]></content>
-    
-    
-    <categories>
-      
-      <category>Agent</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>LLM</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>real-publish-test</title>
-    <link href="/real-publish-test.html"/>
-    <url>/real-publish-test.html</url>
-    
-    <content type="html"><![CDATA[<h1 id="这是个测试内容">这是个测试内容</h1><p>测试23456 ..venv.exe main.py publish<code>--title "stage2-local-image"</code> --content-file"./resource/draft.md"<code>--cover-image-source "./resource/1.png"</code> --dry-run</p>]]></content>
-    
-    
-    <categories>
-      
-      <category>技术测试</category>
-      
-      <category>软件开发</category>
-      
-      <category>博客管理</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>Python</tag>
-      
-      <tag>命令行工具</tag>
-      
-      <tag>发布流程</tag>
-      
-      <tag>测试内容</tag>
-      
-      <tag>自动化脚本</tag>
-      
-      <tag>虚拟环境</tag>
-      
-      <tag>Markdown</tag>
-      
-      <tag>本地部署</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Agent与Skills</title>
-    <link href="/agentskills.html"/>
-    <url>/agentskills.html</url>
-    
-    <content type="html"><![CDATA[<h1 id="agent-这玩意儿光聪明没用">Agent 这玩意儿，光聪明没用</h1><p>我最开始搞 Agent的时候，总觉得是模型不够强。后来发现，根本不是智商问题。它就像个刚毕业的数学天才，让他去报税，他可能连“专项附加扣除”是什么都不知道，更别说那些藏在公司历史邮件里的奇葩约定了。</p><p>Anthropic 那篇讲 Skills 的文章，最戳我的就一句话：<strong>The newparadigm: code is all you need</strong>。</p><p>这话听着像废话，但背后意思很硬：代码正在变成 Agent干数字活的统一接口。以前我们老想着给 Agent定制各种花里胡哨的工具，现在思路变了——给它一个代码执行环境和文件系统，让它自己用代码去搭脚手架。</p><h2id="代码就是一切工程上到底怎么搞">“代码就是一切”，工程上到底怎么搞？</h2><p>我们习惯把“写代码”当成一个具体任务。但 Anthropic 说得更狠：在 Agent的世界里，代码是<strong>操作系统层</strong>的接口。</p><p>举个例子，让 Agent“生成一份财务报告”。传统做法是啥？写一堆工具说明，塞一堆上下文，然后祈祷它每次输出都差不多。结果呢？十次能有八次格式不一样，气得你想砸键盘。</p><p>“code is all you need”的路子，是把任务拆成确定的执行步骤： 1. 调 API拉数据，扔到文件系统里。 2. 用写好的脚本清洗、统计。 3.用模板生成报告骨架。 4.最后，才让模型去做它擅长的部分：综合判断，组织叙事。</p><p>这么一来，Agent的能力不靠“重造轮子”，就看它“会不会用代码把事串起来”。Bash + 文件系统 +一堆可复用脚本，成了最实在的脚手架。</p><h2 id="通用-agent-为什么还是难用缺的不是脑子是经验">通用 Agent为什么还是难用？缺的不是脑子，是经验</h2><p>文章里那个比喻太对了：报税你找数学天才还是老会计？肯定选老会计。为什么？经验。</p><p>现在的通用 Agent 就卡在这儿。它推理能力不差，但一干真活就露怯： *<strong>背景缺失</strong>：公司里的潜规则、历史决策、合规红线，它默认不知道。你每次都得从头解释，累不累？*<strong>复用困难</strong>：同一个任务，这次输出挺好，下次就飘了。质量全靠人盯着，根本没法规模化。*<strong>不会长记性</strong>：这次踩过的坑，下次一模一样再踩一遍。因为“经验”没沉淀下来，全散在对话历史里，跟没说一样。</p><p>Skills 要补的，就是这块“职业训练”。它不是让 Agent更聪明，是让它更<strong>专业</strong>。</p><h2 id="skills-本体把-sop-做成能版本控制的文件">Skills 本体：把 SOP做成能版本控制的文件</h2><p>Anthropic 对 Skills的定义非常工程，不是什么玄学概念。它就是一<strong>组文件的组织方式</strong>，用来打包领域知识和流程。</p><p>典型结构长这样： <figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nix">my-skill<span class="hljs-symbol">/</span><br>├── SKILL.md          <span class="hljs-comment"># 入口：流程、边界、验收标准</span><br>├── references<span class="hljs-symbol">/</span>       <span class="hljs-comment"># 资料库：规范、模板、检查清单、示例（按需加载）</span><br>└── scripts<span class="hljs-symbol">/</span>          <span class="hljs-comment"># 工具库：可执行脚本（按需调用）</span><br></code></pre></td></tr></table></figure></p><p>关键不是目录多漂亮，而是它带来的工程属性： *<strong>能版本控制</strong>：能用 Git 管，能 CodeReview，能回滚，出事了能追责。 *<strong>能共享</strong>：丢到团队仓库里，谁都能用。 *<strong>能审计</strong>：流程和边界白纸黑字写在文件里，不是藏在某次聊天记录里。</p><p>说白了，Skills就是把“教新人干活”的那套材料，做成了可组合、可复用的资产包。</p><h2id="最核心的渐进式披露别一次性喂吐它">最核心的：渐进式披露，别一次性喂吐它</h2><p>目录结构只是表象。真正让 Skills能规模化而不崩掉的，是<strong>渐进式披露（ProgressiveDisclosure）</strong>——按需加载，别一次性把几百页文档全塞进上下文。</p><p>他们搞了个三层“账本”： 1. <strong>元信息（metadata）</strong>：只暴露name 和 description，大概 50 个 token，用来匹配和发现技能。 2.<strong>入口（SKILL.md）</strong>：匹配上了才加载，大概 500 个token，说清楚流程、边界和验收标准。 3.<strong>附录（references/）</strong>：需要细节的时候再按文件名去读，单个文件可能2000+ token，但不常驻内存。</p><p>这个设计救了我老命。以前动不动就上下文爆炸，现在清爽多了。</p><h2 id="几个踩过的坑和一点不确定">几个踩过的坑，和一点不确定</h2><p><strong>Description 不是简介，是路由规则</strong>很多团队（包括我一开始）最容易把 description写废。它不该是技能简介，而是一条<strong>路由规则</strong>。要写清楚两件事：1）什么情况下该用这个技能；2）用了之后会产出什么具体东西。我的经验是，用你们团队<strong>真实的黑话和触发词</strong>来写。别整那些抽象的“分析能力”、“处理功能”。</p><p><strong>脚本就是工具，把确定性工作锁死</strong>文章里有个例子我印象很深：他们发现 Claude老是写同一段脚本，用来给演示文稿套 Anthropic的模板。每次都现场重写，既浪费 token 又容易出错。后来他们干脆把脚本存下来，让 Agent 直接调用。收益太明显了： *<strong>确定性拉满</strong>：关键逻辑走脚本，失败了好归因。 *<strong>好维护</strong>：脚本能迭代、能 Review、能补边界条件。 *<strong>上下文干净</strong>：脚本本体不用进上下文，只把运行结果（输出或生成的文件）带回来就行。</p><p>我现在把模型定位成“<strong>编排者</strong>”，脚本定位成“<strong>操作工</strong>”。很多玄学的稳定性问题，一下子变成了可调试的工程问题。</p><p><strong>Skill、MCP、Subagent 别搞混</strong>这几个概念特别容易揉成一团，最后变成“一个超级 Prompt +一堆工具”，系统很快就失控了。 我的分工理解是： *<strong>Skills</strong>：管“<strong>怎么做</strong>”（流程、模板、检查点）。*<strong>MCP</strong>：管“<strong>连到哪</strong>”（外部工具和数据源的连接层）。*<strong>Subagents</strong>：管“<strong>怎么分</strong>”（并行、审计、隔离上下文）。</p><p>你可以把它们看成三种不同的“工程杠杆”：方法、连接、组织。别用错地方。</p><h2 id="团队怎么落地从1个skill开始">团队怎么落地？从1个Skill开始</h2><p>别想着一口吃成胖子。我的建议是：<strong>从1个能反复用、能验收的Skill开始</strong>。</p><p><strong>第一步：选对题</strong> 就看两个信号： 1.<strong>高频</strong>：每周或者每个项目都要做的。 2.<strong>可验收</strong>：输出有明确标准，不靠“感觉”。 比如：PRReview、故障排查Checklist、周报生成、竞品信息拉取对比。这些都很适合开局。</p><p><strong>第二步：写对入口文件</strong> <code>SKILL.md</code>别写成百科全书。就写三件事： 1.<strong>流程</strong>：第一步干啥，第二步干啥。 2.<strong>边界</strong>：什么情况下别动手，缺什么信息要先问。 3.<strong>验收</strong>：怎么算做完？（最好能机器检查）那些细节、例子、数据口径表，全拆到 <code>references/</code>文件夹里，用的时候再读。</p><p><strong>第三步：能脚本化的，绝不让模型即兴发挥</strong>模型擅长处理“不确定”，比如拆解问题、权衡取舍、组织语言。但像数据清洗、固定格式生成、模板套用这些确定性的脏活累活，<strong>必须用脚本锁死</strong>。别考验模型的耐心，更别考验你的。</p><p><strong>第四步：Skill多了，就得治理</strong>技能少的时候，靠人脑记得住。超过20个，就必须上治理了。 最简单的治理： *每个 Skill 标清楚 <strong>Owner</strong>。 * Description写明白触发场景，避免技能之间打架。 *定期盘点：合并重复的，删掉没人用的，补齐验收标准。</p><p>我现在也不确定的是，当 Skills生态真的跑起来，跨团队、跨公司共享的时候，<strong>版本兼容性和质量评估</strong>到底该怎么搞？会不会出现“垃圾技能”污染整个池子？这玩意儿，可能得踩过坑才知道。</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="agent技能先想清楚你要它干嘛">Agent技能？先想清楚你要它干嘛</h2><p>我折腾Agent技能有一阵子了，最大的感受就是：别一上来就想着“我要用技能”，你得先想明白，你到底想让它帮你解决什么具体问题。很多教程一开头就列一堆技能，教你配置这个调用那个，看得人眼花缭乱，结果自己上手一跑，发现要么用不上，要么根本跑不通。</p><p>我最开始也犯过这个毛病。看到有“联网搜索”技能，兴奋得不行，赶紧配好API密钥，想着以后查资料让Agent代劳多酷。结果第一次用就崩了——返回一堆杂乱无章的网页摘要，信息碎片化得厉害，还得我自己花半天时间拼凑和甄别。我这才反应过来，对于需要深度、准确信息的任务，这种泛泛的搜索技能目前就是个玩具，<strong>撑不住</strong>严肃的活儿。它适合快速抓取一些时效性强的新闻梗概，但别指望它帮你做研究分析。这个落差让我冷静下来，不再盲目追求“技能多”，而是转向“场景细”。</p><h3 id="内部工具调用香但绑定太死">内部工具调用：香，但绑定太死</h3><p>后来我把重点转向了让Agent调用我们内部的工具和API，这部分体验可以说是冰火两重天。</p><p><strong>好的地方特别香</strong>：比如我们有个内部的数据报表生成接口，我把这个封装成技能后，现在只需要用自然语言说“帮我拉一下上周A项目的用户活跃度报表，按天展示”，Agent就能自己理解意图、组装参数、调用接口，最后把结构化的数据甚至图表链接返回给我。这效率提升是实实在在的，以前要切系统、找页面、点选一堆筛选条件，现在一句话搞定。这种<strong>能闭环解决一个高频、固定流程需求</strong>的技能，价值立竿见影。</p><p><strong>但坑也真不少</strong>，最主要的就是<strong>绑定太死</strong>。每个技能都要写死适配特定的API参数格式和认证方式。我们内部系统但凡有个小升级，改了个参数名或者响应结构，对应的技能立马就废了，错误信息还经常看不懂，debug起来巨<strong>难搞</strong>。我现在维护着几个核心技能，每次相关系统发版通知我都心头一紧。所谓的“智能体”在这里一点也不智能，它就是个体力活粘合剂。我在想，是不是得搞一层更通用的协议或适配层，但这又带来了新的复杂度和性能问题，<strong>我现在也不确定</strong>这条路是不是最优解。</p><h3id="长文本处理听起来美好用起来尴尬">长文本处理：听起来美好，用起来尴尬</h3><p>长文本分析技能是另一个宣传重点，但我用下来感觉有点尴尬。是的，它能吞下很长的PDF或文档，然后你问它问题。对于一些事实性提取，比如“文档里提到了哪几个公司”，它还行。但一旦需要深度理解、关联对比或者总结核心论点，它就很容易开始胡言乱语，或者给出一些非常表面、正确的废话。</p><p>问题在于，这种技能给你的是一种“它读懂了”的错觉。你看到它针对你的问题输出了流畅的文本，就容易轻信。但好几次，我让它对比文档A和文档B的技术方案差异，它给出的点要么不痛不痒，要么干脆是错的（把A的特点安到B头上）。<strong>这个根本没用</strong>，甚至有害，因为你可能基于它的错误输出做判断。后来对于重要的长文档，我宁愿自己花时间速读，也不敢完全交给它。它顶多当个高级点的“Ctrl+F”。</p><h3 id="技能编排理想丰满现实骨感">技能编排：理想丰满，现实骨感</h3><p>最后说说技能编排，就是让多个技能按顺序协作。这听起来是Agent的终极形态对吧？我设想的是：先让Agent搜索最新市场动态，然后调用数据分析技能生成图表，最后再让它根据结果写个邮件摘要。</p><p>现实是，每一步的误差都会累积。搜索步骤可能抓了些不相关的信息，导致数据分析的输入就是歪的，最后生成的图表和邮件自然也就跑偏了。调试这种链条极其痛苦，你很难定位到底是哪个环节出了问题，还是环节之间的信息传递出了问题。我花了两天时间想搭建一个自动竞品分析流水线，最后得到的是一堆自相矛盾的数据和一篇不知所云的报告。<strong>我后来放弃了</strong>，至少在当前阶段，把复杂任务拆解成独立的、人工审核的小步骤，比追求全自动编排要可靠得多。</p><p>所以，折腾了一圈回来，我的判断是：Agent技能不是魔法。把它当成一个需要精心设计接口、严格限定场景、并且随时准备接手善后的“自动化小助手”，可能更务实。那些宣传中无所不能的智能体，离我们还挺远的。</p><p>我还在纠结的是，对于这些技能的“可靠性评估”，到底该怎么设计？难道每次都要我人工当裁判吗？有没有一种方法，能让Agent自己知道它什么时候是“不确定”或“可能搞错了”的？</p>]]></content>
     
     
     <categories>
       
       <category>人工智能</category>
       
-      <category>软件开发</category>
+      <category>技术应用</category>
       
-      <category>项目管理</category>
+      <category>软件开发</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>Agent</tag>
+      <tag>Agent技能</tag>
       
-      <tag>Skills</tag>
-      
-      <tag>代码接口</tag>
-      
-      <tag>渐进式披露</tag>
-      
-      <tag>工程实践</tag>
+      <tag>AI助手</tag>
       
       <tag>自动化</tag>
       
-      <tag>团队协作</tag>
+      <tag>工具调用</tag>
       
-      <tag>版本控制</tag>
+      <tag>长文本处理</tag>
+      
+      <tag>技能编排</tag>
+      
+      <tag>技术实践</tag>
+      
+      <tag>效率提升</tag>
       
     </tags>
     
@@ -176,9 +65,9 @@
       
       <tag>笔记整理</tag>
       
-      <tag>agent</tag>
-      
       <tag>大模型</tag>
+      
+      <tag>agent</tag>
       
       <tag>大模型应用</tag>
       
@@ -265,9 +154,9 @@
     
     <tags>
       
-      <tag>LLM</tag>
-      
       <tag>笔记整理</tag>
+      
+      <tag>LLM</tag>
       
       <tag>强化学习</tag>
       
