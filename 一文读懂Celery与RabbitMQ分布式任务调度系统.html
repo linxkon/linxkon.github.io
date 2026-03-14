@@ -19,12 +19,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
+    <meta name="description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一文读懂Celery与RabbitMQ分布式任务调度系统">
 <meta property="og:url" content="https://linxkon.github.io/%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82Celery%E4%B8%8ERabbitMQ%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
+<meta property="og:description" content="Celery结合RabbitMQ，可用于AI任务的异步处理、分布式计算、任务调度，广泛应用于模型推理、训练管理、数据预处理等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持负载均衡、任务重试、定时调度，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/celery.jpg">
 <meta property="article:published_time" content="2025-03-01T12:21:13.000Z">
@@ -302,49 +302,47 @@
             
               <div class="markdown-body">
                 
-                <p>Celery结合RabbitMQ，可用于AI任务的<strong>异步处理、分布式计算、任务调度</strong>，广泛应用于<strong>模型推理、训练管理、数据预处理</strong>等场景。RabbitMQ
-负责任务分发，Celery Worker
-并行执行，提高系统吞吐量，支持<strong>负载均衡、任务重试、定时调度</strong>，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。
-<span id="more"></span></p>
-<h1 id="一clerey的核心组件">一、Clerey的核心组件</h1>
-<p>Celery是一个异步任务队列/作业队列，基于分布式消息传递。它专注于实时操作，但也支持任务调度。作为一个任务队列，Celery的主要功能是将工作分配到多个工作节点，实现任务的异步执行。</p>
-<ol type="1">
+                <p>Celery结合RabbitMQ，可用于AI任务的<strong>异步处理、分布式计算、任务调度</strong>，广泛应用于<strong>模型推理、训练管理、数据预处理</strong>等场景。RabbitMQ 负责任务分发，Celery Worker 并行执行，提高系统吞吐量，支持<strong>负载均衡、任务重试、定时调度</strong>，确保AI任务高效稳定运行，适用于大规模计算和高并发请求处理。<br><span id="more"></span></p>
+<h1 id="一、Clerey的核心组件"><a href="#一、Clerey的核心组件" class="headerlink" title="一、Clerey的核心组件"></a>一、Clerey的核心组件</h1><p>Celery是一个异步任务队列/作业队列，基于分布式消息传递。它专注于实时操作，但也支持任务调度。作为一个任务队列，Celery的主要功能是将工作分配到多个工作节点，实现任务的异步执行。</p>
+<ol>
 <li><p>Broker (消息中间件)</p>
 <ul>
 <li>用于传递消息，接收并存储任务</li>
 <li>常用的Broker有RabbitMQ和Redis</li>
 <li>RabbitMQ功能完善，适合生产环境</li>
 <li>Redis设置简单，适合开发和小型应用</li>
-</ul></li>
+</ul>
+</li>
 <li><p>Worker (工作节点)</p>
 <ul>
 <li>执行任务的进程</li>
 <li>可以在不同的机器上部署多个Worker</li>
 <li>分配任务到多个Worker实现负载均衡</li>
-</ul></li>
+</ul>
+</li>
 <li><p>Backend (结果存储)</p>
 <ul>
 <li>存储任务执行结果</li>
 <li>常用的Backend也包括Redis和RabbitMQ</li>
 <li>也可使用MySQL、MongoDB等数据库</li>
-</ul></li>
+</ul>
+</li>
 <li><p>Beat (定时任务)</p>
 <ul>
 <li>调度定时任务的组件</li>
 <li>类似于Linux的crontab</li>
 <li>发送定时任务到Broker队列</li>
-</ul></li>
+</ul>
+</li>
 </ol>
-<h2 id="工作流程">工作流程</h2>
-<ol type="1">
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
 <li>客户端通过API将任务发送给<strong>Broker</strong></li>
 <li><strong>Broker</strong>将任务存入队列</li>
 <li>Worker从Broker获取任务并执行</li>
 <li>执行结果存入Backend</li>
 <li>客户端可以从Backend获取结果</li>
 </ol>
-<h2 id="特点和优势">特点和优势</h2>
-<ol type="1">
+<h2 id="特点和优势"><a href="#特点和优势" class="headerlink" title="特点和优势"></a>特点和优势</h2><ol>
 <li><strong>分布式执行</strong>：任务可在多台机器上分布执行</li>
 <li><strong>高可用性</strong>：单个Worker故障不影响整个系统</li>
 <li><strong>灵活性</strong>：支持多种Broker和Backend</li>
@@ -355,27 +353,24 @@
 <li><strong>并发控制</strong>：可控制每个Worker的并发任务数</li>
 <li><strong>资源限制</strong>：可限制CPU和内存使用</li>
 </ol>
-<h2 id="常见应用场景">常见应用场景</h2>
-<ol type="1">
+<h2 id="常见应用场景"><a href="#常见应用场景" class="headerlink" title="常见应用场景"></a>常见应用场景</h2><ol>
 <li><strong>异步任务处理</strong>：发送邮件、图像处理等耗时操作</li>
 <li><strong>定时任务</strong>：定期数据备份、报表生成</li>
 <li><strong>大规模数据处理</strong>：数据清洗、ETL任务</li>
 <li><strong>API限流</strong>：控制API调用频率</li>
 <li><strong>任务工作流</strong>：编排复杂的任务流程</li>
 </ol>
-<h1 id="二celery常用消息队列组件">二、celery常用消息队列组件</h1>
-<ul>
+<h1 id="二、celery常用消息队列组件"><a href="#二、celery常用消息队列组件" class="headerlink" title="二、celery常用消息队列组件"></a>二、celery常用消息队列组件</h1><ul>
 <li><strong>Redis</strong>（常见，易部署，但不适合高吞吐任务）</li>
 <li><strong>Amazon SQS</strong></li>
 <li><strong>RabbitMQ</strong>：Celery 默认推荐</li>
 <li><strong>Kafka</strong>（支持 Celery，但不如 RabbitMQ 原生）</li>
-<li><strong>数据库（如</strong>
-<strong>MySQL/PostgreSQL）</strong>（效率较低，不推荐）</li>
+<li><strong>数据库（如</strong>     <strong>MySQL/PostgreSQL）</strong>（效率较低，不推荐）</li>
 </ul>
+<div class="table-container">
 <table>
-
 <thead>
-<tr class="header">
+<tr>
 <th><strong>功能</strong></th>
 <th><strong>Celery + RabbitMQ</strong></th>
 <th><strong>Celery + Redis</strong></th>
@@ -383,167 +378,117 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>任务持久化</td>
-<td>✅ 持久化存储</td>
-<td>❌ 内存存储，丢失风险</td>
-<td>✅ 可持久化</td>
+<td>✅  持久化存储</td>
+<td>❌  内存存储，丢失风险</td>
+<td>✅  可持久化</td>
 </tr>
-<tr class="even">
+<tr>
 <td>任务调度</td>
-<td>✅ 高效调度</td>
-<td>✅ 但吞吐低</td>
-<td>🚫 需额外支持</td>
+<td>✅  高效调度</td>
+<td>✅  但吞吐低</td>
+<td>🚫  需额外支持</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>适合高并发</td>
 <td>✅</td>
-<td>🚫 不适合高吞吐</td>
+<td>🚫  不适合高吞吐</td>
 <td>✅</td>
 </tr>
-<tr class="even">
+<tr>
 <td>可靠性</td>
-<td>✅ 消息确认机制</td>
-<td>❌ 容易丢失任务</td>
+<td>✅  消息确认机制</td>
+<td>❌  容易丢失任务</td>
 <td>✅</td>
 </tr>
 </tbody>
 </table>
-<h4 id="结论-一般生产环境使用-celery-rabbitmq-的搭配比较多">结论：
-一般生产环境使用 <strong>Celery + RabbitMQ</strong> 的搭配比较多</h4>
-<h1 id="三rabbitmq-在-celery-中的角色">三、<strong>RabbitMQ</strong>
-<strong>在</strong> <strong>Celery</strong>
-<strong>中的角色</strong></h1>
-<h3 id="rabbitmq-充当-消息代理broker主要用于">RabbitMQ 充当
-<strong>消息代理（Broker）</strong>，主要用于：</h3>
-<ul>
-<li><strong>任务队列</strong>：Celery 把任务发布到 RabbitMQ
-的队列中，等待 worker 处理。</li>
-<li><strong>任务分发</strong>：RabbitMQ 负责将任务消息分发给 Celery
-worker 进程，实现异步任务执行。</li>
-<li><strong>任务重试</strong>：如果 worker 失败，RabbitMQ
-可以重新投递任务，确保可靠性。</li>
+</div>
+<h4 id="结论：-一般生产环境使用-Celery-RabbitMQ-的搭配比较多"><a href="#结论：-一般生产环境使用-Celery-RabbitMQ-的搭配比较多" class="headerlink" title="结论： 一般生产环境使用 Celery + RabbitMQ 的搭配比较多"></a>结论： 一般生产环境使用 <strong>Celery + RabbitMQ</strong> 的搭配比较多</h4><h1 id="三、RabbitMQ-在-Celery-中的角色"><a href="#三、RabbitMQ-在-Celery-中的角色" class="headerlink" title="三、RabbitMQ 在 Celery 中的角色"></a>三、<strong>RabbitMQ</strong> <strong>在</strong> <strong>Celery</strong> <strong>中的角色</strong></h1><h3 id="RabbitMQ-充当-消息代理（Broker），主要用于："><a href="#RabbitMQ-充当-消息代理（Broker），主要用于：" class="headerlink" title="RabbitMQ 充当 消息代理（Broker），主要用于："></a>RabbitMQ 充当 <strong>消息代理（Broker）</strong>，主要用于：</h3><ul>
+<li><strong>任务队列</strong>：Celery 把任务发布到 RabbitMQ 的队列中，等待 worker 处理。</li>
+<li><strong>任务分发</strong>：RabbitMQ 负责将任务消息分发给 Celery worker 进程，实现异步任务执行。</li>
+<li><strong>任务重试</strong>：如果 worker 失败，RabbitMQ 可以重新投递任务，确保可靠性。</li>
 </ul>
-<h3 id="celery-任务执行流程rabbitmq-作为-broker">Celery
-<strong>任务执行流程（RabbitMQ</strong> <strong>作为</strong>
-<strong>Broker）</strong></h3>
-<ol type="1">
-<li><strong>任务发布</strong>：
-<ul>
+<h3 id="Celery-任务执行流程（RabbitMQ-作为-Broker）"><a href="#Celery-任务执行流程（RabbitMQ-作为-Broker）" class="headerlink" title="Celery 任务执行流程（RabbitMQ 作为 Broker）"></a>Celery <strong>任务执行流程（RabbitMQ</strong> <strong>作为</strong> <strong>Broker）</strong></h3><ol>
+<li><strong>任务发布</strong>：<ul>
 <li>客户端（producer）使用 Celery 发送一个任务（task）。</li>
-<li>任务通过 <strong>Broker（RabbitMQ）</strong> 存入队列。</li>
-</ul></li>
-<li><strong>任务消费</strong>：
-<ul>
+<li>任务通过 <strong>Broker（RabbitMQ）</strong>      存入队列。</li>
+</ul>
+</li>
+<li><strong>任务消费</strong>：<ul>
 <li>Celery worker 订阅 RabbitMQ 队列，获取任务。</li>
 <li>worker 从 RabbitMQ 取出任务，并执行。</li>
-</ul></li>
-<li><strong>结果存储（可选）</strong>：
-<ul>
-<li>任务执行结果可以存入 Redis、数据库等，方便查询。</li>
-</ul></li>
-</ol>
-<h3 id="使用-rabbitmq-作为broker优势">使用 RabbitMQ
-作为Broker优势：</h3>
-<h3 id="解耦">1. <strong>解耦</strong></h3>
-<ul>
-<li>生产者和消费者不需要直接交互，而是通过 RabbitMQ
-进行通信，降低了模块之间的耦合度，提高了系统的可维护性和可扩展性。</li>
 </ul>
-<h3 id="异步处理-提高吞吐量">2. <strong>异步处理 &amp;
-提高吞吐量</strong></h3>
-<ul>
+</li>
+<li><strong>结果存储（可选）</strong>：<ul>
+<li>任务执行结果可以存入 Redis、数据库等，方便查询。</li>
+</ul>
+</li>
+</ol>
+<h3 id="使用-RabbitMQ-作为Broker优势："><a href="#使用-RabbitMQ-作为Broker优势：" class="headerlink" title="使用 RabbitMQ 作为Broker优势："></a>使用 RabbitMQ 作为Broker优势：</h3><h3 id="1-解耦"><a href="#1-解耦" class="headerlink" title="1. 解耦"></a>1. <strong>解耦</strong></h3><ul>
+<li>生产者和消费者不需要直接交互，而是通过 RabbitMQ 进行通信，降低了模块之间的耦合度，提高了系统的可维护性和可扩展性。</li>
+</ul>
+<h3 id="2-异步处理-amp-提高吞吐量"><a href="#2-异步处理-amp-提高吞吐量" class="headerlink" title="2. 异步处理 &amp; 提高吞吐量"></a>2. <strong>异步处理 &amp; 提高吞吐量</strong></h3><ul>
 <li>生产者可以快速将消息发送到队列，消费者可以异步处理，避免阻塞，提高系统整体吞吐能力。</li>
 </ul>
-<h3 id="流量削峰-限流">3. <strong>流量削峰 &amp; 限流</strong></h3>
-<ul>
-<li>在高并发场景下，RabbitMQ
-可以作为缓冲层，避免数据库或下游系统被瞬时流量压垮。</li>
+<h3 id="3-流量削峰-amp-限流"><a href="#3-流量削峰-amp-限流" class="headerlink" title="3. 流量削峰 &amp; 限流"></a>3. <strong>流量削峰 &amp; 限流</strong></h3><ul>
+<li>在高并发场景下，RabbitMQ 可以作为缓冲层，避免数据库或下游系统被瞬时流量压垮。</li>
 </ul>
-<h3 id="可靠性-持久化">4. <strong>可靠性 &amp; 持久化</strong></h3>
-<ul>
-<li>通过 <strong>消息确认（ACK）、持久化存储、死信队列（DLX）</strong>
-等机制，RabbitMQ 可以防止消息丢失，提高系统可靠性。</li>
+<h3 id="4-可靠性-amp-持久化"><a href="#4-可靠性-amp-持久化" class="headerlink" title="4. 可靠性 &amp; 持久化"></a>4. <strong>可靠性 &amp; 持久化</strong></h3><ul>
+<li>通过 <strong>消息确认（ACK）、持久化存储、死信队列（DLX）</strong> 等机制，RabbitMQ 可以防止消息丢失，提高系统可靠性。</li>
 </ul>
-<h3 id="支持多种消息路由模式">5.
-<strong>支持多种消息路由模式</strong></h3>
-<ul>
-<li><strong>简单队列模式</strong>（点对点）<br />
-</li>
-<li><strong>发布/订阅模式</strong>（广播）<br />
-</li>
-<li><strong>路由模式</strong>（基于路由键分发）<br />
-</li>
-<li><strong>主题模式</strong>（基于通配符匹配的订阅）<br />
-</li>
+<h3 id="5-支持多种消息路由模式"><a href="#5-支持多种消息路由模式" class="headerlink" title="5. 支持多种消息路由模式"></a>5. <strong>支持多种消息路由模式</strong></h3><ul>
+<li><strong>简单队列模式</strong>（点对点）  </li>
+<li><strong>发布/订阅模式</strong>（广播）  </li>
+<li><strong>路由模式</strong>（基于路由键分发）  </li>
+<li><strong>主题模式</strong>（基于通配符匹配的订阅）  </li>
 <li><strong>RPC模式</strong>（远程调用）</li>
 </ul>
-<h3 id="多语言支持">6. <strong>多语言支持</strong></h3>
-<ul>
-<li>兼容多种编程语言（Python、Java、Go、C++
-等），易于集成到不同技术栈的系统中。</li>
+<h3 id="6-多语言支持"><a href="#6-多语言支持" class="headerlink" title="6. 多语言支持"></a>6. <strong>多语言支持</strong></h3><ul>
+<li>兼容多种编程语言（Python、Java、Go、C++ 等），易于集成到不同技术栈的系统中。</li>
 </ul>
-<h3 id="分布式-高可用">7. <strong>分布式 &amp; 高可用</strong></h3>
-<ul>
-<li>支持
-<strong>集群部署、主从复制、镜像队列</strong>，保证服务高可用。</li>
+<h3 id="7-分布式-amp-高可用"><a href="#7-分布式-amp-高可用" class="headerlink" title="7. 分布式 &amp; 高可用"></a>7. <strong>分布式 &amp; 高可用</strong></h3><ul>
+<li>支持 <strong>集群部署、主从复制、镜像队列</strong>，保证服务高可用。</li>
 </ul>
-<h3 id="消息优先级-ttl">8. <strong>消息优先级 &amp; TTL</strong></h3>
-<ul>
-<li>可以设置
-<strong>消息的优先级</strong>，让高优先级的消息先被消费。<br />
-</li>
-<li>可以设置
-<strong>消息TTL</strong>（过期时间），避免无用的消息占用队列资源。</li>
+<h3 id="8-消息优先级-amp-TTL"><a href="#8-消息优先级-amp-TTL" class="headerlink" title="8. 消息优先级 &amp; TTL"></a>8. <strong>消息优先级 &amp; TTL</strong></h3><ul>
+<li>可以设置 <strong>消息的优先级</strong>，让高优先级的消息先被消费。  </li>
+<li>可以设置 <strong>消息TTL</strong>（过期时间），避免无用的消息占用队列资源。</li>
 </ul>
-<h3 id="插件生态丰富">9. <strong>插件生态丰富</strong></h3>
-<ul>
+<h3 id="9-插件生态丰富"><a href="#9-插件生态丰富" class="headerlink" title="9. 插件生态丰富"></a>9. <strong>插件生态丰富</strong></h3><ul>
 <li>支持 Web 管理界面、监控插件、延迟队列等功能，方便运维管理。</li>
 </ul>
-<h3 id="轻量级-易部署">10. <strong>轻量级 &amp; 易部署</strong></h3>
-<ul>
-<li>RabbitMQ 基于 Erlang
-开发，性能强劲，同时占用资源较少，易于部署和维护。</li>
+<h3 id="10-轻量级-amp-易部署"><a href="#10-轻量级-amp-易部署" class="headerlink" title="10. 轻量级 &amp; 易部署"></a>10. <strong>轻量级 &amp; 易部署</strong></h3><ul>
+<li><p>RabbitMQ 基于 Erlang 开发，性能强劲，同时占用资源较少，易于部署和维护。</p>
+<p><strong>高吞吐、异步处理、消息可靠性</strong>，RabbitMQ 是一个不错的选择。当场景需要 <strong>超高吞吐（百万级QPS）</strong>，Kafka 会更适合。</p>
+</li>
 </ul>
-<p><strong>高吞吐、异步处理、消息可靠性</strong>，RabbitMQ
-是一个不错的选择。当场景需要
-<strong>超高吞吐（百万级QPS）</strong>，Kafka 会更适合。</p>
-<p># 四、安装Celery、RabbitMQ</p>
-<h3 id="第0步先安装celery">第0步：先安装celery</h3>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> celery<br></code></pre></td></tr></table></figure>
-<h3 id="第一步更新包列表">第一步：更新包列表</h3>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> update<br>sudo apt-<span class="hljs-built_in">get</span> upgrade<br></code></pre></td></tr></table></figure>
-<h3 id="第二步安装erlang">第二步：安装Erlang</h3>
-<p>RabbitMQ是基于Erlang语言开发的，所以首先需要安装Erlang：
-添加Erlang仓库</p>
+<h1 id="四、安装Celery、RabbitMQ"><a href="#四、安装Celery、RabbitMQ" class="headerlink" title="四、安装Celery、RabbitMQ"></a>四、安装Celery、RabbitMQ</h1><h3 id="第0步：先安装celery"><a href="#第0步：先安装celery" class="headerlink" title="第0步：先安装celery"></a>第0步：先安装celery</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> celery<br></code></pre></td></tr></table></figure>
+<h3 id="第一步：更新包列表"><a href="#第一步：更新包列表" class="headerlink" title="第一步：更新包列表"></a>第一步：更新包列表</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> update<br>sudo apt-<span class="hljs-built_in">get</span> upgrade<br></code></pre></td></tr></table></figure>
+<h3 id="第二步：安装Erlang"><a href="#第二步：安装Erlang" class="headerlink" title="第二步：安装Erlang"></a>第二步：安装Erlang</h3><p>RabbitMQ是基于Erlang语言开发的，所以首先需要安装Erlang：<br> 添加Erlang仓库</p>
 <figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs smali">sudo apt-get install software-properties-common apt-transport-https<br>wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key<span class="hljs-built_in"> add </span>-<br>sudo<span class="hljs-built_in"> add-apt-repository </span><span class="hljs-string">&quot;deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib&quot;</span><br></code></pre></td></tr></table></figure>
-<h4 id="更新包列表">更新包列表</h4>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>
-<h4 id="安装erlang">安装Erlang</h4>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install erlang<br></code></pre></td></tr></table></figure>
-<h3 id="第三步安装rabbitmq">第三步：安装RabbitMQ</h3>
-<p>添加RabbitMQ仓库 <figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs smali">wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key<span class="hljs-built_in"> add </span>-<br>sudo<span class="hljs-built_in"> add-apt-repository </span><span class="hljs-string">&quot;deb https://dl.bintray.com/rabbitmq/debian $(lsb_release -cs) main&quot;</span><br></code></pre></td></tr></table></figure></p>
-<h4 id="更新包列表-1">更新包列表</h4>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>
-<h4 id="安装rabbitmq">安装RabbitMQ</h4>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> install rabbitmq-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
-<h3 id="第四步启动rabbitmq">第四步：启动rabbitMQ</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 启动服务</span><br><span class="hljs-built_in">sudo</span> systemctl start rabbitmq-server<br><br><span class="hljs-comment"># 设置开机自启</span><br><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> rabbitmq-server<br></code></pre></td></tr></table></figure>
-<h4 id="查看队列状态">查看队列状态</h4>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl status rabbitmq-server<br><span class="hljs-built_in">sudo</span> rabbitmqctl list_queues<br></code></pre></td></tr></table></figure>
-<h1 id="五简单的rabbitmq测试脚本">五、简单的RabbitMQ测试脚本</h1>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># celeryconfig.py - Celery配置文件</span><br><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> timedelta<br><br><span class="hljs-comment"># 时区设置</span><br>timezone = <span class="hljs-string">&#x27;Asia/Shanghai&#x27;</span><br><br><span class="hljs-comment"># 任务序列化格式</span><br>task_serializer = <span class="hljs-string">&#x27;json&#x27;</span><br>accept_content = [<span class="hljs-string">&#x27;json&#x27;</span>]<br>result_serializer = <span class="hljs-string">&#x27;json&#x27;</span><br><br><span class="hljs-comment"># 定义周期性任务</span><br>beat_schedule = &#123;<br>    <span class="hljs-string">&#x27;add-every-30-seconds&#x27;</span>: &#123;<br>        <span class="hljs-string">&#x27;task&#x27;</span>: <span class="hljs-string">&#x27;tasks.add&#x27;</span>,<br>        <span class="hljs-string">&#x27;schedule&#x27;</span>: timedelta(seconds=<span class="hljs-number">30</span>),<br>        <span class="hljs-string">&#x27;args&#x27;</span>: (<span class="hljs-number">16</span>, <span class="hljs-number">16</span>),<br>    &#125;,<br>    <span class="hljs-string">&#x27;multiply-every-minute&#x27;</span>: &#123;<br>        <span class="hljs-string">&#x27;task&#x27;</span>: <span class="hljs-string">&#x27;tasks.multiply&#x27;</span>,<br>        <span class="hljs-string">&#x27;schedule&#x27;</span>: timedelta(minutes=<span class="hljs-number">1</span>),<br>        <span class="hljs-string">&#x27;args&#x27;</span>: (<span class="hljs-number">4</span>, <span class="hljs-number">5</span>),<br>    &#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="更新包列表"><a href="#更新包列表" class="headerlink" title="更新包列表"></a>更新包列表</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>
+<h4 id="安装Erlang"><a href="#安装Erlang" class="headerlink" title="安装Erlang"></a>安装Erlang</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install erlang<br></code></pre></td></tr></table></figure>
+<h3 id="第三步：安装RabbitMQ"><a href="#第三步：安装RabbitMQ" class="headerlink" title="第三步：安装RabbitMQ"></a>第三步：安装RabbitMQ</h3><p> 添加RabbitMQ仓库<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs smali">wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key<span class="hljs-built_in"> add </span>-<br>sudo<span class="hljs-built_in"> add-apt-repository </span><span class="hljs-string">&quot;deb https://dl.bintray.com/rabbitmq/debian $(lsb_release -cs) main&quot;</span><br></code></pre></td></tr></table></figure></p>
+<h4 id="更新包列表-1"><a href="#更新包列表-1" class="headerlink" title="更新包列表"></a>更新包列表</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>
+<h4 id="安装RabbitMQ"><a href="#安装RabbitMQ" class="headerlink" title="安装RabbitMQ"></a>安装RabbitMQ</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> install rabbitmq-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
+<h3 id="第四步：启动rabbitMQ"><a href="#第四步：启动rabbitMQ" class="headerlink" title="第四步：启动rabbitMQ"></a>第四步：启动rabbitMQ</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 启动服务</span><br><span class="hljs-built_in">sudo</span> systemctl start rabbitmq-server<br><br><span class="hljs-comment"># 设置开机自启</span><br><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> rabbitmq-server<br></code></pre></td></tr></table></figure>
+<h4 id="查看队列状态"><a href="#查看队列状态" class="headerlink" title="查看队列状态"></a>查看队列状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl status rabbitmq-server<br><span class="hljs-built_in">sudo</span> rabbitmqctl list_queues<br></code></pre></td></tr></table></figure>
+<h1 id="五、简单的RabbitMQ测试脚本"><a href="#五、简单的RabbitMQ测试脚本" class="headerlink" title="五、简单的RabbitMQ测试脚本"></a>五、简单的RabbitMQ测试脚本</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># celeryconfig.py - Celery配置文件</span><br><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> timedelta<br><br><span class="hljs-comment"># 时区设置</span><br>timezone = <span class="hljs-string">&#x27;Asia/Shanghai&#x27;</span><br><br><span class="hljs-comment"># 任务序列化格式</span><br>task_serializer = <span class="hljs-string">&#x27;json&#x27;</span><br>accept_content = [<span class="hljs-string">&#x27;json&#x27;</span>]<br>result_serializer = <span class="hljs-string">&#x27;json&#x27;</span><br><br><span class="hljs-comment"># 定义周期性任务</span><br>beat_schedule = &#123;<br>    <span class="hljs-string">&#x27;add-every-30-seconds&#x27;</span>: &#123;<br>        <span class="hljs-string">&#x27;task&#x27;</span>: <span class="hljs-string">&#x27;tasks.add&#x27;</span>,<br>        <span class="hljs-string">&#x27;schedule&#x27;</span>: timedelta(seconds=<span class="hljs-number">30</span>),<br>        <span class="hljs-string">&#x27;args&#x27;</span>: (<span class="hljs-number">16</span>, <span class="hljs-number">16</span>),<br>    &#125;,<br>    <span class="hljs-string">&#x27;multiply-every-minute&#x27;</span>: &#123;<br>        <span class="hljs-string">&#x27;task&#x27;</span>: <span class="hljs-string">&#x27;tasks.multiply&#x27;</span>,<br>        <span class="hljs-string">&#x27;schedule&#x27;</span>: timedelta(minutes=<span class="hljs-number">1</span>),<br>        <span class="hljs-string">&#x27;args&#x27;</span>: (<span class="hljs-number">4</span>, <span class="hljs-number">5</span>),<br>    &#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs pyth"># tasks.py - 任务定义文件<br>from celery import Celery<br><br># 创建Celery实例，指定消息代理(RabbitMQ)和结果后端<br>app = Celery(&#x27;tasks&#x27;,<br>             broker=&#x27;amqp://guest:guest@localhost:5672//&#x27;,<br>             backend=&#x27;rpc://&#x27;)<br><br># 任务装饰器，将函数注册为Celery任务<br>@app.task<br>def add(x, y):<br>    return x + y<br><br>@app.task<br>def multiply(x, y):<br>    return x * y<br><br># 带有重试机制的任务示例<br>@app.task(bind=True, max_retries=3, default_retry_delay=5)<br>def fetch_data(self, url):<br>    try:<br>        # 这里应该是获取数据的实际代码<br>        # 为了示例，我们模拟一个成功的返回<br>        return f&quot;Data fetched from &#123;url&#125;&quot;<br>    except Exception as exc:<br>        # 发生错误时重试<br>        self.retry(exc=exc)<br><br># 周期性任务 - 在celery beat配置中定义<br># 需要在celeryconfig.py中配置<br></code></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs pyth"># test_tasks.py - 测试任务的脚本<br>from tasks import add, multiply, fetch_data<br>import time<br><br>def test_simple_tasks():<br>    # 异步调用任务<br>    print(&quot;启动任务...&quot;)<br>    <br>    # 调用add任务<br>    result1 = add.delay(4, 4)<br>    # 调用multiply任务<br>    result2 = multiply.delay(5, 6)<br>    # 调用fetch_data任务<br>    result3 = fetch_data.delay(&quot;https://example.com&quot;)<br>    <br>    # 等待任务完成并获取结果<br>    print(&quot;等待任务结果...&quot;)<br>    <br>    # 获取add任务结果<br>    while not result1.ready():<br>        time.sleep(0.1)<br>    print(f&quot;Add结果: &#123;result1.get()&#125;&quot;)<br>    <br>    # 获取multiply任务结果<br>    while not result2.ready():<br>        time.sleep(0.1)<br>    print(f&quot;Multiply结果: &#123;result2.get()&#125;&quot;)<br>    <br>    # 获取fetch_data任务结果<br>    while not result3.ready():<br>        time.sleep(0.1)<br>    print(f&quot;Fetch data结果: &#123;result3.get()&#125;&quot;)<br><br>def test_scheduled_task():<br>    # 这个函数演示如何手动测试计划任务<br>    # 实际上，计划任务是由celery beat自动调度的<br>    print(&quot;模拟计划任务...&quot;)<br>    result = add.apply_async(args=[10, 20])<br>    <br>    # 等待任务完成<br>    print(&quot;等待计划任务结果...&quot;)<br>    while not result.ready():<br>        time.sleep(0.1)<br>    print(f&quot;计划任务结果: &#123;result.get()&#125;&quot;)<br><br>if __name__ == &quot;__main__&quot;:<br>    # 测试简单任务<br>    test_simple_tasks()<br>    <br>    # 测试计划任务<br>    test_scheduled_task()<br></code></pre></td></tr></table></figure>
-<h4 id="启动方式">启动方式</h4>
-<ul>
-<li><p><strong>确保已经启动RabbitMQ服务器</strong></p></li>
-<li><p><strong>bash1启动Celery worker:</strong></p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">celery</span> -A tasks worker --loglevel=<span class="hljs-literal">info</span><br></code></pre></td></tr></table></figure></li>
-<li><p><strong>bash2启动Celery beat (用于周期性任务):</strong></p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">celery</span> -A tasks beat --loglevel=<span class="hljs-literal">info</span><br></code></pre></td></tr></table></figure></li>
-<li><p><strong>bash3运行测试脚本:</strong></p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python</span> test_tasks.<span class="hljs-keyword">py</span><br></code></pre></td></tr></table></figure></li>
+<h4 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h4><ul>
+<li><p><strong>确保已经启动RabbitMQ服务器</strong></p>
+</li>
+<li><p><strong>bash1启动Celery worker:</strong> </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">celery</span> -A tasks worker --loglevel=<span class="hljs-literal">info</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>bash2启动Celery beat (用于周期性任务):</strong> </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">celery</span> -A tasks beat --loglevel=<span class="hljs-literal">info</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>bash3运行测试脚本:</strong> </p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python</span> test_tasks.<span class="hljs-keyword">py</span><br></code></pre></td></tr></table></figure>
+</li>
 </ul>
 
                 

@@ -19,12 +19,12 @@
   <meta name="author" content="linxkon">
   <meta name="keywords" content="技术分享，项目实战，生活记录">
   
-    <meta name="description" content="1. 张量的数值计算 1）张量基本运算  加减乘除取负号： add、sub、mul、div、neg add_（其中带下划线的版本会修改原数据）  123456789101112131415161718192021222324252627282930313233data &#x3D; torch.randint(0, 10, [2, 3])print(data)&gt;&gt;&gt; tens">
+    <meta name="description" content="1. 张量的数值计算1）张量基本运算 加减乘除取负号： add、sub、mul、div、neg add_（其中带下划线的版本会修改原数据）  123456789101112131415161718192021222324252627282930313233data &#x3D; torch.randint(0, 10, [2, 3])print(data)&gt;&gt;&gt; tensor([[3, 7">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tensor基础2——张量的计算">
 <meta property="og:url" content="https://linxkon.github.io/Tensor%E5%9F%BA%E7%A1%802--%E5%BC%A0%E9%87%8F%E7%9A%84%E8%AE%A1%E7%AE%97.html">
 <meta property="og:site_name" content="AI·你所爱">
-<meta property="og:description" content="1. 张量的数值计算 1）张量基本运算  加减乘除取负号： add、sub、mul、div、neg add_（其中带下划线的版本会修改原数据）  123456789101112131415161718192021222324252627282930313233data &#x3D; torch.randint(0, 10, [2, 3])print(data)&gt;&gt;&gt; tens">
+<meta property="og:description" content="1. 张量的数值计算1）张量基本运算 加减乘除取负号： add、sub、mul、div、neg add_（其中带下划线的版本会修改原数据）  123456789101112131415161718192021222324252627282930313233data &#x3D; torch.randint(0, 10, [2, 3])print(data)&gt;&gt;&gt; tensor([[3, 7">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://linxkon.github.io/images/index_pic/tensor.jpg">
 <meta property="article:published_time" content="2021-02-12T12:21:13.000Z">
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          925 字
+          914 字
         
       </span>
     
@@ -301,52 +301,38 @@
             
               <div class="markdown-body">
                 
-                <h4 id="张量的数值计算">1. 张量的数值计算</h4>
-<h5 id="张量基本运算">1）张量基本运算</h5>
-<ul>
+                <h4 id="1-张量的数值计算"><a href="#1-张量的数值计算" class="headerlink" title="1. 张量的数值计算"></a>1. 张量的数值计算</h4><h5 id="1）张量基本运算"><a href="#1）张量基本运算" class="headerlink" title="1）张量基本运算"></a>1）张量基本运算</h5><ul>
 <li>加减乘除取负号：</li>
 <li>add、sub、mul、div、neg</li>
 <li>add_（其中带下划线的版本会修改原数据）</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs python">data = torch.randint(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>])<br><span class="hljs-built_in">print</span>(data)<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">3</span>, <span class="hljs-number">7</span>, <span class="hljs-number">4</span>],<br>            [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>]])<br><br><span class="hljs-comment"># 1. 不修改原数据</span><br>new_data = data.add(<span class="hljs-number">10</span>)  <span class="hljs-comment"># 等价 new_data = data + 10</span><br><span class="hljs-built_in">print</span>(new_data)<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">13</span>, <span class="hljs-number">17</span>, <span class="hljs-number">14</span>],<br>            [<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">16</span>]])<br><br><span class="hljs-comment"># 2. 直接修改原数据 注意: 带下划线的函数为修改原数据本身</span><br>data.add_(<span class="hljs-number">10</span>)  <span class="hljs-comment"># 等价 data += 10</span><br><span class="hljs-built_in">print</span>(data)<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">13</span>, <span class="hljs-number">17</span>, <span class="hljs-number">14</span>],<br>            [<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">16</span>]])<br><br><span class="hljs-comment"># 3. 其他函数</span><br><span class="hljs-built_in">print</span>(data.sub(<span class="hljs-number">100</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[-<span class="hljs-number">87</span>, -<span class="hljs-number">83</span>, -<span class="hljs-number">86</span>],<br>            [-<span class="hljs-number">90</span>, -<span class="hljs-number">90</span>, -<span class="hljs-number">84</span>]])<br><br><span class="hljs-built_in">print</span>(data.mul(<span class="hljs-number">100</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">1300</span>, <span class="hljs-number">1700</span>, <span class="hljs-number">1400</span>],<br>            [<span class="hljs-number">1000</span>, <span class="hljs-number">1000</span>, <span class="hljs-number">1600</span>]])<br><br><span class="hljs-built_in">print</span>(data.div(<span class="hljs-number">100</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">0.1300</span>, <span class="hljs-number">0.1700</span>, <span class="hljs-number">0.1400</span>],<br>            [<span class="hljs-number">0.1000</span>, <span class="hljs-number">0.1000</span>, <span class="hljs-number">0.1600</span>]])<br><br><span class="hljs-built_in">print</span>(data.neg())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[-<span class="hljs-number">13</span>, -<span class="hljs-number">17</span>, -<span class="hljs-number">14</span>],<br>            [-<span class="hljs-number">10</span>, -<span class="hljs-number">10</span>, -<span class="hljs-number">16</span>]])<br></code></pre></td></tr></table></figure>
-<h5 id="张量点乘运算">2）张量点乘运算</h5>
-<ul>
-<li>点乘指（Hadamard）的是两个同维矩阵对应位置的元素相乘，使用mul
-和运算符 * 实现。</li>
+<h5 id="2）张量点乘运算"><a href="#2）张量点乘运算" class="headerlink" title="2）张量点乘运算"></a>2）张量点乘运算</h5><ul>
+<li>点乘指（Hadamard）的是两个同维矩阵对应位置的元素相乘，使用mul 和运算符 * 实现。</li>
 </ul>
-<figure>
-<img src="assets/image-20240528102236446.png" srcset="/img/loading.gif" lazyload
-alt="image-20240528102236446" />
-<figcaption aria-hidden="true">image-20240528102236446</figcaption>
-</figure>
+<p><img src="assets/image-20240528102236446.png" srcset="/img/loading.gif" lazyload alt="image-20240528102236446"></p>
 <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs lua">data1 = torch.tensor(<span class="hljs-string">[[1, 2], [3, 4]]</span>)<br>data2 = torch.tensor(<span class="hljs-string">[[5, 6], [7, 8]]</span>)<br># 第一种方式<br>data = torch.mul(data1, data2)<br><span class="hljs-built_in">print</span>(data)<br>&gt;&gt;&gt; tensor(<span class="hljs-string">[[ 5, 12],</span><br><span class="hljs-string">            [21, 32]]</span>)<br><br># 第二种方式<br>data = data1 * data2<br><span class="hljs-built_in">print</span>(data)<br>&gt;&gt;&gt; tensor(<span class="hljs-string">[[ 5, 12],</span><br><span class="hljs-string">            [21, 32]]</span>)<br></code></pre></td></tr></table></figure>
-<h5 id="张量矩阵乘法运算">3）张量矩阵乘法运算</h5>
-<ul>
-<li>矩阵乘法运算要求第一个矩阵 shape: (n, m)，第二个矩阵 shape: (m, p),
-两个矩阵点积运算 shape 为: (n, p)。</li>
+<h5 id="3）张量矩阵乘法运算"><a href="#3）张量矩阵乘法运算" class="headerlink" title="3）张量矩阵乘法运算"></a>3）张量矩阵乘法运算</h5><ul>
+<li>矩阵乘法运算要求第一个矩阵 shape: (n, m)，第二个矩阵 shape: (m, p), 两个矩阵点积运算 shape 为: (n, p)。</li>
 <li>运算符 @ 用于进行两个矩阵的乘积运算</li>
-<li>torch.matmul 对进行乘积运算的两矩阵形状没有限定.对数输入的 shape
-不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
+<li>torch.matmul 对进行乘积运算的两矩阵形状没有限定.对数输入的 shape 不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 点积运算</span><br>data1 = torch.tensor([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>], [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>]])<br>data2 = torch.tensor([[<span class="hljs-number">5</span>, <span class="hljs-number">6</span>], [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>]])<br><span class="hljs-comment"># 方式一:</span><br>data3 = data1 @ data2<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;data3--&gt;&quot;</span>, data3)<br><span class="hljs-meta">&gt;&gt;&gt; </span>data3--&gt; tensor([[<span class="hljs-number">19</span>, <span class="hljs-number">22</span>],<br>                     [<span class="hljs-number">43</span>, <span class="hljs-number">50</span>],<br>                     [<span class="hljs-number">67</span>, <span class="hljs-number">78</span>]])<br><br><span class="hljs-comment"># 方式二:</span><br>data4 = torch.matmul(data1, data2)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;data4--&gt;&quot;</span>, data4)<br><span class="hljs-meta">&gt;&gt;&gt; </span>data4--&gt; tensor([[<span class="hljs-number">19</span>, <span class="hljs-number">22</span>],<br>                     [<span class="hljs-number">43</span>, <span class="hljs-number">50</span>],<br>                     [<span class="hljs-number">67</span>, <span class="hljs-number">78</span>]])<br></code></pre></td></tr></table></figure>
-<h5 id="总结">4）总结</h5>
-<p><strong>&lt;1&gt; 张量基本运算函数</strong></p>
+<h5 id="4）总结"><a href="#4）总结" class="headerlink" title="4）总结"></a>4）总结</h5><p><strong><1> 张量基本运算函数</strong></p>
 <ul>
 <li>add、sub、mul、div、neg等函数</li>
-<li>add_、sub_、mul_、div_、neg_等函数</li>
+<li>add<em>、sub</em>、mul<em>、div</em>、neg_等函数</li>
 </ul>
-<p><strong>&lt;2&gt; 张量的点乘运算</strong></p>
+<p><strong><2> 张量的点乘运算</strong></p>
 <ul>
 <li>mul 和运算符 *</li>
 </ul>
-<p><strong>&lt;3&gt; 点积运算</strong></p>
+<p><strong><3> 点积运算</strong></p>
 <ul>
 <li>运算符@用于进行两个矩阵的点乘运算</li>
-<li>torch.matmul 对进行点乘运算的两矩阵形状没有限定，对数输入的 shape
-不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
+<li>torch.matmul 对进行点乘运算的两矩阵形状没有限定，对数输入的 shape 不同的张量, 对应的最后几个维度必须符合矩阵运算规则</li>
 </ul>
-<h4 id="张量的运算函数">2. 张量的运算函数</h4>
-<p>PyTorch 为每个张量封装很多实用的计算函数：</p>
+<h4 id="2-张量的运算函数"><a href="#2-张量的运算函数" class="headerlink" title="2. 张量的运算函数"></a>2. 张量的运算函数</h4><p>PyTorch 为每个张量封装很多实用的计算函数：</p>
 <ul>
 <li>均值</li>
 <li>平方根</li>
@@ -355,7 +341,6 @@ alt="image-20240528102236446" />
 <li>对数计算等等</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br>data = torch.randint(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>, [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>], dtype=torch.float64)<br><span class="hljs-built_in">print</span>(data)<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">4.</span>, <span class="hljs-number">0.</span>, <span class="hljs-number">7.</span>],<br>            [<span class="hljs-number">6.</span>, <span class="hljs-number">3.</span>, <span class="hljs-number">5.</span>]], dtype=torch.float64)<br><br><span class="hljs-comment"># 1. 计算均值</span><br><span class="hljs-comment"># 注意: tensor 必须为 Float 或者 Double 类型</span><br><span class="hljs-built_in">print</span>(data.mean())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor(<span class="hljs-number">4.1667</span>, dtype=torch.float64)<br><br><span class="hljs-built_in">print</span>(data.mean(dim=<span class="hljs-number">0</span>))  <span class="hljs-comment"># 按列计算均值</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([<span class="hljs-number">5.0000</span>, <span class="hljs-number">1.5000</span>, <span class="hljs-number">6.0000</span>], dtype=torch.float64)<br><br><span class="hljs-built_in">print</span>(data.mean(dim=<span class="hljs-number">1</span>))  <span class="hljs-comment"># 按行计算均值</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([<span class="hljs-number">3.6667</span>, <span class="hljs-number">4.6667</span>], dtype=torch.float64)<br><br><span class="hljs-comment"># 2. 计算总和</span><br><span class="hljs-built_in">print</span>(data.<span class="hljs-built_in">sum</span>())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor(<span class="hljs-number">25.</span>, dtype=torch.float64)<br><br><span class="hljs-built_in">print</span>(data.<span class="hljs-built_in">sum</span>(dim=<span class="hljs-number">0</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([<span class="hljs-number">10.</span>,  <span class="hljs-number">3.</span>, <span class="hljs-number">12.</span>], dtype=torch.float64)<br><br><span class="hljs-built_in">print</span>(data.<span class="hljs-built_in">sum</span>(dim=<span class="hljs-number">1</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([<span class="hljs-number">11.</span>, <span class="hljs-number">14.</span>], dtype=torch.float64)<br><br><span class="hljs-comment"># 3. 计算平方</span><br><span class="hljs-built_in">print</span>(torch.<span class="hljs-built_in">pow</span>(data，<span class="hljs-number">2</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">16.</span>,  <span class="hljs-number">0.</span>, <span class="hljs-number">49.</span>],<br>            [<span class="hljs-number">36.</span>,  <span class="hljs-number">9.</span>, <span class="hljs-number">25.</span>]], dtype=torch.float64)<br><br><span class="hljs-comment"># 4. 计算平方根</span><br><span class="hljs-built_in">print</span>(data.sqrt())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">2.0000</span>, <span class="hljs-number">0.0000</span>, <span class="hljs-number">2.6458</span>],<br>            [<span class="hljs-number">2.4495</span>, <span class="hljs-number">1.7321</span>, <span class="hljs-number">2.2361</span>]], dtype=torch.float64)<br><br><span class="hljs-comment"># 5. 指数计算, e^n 次方</span><br><span class="hljs-built_in">print</span>(data.exp())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">5.4598e+01</span>, <span class="hljs-number">1.0000e+00</span>, <span class="hljs-number">1.0966e+03</span>],<br>            [<span class="hljs-number">4.0343e+02</span>, <span class="hljs-number">2.0086e+01</span>, <span class="hljs-number">1.4841e+02</span>]], dtype=torch.float64)<br><br><span class="hljs-comment"># 6. 对数计算</span><br><span class="hljs-built_in">print</span>(data.log())  <span class="hljs-comment"># 以 e 为底</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">1.3863</span>,   -inf, <span class="hljs-number">1.9459</span>],<br>            [<span class="hljs-number">1.7918</span>, <span class="hljs-number">1.0986</span>, <span class="hljs-number">1.6094</span>]], dtype=torch.float64)<br><br><span class="hljs-built_in">print</span>(data.log2())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">2.0000</span>,   -inf, <span class="hljs-number">2.8074</span>],<br>            [<span class="hljs-number">2.5850</span>, <span class="hljs-number">1.5850</span>, <span class="hljs-number">2.3219</span>]], dtype=torch.float64)<br><br><span class="hljs-built_in">print</span>(data.log10())<br><span class="hljs-meta">&gt;&gt;&gt; </span>tensor([[<span class="hljs-number">0.6021</span>,   -inf, <span class="hljs-number">0.8451</span>],<br>            [<span class="hljs-number">0.7782</span>, <span class="hljs-number">0.4771</span>, <span class="hljs-number">0.6990</span>]], dtype=torch.float64)<br></code></pre></td></tr></table></figure>
-
                 
               </div>
             
